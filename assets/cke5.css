@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:700');
+
+/**
+ * @author mail[at]doerr-softwaredevelopment[dot]com Joachim Doerr
+ * @package redaxo5
+ * @license MIT
+ */
+
+.slider.slider-horizontal {
+    width: 96%;
+    margin: 0 2%;
+    min-width: 260px;
+}
+.cke5-icon-logo {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-left: -25px;
+    background: url(images/cke5.svg) no-repeat 0 0;
+    background-size: 18px 18px;
+    vertical-align: middle;
+}
+.active .cke5-icon-logo {
+    background-image: url(images/cke5_white.svg);
+}
+.page-header .cke5-icon-logo {
+    margin-left: 0;
+    width: 40px;
+    height: 40px;
+    background-size: 38px 38px;
+    background-image: url(images/cke5_black.svg);
+}
+.cke5-header {
+    position: relative;
+    display: block;
+    background-size: cover;
+    background: #000 url(images/header-patrick-fore-357913-unsplash.jpg) no-repeat center top;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 15px;
+}
+picture img {
+    max-width: 100%;
+    min-height: 260px;
+    max-height: 360px;
+    opacity: 0;
+}
+.panel-body > .cke5-header {
+    margin-left: -15px;
+    margin-right: -15px;
+    margin-top: -15px;
+}
+.cke5-header .header-content {
+    width: 100%;
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 99;
+    transition: transform .2s ease-in-out;
+}
+.cke5-header h1 {
+    padding-top: 110px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+}
+@media (min-width: 768px) {
+    .cke5-header h1:before {
+        width: 130px;
+        height: 130px;
+        margin-left: 7.5px;
+    }
+}
+.cke5-header h1:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 110px;
+    height: 110px;
+    transform: translateX(-50%);
+    background: url(images/cke5_white.svg) no-repeat;
+    background-size: contain;
+}
+.cke5-header .photoinfo {
+    position: absolute;
+    z-index: 98;
+    bottom: 13px;
+    right: 17px;
+}
+.cke5-header .photoinfo a {
+    color: #fff;
+    border-bottom: 1px solid #fff;
+}
+.cke5-demo {
+    margin: 0 auto;
+    max-width: 1030px;
+}
+.cke5-mainnav {
+    padding: 20px 0 25px 0;
+}
+.nav.nav-pills.list-inline > li {
+    float: inherit !important;
+    position: inherit !important;
+    display: inline-block !important;
+}
+.panel-cke5-mblockdemo .rex-form-group:not(.rex-form-group-vertical) > dd:first-child,
+.cke5-mblockdemo .rex-form-group:not(.rex-form-group-vertical) > dd:first-child {
+    margin: 0 auto;
+    padding-left: inherit !important;
+    max-width: 1030px;
+    display: block;
+}
+.panel-cke5-mblockdemo .sortitem {
+    background: #f7f7f7;
+}
+.panel-cke5-mblockdemo form {
+    max-width: 1330px;
+    margin: 0 auto;
+}

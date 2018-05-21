@@ -1,0 +1,51 @@
+# title
+cke5_title = CKEditor 5
+
+# navigation
+cke5_profiles = Editor Profile
+cke5_config = Konfiguration
+cke5_main = Überblick & Demos
+cke5_demo = CKEditor 5 Demo
+cke5_mblock_demo = MBlock Demo
+cke5_features = Editor- & Addon-Features
+
+# heading
+cke5_subnavigation_header_title = CKEditor 5 für Redaxo 5
+cke5_subnavigation_header_photo = Foto von %s auf %s
+
+# profiles list & form
+cke5_list_profiles = CKEditor 5 Profile
+cke5_profile_edit = CKEditor 5 Profile bearbeiten
+cke5_profile_add = Neues CKEditor 5 Profile erstellen
+cke5_list_function = Funktion
+cke5_clone = duplizieren
+
+# profiles columns names
+cke5_name = Profile-Namen
+cke5_name_placeholder = profile_name
+cke5_description = Profile-Beschrieb
+cke5_description_placeholder = Einsatzzweck und Umfang des Profils
+cke5_toolbar = Toolbar-Elemente
+cke5_heading = Heading-Elemente
+cke5_alignment = Text Ausrichtung
+cke5_fontSize = Schriftgrößen
+cke5_link = Rexdaxo-Links
+cke5_lang = Sprache
+cke5_image_toolbar = Image-Plugin Toolbar
+cke5_height_default = CKEditor 5 Default-Höhe
+cke5_height_default_description = Ohne Custom-min- und -max-Höhe, Höhe passt sich dem Textarea-Inhalt an
+cke5_min_height = Textarea Mindest-Höhe
+cke5_max_height = Textarea Maximal-Höhe
+cke5_highlight = Marker- und Schriftfarben
+
+# profiles list & form actions
+rex_cke5_profiles_cloned = Profile wurde dupliziert
+rex_cke5_profiles_deleted = Profile wurde gelöscht
+rex_cke5_profiles_clone_exception = Profile konnte nicht dupliziert werden
+rex_cke5_profiles_delete_exception = Profile konnte nicht gelöscht werden
+cke5_add_profile = Neues Profile erstellen
+cke5_profiles_created = Profile wurden generiert und stehen zur Verfügung
+cke5_profiles_creation_exception = Profile konnten nicht generiert werden
+
+# demo mblock error
+cke5_mblock_not_available = MBlock ist nicht installiert oder aktiviert. Diese Demo kann nur mit installiertem und aktivierten MBlock-Addon angezeigt werden

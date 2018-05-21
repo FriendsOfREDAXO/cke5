@@ -1,0 +1,24 @@
+package: cke5
+version: '1.0.0'
+author: Friends Of REDAXO
+supportpage: https://github.com/FriendsOfREDAXO/demo_addon
+
+page:
+    title: 'translate:title'
+    icon: cke5-icon-logo
+    perm: admin
+    subpages:
+        main:
+            title: 'translate:main'
+            subpages:
+                demo:
+                    title: 'translate:demo'
+                mblock_demo:
+                    title: 'translate:mblock_demo'
+                    requires:
+                        mblock: '^5.1.0'
+        profiles:
+            title: 'translate:profiles'
+
+requires:
+    redaxo: '^5.5'
