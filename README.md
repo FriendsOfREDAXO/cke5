@@ -5,8 +5,22 @@ Integriert den [CKEDITOR5](https://ckeditor.com) in REDAXO
 ### Features
 - WYSIWYG-Editor 
 - Bildupload in den Medienpool per Drag & Drop ins Textfeld
-- Profil-Konfigurator
+- Profil-Konfigurator, Profile können einfach zusammengeklickt werden
+- Linkmap-Support
+- Medienpool-Support
 - MBLOCK-Support
+
+### Verwendung 
+
+```php 
+  <textarea name="content" id="editor" class="cke5-editor" data-profile="default" data-lang="de">
+```
+Über weitere Data-Attribute können könen die Minimal und Maximalhöhe sowie die Sprache gesteuert werden: 
+
+- data-max-height
+- data-min-height
+- data-lang
+
 
 ### Bugtracker
 
