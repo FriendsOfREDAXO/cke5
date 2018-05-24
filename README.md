@@ -37,7 +37,7 @@ siehe [CHANGELOG.md](https://github.com/FriendsOfREDAXO/cke5/blob/master/CHANGEL
 ### Lizenzen
 
 AddOn:[MIT LICENSE](https://github.com/FriendsOfREDAXO/cke5/blob/master/LICENSE)
-CKEDITOR [GPL LICENSE]https://github.com/ckeditor/ckeditor5/blob/master/LICENSE.md)
+CKEDITOR [GPL LICENSE](https://github.com/ckeditor/ckeditor5/blob/master/LICENSE.md)
 
 
 ### Autor
