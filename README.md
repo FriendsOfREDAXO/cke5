@@ -2,6 +2,9 @@
 ================================================================================
 Integriert den [CKEDITOR5](https://ckeditor.com) in REDAXO
 
+![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/ck5.png)
+
+
 ### Features
 - WYSIWYG-Editor 
 - Bildupload in den Medienpool per Drag & Drop ins Textfeld
