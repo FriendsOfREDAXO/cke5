@@ -65,6 +65,9 @@ picture img {
     padding-top: 110px;
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
+    font-size: 36px;
+    color: #fff;
+    line-height: 1.1em;
 }
 @media (min-width: 768px) {
     .cke5-header h1:before {
