@@ -39,6 +39,8 @@ cke5_max_height = Textarea max-height
 cke5_highlight = Marker- and pen-colors
 cke5_media_manager_type = Media-Manager-Type
 cke5_media_category = Media-category
+cke5_upload_default = Image-Drag&Drop-Upload
+cke5_upload_default_description = Pictures can be put into the textarea via drag + drop
 
 # profiles list & form actions
 rex_cke5_profiles_cloned = Profile was duplicated

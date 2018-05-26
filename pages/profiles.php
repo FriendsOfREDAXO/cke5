@@ -205,6 +205,13 @@ if ($func == '') {
     $field->setAttribute('data-slider-value', $max_height);
     $form->addRawField('</div>');
 
+    // upload default
+    $field = $form->addCheckboxField('upload_default');
+    $field->setAttribute('data-toggle', 'toggle');
+    $field->setLabel(rex_i18n::msg('cke5_upload_default'));
+    $field->addOption(rex_i18n::msg('cke5_upload_default_description'), 'default_upload');
+    if ($func == 'add') $field->setValue('default_upload');
+
     // lang
     $field = $form->addSelectField('lang');
     $field->setAttribute('class', 'form-control selectpicker');

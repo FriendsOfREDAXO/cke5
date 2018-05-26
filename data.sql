@@ -1,6 +1,6 @@
-INSERT INTO `rex_cke5_profiles` (`id`, `name`, `description`, `min_height`, `max_height`, `lang`, `createdate`, `updatedate`, `createuser`, `updateuser`, `toolbar`, `fontsize`, `heading`, `alignment`, `rexlink`, `image_toolbar`, `height_default`, `highlight`)
+INSERT INTO `rex_cke5_profiles` (`id`, `name`, `description`, `toolbar`, `heading`, `alignment`, `image_toolbar`, `fontsize`, `highlight`, `rexlink`, `height_default`, `min_height`, `max_height`, `lang`, `mediatype`, `mediacategory`, `upload_default`, `createdate`, `updatedate`, `createuser`, `updateuser`)
 VALUES
-	(1, 'default', 'Default und Demo Profile', '0', '0', '', '2018-05-21 17:50:09', '2018-05-21 18:52:09', 'admin', 'admin', 'heading,|,alignment,highlight,bold,italic,underline,strikethrough,link,rexImage,blockQuote,bulletedList,numberedList,Undo,Redo', 'tiny,small,big,huge', 'paragraph,h2,h3,h4,h5', 'left,right,center,justify', 'internal,media', 'imageTextAlternative,|,full,alignLeft,alignRight,alignCenter', '|default_height|', 'yellowMarker,greenMarker,redPen,greenPen');
+	(1, 'default', 'Default und Demo Profile', 'heading,|,alignment,highlight,bold,italic,underline,strikethrough,link,rexImage,blockQuote,bulletedList,numberedList,Undo,Redo', 'paragraph,h1,h2,h3,h4', 'left,right,center,justify', 'imageTextAlternative,|,full,alignLeft,alignRight,alignCenter', 'tiny,small,big,huge', 'yellowMarker,greenMarker,redPen,greenPen', 'internal,media', '|default_height|', 0, 0, '', '', 0, '|default_upload|', '2018-05-21 17:50:09', '2018-05-26 18:03:26', 'admin', 'admin');
 
 INSERT INTO `rex_cke5_mblock_demo` (`id`, `name`, `mblock_field`, `createdate`, `updatedate`, `createuser`, `updateuser`)
 VALUES
