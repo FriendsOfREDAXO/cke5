@@ -83,17 +83,7 @@ Below is a list of the most important keystrokes supported by CKEditor 5 and its
 | Navigate through the toolbar | <kbd>↑</kbd> / <kbd>→</kbd> / <kbd>↓</kbd> / <kbd>←</kbd> | <kbd>↑</kbd> / <kbd>→</kbd> / <kbd>↓</kbd> / <kbd>←</kbd> |
 | Execute the currently focused button | <kbd>Enter</kbd> | <kbd>Enter</kbd> |
 
-<style>
-.keyboard-shortcuts th {
-	text-align: center;
-}
-.keyboard-shortcuts td:nth-of-type(1) {
-	text-align: right;
-}
-.keyboard-shortcuts td:nth-of-type(2), .keyboard-shortcuts td:nth-of-type(3) {
-	width: 30%;
-}
-</style>
+
 
 
 ## Bugtracker
