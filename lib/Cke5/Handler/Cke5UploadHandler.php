@@ -16,6 +16,9 @@ use rex_response;
 
 class Cke5UploadHandler
 {
+    const MEDIA_TYPE_PATH = 'index.php?rex_media_type=%s&rex_media_file=';
+    const MEDIA_PATH = '/media/';
+
     /**
      * @author Joachim Doerr
      */
@@ -29,10 +32,18 @@ class Cke5UploadHandler
 
         if ($_FILES['upload']['name'] != '' && rex_mediapool_isAllowedMediaType($_FILES['upload']['name'])) {
 
-            $return = rex_mediapool_saveMedia($_FILES['upload'], 0, array('title'=>''), rex::getUser()->getValue('login'));
+            $mediaCategory = \rex_request::get('media_category', 'int', 0);
+            $return = rex_mediapool_saveMedia($_FILES['upload'], $mediaCategory, array('title'=>''), rex::getUser()->getValue('login'));
 
             if ($return['ok'] == 1) {
                 rex_extension::registerPoint(new rex_extension_point('MEDIA_ADDED', '', $return));
+            }
+
+            $mediaType = \rex_request::get('media_type', 'string', '');
+            $mediaSrcPath = self::MEDIA_PATH;
+
+            if (!empty($mediaType)) {
+                $mediaSrcPath = sprintf(self::MEDIA_TYPE_PATH, $mediaType);
             }
 
             $statusCode = 201;
@@ -40,7 +51,7 @@ class Cke5UploadHandler
                 'fileName' => $return['filename'],
                 'uploaded' => 1,
                 'error' => null,
-                'url' => '/media/' . $return['filename'],
+                'url' => $mediaSrcPath . $return['filename'],
             );
 
         } else {

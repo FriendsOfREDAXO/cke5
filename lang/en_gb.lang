@@ -37,6 +37,8 @@ cke5_height_default_description = Without custom min and max height, height adap
 cke5_min_height = Textarea min-height
 cke5_max_height = Textarea max-height
 cke5_highlight = Marker- and pen-colors
+cke5_media_manager_type = Media-Manager-Type
+cke5_media_category = Media-category
 
 # profiles list & form actions
 rex_cke5_profiles_cloned = Profile was duplicated

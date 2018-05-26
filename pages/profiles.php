@@ -215,6 +215,25 @@ if ($func == '') {
         $field->getSelect()->addOption(rex_i18n::msg('lang'), $locale);
     }
 
+    if (rex_addon::exists('media_manager') && rex_addon::get('media_manager')->isAvailable()) {
+        $field = $form->addSelectField('mediatype');
+        $field->setAttribute('class', 'form-control selectpicker');
+        $field->setLabel(rex_i18n::msg('cke5_media_manager_type'));
+        $field->getSelect()->addOption('default ./media/', '');
+        $field->getSelect()->addDBSqlOptions('SELECT name, name FROM ' . rex::getTablePrefix() . 'media_manager_type ORDER BY status, name');
+    }
+
+    if (rex_addon::exists('mediapool') && rex_addon::get('mediapool')->isAvailable()) {
+        $field = $form->addSelectField('mediacategory');
+        $field->setAttribute('class', 'form-control selectpicker');
+        $field->setLabel(rex_i18n::msg('cke5_media_category'));
+        $cats_sel = new rex_media_category_select();
+        $cats_sel->setStyle('class="form-control selectpicker"');
+        $cats_sel->setName('mediacategory');
+        $cats_sel->addOption(rex_i18n::msg('pool_kats_no'), '0');
+        $field->setSelect($cats_sel);
+    }
+
     // show
     $content = $form->get();
 

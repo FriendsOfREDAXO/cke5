@@ -60,7 +60,24 @@ class Cke5ProfilesCreator
                     $jsonProfile['highlight'] = array('options' => self::getHighlight(self::toArray($profile['highlight'])));
                 }
 
-                $jsonProfile['ckfinder'] = array('uploadUrl' => self::UPLOAD_URL);
+                // "rexImage": {"media_type" : "testtype"},
+                // "ckfinder": {"uploadUrl": ".\/index.php?cke5upload=1&media_type=testtype&media_category=2"}
+
+                if (in_array('rexImage', $toolbar) && !empty($profile['mediatype'])) {
+                    $jsonProfile['rexImage'] = array('media_type' => $profile['mediatype']);
+                }
+
+                $ckFinderUrl = self::UPLOAD_URL;
+
+                if (!empty($profile['mediatype'])) {
+                    $ckFinderUrl .= '&media_type=' . $profile['mediatype'];
+                }
+
+                if (!empty($profile['mediacategory'])) {
+                    $ckFinderUrl .= '&media_category=' . $profile['mediacategory'];
+                }
+
+                $jsonProfile['ckfinder'] = array('uploadUrl' => $ckFinderUrl);
 
                 if (!empty($profile['lang'])) {
                     $jsonProfile['lang'] = $profile['lang'];

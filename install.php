@@ -20,9 +20,11 @@ rex_sql_table::get(rex::getTable('cke5_profiles'))
     ->ensureColumn(new rex_sql_column('highlight', 'varchar(255)', true))
     ->ensureColumn(new rex_sql_column('rexlink', 'varchar(255)', true))
     ->ensureColumn(new rex_sql_column('height_default', 'varchar(255)', true))
-    ->ensureColumn(new rex_sql_column('min_height', 'varchar(4)', true))
-    ->ensureColumn(new rex_sql_column('max_height', 'varchar(4)', true))
+    ->ensureColumn(new rex_sql_column('min_height', 'int(4)', true))
+    ->ensureColumn(new rex_sql_column('max_height', 'int(4)', true))
     ->ensureColumn(new rex_sql_column('lang', 'varchar(2)', true))
+    ->ensureColumn(new rex_sql_column('mediatype', 'varchar(255)', true))
+    ->ensureColumn(new rex_sql_column('mediacategory', 'int(4)', true))
     ->ensureColumn(new rex_sql_column('createdate', 'datetime', true))
     ->ensureColumn(new rex_sql_column('updatedate', 'datetime', true))
     ->ensureColumn(new rex_sql_column('createuser', 'varchar(255)', true))
@@ -42,7 +44,13 @@ rex_sql_table::get(rex::getTable('cke5_mblock_demo'))
 
 // install default demo profile and mblock demo data
 try {
-    rex_sql_util::importDump($this->getPath('data.sql'));
+    $sql = rex_sql::factory();
+    if (
+        sizeof($sql->getArray("SELECT id FROM " . rex::getTable('cke5_profiles') . " WHERE id=1")) <= 0 &&
+        sizeof($sql->getArray("SELECT id FROM " . rex::getTable('cke5_mblock_demo') . " WHERE id=1")) <= 0
+    ) {
+        rex_sql_util::importDump($this->getPath('data.sql'));
+    }
 } catch (rex_sql_exception $e) {
     rex_logger::logException($e);
     print rex_view::error($e->getMessage());
