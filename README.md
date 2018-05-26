@@ -20,7 +20,7 @@ Integriert den [CKEDITOR5](https://ckeditor.com) in REDAXO
 ### Verwendung allgemein
 
 ```php 
-  <textarea name="content" id="editor" class="cke5-editor" data-profile="default" data-lang="de" name="REX_INPUT_VALUE[1]">REX_VALUE[1]</textarea>
+ <textarea class="form-control cke5-editor" id="editor-1" data-profile="default"  name="REX_INPUT_VALUE[1]">REX_VALUE[1]</textarea>
 ```
 Über weitere Data-Attribute können die Minimal- und Maximalhöhe sowie die Sprache gesteuert werden: 
 
