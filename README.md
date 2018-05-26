@@ -107,4 +107,6 @@ CKEDITOR [GPL LICENSE](https://github.com/ckeditor/ckeditor5/blob/master/LICENSE
 
 [Joachim Dörr](https://github.com/joachimdoerr)
 
+**Initiator:**
 
+[KLXM Crossmedia / Thomas Skerbis](https://klxm.de)
