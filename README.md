@@ -1,4 +1,4 @@
-🐣 REDAXO-AddOn: cke5 - CKEDITOR5 für REDAXO
+REDAXO-AddOn: cke5 - CKEDITOR5 für REDAXO
 ================================================================================
 Integriert den [CKEDITOR5](https://ckeditor.com) in REDAXO
 
@@ -7,7 +7,7 @@ Integriert den [CKEDITOR5](https://ckeditor.com) in REDAXO
 
 ## Features
 - WYSIWYG-Editor
-- Profil-Konfigurator, Profile können einfach zusammengeklickt werden
+- Profil-Konfigurator mit Drag&Drop-Support, Profile können einfach zusammengeklickt werden
 - Bildupload in den Medienpool per Drag & Drop ins Textfeld
 - Bildupload-Kategorie je Profil einstellbar
 - Mediamanager-Type je Profil einstellbar
