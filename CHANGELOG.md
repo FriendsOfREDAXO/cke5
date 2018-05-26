@@ -2,6 +2,7 @@
 
 ## Version 1.1.0
 
+* README updated, module examples, shortcut add and many other great changes -> special thanks @skerbis
 * Add short profile
 * drag & drop for items in profile edit
 * media-manager-type support in profiles
