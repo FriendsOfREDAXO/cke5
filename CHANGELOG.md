@@ -1,5 +1,14 @@
 # Changelog
 
+## Version 1.1.0
+
+* Add short profile
+* drag & drop for items in profile edit
+* media-manager-type support in profiles
+* media-category support in profiles for drag & drop image upload
+* profile edit js and cke5 init js slitted in tow files
+* drag & drop image upload optional for profiles
+
 ## Version 1.0.0 
 
 * Add data sql to install default profile
