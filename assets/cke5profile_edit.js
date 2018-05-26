@@ -173,6 +173,28 @@ function cke5_init_edit() {
             toggle_collapse('minmax', toogle_it);
         });
     }
+
+    $('.cke5InputTags-list').each(function(){
+        $(this).sortable({
+            update: function() {
+                var _input = $(this).prev(),
+                    _inputid = _input.attr('data-uniqid'),
+                    _inputtags = window.cke5InputTags.instances[_inputid],
+                    _tags = {},
+                    tags;
+
+                $(this).find('span').each(function(i){
+                    _tags[i] = $(this).attr('data-tag');
+                });
+
+                tags = $.map(_tags, function(val) {
+                    return val;
+                }).join(",");
+                _inputtags.$element.attr('value', tags);
+                _inputtags.tags = _inputtags.$element.val().split(',');
+            }
+        });
+    });
 }
 
 function cke5_toolbar_create_tag(typename, tags) {
