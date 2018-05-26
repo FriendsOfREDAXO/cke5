@@ -3,6 +3,7 @@ cke5_title = CKEditor 5
 
 # navigation
 cke5_profiles = Editor Profile
+cke5_help = Hilfe
 cke5_config = Konfiguration
 cke5_main = Überblick & Demos
 cke5_demo = CKEditor 5 Demo

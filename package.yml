@@ -19,6 +19,8 @@ page:
                         mblock: '^5.1.0'
         profiles:
             title: 'translate:profiles'
+        help:
+            title: 'translate:help'
 
 requires:
     redaxo: '^5.5'
