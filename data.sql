@@ -1,6 +1,7 @@
 INSERT INTO `rex_cke5_profiles` (`id`, `name`, `description`, `toolbar`, `heading`, `alignment`, `image_toolbar`, `fontsize`, `highlight`, `rexlink`, `height_default`, `min_height`, `max_height`, `lang`, `mediatype`, `mediacategory`, `upload_default`, `createdate`, `updatedate`, `createuser`, `updateuser`)
 VALUES
-	(1, 'default', 'Default und Demo Profile', 'heading,|,alignment,highlight,bold,italic,underline,strikethrough,link,rexImage,blockQuote,bulletedList,numberedList,Undo,Redo', 'paragraph,h1,h2,h3,h4', 'left,right,center,justify', 'imageTextAlternative,|,full,alignLeft,alignRight,alignCenter', 'tiny,small,big,huge', 'yellowMarker,greenMarker,redPen,greenPen', 'internal,media', '|default_height|', 0, 0, '', '', 0, '|default_upload|', '2018-05-21 17:50:09', '2018-05-26 18:03:26', 'admin', 'admin');
+	(1, 'default', 'Default & Demo Profile', 'heading,|,alignment,highlight,bold,italic,underline,strikethrough,link,rexImage,blockQuote,bulletedList,numberedList,Undo,Redo', 'paragraph,h1,h2,h3,h4', 'left,right,center,justify', 'imageTextAlternative,|,full,alignLeft,alignRight,alignCenter', 'tiny,small,big,huge', 'yellowMarker,greenMarker,redPen,greenPen', 'internal,media', '|default_height|', 0, 0, '', '', 0, '|default_upload|', '2018-05-21 17:50:09', '2018-05-26 18:03:26', 'admin', 'admin'),
+	(2, 'light', 'Lead-Text & Demo Profile', 'bold,italic,bulletedList,numberedList,Undo,Redo', '', 'left,right,center', '', '', '', 'internal,media', '|default_height|', 0, 0, '', '', 0, NULL, '2018-05-26 20:48:34', '2018-05-26 20:54:53', 'admin', 'admin');
 
 INSERT INTO `rex_cke5_mblock_demo` (`id`, `name`, `mblock_field`, `createdate`, `updatedate`, `createuser`, `updateuser`)
 VALUES
