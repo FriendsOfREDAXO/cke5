@@ -49,6 +49,7 @@ class Cke5AssetsProvider
                 'bootstrap-slider' => 'vendor/bootstrap-slider/bootstrap-slider.min.js',
                 'bootstrap-toggle' => 'vendor/bootstrap-toggle/bootstrap-toggle.min.js',
                 'jquery.alphanum' => 'vendor/alphanum/jquery.alphanum.js',
+                'cke5profile_edit' => 'cke5profile_edit.js',
             ));
             // add css vendors
             self::addCss(array(
