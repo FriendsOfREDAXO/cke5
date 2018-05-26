@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the maintenance package.
+ * This file is part of the cke5 package.
  *
  * @author (c) Friends Of REDAXO
  * @author <friendsof@redaxo.org>
