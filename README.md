@@ -6,10 +6,11 @@ Integriert den [CKEDITOR5](https://ckeditor.com) in REDAXO
 
 
 ## Features
-- WYSIWYG-Editor 
+- WYSIWYG-Editor
+- Profil-Konfigurator, Profile können einfach zusammengeklickt werden
 - Bildupload in den Medienpool per Drag & Drop ins Textfeld
 - Bildupload-Kategorie je Profil einstellbar
-- Profil-Konfigurator, Profile können einfach zusammengeklickt werden
+- Mediamanager-Type je Profil einstellbar
 - Linkmap-Support
 - Medienpool-Support
 - MBLOCK-Support
