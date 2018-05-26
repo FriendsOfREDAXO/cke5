@@ -22,6 +22,9 @@ Integriert den [CKEDITOR5](https://ckeditor.com) in REDAXO
 ```php 
  <textarea class="form-control cke5-editor" id="editor-1" data-profile="default" data-lang="de"  name="REX_INPUT_VALUE[1]">REX_VALUE[1]</textarea>
 ```
+### Ausgabe Code
+`REX_VALUE[id="1" output="html"]`
+
 Über weitere Data-Attribute können die Minimal- und Maximalhöhe sowie die Sprache gesteuert werden: 
 
 - data-max-height
