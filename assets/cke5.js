@@ -19,7 +19,7 @@ $(document).on('ready', function () {
     });
 });
 
-$(document).on('pjax:success', function () {
+$(document).on('ready pjax:success', function () {
     if ($(ckareas).length) {
         cke5_init_all($(ckareas));
     }
