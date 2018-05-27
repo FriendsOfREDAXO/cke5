@@ -86,8 +86,8 @@ echo MBlock::show($id, $mform->show());
 
 ## Bugtracker
 
-You have found a mistake or a nice feature ready? [Create Issue](https://github.com/FriendsOfREDAXO/cke5/issues). 
-Before you create a new Issue, please search if already exists with your request and read the [Issue Guidelines (englisch)](https://github.com/necolas/issue-guidelines) from [Nicolas Gallagher](https://github.com/necolas/).
+If you have found a error or maybe you have an idea, You can create a [Issue](https://github.com/FriendsOfREDAXO/cke5/issues). 
+Before you create a new issue, please search if there already exists an issue with your request, and read the [Issue Guidelines (englisch)](https://github.com/necolas/issue-guidelines) from [Nicolas Gallagher](https://github.com/necolas/).
 
 
 ## Changelog
