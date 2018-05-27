@@ -1,8 +1,10 @@
 # Changelog
 
-## Version 1.1.1
+## Version 1.1.2
 
 * fixed: remove ck element by MBlock add not ever work 
+* fix many reinit register callback bug by pjax callback event
+* Translate README -> thanks @crydotsnake
 
 ## Version 1.1.0
 
