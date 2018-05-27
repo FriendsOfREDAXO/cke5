@@ -60,8 +60,6 @@ function cke5_init(element) {
         options['lang'] = lang;
     }
 
-    console.log(options);
-
     // init editor
     ClassicEditor.create(document.querySelector('#' + unique_id), options)
         .then(editor => {
@@ -76,7 +74,7 @@ function cke5_init(element) {
 function cke5_destroy(elements) {
     elements.each(function () {
         var next = $(this).next();
-        if (next.length && next.hasClass('ck')) {
+        if (next.length && (next.hasClass('ck-editor') || next.hasClass('ck'))) {
             next.remove();
         }
     });
