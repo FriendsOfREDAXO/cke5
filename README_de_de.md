@@ -1,4 +1,4 @@
-REDAXO-AddOn: cke5 - CKEditor5 für REDAXO
+cke5 - CKEditor5-AddOn für REDAXO
 ================================================================================
 Integriert den [CKEditor5](https://ckeditor.com) in REDAXO
 
