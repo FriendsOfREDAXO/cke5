@@ -17,7 +17,9 @@ Integriert den [CKEDITOR5](https://ckeditor.com) in REDAXO
 
 ## Codebeispiele
 
-### Verwendung allgemein
+### Verwendung allgemein:
+
+### Eingabe Code
 
 ```php 
  <textarea class="form-control cke5-editor" id="editor-1" data-profile="default" data-lang="de"  name="REX_INPUT_VALUE[1]">REX_VALUE[1]</textarea>
