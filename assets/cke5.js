@@ -8,20 +8,21 @@ let ckeditors = {};
 
 var ckareas = '.cke5-editor';
 
-$(document).on('ready pjax:success', function () {
+$(document).on('ready', function () {
+    mblock_module.registerCallback('reindex_end', function () {
+        if ($(ckareas).length) {
+            if (mblock_module.lastAction == 'add_item') {
+                cke5_destroy(mblock_module.affectedItem.find(ckareas));
+                cke5_init_all(mblock_module.affectedItem.find(ckareas));
+            }
+        }
+    });
+});
 
+$(document).on('pjax:success', function () {
     if ($(ckareas).length) {
         cke5_init_all($(ckareas));
-        mblock_module.registerCallback('reindex_end', function () {
-            if ($(ckareas).length) {
-                if (mblock_module.lastAction == 'add_item') {
-                    cke5_destroy(mblock_module.affectedItem.find(ckareas));
-                    cke5_init_all(mblock_module.affectedItem.find(ckareas));
-                }
-            }
-        });
     }
-
 });
 
 function cke5_init_all(elements) {
@@ -31,7 +32,6 @@ function cke5_init_all(elements) {
 }
 
 function cke5_init(element) {
-
     var unique_id = 'ck' + Math.random().toString(16).slice(2),
         options = {},
         sub_options = {},
