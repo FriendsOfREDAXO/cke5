@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 1.1.1
+
+* fixed: remove ck element by MBlock add not ever work 
+
 ## Version 1.1.0
 
 * README updated, module examples, shortcut add and many other great changes -> special thanks @skerbis
