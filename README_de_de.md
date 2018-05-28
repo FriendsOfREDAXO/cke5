@@ -13,7 +13,7 @@ Integriert den [CKEditor5](https://ckeditor.com) in REDAXO
 - Mediamanager-Type je Profil einstellbar
 - Linkmap-Support
 - Medienpool-Support
-- MBLOCK-Support
+- MBlock-Support
 
 ## Codebeispiele
 
@@ -22,7 +22,7 @@ Integriert den [CKEditor5](https://ckeditor.com) in REDAXO
 ### Eingabe Code
 
 ```php 
- <textarea class="form-control cke5-editor" id="editor-1" data-profile="default" data-lang="de"  name="REX_INPUT_VALUE[1]">REX_VALUE[1]</textarea>
+ <textarea class="form-control cke5-editor" data-profile="default" data-lang="de"  name="REX_INPUT_VALUE[1]">REX_VALUE[1]</textarea>
 ```
 ### Ausgabe Code
 `REX_VALUE[id="1" output="html"]`
@@ -33,7 +33,7 @@ Integriert den [CKEditor5](https://ckeditor.com) in REDAXO
 - data-min-height
 - data-lang
 
-### Verwendung in mform
+### Verwendung in MForm
 ```php
 $mform = new MForm();
 $mform->addTextAreaField(1, 
@@ -46,9 +46,10 @@ $mform->addTextAreaField(1,
 echo $mform->show();
 ```
 
-### Verwendunng mit Mblock
+### Verwendunng mit MBlock
 
 ```php
+$id = 1;
 $mform = new MForm();
 $mform->addFieldset('Accordion');
 $mform->addTextField("$id.0.titel", array('label'=>'Titel'));
