@@ -22,7 +22,7 @@ Integrates the [CKEditor5](https://ckeditor.com) for REDAXO
 ### Input Code
 
 ```php 
- <textarea class="form-control cke5-editor" data-profile="default" data-lang="de"  name="REX_INPUT_VALUE[1]">REX_VALUE[1]</textarea>
+ <textarea class="form-control cke5-editor" data-profile="default" data-lang="de" name="REX_INPUT_VALUE[1]">REX_VALUE[1]</textarea>
 ```
 ### Output Code
 `REX_VALUE[id="1" output="html"]`
