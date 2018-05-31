@@ -4,14 +4,13 @@
  * @license MIT
  */
 
-let ckeditors = {};
-
-var ckareas = '.cke5-editor';
+let ckeditors = {},
+    ckareas = '.cke5-editor';
 
 $(document).on('ready', function () {
     mblock_module.registerCallback('reindex_end', function () {
         if ($(ckareas).length) {
-            if (mblock_module.lastAction == 'add_item') {
+            if (mblock_module.lastAction === 'add_item') {
                 cke5_destroy(mblock_module.affectedItem.find(ckareas));
                 cke5_init_all(mblock_module.affectedItem.find(ckareas));
             }
@@ -32,7 +31,7 @@ function cke5_init_all(elements) {
 }
 
 function cke5_init(element) {
-    var unique_id = 'ck' + Math.random().toString(16).slice(2),
+    let unique_id = 'ck' + Math.random().toString(16).slice(2),
         options = {},
         sub_options = {},
         profile_set = element.attr('data-profile'),
@@ -73,7 +72,7 @@ function cke5_init(element) {
 
 function cke5_destroy(elements) {
     elements.each(function () {
-        var next = $(this).next();
+        let next = $(this).next();
         if (next.length && (next.hasClass('ck-editor') || next.hasClass('ck'))) {
             next.remove();
         }
@@ -81,13 +80,13 @@ function cke5_destroy(elements) {
 }
 
 function cke5_pastinit(element, sub_options) {
-    var next = element.next();
+    let next = element.next();
     if (next.length && next.hasClass('ck')) {
-        var editable = next.find('.ck-editor__editable');
-        if ('min-height' in sub_options && editable.length && sub_options['min-height'] != 'none') {
+        let editable = next.find('.ck-editor__editable');
+        if ('min-height' in sub_options && editable.length && sub_options['min-height'] !== 'none') {
             next.find('.ck-editor__editable').css('min-height', sub_options['min-height'] + 'px');
         }
-        if ('max-height' in sub_options && editable.length && sub_options['max-height'] != 'none') {
+        if ('max-height' in sub_options && editable.length && sub_options['max-height'] !== 'none') {
             next.find('.ck-editor__editable').css('max-height', sub_options['max-height'] + 'px');
         }
     }
