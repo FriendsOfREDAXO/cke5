@@ -8,14 +8,16 @@ let ckeditors = {},
     ckareas = '.cke5-editor';
 
 $(document).on('ready', function () {
-    mblock_module.registerCallback('reindex_end', function () {
-        if ($(ckareas).length) {
-            if (mblock_module.lastAction === 'add_item') {
-                cke5_destroy(mblock_module.affectedItem.find(ckareas));
-                cke5_init_all(mblock_module.affectedItem.find(ckareas));
+    if (typeof mblock_module === 'object') {
+        mblock_module.registerCallback('reindex_end', function () {
+            if ($(ckareas).length) {
+                if (mblock_module.lastAction === 'add_item') {
+                    cke5_destroy(mblock_module.affectedItem.find(ckareas));
+                    cke5_init_all(mblock_module.affectedItem.find(ckareas));
+                }
             }
-        }
-    });
+        });
+    }
 });
 
 $(document).on('ready pjax:success', function () {
