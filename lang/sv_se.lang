@@ -1,0 +1,56 @@
+# title
+cke5_title = CKEditor 5
+
+# navigation
+cke5_profiles = Editor profiler
+cke5_help = Hjälpl
+cke5_config = Konfiguration
+cke5_main = Översikt & Demon
+cke5_demo = CKEditor 5 Demo
+cke5_mblock_demo = MBlock Demo
+cke5_features = Editor- & Addon-Features
+
+# heading
+cke5_subnavigation_header_title = CKEditor 5 till Redaxo 5
+cke5_subnavigation_header_photo = Foto från %s på %s
+
+# profiles list & form
+cke5_list_profiles = CKEditor 5 Profile
+cke5_profile_edit = Berabeta CKEditor 5 profil
+cke5_profile_add = Skapa ny CKEditor 5 profil
+cke5_list_function = Funktion
+cke5_clone = Duplicera
+
+# profiles columns names
+cke5_name = Profil-namn
+cke5_name_placeholder = profile_name
+cke5_description = Profil beskrivning
+cke5_description_placeholder = Syfte och omfattning av profilen
+cke5_toolbar = Toolbar element
+cke5_heading = Heading element
+cke5_alignment = Textjustering
+cke5_fontSize = Teckenstorlekar
+cke5_link = Rexdaxo-länkar
+cke5_lang = Språk
+cke5_image_toolbar = Image-Plugin Toolbar
+cke5_height_default = CKEditor 5 default höjd
+cke5_height_default_description = Utan anpassad min och max höjd, höjden anpassas till textarea innehåll
+cke5_min_height = Textarea min höjd
+cke5_max_height = Textarea max höjd
+cke5_highlight = Markör och teckensnitt färger
+cke5_media_manager_type = Media-Manager type
+cke5_media_category = Mediakagetori
+cke5_upload_default = Image-Drag&Drop-Upload
+cke5_upload_default_description = Bilder kan läggas i textfältet via drag + drop
+
+# profiles list & form actions
+rex_cke5_profiles_cloned = Profilen duplicerades
+rex_cke5_profiles_deleted = Profilen har raderats
+rex_cke5_profiles_clone_exception = Profiler kunde inte dupliceras
+rex_cke5_profiles_delete_exception = Profilen kunde inte raderas
+cke5_add_profile = Skapa en ny profil
+cke5_profiles_created = Profiler genererades och var tillgängliga
+cke5_profiles_creation_exception = Profiler kunde inte genereras
+
+# demo mblock error
+cke5_mblock_not_available = MBlock är inte installerat eller aktiverat. Denna demo kan bara ses med MBlock addon installerat och aktiverat
