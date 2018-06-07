@@ -1,5 +1,11 @@
 # Changelog
 
+
+## Version 1.1.3
+
+* fixed: js error in Demo caused by missing mblock installation
+* swedish translation: thx to: @interweave-media
+
 ## Version 1.1.2
 
 * fixed: remove ck element by MBlock add not ever work 
