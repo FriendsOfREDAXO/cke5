@@ -45,7 +45,7 @@ function cke5_init_edit() {
         }
         var toolbarTags = toolbar.cke5InputTags({
             autocomplete: {
-                values: ['|', 'heading', 'fontSize', 'fontFamily', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'code', 'link', 'rexImage', 'imageUpload', 'bulletedList', 'numberedList', 'blockQuote', 'Undo', 'Redo', 'highlight', 'emoji']
+                values: ['|', 'heading', 'fontSize', 'fontFamily', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'code', 'link', 'rexImage', 'imageUpload', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji']
             },
             create: function (e) {
                 cke5_toolbar_create_tag('toolbar',e.tags);

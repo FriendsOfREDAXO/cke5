@@ -82,7 +82,7 @@ class Cke5ProfilesCreator
                 }
 
                 if (!empty($profile['lang'])) {
-                    $jsonProfile['lang'] = $profile['lang'];
+                    $jsonProfile['language'] = $profile['lang'];
                 }
 
                 if (is_null($profile['height_default']) or empty($profile['height_default'])) {

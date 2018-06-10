@@ -58,7 +58,7 @@ function cke5_init(element) {
         sub_options['max-height'] = max_height;
     }
     if (typeof lang === 'undefined' || !lang) { } else {
-        options['lang'] = lang;
+        options['language'] = lang;
     }
 
     // init editor
