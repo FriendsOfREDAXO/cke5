@@ -22,7 +22,7 @@ Integriert den [CKEditor5](https://ckeditor.com) in REDAXO
 ### Eingabe Code
 
 ```php 
- <textarea class="form-control cke5-editor" data-profile="default" data-lang="de" name="REX_INPUT_VALUE[1]">REX_VALUE[1]</textarea>
+ <textarea class="form-control cke5-editor" data-profile="default" data-lang="<?php echo \Cke5\Utils\Cke5Lang::getUserLang(); ?>" name="REX_INPUT_VALUE[1]">REX_VALUE[1]</textarea>
 ```
 ### Ausgabe Code
 `REX_VALUE[id="1" output="html"]`
@@ -40,7 +40,7 @@ $mform->addTextAreaField(1,
         array(
         'label'=>'Text',
         'class'=>'cke5-editor', 
-        'data-lang'=>'de', 
+        'data-lang'=>\Cke5\Utils\Cke5Lang::getUserLang(), 
         'data-profile'=>'default')
         );
 echo $mform->show();
@@ -57,7 +57,7 @@ $mform->addTextAreaField("$id.0.text",
         array(
         'label'=>'Text',
         'class'=>'cke5-editor', 
-        'data-lang'=>'de', 
+        'data-lang'=>\Cke5\Utils\Cke5Lang::getUserLang(), 
         'data-profile'=>'default')
         );
 echo MBlock::show($id, $mform->show());

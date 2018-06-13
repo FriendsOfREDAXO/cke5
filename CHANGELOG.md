@@ -9,7 +9,6 @@
 * add get user default lang helper
 * use user default lang in examples
 
-
 ## Version 1.1.3
 
 * fixed: js error in Demo caused by missing mblock installation
