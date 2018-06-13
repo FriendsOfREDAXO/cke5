@@ -54,3 +54,4 @@ cke5_profiles_creation_exception = Profiles could not be generated
 
 # demo mblock error
 cke5_mblock_not_available = MBlock is not installed or activated. This demo can only be viewed with MBlock
+cke5_description_empty_error = Pleas enter a profile description

@@ -41,7 +41,7 @@ function cke5_init_edit() {
 
     if (toolbar.length) {
         if (toolbar.attr('data-default-tags') === '1') {
-            toolbar.val('heading,|')
+            toolbar.attr('value', 'heading,|')
         }
         var toolbarTags = toolbar.cke5InputTags({
             autocomplete: {
@@ -58,7 +58,7 @@ function cke5_init_edit() {
 
     if (alignment.length) {
         if (alignment.attr('data-default-tags') === '1') {
-            alignment.val('left,right,center')
+            alignment.attr('value', 'left,right,center')
         }
         var alignmentTags = alignment.cke5InputTags({
             autocomplete: {
@@ -70,7 +70,7 @@ function cke5_init_edit() {
 
     if (heading.length) {
         if (heading.attr('data-default-tags') === '1') {
-            heading.val('paragraph,h1,h2,h3');
+            heading.attr('value', 'paragraph,h1,h2,h3');
         }
         var headingTags = heading.cke5InputTags({
             autocomplete: {
@@ -82,7 +82,7 @@ function cke5_init_edit() {
 
     if (fontsize.length) {
         if (fontsize.attr('data-default-tags') === '1') {
-            fontsize.val('tiny,small,big,huge');
+            fontsize.attr('value', 'tiny,small,big,huge');
         }
         var fontsizeTags = fontsize.cke5InputTags({
             autocomplete: {
@@ -100,7 +100,7 @@ function cke5_init_edit() {
 
     if (rexlink.length) {
         if (rexlink.attr('data-default-tags') === '1') {
-            rexlink.val('internal,media');
+            rexlink.attr('value', 'internal,media');
         }
         var rexlinkTags = rexlink.cke5InputTags({
             autocomplete: {
@@ -112,7 +112,7 @@ function cke5_init_edit() {
 
     if (image.length) {
         if (image.attr('data-default-tags') === '1') {
-            image.val('imageTextAlternative,|,full,alignLeft,alignRight');
+            image.attr('value', 'imageTextAlternative,|,full,alignLeft,alignRight');
         }
         var imageTags = image.cke5InputTags({
             autocomplete: {
@@ -125,7 +125,7 @@ function cke5_init_edit() {
     if (highlight.length) {
         if (highlight.attr('data-default-tags') === '1') {
             var defaults = highlight.attr('data-defaults');
-            highlight.val(defaults);
+            highlight.attr('value', defaults);
         }
 
         var highlightTags = highlight.cke5InputTags({

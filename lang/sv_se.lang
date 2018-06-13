@@ -54,3 +54,4 @@ cke5_profiles_creation_exception = Profiler kunde inte genereras
 
 # demo mblock error
 cke5_mblock_not_available = MBlock är inte installerat eller aktiverat. Denna demo kan bara ses med MBlock addon installerat och aktiverat
+cke5_description_empty_error = Pleas enter a profile description

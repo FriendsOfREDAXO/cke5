@@ -10,6 +10,7 @@
 $func = rex_request::request('func', 'string');
 $id = rex_request::request('id', 'int');
 $start = rex_request::request('start', 'int', NULL);
+$send = rex_request::request('send', 'boolean', false);
 
 $profileTable = rex::getTable(\Cke5\Handler\Cke5DatabaseHandler::CKE5_PROFILES);
 $message = '';
@@ -86,6 +87,7 @@ if ($func == '') {
     $id = rex_request('id', 'int');
     $form = rex_form::factory($profileTable, '', 'id=' . $id);
     $form->addParam('start', $start);
+    $form->addParam('send', true);
 
     $in_heading = '';
     $in_alignment = '';
@@ -95,6 +97,7 @@ if ($func == '') {
     $in_highlight = '';
     $min_height = 0;
     $max_height = 0;
+    $default_value = ($func == 'add' && $send == false) ? true : false;
 
     if ($func == 'add') { $in_heading = 'in'; }
     if ($func == 'edit') {
@@ -130,14 +133,14 @@ if ($func == '') {
     $field = $form->addTextField('toolbar');
     $field->setAttribute('id', 'cke5toolbar-input');
     $field->setLabel(rex_i18n::msg('cke5_toolbar'));
-    if ($func == 'add') $field->setAttribute('data-default-tags',1);
+    if ($default_value) $field->setAttribute('data-default-tags',1);
 
     // heading
     $form->addRawField('<div class="collapse ' . $in_heading . '" id="cke5heading-collapse">');
     $field = $form->addTextField('heading');
     $field->setAttribute('id', 'cke5heading-input');
     $field->setLabel(rex_i18n::msg('cke5_heading'));
-    if ($func == 'add') $field->setAttribute('data-default-tags',1);
+    if ($default_value) $field->setAttribute('data-default-tags',1);
     $form->addRawField('</div>');
 
     // alignment
@@ -145,7 +148,7 @@ if ($func == '') {
     $field = $form->addTextField('alignment');
     $field->setAttribute('id', 'cke5alignment-input');
     $field->setLabel(rex_i18n::msg('cke5_alignment'));
-    if ($func == 'add') $field->setAttribute('data-default-tags',1);
+    if ($default_value) $field->setAttribute('data-default-tags',1);
     $form->addRawField('</div>');
 
     // fontsize
@@ -153,7 +156,7 @@ if ($func == '') {
     $field = $form->addTextField('fontsize');
     $field->setAttribute('id', 'cke5fontsize-input');
     $field->setLabel(rex_i18n::msg('cke5_fontSize'));
-    if ($func == 'add') $field->setAttribute('data-default-tags',1);
+    if ($default_value) $field->setAttribute('data-default-tags',1);
     $form->addRawField('</div>');
 
     // rex link
@@ -161,7 +164,7 @@ if ($func == '') {
     $field = $form->addTextField('rexlink');
     $field->setAttribute('id', 'cke5link-input');
     $field->setLabel(rex_i18n::msg('cke5_link'));
-    if ($func == 'add') $field->setAttribute('data-default-tags',1);
+    if ($default_value) $field->setAttribute('data-default-tags',1);
     $form->addRawField('</div>');
 
     // highlight
@@ -172,7 +175,7 @@ if ($func == '') {
     $field->setAttribute('data-defaults', 'yellowMarker,greenMarker,redPen,greenPen');
     $field->setAttribute('data-tags', '["yellowMarker", "greenMarker", "pinkMarker", "blueMarker", "redPen", "greenPen"]');
     $field->setLabel(rex_i18n::msg('cke5_highlight'));
-    if ($func == 'add') $field->setAttribute('data-default-tags',1);
+    if ($default_value) $field->setAttribute('data-default-tags',1);
     $form->addRawField('</div>');
 
     // TODO add special fonts
@@ -181,14 +184,14 @@ if ($func == '') {
     $field = $form->addTextField('image_toolbar');
     $field->setAttribute('id', 'cke5image-input');
     $field->setLabel(rex_i18n::msg('cke5_image_toolbar'));
-    if ($func == 'add') $field->setAttribute('data-default-tags',1);
+    if ($default_value) $field->setAttribute('data-default-tags',1);
 
     // default height
     $field = $form->addCheckboxField('height_default');
     $field->setAttribute('id', 'cke5height-input');
     $field->setLabel(rex_i18n::msg('cke5_height_default'));
     $field->addOption(rex_i18n::msg('cke5_height_default_description'), 'default_height');
-    if ($func == 'add') $field->setValue('default_height');
+    if ($default_value) $field->setValue('default_height');
 
     // min max height collapse
     $form->addRawField('<div class="collapse" id="cke5minmax-collapse">');
@@ -210,7 +213,7 @@ if ($func == '') {
     $field->setAttribute('data-toggle', 'toggle');
     $field->setLabel(rex_i18n::msg('cke5_upload_default'));
     $field->addOption(rex_i18n::msg('cke5_upload_default_description'), 'default_upload');
-    if ($func == 'add') $field->setValue('default_upload');
+    if ($default_value) $field->setValue('default_upload');
 
     // lang
     $field = $form->addSelectField('lang');
