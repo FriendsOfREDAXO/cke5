@@ -10,7 +10,7 @@
 $content = \Cke5\Provider\Cke5NavigationProvider::getSubNavigationHeader() .
            \Cke5\Provider\Cke5NavigationProvider::getSubNavigation() . '
 <div class="cke5-demo">
-    <textarea name="content" id="editor" class="cke5-editor" data-profile="default" data-lang="de">
+    <textarea name="content" id="editor" class="cke5-editor" data-profile="default" data-lang="'.\Cke5\Utils\Cke5Lang::getUserLang().'">
     
         <h1>Space Shuttle Programm</h1>
         

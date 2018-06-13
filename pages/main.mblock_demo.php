@@ -30,7 +30,7 @@ if (rex_addon::exists('mblock') && rex_addon::get('mblock')->isAvailable()) {
     $element = $nf->addTextAreaField('mblock_field][attr_type][0][text');
     $element->setAttribute('class', 'cke5-editor');
     $element->setAttribute('data-profile', 'default');
-    $element->setAttribute('data-lang', 'de');
+    $element->setAttribute('data-lang', \Cke5\Utils\Cke5Lang::getUserLang());
 
     $form->addRawField(MBlock::show($table . '::mblock_field::attr_type', $nf->getElements()));
 
