@@ -10,11 +10,14 @@ namespace Cke5\Creator;
 
 use Cke5\Handler\Cke5DatabaseHandler;
 use rex_file;
+use rex_i18n;
 
 class Cke5ProfilesCreator
 {
     const UPLOAD_URL = './index.php?cke5upload=1';
     const PROFILES_FILENAME = 'cke5profiles.js';
+    const TRANSLATION_FILENAME = 'cke5translations.js';
+    const TRANSLATION_PATH = 'vendor/ckeditor5-classic/translations/%s.js';
 
     /**
      * @throws \rex_functional_exception
@@ -113,6 +116,23 @@ const cke5suboptions = $suboptions;
         }
 
         if (!rex_file::put(self::getAddon()->getAssetsPath(self::PROFILES_FILENAME), $content)) {
+            throw new \rex_functional_exception(\rex_i18n::msg('cke5_profiles_creation_exception'));
+        }
+    }
+
+    /**
+     * @throws \rex_functional_exception
+     * @author Joachim Doerr
+     */
+    public static function languageFileCreate()
+    {
+        $content = '';
+        foreach (rex_i18n::getLocales() as $locale) {
+            if (substr($locale, 0, 2) == 'en') { continue; }
+            $content .= rex_file::get(self::getAddon()->getAssetsPath(sprintf(self::TRANSLATION_PATH, substr($locale, 0, 2)))) . "\n";
+        }
+
+        if (!rex_file::put(self::getAddon()->getAssetsPath(self::TRANSLATION_FILENAME), $content)) {
             throw new \rex_functional_exception(\rex_i18n::msg('cke5_profiles_creation_exception'));
         }
     }

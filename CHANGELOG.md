@@ -1,5 +1,14 @@
 # Changelog
 
+## Version 1.1.4
+
+* fixed: lang != language change key-name in js and profile settings
+* add all supported backend languages in one file
+* update editor build to fix language conflicts
+* fixed: save ever only default settings by add profile
+* add get user default lang helper
+* use user default lang in examples
+
 
 ## Version 1.1.3
 

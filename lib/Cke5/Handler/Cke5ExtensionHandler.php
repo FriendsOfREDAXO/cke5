@@ -72,7 +72,7 @@ class Cke5ExtensionHandler
 
     /**
      * @param rex_extension_point $ep
-     * @return bool
+     * @return void
      * @author Joachim Doerr
      */
     public static function createProfiles(rex_extension_point $ep)
@@ -80,12 +80,11 @@ class Cke5ExtensionHandler
         if (rex_be_controller::getCurrentPagePart(2) == 'profiles') {
             try {
                 Cke5ProfilesCreator::profilesCreate();
+                Cke5ProfilesCreator::languageFileCreate();
             } catch (\rex_functional_exception $e) {
                 print rex_view::error($e->getMessage());
-                return false;
             }
             # print rex_view::info(\rex_i18n::msg('cke5_profiles_created'));
-            return true;
         }
     }
 }
