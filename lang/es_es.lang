@@ -1,0 +1,57 @@
+# title
+cke5_title = CKEditor 5
+
+# navigation
+cke5_profiles = Perfiles del editor
+cke5_help = Ayuda
+cke5_config = Configuración
+cke5_main = Descripción general y Demos
+cke5_demo = CKEditor 5 Demo
+cke5_mblock_demo = MBlock Demo
+cke5_features = Funciones de Editor y Complemento
+
+# heading
+cke5_subnavigation_header_title = CKEditor 5 para Redaxo 5
+cke5_subnavigation_header_photo = Foto de %s en %s
+
+# profiles list & form
+cke5_list_profiles = Perfiles de CKEditor 5
+cke5_profile_edit = Editar perfil CKEditor 5
+cke5_profile_add = Crear nuevos perfil de CKEditor 5
+cke5_list_function = Función
+cke5_clone = duplicar
+
+# profiles columns names
+cke5_name = Nombre perfil
+cke5_name_placeholder = nombre_perfil
+cke5_description = Perfil-Descripción
+cke5_description_placeholder = Propósito y alcance del perfil
+cke5_toolbar = Elementos de la barra de herramientas
+cke5_heading = Elementos de cabecera
+cke5_alignment = Alineacion
+cke5_fontSize = Tamaños de fuente
+cke5_link = Enlaces Rexdaxo
+cke5_lang = Idioma
+cke5_image_toolbar = Barra de herramientas de Image-Plugin
+cke5_height_default = CKEditor 5 Altura predeterminada
+cke5_height_default_description = Sin altura mínima y máxima personalizadas, la altura se adapta al contenido de texto
+cke5_min_height = Textarea min-height
+cke5_max_height = Altura máxima de Textarea
+cke5_highlight = Marcador y colores de fuente
+cke5_media_manager_type = Tipo de administrador de medios
+cke5_media_category = Categoría de medios
+cke5_upload_default = Imagen-Arrastrar y Soltar-Subir
+cke5_upload_default_description = Las imágenes se pueden poner en textarea a través de arrastrar + soltar
+
+# profiles list & form actions
+rex_cke5_profiles_cloned = El perfil fue duplicado
+rex_cke5_profiles_deleted = Perfil ha sido eliminado
+rex_cke5_profiles_clone_exception = El perfil no puede ser duplicado
+rex_cke5_profiles_delete_exception = Perfil no se pudo eliminar
+cke5_add_profile = Crea un nuevo perfil
+cke5_profiles_created = Los perfiles fueron generados y disponibles
+cke5_profiles_creation_exception = Los perfiles no pueden ser generados
+
+# demo mblock error
+cke5_mblock_not_available = MBlock no está instalado o activado. Esta demostración solo se puede ver con MBlock
+cke5_description_empty_error = Ingrese una descripción de perfil
