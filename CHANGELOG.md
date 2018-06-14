@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 1.1.5
+
+* fixed: image width on help page
+
 ## Version 1.1.4
 
 * fixed: lang != language change key-name in js and profile settings
