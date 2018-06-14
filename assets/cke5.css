@@ -11,6 +11,8 @@
     margin: 0 2%;
     min-width: 260px;
 }
+.cke5-help-page img {max-width: 100%; height:auto;}
+
 .cke5-icon-logo {
     display: inline-block;
     width: 20px;
