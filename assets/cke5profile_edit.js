@@ -5,7 +5,7 @@
  */
 
 var ckedit = '.cke5_profile_edit',
-    cktypes = ['heading', 'fontSize', 'fontFamily', 'alignment', 'link', 'highlight'];
+    cktypes = ['heading', 'fontSize', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable'];
 
 $(document).on('ready pjax:success', function () {
     if ($(ckedit).length) {
@@ -17,6 +17,7 @@ function cke5_init_edit() {
 
     var toolbar = $('#cke5toolbar-input'),
         alignment = $('#cke5alignment-input'),
+        insertTable = $('#cke5inserttable-input'),
         heading = $('#cke5heading-input'),
         fontsize = $('#cke5fontsize-input'),
         rexlink = $('#cke5link-input'),
@@ -45,7 +46,7 @@ function cke5_init_edit() {
         }
         var toolbarTags = toolbar.cke5InputTags({
             autocomplete: {
-                values: ['|', 'heading', 'fontSize', 'fontFamily', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'code', 'link', 'rexImage', 'imageUpload', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji']
+                values: ['|', 'heading', 'fontSize', 'fontFamily', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'insertTable', 'code', 'link', 'rexImage', 'imageUpload', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji']
             },
             create: function (e) {
                 cke5_toolbar_create_tag('toolbar',e.tags);
@@ -65,6 +66,18 @@ function cke5_init_edit() {
                 values: ['left', 'right', 'center', 'justify']
             },
             max: 4
+        });
+    }
+
+    if (insertTable.length) {
+        if (insertTable.attr('data-default-tags') === '1') {
+            insertTable.attr('value', 'tableColumn,tableRow,mergeTableCells')
+        }
+        var insertTableTags = insertTable.cke5InputTags({
+            autocomplete: {
+                values: ['tableColumn', 'tableRow', 'mergeTableCells']
+            },
+            max: 3
         });
     }
 
