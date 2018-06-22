@@ -47,6 +47,10 @@ class Cke5ProfilesCreator
                     $jsonProfile['image'] = array('toolbar' => self::getImageToolbar($imageKeys), 'styles' => self::getImageStyles($imageKeys));
                 }
 
+                if (in_array('insertTable', $toolbar) && !empty($profile['table_toolbar'])) {
+                    $jsonProfile['table'] = array('toolbar' => self::toArray($profile['table_toolbar']));
+                }
+
                 if (in_array('alignment', $toolbar) && !empty($profile['alignment'])) {
                     $jsonProfile['alignment'] = self::toArray($profile['alignment']);
                 }
