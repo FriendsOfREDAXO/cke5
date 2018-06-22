@@ -33,6 +33,7 @@ cke5_fontSize = Fontsizes
 cke5_link = Rexdaxo-links
 cke5_lang = Language
 cke5_image_toolbar = Image-plugin toolbar
+cke5_table_toolbar = Table-plugin toolbar
 cke5_height_default = CKEditor 5 default-height
 cke5_height_default_description = Without custom min and max height, height adapts to textarea content
 cke5_min_height = Textarea min-height
