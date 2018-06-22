@@ -6,7 +6,6 @@
  */
 
 /** @var rex_addon $this */
-
 // install profiles database
 rex_sql_table::get(rex::getTable('cke5_profiles'))
     ->ensurePrimaryIdColumn()
@@ -18,6 +17,7 @@ rex_sql_table::get(rex::getTable('cke5_profiles'))
     ->ensureColumn(new rex_sql_column('image_toolbar', 'varchar(255)', true))
     ->ensureColumn(new rex_sql_column('fontsize', 'varchar(255)', true))
     ->ensureColumn(new rex_sql_column('highlight', 'varchar(255)', true))
+    ->ensureColumn(new rex_sql_column('table_toolbar', 'varchar(255)', true))
     ->ensureColumn(new rex_sql_column('rexlink', 'varchar(255)', true))
     ->ensureColumn(new rex_sql_column('height_default', 'varchar(255)', true))
     ->ensureColumn(new rex_sql_column('min_height', 'int(4)', true))
