@@ -85,12 +85,13 @@ if ($func == '') {
 } elseif ($func == 'edit' || $func == 'add') {
 
     $id = rex_request('id', 'int');
-    $form = rex_form::factory($profileTable, '', 'id=' . $id);
+    $form = rex_form::factory($profileTable, '', 'id=' . $id, 'post', false);
     $form->addParam('start', $start);
     $form->addParam('send', true);
 
     $in_heading = '';
     $in_alignment = '';
+    $in_table = '';
     $in_fontsize = '';
     $in_rexlink = '';
     $in_minmax = '';
@@ -109,9 +110,10 @@ if ($func == '') {
 
         if (in_array('heading', $toolbar)) $in_heading = 'in';
         if (in_array('alignment', $toolbar)) $in_alignment = 'in';
+        if (in_array('insertTable', $toolbar)) $in_table = 'in';
         if (in_array('fontSize', $toolbar)) $in_fontsize = 'in';
         if (in_array('link', $toolbar)) $in_rexlink = 'in';
-        if (in_array('$in_highlight', $toolbar)) $in_highlight = 'in';
+        if (in_array('highlight', $toolbar)) $in_highlight = 'in';
 
         $min_height = (int) $result[$prefix . '.min_height'];
         $max_height = (int) $result[$prefix . '.max_height'];
@@ -148,6 +150,14 @@ if ($func == '') {
     $field = $form->addTextField('alignment');
     $field->setAttribute('id', 'cke5alignment-input');
     $field->setLabel(rex_i18n::msg('cke5_alignment'));
+    if ($default_value) $field->setAttribute('data-default-tags',1);
+    $form->addRawField('</div>');
+
+    // table
+    $form->addRawField('<div class="collapse  ' . $in_table . '" id="cke5insertTable-collapse">');
+    $field = $form->addTextField('table_toolbar');
+    $field->setAttribute('id', 'cke5inserttable-input');
+    $field->setLabel(rex_i18n::msg('cke5_table_toolbar'));
     if ($default_value) $field->setAttribute('data-default-tags',1);
     $form->addRawField('</div>');
 
