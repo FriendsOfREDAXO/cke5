@@ -124,7 +124,7 @@
                 self.ELEMENT_CLASS = self.DEFAULT_CLASS + '-' + self.UNIQID;
                 self.LIST_CLASS = self.DEFAULT_CLASS + '-list';
                 self.ITEM_CLASS = self.DEFAULT_CLASS + '-item';
-                self.ITEM_CONTENT = '<span class="value" title="Cliquez pour éditer">%s</span><i class="close-item">&times</i>';
+                self.ITEM_CONTENT = '<span class="value">%s</span><i class="close-item">&times</i>';
                 self.FIELD_CLASS = self.DEFAULT_CLASS + '-field';
                 self.ERROR_CLASS = self.DEFAULT_CLASS + '-error';
                 self.ERROR_CONTENT = '<p class="' + self.ERROR_CLASS + '">%s</p>';
@@ -769,13 +769,13 @@
             only: false
         },
         errors: {
-            empty: 'Attention, vous ne pouvez pas ajouter un tag vide.',
-            minLength: 'Attention, votre tag doit avoir au minimum %s caractères.',
-            maxLength: 'Attention, votre tag ne doit pas dépasser %s caractères.',
-            max: 'Attention, le nombre de tags ne doit pas dépasser %s.',
-            email: 'Attention, l\'adresse email que vous avez entré n\'est pas valide',
-            exists: 'Attention, ce tag existe déjà !',
-            autocomplete_only: 'Attention, vous devez sélectionner une valeur dans la liste.',
+            empty: 'Warning, you can not add an empty tag.',
+            minLength: 'Warning, your tag must have at least %s characters.',
+            maxLength: 'Warning, your tag must not exceed %s characters.',
+            max: 'Attention, the number of tags must not exceed %s.',
+            email: 'Warning, the email address you entered is not valid.',
+            exists: 'Warning, this tag already exists!',
+            autocomplete_only: 'Warning, you must select a value from the list.',
             timeout: 8000
         }
     };
