@@ -19,6 +19,26 @@ class Cke5ProfilesCreator
     const TRANSLATION_FILENAME = 'cke5translations.js';
     const TRANSLATION_PATH = 'vendor/ckeditor5-classic/translations/%s.js';
 
+    const ALLOWED_FIELDS = array(
+        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'insertTable', 'code', 'link', 'rexImage', 'imageUpload', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji'],
+        'alignment' => ['left', 'right', 'center', 'justify'],
+        'table_toolbar' => ['tableColumn', 'tableRow', 'mergeTableCells'],
+        'heading' => ['paragraph', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+        'highlight' => ['yellowMarker', 'greenMarker', 'pinkMarker', 'blueMarker', 'redPen', 'greenPen'],
+        'image_toolbar' =>  ['|', 'imageTextAlternative', 'full', 'alignLeft', 'alignCenter', 'alignRight'],
+        'rexlink' => ['internal', 'media'],
+        'fontsize' => ['tiny', 'small', 'big', 'huge', '8', '9',
+            '10', '11', '12', '13', '14', '15', '16', '17', '18', '19',
+            '20', '21', '22', '23', '24', '25', '26', '27', '28', '29',
+            '30', '31', '32', '33', '34', '35', '36', '37', '38', '39',
+            '40', '41', '42', '43', '44', '45', '46', '47', '48', '49',
+            '50', '51', '52', '53', '54', '55', '56', '57', '58', '59',
+            '60', '61', '62', '63', '64', '65', '66', '67', '68', '69',
+            '70', '71', '72', '73', '74', '75', '76', '77', '78', '79'],
+        'min_height' => ['none', '100px', '200px', '300px', '400px', '500px', '600px'],
+        'max_height' => ['none', '200px', '400px', '600px', '800px', '1000px', '1200px'],
+    );
+
     /**
      * @throws \rex_functional_exception
      * @author Joachim Doerr

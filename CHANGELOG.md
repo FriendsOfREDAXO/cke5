@@ -1,5 +1,36 @@
 # Changelog
 
+## Version 1.2.0
+
+* @ckeditor5 classic build update to v10.1.0
+* add @cheditor5 table plugin
+* add options for @cheditor5 table-toolbar in profile builder
+* hide image toolbar settings in profile builder is imageUpload or rexImage disable
+* update Keyboard support tables in readme.md's
+* to don't lost custom profiles after update recreate profiles by update
+* execute sql by update to v1.2.0
+* use better style like github for keyboard support table
+* add preview in profile builder
+* add preview page with code example
+* add text license to mblock demo page
+* `Cke5\Creator\Cke5ProfilesApi::addProfile` api was add to create profiles without user interface
+
+```
+    $create = \Cke5\Creator\Cke5ProfilesApi::addProfile(
+        'full_cke',
+        'Cke5 with all possible tools',
+        ['heading', '|', 'fontSize', 'fontFamily', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'insertTable', 'code', 'link', 'rexImage', 'bulletedList', 'numberedList', 'blockQuote', 'highlight', 'emoji', 'undo', 'redo'],
+        ['paragraph', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+        ['left', 'right', 'center', 'justify'],
+        ['imageTextAlternative', '|', 'full', 'alignLeft', 'alignCenter', 'alignRight'],
+        ['tiny', 'small', 'big', 'huge'],
+        ['yellowMarker', 'greenMarker', 'pinkMarker', 'blueMarker', 'redPen', 'greenPen'],
+        ['tableColumn', 'tableRow', 'mergeTableCells'],
+        ['internal', 'media']
+    );
+    echo (is_string($create)) ? $create : 'successful profile created';
+```
+
 ## Version 1.1.5
 
 * fixed: image width on help page
