@@ -25,9 +25,9 @@ if (rex::isBackend() && rex::getUser()) {
 
     // register extension point actions
     if (rex_be_controller::getCurrentPagePart(1) == 'cke5') {
-        rex_extension::register('PAGE_TITLE', array('\Cke5\Handler\Cke5ExtensionHandler', 'addIcon'), rex_extension::EARLY);
-        rex_extension::register('PAGES_PREPARED', array('\Cke5\Handler\Cke5ExtensionHandler', 'hiddenMain'), rex_extension::EARLY);
-        rex_extension::register('REX_FORM_CONTROL_FIELDS', array('\Cke5\Handler\Cke5ExtensionHandler', 'removeDemoControlFields'), rex_extension::LATE);
-        rex_extension::register(array('REX_FORM_SAVED', 'REX_FORM_DELETED', 'CKE5_CLONE_PROFILE', 'CKE5_DELETE_PROFILE'), array('\Cke5\Handler\Cke5ExtensionHandler', 'createProfiles'));
+        rex_extension::register('PAGE_TITLE', ['\Cke5\Handler\Cke5ExtensionHandler', 'addIcon'], rex_extension::EARLY);
+        rex_extension::register('PAGES_PREPARED', ['\Cke5\Handler\Cke5ExtensionHandler', 'hiddenMain'], rex_extension::EARLY);
+        rex_extension::register('REX_FORM_CONTROL_FIELDS', ['\Cke5\Handler\Cke5ExtensionHandler', 'removeDemoControlFields'], rex_extension::LATE);
+        rex_extension::register(['REX_FORM_SAVED', 'REX_FORM_DELETED', 'CKE5_PROFILE_CLONE', 'CKE5_PROFILE_DELETE', 'CKE5_PROFILE_ADD'], ['\Cke5\Handler\Cke5ExtensionHandler', 'createProfiles']);
     }
 }

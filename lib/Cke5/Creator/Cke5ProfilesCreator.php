@@ -19,13 +19,13 @@ class Cke5ProfilesCreator
     const TRANSLATION_FILENAME = 'cke5translations.js';
     const TRANSLATION_PATH = 'vendor/ckeditor5-classic/translations/%s.js';
 
-    const ALLOWED_FIELDS = array(
+    const ALLOWED_FIELDS = [
         'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'insertTable', 'code', 'link', 'rexImage', 'imageUpload', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji'],
         'alignment' => ['left', 'right', 'center', 'justify'],
         'table_toolbar' => ['tableColumn', 'tableRow', 'mergeTableCells'],
         'heading' => ['paragraph', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
         'highlight' => ['yellowMarker', 'greenMarker', 'pinkMarker', 'blueMarker', 'redPen', 'greenPen'],
-        'image_toolbar' =>  ['|', 'imageTextAlternative', 'full', 'alignLeft', 'alignCenter', 'alignRight'],
+        'image_toolbar' => ['|', 'imageTextAlternative', 'full', 'alignLeft', 'alignCenter', 'alignRight'],
         'rexlink' => ['internal', 'media'],
         'fontsize' => ['tiny', 'small', 'big', 'huge', '8', '9',
             '10', '11', '12', '13', '14', '15', '16', '17', '18', '19',
@@ -37,7 +37,7 @@ class Cke5ProfilesCreator
             '70', '71', '72', '73', '74', '75', '76', '77', '78', '79'],
         'min_height' => ['none', '100px', '200px', '300px', '400px', '500px', '600px'],
         'max_height' => ['none', '200px', '400px', '600px', '800px', '1000px', '1200px'],
-    );
+    ];
 
     /**
      * @throws \rex_functional_exception
@@ -49,26 +49,26 @@ class Cke5ProfilesCreator
         $content = '';
 
         if (sizeof($profiles) > 0) {
-            $jsonProfiles = array();
-            $jsonSuboptions = array();
+            $jsonProfiles = [];
+            $jsonSuboptions = [];
 
             foreach ($profiles as $profile) {
 
                 $toolbar = self::toArray($profile['toolbar']);
-                $jsonProfile = array('toolbar' => $toolbar);
-                $jsonSuboption = array();
+                $jsonProfile = ['toolbar' => $toolbar];
+                $jsonSuboption = [];
 
                 if (in_array('link', $toolbar) && !empty($profile['rexlink'])) {
-                    $jsonProfile['link'] = array('rexlink' => self::toArray($profile['rexlink']));
+                    $jsonProfile['link'] = ['rexlink' => self::toArray($profile['rexlink'])];
                 }
 
                 if (!empty($profile['image_toolbar'])) {
                     $imageKeys = self::toArray($profile['image_toolbar']);
-                    $jsonProfile['image'] = array('toolbar' => self::getImageToolbar($imageKeys), 'styles' => self::getImageStyles($imageKeys));
+                    $jsonProfile['image'] = ['toolbar' => self::getImageToolbar($imageKeys), 'styles' => self::getImageStyles($imageKeys)];
                 }
 
                 if (in_array('insertTable', $toolbar) && !empty($profile['table_toolbar'])) {
-                    $jsonProfile['table'] = array('toolbar' => self::toArray($profile['table_toolbar']));
+                    $jsonProfile['table'] = ['toolbar' => self::toArray($profile['table_toolbar'])];
                 }
 
                 if (in_array('alignment', $toolbar) && !empty($profile['alignment'])) {
@@ -76,22 +76,22 @@ class Cke5ProfilesCreator
                 }
 
                 if (in_array('fontSize', $toolbar) && !empty($profile['fontsize'])) {
-                    $jsonProfile['fontSize'] = array('options' => self::toArray($profile['fontsize']));
+                    $jsonProfile['fontSize'] = ['options' => self::toArray($profile['fontsize'])];
                 }
 
                 if (in_array('heading', $toolbar) && !empty($profile['heading'])) {
-                    $jsonProfile['heading'] = array('options' => self::getHeadings(self::toArray($profile['heading'])));
+                    $jsonProfile['heading'] = ['options' => self::getHeadings(self::toArray($profile['heading']))];
                 }
 
                 if (in_array('highlight', $toolbar) && !empty($profile['highlight'])) {
-                    $jsonProfile['highlight'] = array('options' => self::getHighlight(self::toArray($profile['highlight'])));
+                    $jsonProfile['highlight'] = ['options' => self::getHighlight(self::toArray($profile['highlight']))];
                 }
 
                 // "rexImage": {"media_type" : "testtype"},
                 // "ckfinder": {"uploadUrl": ".\/index.php?cke5upload=1&media_type=testtype&media_category=2"}
 
                 if (in_array('rexImage', $toolbar) && !empty($profile['mediatype'])) {
-                    $jsonProfile['rexImage'] = array('media_type' => $profile['mediatype']);
+                    $jsonProfile['rexImage'] = ['media_type' => $profile['mediatype']];
                 }
 
                 if (!is_null($profile['upload_default']) or !empty($profile['upload_default'])) {
@@ -105,7 +105,7 @@ class Cke5ProfilesCreator
                         $ckFinderUrl .= '&media_category=' . $profile['mediacategory'];
                     }
 
-                    $jsonProfile['ckfinder'] = array('uploadUrl' => $ckFinderUrl);
+                    $jsonProfile['ckfinder'] = ['uploadUrl' => $ckFinderUrl];
                 }
 
                 if (!empty($profile['lang'])) {
@@ -113,12 +113,12 @@ class Cke5ProfilesCreator
                 }
 
                 if (is_null($profile['height_default']) or empty($profile['height_default'])) {
-                    foreach(array('min', 'max') as $key) {
+                    foreach (['min', 'max'] as $key) {
                         if (!empty($profile[$key . '_height'])) {
                             if ((int)$profile[$key . '_height'] == 0) {
-                                $jsonSuboption[] = array($key . '-height' => 'none');
+                                $jsonSuboption[] = [$key . '-height' => 'none'];
                             } else {
-                                $jsonSuboption[] = array($key . '-height' => (int)$profile[$key . '_height']);
+                                $jsonSuboption[] = [$key . '-height' => (int)$profile[$key . '_height']];
                             }
                         }
                     }
@@ -133,7 +133,7 @@ class Cke5ProfilesCreator
             $suboptions = json_encode($jsonSuboptions);
 
             $content =
-"
+                "
 const cke5profiles = $profiles;
 const cke5suboptions = $suboptions;
 ";
@@ -152,7 +152,9 @@ const cke5suboptions = $suboptions;
     {
         $content = '';
         foreach (rex_i18n::getLocales() as $locale) {
-            if (substr($locale, 0, 2) == 'en') { continue; }
+            if (substr($locale, 0, 2) == 'en') {
+                continue;
+            }
             $content .= rex_file::get(self::getAddon()->getAssetsPath(sprintf(self::TRANSLATION_PATH, substr($locale, 0, 2)))) . "\n";
         }
 
@@ -177,10 +179,10 @@ const cke5suboptions = $suboptions;
      */
     private static function getImageToolbar($keys)
     {
-        $return = array();
+        $return = [];
 
         foreach ($keys as $key) {
-            if (in_array($key, array('full', 'alignLeft', 'alignCenter', 'alignRight'))){
+            if (in_array($key, ['full', 'alignLeft', 'alignCenter', 'alignRight'])) {
                 $return[] = 'imageStyle:' . $key;
             } else {
                 $return[] = $key;
@@ -197,10 +199,10 @@ const cke5suboptions = $suboptions;
      */
     private static function getImageStyles($keys)
     {
-        $return = array();
+        $return = [];
 
         foreach ($keys as $key) {
-            if (in_array($key, array('full', 'alignLeft', 'alignCenter', 'alignRight'))){
+            if (in_array($key, ['full', 'alignLeft', 'alignCenter', 'alignRight'])) {
                 $return[] = $key;
             }
         }
@@ -225,51 +227,51 @@ const cke5suboptions = $suboptions;
      */
     private static function getHeadings($keys)
     {
-        $headings = array(
-            'paragraph' => array(
+        $headings = [
+            'paragraph' => [
                 'model' => 'paragraph',
                 'title' => 'Paragraph',
                 'class' => 'ck-heading_paragraph'
-            ),
-            'h1' => array(
+            ],
+            'h1' => [
                 'model' => 'heading1',
                 'view' => 'h1',
                 'title' => 'Heading 1',
                 'class' => 'ck-heading_heading1'
-            ),
-            'h2' => array(
+            ],
+            'h2' => [
                 'model' => 'heading2',
                 'view' => 'h2',
                 'title' => 'Heading 2',
                 'class' => 'ck-heading_heading2'
-            ),
-            'h3' => array(
+            ],
+            'h3' => [
                 'model' => 'heading3',
                 'view' => 'h3',
                 'title' => 'Heading 3',
                 'class' => 'ck-heading_heading3'
-            ),
-            'h4' => array(
+            ],
+            'h4' => [
                 'model' => 'heading4',
                 'view' => 'h4',
                 'title' => 'Heading 4',
                 'class' => 'ck-heading_heading4'
-            ),
-            'h5' => array(
+            ],
+            'h5' => [
                 'model' => 'heading5',
                 'view' => 'h5',
                 'title' => 'Heading 5',
                 'class' => 'ck-heading_heading5'
-            ),
-            'h6' => array(
+            ],
+            'h6' => [
                 'model' => 'heading6',
                 'view' => 'h6',
                 'title' => 'Heading 6',
                 'class' => 'ck-heading_heading6'
-            ),
-        );
+            ],
+        ];
 
-        $return = array();
+        $return = [];
 
         foreach ($keys as $key) {
             if (key_exists($key, $headings)) {
@@ -287,52 +289,52 @@ const cke5suboptions = $suboptions;
      */
     private static function getHighlight($keys)
     {
-        $highlights = array(
-            'yellowMarker' => array(
+        $highlights = [
+            'yellowMarker' => [
                 'model' => 'yellowMarker',
                 'class' => 'marker-yellow',
                 'title' => 'Yellow Marker',
                 'color' => 'var(--ck-highlight-marker-yellow)',
                 'type' => 'marker'
-            ),
-            'greenMarker' => array(
+            ],
+            'greenMarker' => [
                 'model' => 'greenMarker',
                 'class' => 'marker-green',
                 'title' => 'Green Marker',
                 'color' => 'var(--ck-highlight-marker-green)',
                 'type' => 'marker'
-            ),
-            'pinkMarker' => array(
+            ],
+            'pinkMarker' => [
                 'model' => 'pinkMarker',
                 'class' => 'marker-pink',
                 'title' => 'Pink Marker',
                 'color' => 'var(--ck-highlight-marker-pink)',
                 'type' => 'marker'
-            ),
-            'blueMarker' => array(
+            ],
+            'blueMarker' => [
                 'model' => 'blueMarker',
                 'class' => 'marker-blue',
                 'title' => 'Blue Marker',
                 'color' => 'var(--ck-highlight-marker-blue)',
                 'type' => 'marker'
-            ),
-            'redPen' => array(
+            ],
+            'redPen' => [
                 'model' => 'redPen',
                 'class' => 'pen-red',
                 'title' => 'Red pen',
                 'color' => 'var(--ck-highlight-pen-red)',
                 'type' => 'pen'
-            ),
-            'greenPen' => array(
+            ],
+            'greenPen' => [
                 'model' => 'greenPen',
                 'class' => 'pen-green',
                 'title' => 'Green pen',
                 'color' => 'var(--ck-highlight-pen-green)',
                 'type' => 'pen'
-            ),
-        );
+            ],
+        ];
 
-        $return = array();
+        $return = [];
 
         foreach ($keys as $key) {
             if (key_exists($key, $highlights)) {

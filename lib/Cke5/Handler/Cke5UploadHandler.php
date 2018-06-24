@@ -33,7 +33,7 @@ class Cke5UploadHandler
         if ($_FILES['upload']['name'] != '' && rex_mediapool_isAllowedMediaType($_FILES['upload']['name'])) {
 
             $mediaCategory = \rex_request::get('media_category', 'int', 0);
-            $return = rex_mediapool_saveMedia($_FILES['upload'], $mediaCategory, array('title'=>''), rex::getUser()->getValue('login'));
+            $return = rex_mediapool_saveMedia($_FILES['upload'], $mediaCategory, ['title'=>''], rex::getUser()->getValue('login'));
 
             if ($return['ok'] == 1) {
                 rex_extension::registerPoint(new rex_extension_point('MEDIA_ADDED', '', $return));
@@ -47,17 +47,17 @@ class Cke5UploadHandler
             }
 
             $statusCode = 201;
-            $response = array(
+            $response = [
                 'fileName' => $return['filename'],
                 'uploaded' => 1,
                 'error' => null,
                 'url' => $mediaSrcPath . $return['filename'],
-            );
+            ];
 
         } else {
 
             $statusCode = 500;
-            $response = array(
+            $response = [
                 'fileName' => null,
                 'uploaded' => [
                     'number'    => 500,
@@ -65,7 +65,7 @@ class Cke5UploadHandler
                 ],
                 'error' => null,
                 'url' => null,
-            );
+            ];
 
         }
 

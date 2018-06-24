@@ -88,7 +88,7 @@ class Cke5NavigationProvider
                     \rex_logger::logException($e);
                 }
 
-                $subtitle = str_replace(array('nav nav-tabs', 'rex-page-nav'), array('nav nav-pills list-inline center-block text-center', 'cke5-mainnav'), $subtitle);
+                $subtitle = str_replace(['nav nav-tabs', 'rex-page-nav'], ['nav nav-pills list-inline center-block text-center', 'cke5-mainnav'], $subtitle);
 
             } else {
                 $subtitle = '';

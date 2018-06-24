@@ -17,13 +17,13 @@ $message = '';
 
 if ($func == 'clone') {
     $message = \Cke5\Utils\Cke5ListHelper::cloneData($profileTable, $id);
-    rex_extension::registerPoint(new rex_extension_point('CKE5_CLONE_PROFILE', $id));
+    rex_extension::registerPoint(new rex_extension_point('CKE5_PROFILE_CLONE', $id));
     $func = '';
 }
 
 if ($func == 'delete') {
     $message = \Cke5\Utils\Cke5ListHelper::deleteData($profileTable, $id);
-    rex_extension::registerPoint(new rex_extension_point('CKE5_DELETE_PROFILE', $id));
+    rex_extension::registerPoint(new rex_extension_point('CKE5_PROFILE_DELETE', $id));
     $func = '';
 }
 

@@ -10,6 +10,8 @@ namespace Cke5\Handler;
 
 use Cke5\Creator\Cke5ProfilesCreator;
 use rex;
+use rex_extension;
+use rex_extension_point;
 use rex_sql;
 
 class Cke5DatabaseHandler
@@ -49,14 +51,14 @@ class Cke5DatabaseHandler
      */
     public static function addProfile($name,
                                       $description,
-                                      array $toolbar = array(),
-                                      array $heading = array(),
-                                      array $alignment = array(),
-                                      array $image_toolbar = array(),
-                                      array $fontsize = array(),
-                                      array $highlight = array(),
-                                      array $table_toolbar = array(),
-                                      array $rexlink = array(),
+                                      array $toolbar = [],
+                                      array $heading = [],
+                                      array $alignment = [],
+                                      array $image_toolbar = [],
+                                      array $fontsize = [],
+                                      array $highlight = [],
+                                      array $table_toolbar = [],
+                                      array $rexlink = [],
                                       int $min_height = null,
                                       int $max_height = null,
                                       string $lang = null,
@@ -101,7 +103,11 @@ class Cke5DatabaseHandler
             return $e->getMessage();
         }
 
-        return self::loadProfile($name);
+        if (is_array($profile = self::loadProfile($name))) {
+            rex_extension::registerPoint(new rex_extension_point('CKE5_PROFILE_ADD', '', $profile, true));
+        }
+
+        return $profile;
     }
 
     /**

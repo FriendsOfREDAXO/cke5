@@ -77,7 +77,7 @@ class Cke5ExtensionHandler
      */
     public static function createProfiles(rex_extension_point $ep)
     {
-        if (rex_be_controller::getCurrentPagePart(2) == 'profiles') {
+        if (rex_be_controller::getCurrentPagePart(2) == 'profiles' or $ep->getName() == 'CKE5_PROFILE_ADD') {
             try {
                 Cke5ProfilesCreator::profilesCreate();
                 Cke5ProfilesCreator::languageFileCreate();

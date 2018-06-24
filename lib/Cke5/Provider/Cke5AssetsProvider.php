@@ -41,19 +41,19 @@ class Cke5AssetsProvider
     {
         if (rex_be_controller::getCurrentPagePart(2) == 'profiles') {
             // add js vendors
-            self::addJS(array(
+            self::addJS([
                 'cke5InputTags' => 'vendor/cke5InputTags/cke5InputTags.js',
                 'bootstrap-slider' => 'vendor/bootstrap-slider/bootstrap-slider.min.js',
                 'bootstrap-toggle' => 'vendor/bootstrap-toggle/bootstrap-toggle.min.js',
                 'jquery.alphanum' => 'vendor/alphanum/jquery.alphanum.js',
                 'cke5profile_edit' => 'cke5profile_edit.js',
-            ));
+            ]);
             // add css vendors
-            self::addCss(array(
+            self::addCss([
                 'cke5InputTags' => 'vendor/cke5InputTags/cke5InputTags.css',
                 'bootstrap-slider' => 'vendor/bootstrap-slider/bootstrap-slider.min.css',
                 'bootstrap-toggle' => 'vendor/bootstrap-toggle/bootstrap-toggle.min.css',
-            ));
+            ]);
         }
     }
 
