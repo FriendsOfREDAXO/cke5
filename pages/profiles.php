@@ -95,12 +95,14 @@ if ($func == '') {
     $in_fontsize = '';
     $in_rexlink = '';
     $in_minmax = '';
+    $in_imagetoolbar = '';
     $in_highlight = '';
     $min_height = 0;
     $max_height = 0;
     $default_value = ($func == 'add' && $send == false) ? true : false;
+    $profile = '';
 
-    if ($func == 'add') { $in_heading = 'in'; }
+    if ($func == 'add') { $in_heading = 'in'; $in_imagetoolbar = 'in'; }
     if ($func == 'edit') {
         $form->addParam('id', $id);
 
@@ -114,9 +116,12 @@ if ($func == '') {
         if (in_array('fontSize', $toolbar)) $in_fontsize = 'in';
         if (in_array('link', $toolbar)) $in_rexlink = 'in';
         if (in_array('highlight', $toolbar)) $in_highlight = 'in';
+        if (in_array('rexImage', $toolbar) || in_array('imageUpload', $toolbar)) $in_imagetoolbar = 'in';
 
         $min_height = (int) $result[$prefix . '.min_height'];
         $max_height = (int) $result[$prefix . '.max_height'];
+
+        $profile = $result[$prefix . '.name'];
     }
 
     // name
@@ -191,10 +196,12 @@ if ($func == '') {
     // TODO add special fonts
 
     // image toolbar
+    $form->addRawField('<div class="collapse ' . $in_imagetoolbar . '" id="cke5imagetoolbar-collapse">');
     $field = $form->addTextField('image_toolbar');
     $field->setAttribute('id', 'cke5image-input');
     $field->setLabel(rex_i18n::msg('cke5_image_toolbar'));
     if ($default_value) $field->setAttribute('data-default-tags',1);
+    $form->addRawField('</div>');
 
     // default height
     $field = $form->addCheckboxField('height_default');
@@ -221,6 +228,7 @@ if ($func == '') {
     // upload default
     $field = $form->addCheckboxField('upload_default');
     $field->setAttribute('data-toggle', 'toggle');
+    $field->setAttribute('id', 'cke5uploaddefault-input');
     $field->setLabel(rex_i18n::msg('cke5_upload_default'));
     $field->addOption(rex_i18n::msg('cke5_upload_default_description'), 'default_upload');
     if ($default_value) $field->setValue('default_upload');
@@ -252,6 +260,23 @@ if ($func == '') {
         $cats_sel->setName('mediacategory');
         $cats_sel->addOption(rex_i18n::msg('pool_kats_no'), '0');
         $field->setSelect($cats_sel);
+    }
+
+
+    if ($func == 'edit') {
+        $form->addRawField('
+        <div class="cke5-preview-row">
+            <dl class="rex-form-group form-group">
+                <dt>
+                    <label class="control-label">' . rex_i18n::msg('cke5_editor_preview') . '</label>
+                </dt>
+                <dd>
+                    <div class="cke5-editor" data-profile="' . $profile . '" data-lang="' . \Cke5\Utils\Cke5Lang::getUserLang() . '"></div>           
+                    <div class="cke5-editor-info"><p>' . rex_i18n::msg('cke5_editor_preview_info') . '</p></div> 
+                </dd>
+            </dl>
+        </div>
+        ');
     }
 
     // show

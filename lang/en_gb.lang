@@ -9,6 +9,11 @@ cke5_main = Overview & demos
 cke5_demo = CKEditor 5 demo
 cke5_mblock_demo = MBlock demo
 cke5_features = Editor- & addon-features
+cke5_preview = Profile previews
+
+# preview
+cke5_editor_preview = Editor preview
+cke5_editor_preview_info = Entries in the editor preview will not be saved, the preview will be displayed after save or apply
 
 # heading
 cke5_subnavigation_header_title = CKEditor 5 for Redaxo 5
