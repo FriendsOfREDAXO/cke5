@@ -132,15 +132,24 @@ picture img {
 
 .panel-cke5-mblockdemo .rex-form-group:not(.rex-form-group-vertical) > dd:first-child,
 .cke5-mblockdemo .rex-form-group:not(.rex-form-group-vertical) > dd:first-child {
-    margin: 0 auto;
     padding-left: inherit !important;
+}
+
+.cke5-preview .cke5-preview-editor,
+.panel-cke5-mblockdemo .rex-form-group:not(.rex-form-group-vertical) > dd:first-child,
+.cke5-mblockdemo .rex-form-group:not(.rex-form-group-vertical) > dd:first-child {
+    margin: 0 auto;
     max-width: 1030px;
     display: block;
 }
 
+.cke5-preview,
 .panel-cke5-mblockdemo .cke5-demo-info {
     max-width: 1330px;
     margin: 0 auto;
+}
+
+.panel-cke5-mblockdemo .cke5-demo-info {
     padding: 2em;
 }
 
@@ -218,19 +227,50 @@ picture img {
     border-right: none;
     padding: 2em 15px;
     margin: 0 -15px 1.5em -15px;
-    -webkit-box-shadow: inset 0px 0px 64px -45px rgba(0,0,0,0.31);
-    -moz-box-shadow: inset 0px 0px 64px -45px rgba(0,0,0,0.31);
-    box-shadow: inset 0px 0px 64px -45px rgba(0,0,0,0.31);
-    background-image:
-            linear-gradient(45deg, #fbfbfb 25%, transparent 25%),
-            linear-gradient(-45deg, #fbfbfb 25%, transparent 25%),
-            linear-gradient(45deg, transparent 75%, #fbfbfb 75%),
-            linear-gradient(-45deg, transparent 75%, #fbfbfb 75%);
-    background-size:20px 20px;
+    background-image: linear-gradient(45deg, #f7f7f7 25%, transparent 25%),
+    linear-gradient(-45deg, #f7f7f7 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #f7f7f7 75%),
+    linear-gradient(-45deg, transparent 75%, #f7f7f7 75%);
+    background-size: 20px 20px;
     background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
 
 }
 
 .cke5-preview-row dl {
     margin-bottom: 0;
+}
+
+.cke5-preview-code {
+    margin: 1em 0 2em;
+}
+
+.cke5-preview h4 {
+    margin: 1em 0;
+}
+
+.cke5-preview .cke5-preview-row {
+    margin: 0;
+    border: none;
+    padding: 1em 2em;
+}
+
+.cke5-preview .cke5-preview-row:nth-child(odd) {
+    background-color: #fcfcfc;
+    background-image: linear-gradient(45deg, #fff 25%, transparent 25%),
+    linear-gradient(-45deg, #fff 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #fff 75%),
+    linear-gradient(-45deg, transparent 75%, #fff 75%);
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+.cke5-preview .cke5-preview-row:nth-child(even) {
+    background-image: linear-gradient(45deg, #f7f7f7 25%, transparent 25%),
+    linear-gradient(-45deg, #f7f7f7 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #f7f7f7 75%),
+    linear-gradient(-45deg, transparent 75%, #f7f7f7 75%);
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
 }

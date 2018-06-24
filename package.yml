@@ -1,5 +1,5 @@
 package: cke5
-version: '1.1.5'
+version: '1.2.0'
 author: Friends Of REDAXO
 supportpage: https://github.com/FriendsOfREDAXO/cke5/issues
 
@@ -17,6 +17,8 @@ page:
                     title: 'translate:mblock_demo'
                     requires:
                         mblock: '^5.1.0'
+                preview:
+                    title: 'translate:preview'
         profiles:
             title: 'translate:profiles'
         help:
