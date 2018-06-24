@@ -4,8 +4,11 @@
  * @license MIT
  */
 
-var ckedit = '.cke5_profile_edit',
-    cktypes = ['heading', 'fontSize', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable'];
+let ckedit = '.cke5_profile_edit',
+    cktypes = ['heading', 'fontSize', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable'],
+    ckimgtypes = ['rexImage', 'imageUpload'],
+    imageDragDrop;
+
 
 $(document).on('ready pjax:success', function () {
     if ($(ckedit).length) {
@@ -15,7 +18,7 @@ $(document).on('ready pjax:success', function () {
 
 function cke5_init_edit() {
 
-    var toolbar = $('#cke5toolbar-input'),
+    let toolbar = $('#cke5toolbar-input'),
         alignment = $('#cke5alignment-input'),
         insertTable = $('#cke5inserttable-input'),
         heading = $('#cke5heading-input'),
@@ -28,6 +31,8 @@ function cke5_init_edit() {
         height = $('#cke5height-input-default-height'),
         highlight = $('#cke5highlight-input')
     ;
+
+    imageDragDrop = $('#cke5uploaddefault-input-default-upload');
 
     if (name.length) {
         name.alphanum({
@@ -44,15 +49,15 @@ function cke5_init_edit() {
         if (toolbar.attr('data-default-tags') === '1') {
             toolbar.attr('value', 'heading,|')
         }
-        var toolbarTags = toolbar.cke5InputTags({
+        toolbar.cke5InputTags({
             autocomplete: {
                 values: ['|', 'heading', 'fontSize', 'fontFamily', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'insertTable', 'code', 'link', 'rexImage', 'imageUpload', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji']
             },
             create: function (e) {
-                cke5_toolbar_create_tag('toolbar',e.tags);
+                cke5_toolbar_create_tag('toolbar', e.tags);
             },
             destroy: function (e) {
-                cke5_toolbar_destroy_tag('toolbar',e.tags);
+                cke5_toolbar_destroy_tag('toolbar', e.tags);
             }
         });
     }
@@ -61,7 +66,7 @@ function cke5_init_edit() {
         if (alignment.attr('data-default-tags') === '1') {
             alignment.attr('value', 'left,right,center')
         }
-        var alignmentTags = alignment.cke5InputTags({
+        alignment.cke5InputTags({
             autocomplete: {
                 values: ['left', 'right', 'center', 'justify']
             },
@@ -73,7 +78,7 @@ function cke5_init_edit() {
         if (insertTable.attr('data-default-tags') === '1') {
             insertTable.attr('value', 'tableColumn,tableRow,mergeTableCells')
         }
-        var insertTableTags = insertTable.cke5InputTags({
+        insertTable.cke5InputTags({
             autocomplete: {
                 values: ['tableColumn', 'tableRow', 'mergeTableCells']
             },
@@ -85,7 +90,7 @@ function cke5_init_edit() {
         if (heading.attr('data-default-tags') === '1') {
             heading.attr('value', 'paragraph,h1,h2,h3');
         }
-        var headingTags = heading.cke5InputTags({
+        heading.cke5InputTags({
             autocomplete: {
                 values: ['paragraph', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
             },
@@ -97,7 +102,7 @@ function cke5_init_edit() {
         if (fontsize.attr('data-default-tags') === '1') {
             fontsize.attr('value', 'tiny,small,big,huge');
         }
-        var fontsizeTags = fontsize.cke5InputTags({
+        fontsize.cke5InputTags({
             autocomplete: {
                 values: ['tiny', 'small', 'big', 'huge', '8', '9',
                     '10', '11', '12', '13', '14', '15', '16', '17', '18', '19',
@@ -115,7 +120,7 @@ function cke5_init_edit() {
         if (rexlink.attr('data-default-tags') === '1') {
             rexlink.attr('value', 'internal,media');
         }
-        var rexlinkTags = rexlink.cke5InputTags({
+        rexlink.cke5InputTags({
             autocomplete: {
                 values: ['internal', 'media'],
                 max: 2
@@ -127,7 +132,7 @@ function cke5_init_edit() {
         if (image.attr('data-default-tags') === '1') {
             image.attr('value', 'imageTextAlternative,|,full,alignLeft,alignRight');
         }
-        var imageTags = image.cke5InputTags({
+        image.cke5InputTags({
             autocomplete: {
                 values: ['|', 'imageTextAlternative', 'full', 'alignLeft', 'alignCenter', 'alignRight'],
                 max: 12
@@ -137,11 +142,11 @@ function cke5_init_edit() {
 
     if (highlight.length) {
         if (highlight.attr('data-default-tags') === '1') {
-            var defaults = highlight.attr('data-defaults');
+            let defaults = highlight.attr('data-defaults');
             highlight.attr('value', defaults);
         }
 
-        var highlightTags = highlight.cke5InputTags({
+        highlight.cke5InputTags({
             autocomplete: {
                 values: JSON.parse(highlight.attr('data-tags')),
                 max: 12
@@ -180,27 +185,39 @@ function cke5_init_edit() {
             window.dispatchEvent(new Event('resize'));
         }
 
-        height.on('change', function() {
-            var toogle_it = 'show';
-            if ($(this).prop('checked')) { toogle_it = 'hide'; }
+        height.on('change', function () {
+            let toogle_it = 'show';
+            if ($(this).prop('checked')) {
+                toogle_it = 'hide';
+            }
             toggle_collapse('minmax', toogle_it);
         });
     }
 
-    $('.cke5InputTags-list').each(function(){
+    if (imageDragDrop.length) {
+        imageDragDrop.change(function () {
+            if ($(this).prop('checked')) {
+                toggle_collapse('imagetoolbar', 'show');
+            } else {
+                cke5_toolbar_destroy_tag('toolbar', toolbar.val().split(','))
+            }
+        })
+    }
+
+    $('.cke5InputTags-list').each(function () {
         $(this).sortable({
-            update: function() {
-                var _input = $(this).prev(),
+            update: function () {
+                let _input = $(this).prev(),
                     _inputid = _input.attr('data-uniqid'),
                     _inputtags = window.cke5InputTags.instances[_inputid],
                     _tags = {},
                     tags;
 
-                $(this).find('span').each(function(i){
+                $(this).find('span').each(function (i) {
                     _tags[i] = $(this).attr('data-tag');
                 });
 
-                tags = $.map(_tags, function(val) {
+                tags = $.map(_tags, function (val) {
                     return val;
                 }).join(",");
                 _inputtags.$element.attr('value', tags);
@@ -211,26 +228,45 @@ function cke5_init_edit() {
 }
 
 function cke5_toolbar_create_tag(typename, tags) {
-    cktypes.forEach(function(type) {
-        if ($.inArray(type, tags) != -1 && typename === 'toolbar') {
+    cktypes.forEach(function (type) {
+        if ($.inArray(type, tags) !== -1 && typename === 'toolbar') {
             toggle_collapse(type, 'show');
+        }
+    });
+    ckimgtypes.forEach(function (type) {
+        if ($.inArray(type, tags) !== -1 && typename === 'toolbar') {
+            toggle_collapse('imagetoolbar', 'show');
         }
     });
 }
 
 function cke5_toolbar_destroy_tag(typename, tags) {
-    cktypes.forEach(function(type) {
-        if ($.inArray(type, tags) != -1) {} else {
+    let imghide = 0;
+    cktypes.forEach(function (type) {
+        if ($.inArray(type, tags) !== -1) {
+        } else {
             if (typename === 'toolbar') {
                 toggle_collapse(type, 'hide');
             }
         }
     });
+    ckimgtypes.forEach(function (type) {
+        if ($.inArray(type, tags) !== -1) {
+        } else {
+            if (typename === 'toolbar' && !imageDragDrop.prop('checked')) {
+                imghide++;
+            }
+        }
+    });
+    if (imghide === 2) {
+        toggle_collapse('imagetoolbar', 'hide');
+    }
 }
 
 function toggle_collapse(typename, direction) { // direction => [show,hide]
-    if ($('#cke5' + typename + '-collapse').length) {
-        $('#cke5' + typename + '-collapse').collapse(direction);
+    let element = $('#cke5' + typename + '-collapse');
+    if (element.length) {
+        element.collapse(direction);
         window.dispatchEvent(new Event('resize'));
     }
 }
