@@ -6,6 +6,13 @@
  */
 
 /** @var rex_addon $this */
-if (rex_string::versionCompare($this->getVersion(), '1.0.0', '>')) {
+if (rex_string::versionCompare($this->getVersion(), '1.2.0', '<')) {
     include_once $this->getPath('install.php');
+}
+
+try {
+    // regenerate profiles general
+    Cke5\Creator\Cke5ProfilesCreator::profilesCreate();
+} catch (rex_functional_exception $e) {
+    rex_logger::logException($e);
 }
