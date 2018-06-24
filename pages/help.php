@@ -14,7 +14,7 @@ if (rex_i18n::getLocale()!='de_de'){
 else {
      $file = rex_file::get(rex_path::addon('cke5','README_de_de.md')); 
 }
-$body = rex_markdown::factory()->parse($file);
+$body = '<div class="markdown-body">' . rex_markdown::factory()->parse($file) . '</div>';
 $fragment = new rex_fragment();
 $fragment->setVar('body', $body, false);
 $content = '<div class="FoR-help">'.$fragment->parse('core/page/section.php').'</div>';
