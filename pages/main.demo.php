@@ -10,7 +10,7 @@
 $content = \Cke5\Provider\Cke5NavigationProvider::getSubNavigationHeader() .
            \Cke5\Provider\Cke5NavigationProvider::getSubNavigation() . '
 <div class="cke5-demo">
-    <textarea name="content" id="editor" class="cke5-editor" data-profile="default" data-lang="'.\Cke5\Utils\Cke5Lang::getUserLang().'">
+    <div name="content" id="editor" class="cke5-editor" data-profile="default" data-lang="' . \Cke5\Utils\Cke5Lang::getUserLang() . '">
     
         <h1>Space Shuttle Programm</h1>
         
@@ -62,16 +62,11 @@ $content = \Cke5\Provider\Cke5NavigationProvider::getSubNavigationHeader() .
         
         <p>Auch nach dem Challenger-Unglück wurden diverse Verbesserungen vorgenommen, bei denen in erster Linie die Boosterverbindungen zum Außentank verstärkt wurden. Die Änderungen nach der Columbia-Katastrophe betrafen hauptsächlich die Schaumstoffisolierung des externen Tanks. Diese sollte dadurch nicht mehr so leicht abplatzen und den Hitzeschutzschild des Shuttle beschädigen können. Darüber hinaus wurden Sicherheitsbedingungen und Startkriterien verschärft.</p>
         
-        
-        <p><br data-cke-filler="true"></p>
-        
         <p>Quelle: <a href="https://de.wikipedia.org/wiki/Space_Shuttle">Wikipedia</a></p>
-        
-        <p><br data-cke-filler="true"></p>
         
         <blockquote><p>Der Text ist unter der Lizenz <a href="https://de.wikipedia.org/wiki/Wikipedia:Lizenzbestimmungen_Commons_Attribution-ShareAlike_3.0_Unported">„Creative Commons Attribution/Share Alike“</a> verfügbar</p></blockquote>
     
-    </textarea>
+    </div>
 </div>
 ';
 

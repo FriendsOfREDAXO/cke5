@@ -35,6 +35,8 @@ if (rex_addon::exists('mblock') && rex_addon::get('mblock')->isAvailable()) {
     $form->addRawField(MBlock::show($table . '::mblock_field::attr_type', $nf->getElements()));
 
     $content = $form->get();
+
+    $content .= '<div class="cke5-demo-info"><blockquote><p>Die Texte sind unter der Lizenz <a href="https://de.wikipedia.org/wiki/Wikipedia:Lizenzbestimmungen_Commons_Attribution-ShareAlike_3.0_Unported">„Creative Commons Attribution/Share Alike“</a> verfügbar</p></blockquote></div>';
 }
 
 $content = \Cke5\Provider\Cke5NavigationProvider::getSubNavigationHeader() .
