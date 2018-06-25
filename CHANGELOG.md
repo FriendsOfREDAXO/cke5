@@ -3,8 +3,8 @@
 ## Version 2.0.0
 
 * @ckeditor5 classic build update to v10.1.0
-* add @cheditor5 table plugin
-* add options for @cheditor5 table-toolbar in profile builder
+* add @ckeditor5 table plugin
+* add options for @ckeditor5 table-toolbar in profile builder
 * hide image toolbar settings in profile builder is imageUpload or rexImage disable
 * update Keyboard support tables in readme.md's
 * to don't lost custom profiles after update recreate profiles by update
