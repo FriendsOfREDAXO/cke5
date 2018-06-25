@@ -8,7 +8,7 @@
 * hide image toolbar settings in profile builder is imageUpload or rexImage disable
 * update Keyboard support tables in readme.md's
 * to don't lost custom profiles after update recreate profiles by update
-* execute sql by update to v1.2.0
+* execute sql by update to v2.0.0
 * use better style like github for keyboard support table
 * add preview in profile builder
 * add preview page with code example
