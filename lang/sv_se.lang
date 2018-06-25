@@ -9,11 +9,6 @@ cke5_main = Översikt & Demon
 cke5_demo = CKEditor 5 Demo
 cke5_mblock_demo = MBlock Demo
 cke5_features = Editor- & Addon-Features
-cke5_preview = Profile previews
-
-# preview
-cke5_editor_preview = Editor preview
-cke5_editor_preview_info = Entries in the editor preview will not be saved, the preview will be displayed after save or apply
 
 # heading
 cke5_subnavigation_header_title = CKEditor 5 till Redaxo 5
@@ -60,4 +55,3 @@ cke5_profiles_creation_exception = Profiler kunde inte genereras
 
 # demo mblock error
 cke5_mblock_not_available = MBlock är inte installerat eller aktiverat. Denna demo kan bara ses med MBlock addon installerat och aktiverat
-cke5_description_empty_error = Pleas enter a profile description
