@@ -6,7 +6,7 @@
  */
 
 /** @var rex_addon $this */
-if (rex_string::versionCompare($this->getVersion(), '1.2.0', '<')) {
+if (rex_string::versionCompare($this->getVersion(), '2.0.0', '<')) {
     include_once $this->getPath('install.php');
 }
 
