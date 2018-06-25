@@ -87,7 +87,27 @@ echo MBlock::show($id, $mform->show());
 | Insert a soft break (i.e. a `<br>`) | <kbd>Shift</kbd>+<kbd>Enter</kbd> | <kbd>Shift</kbd>+<kbd>Enter</kbd> |
 
 
+## For Developers
 
+By using the API: `Cke5\Creator\Cke5ProfilesApi::addProfile`, it is possible to install own profiles beside of the profile editor. 
+
+Example: 
+
+```php
+    $create = \Cke5\Creator\Cke5ProfilesApi::addProfile(
+        'full_cke',
+        'Cke5 with all possible tools',
+        ['heading', '|', 'fontSize', 'fontFamily', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'insertTable', 'code', 'link', 'rexImage', 'bulletedList', 'numberedList', 'blockQuote', 'highlight', 'emoji', 'undo', 'redo'],
+        ['paragraph', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+        ['left', 'right', 'center', 'justify'],
+        ['imageTextAlternative', '|', 'full', 'alignLeft', 'alignCenter', 'alignRight'],
+        ['tiny', 'small', 'big', 'huge'],
+        ['yellowMarker', 'greenMarker', 'pinkMarker', 'blueMarker', 'redPen', 'greenPen'],
+        ['tableColumn', 'tableRow', 'mergeTableCells'],
+        ['internal', 'media']
+    );
+    echo (is_string($create)) ? $create : 'successful profile created';
+```
 
 ## Bugtracker
 
