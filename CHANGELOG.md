@@ -7,7 +7,7 @@
 * add options for @ckeditor5 table-toolbar in profile builder
 * hide image toolbar settings in profile builder is imageUpload or rexImage disable
 * update Keyboard support tables in readme.md's
-* to don't lost custom profiles after update recreate profiles by update
+* to don't lose custom profiles after update recreate profiles by update
 * execute sql by update to v2.0.0
 * use better style like github for keyboard support table
 * add preview in profile builder
@@ -15,7 +15,7 @@
 * add text license to mblock demo page
 * `Cke5\Creator\Cke5ProfilesApi::addProfile` api was add to create profiles without user interface
 
-```
+```php
     $create = \Cke5\Creator\Cke5ProfilesApi::addProfile(
         'full_cke',
         'Cke5 with all possible tools',
