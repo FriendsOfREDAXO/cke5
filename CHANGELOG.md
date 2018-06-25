@@ -1,6 +1,6 @@
 # Changelog
 
-## Version 1.2.0
+## Version 2.0.0
 
 * @ckeditor5 classic build update to v10.1.0
 * add @cheditor5 table plugin
