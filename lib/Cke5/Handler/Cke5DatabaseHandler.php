@@ -59,12 +59,12 @@ class Cke5DatabaseHandler
                                       array $highlight = [],
                                       array $table_toolbar = [],
                                       array $rexlink = [],
-                                      int $min_height = null,
-                                      int $max_height = null,
-                                      string $lang = null,
-                                      string $mediatype = null,
-                                      int $mediacategory = 0,
-                                      bool $upload_default = true)
+                                      $min_height = null,
+                                      $max_height = null,
+                                      $lang = null,
+                                      $mediatype = null,
+                                      $mediacategory = 0,
+                                      $upload_default = true)
     {
         $height_default = (is_null($min_height) && (is_null($max_height))) ? '|default_height|' : '';
         $upload_default = ($upload_default === true) ? '|default_upload|' : '';
