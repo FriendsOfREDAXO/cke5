@@ -239,7 +239,7 @@ if ($func == '') {
     $field->setLabel(rex_i18n::msg('cke5_lang'));
     $field->getSelect()->addOption('default', '');
     foreach (rex_i18n::getLocales() as $locale) {
-        $field->getSelect()->addOption(rex_i18n::msg('lang'), substr($locale, 0, 2));
+        $field->getSelect()->addOption(substr($locale, 0, 2), substr($locale, 0, 2));
     }
 
     if (rex_addon::exists('media_manager') && rex_addon::get('media_manager')->isAvailable()) {
