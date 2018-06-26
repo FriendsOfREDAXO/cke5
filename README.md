@@ -1,6 +1,7 @@
-cke5 - CKEditor5 AddOn for REDAXO cms 
+CKEditor5 for REDAXO CMS
 ================================================================================
-Integrates the [CKEditor5](https://ckeditor.com) for REDAXO
+
+Integrates the [CKEditor5](https://ckeditor.com) into REDAXO CMS
 
 ![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/ck5.png)
 
