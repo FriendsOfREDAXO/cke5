@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 2.0.1
+
+* Fix php compatibility problems
+
 ## Version 2.0.0
 
 * @ckeditor5 classic build update to v10.1.0
