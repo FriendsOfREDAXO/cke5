@@ -239,7 +239,6 @@ if ($func == '') {
     $field->setLabel(rex_i18n::msg('cke5_lang'));
     $field->getSelect()->addOption('default', '');
     foreach (rex_i18n::getLocales() as $locale) {
-        rex_i18n::setLocale($locale, false); // Locale nicht neu setzen
         $field->getSelect()->addOption(rex_i18n::msg('lang'), substr($locale, 0, 2));
     }
 
