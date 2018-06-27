@@ -2,7 +2,8 @@
 
 ## Version 2.0.1
 
-* Fix php compatibility problems
+* fix php compatibility problems
+* fix locale will change bug in profile editor
 
 ## Version 2.0.0
 
