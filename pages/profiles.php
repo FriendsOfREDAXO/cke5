@@ -238,9 +238,14 @@ if ($func == '') {
     $field->setAttribute('class', 'form-control selectpicker');
     $field->setLabel(rex_i18n::msg('cke5_lang'));
     $field->getSelect()->addOption('default', '');
+    // get current lang
+    $lang = rex_i18n::getLocale();
     foreach (rex_i18n::getLocales() as $locale) {
-        $field->getSelect()->addOption(substr($locale, 0, 2), substr($locale, 0, 2));
+        rex_i18n::setLocale($locale, false);
+        $field->getSelect()->addOption(rex_i18n::msg('lang'), substr($locale, 0, 2));
     }
+    // set current lang again to fix lang problem with php 7.0 and php 5.x
+    rex_i18n::setLocale($lang, false);
 
     if (rex_addon::exists('media_manager') && rex_addon::get('media_manager')->isAvailable()) {
         $field = $form->addSelectField('mediatype');
