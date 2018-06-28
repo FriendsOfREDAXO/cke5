@@ -4,6 +4,7 @@
 
 * fix php compatibility problems
 * fix locale will change bug in profile editor
+* fix provide exception problem
 
 ## Version 2.0.0
 
