@@ -63,14 +63,18 @@ class Cke5AssetsProvider
      */
     private static function addJS(array $js)
     {
-        foreach (rex_view::getJsFiles() as $jsFile) {
-            foreach ($js as $name => $fullPathFile) {
-                if (strpos($jsFile, $name) !== false) { } else {
-                    try {
-                        rex_view::addJsFile(self::getAddon()->getAssetsUrl($fullPathFile));
-                    } catch (rex_exception $e) {
-                        rex_logger::logException($e);
-                    }
+        foreach ($js as $name => $fullPathFile) {
+            $add = true;
+            foreach (rex_view::getJsFiles() as $jsFile) {
+                if (strpos($jsFile, $name) !== false) {
+                    $add = false;
+                }
+            }
+            if ($add) {
+                try {
+                    rex_view::addJsFile(self::getAddon()->getAssetsUrl($fullPathFile));
+                } catch (rex_exception $e) {
+                    rex_logger::logException($e);
                 }
             }
         }
@@ -82,19 +86,22 @@ class Cke5AssetsProvider
      */
     private static function addCss(array $css)
     {
-        if (isset(rex_view::getCssFiles()['all'])) {
-            foreach (rex_view::getCssFiles()['all'] as $cssFile) {
-                foreach ($css as $name => $fullPathFile) {
-                    if (strpos($cssFile, $name) !== false) { } else {
-                        try {
-                            rex_view::addCssFile(self::getAddon()->getAssetsUrl($fullPathFile));
-                        } catch (rex_exception $e) {
-                        }
+        foreach ($css as $name => $fullPathFile) {
+            $add = true;
+            if (isset(rex_view::getCssFiles()['all'])) {
+                foreach (rex_view::getCssFiles()['all'] as $cssFile) {
+                    if (strpos($cssFile, $name) !== false) {
+                        $add = false;
                     }
                 }
             }
-        } else {
-            // TODO error
+            if ($add) {
+                try {
+                    rex_view::addCssFile(self::getAddon()->getAssetsUrl($fullPathFile));
+                } catch (rex_exception $e) {
+                    rex_logger::logException($e);
+                }
+            }
         }
     }
 
