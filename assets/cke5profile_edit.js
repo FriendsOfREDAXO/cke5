@@ -100,7 +100,7 @@ function cke5_init_edit() {
 
     if (fontsize.length) {
         if (fontsize.attr('data-default-tags') === '1') {
-            fontsize.attr('value', 'tiny,small,big,huge');
+            fontsize.attr('value', 'tiny,small,default,big,huge');
         }
         fontsize.cke5InputTags({
             autocomplete: {
