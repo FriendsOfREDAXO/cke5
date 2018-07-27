@@ -1,5 +1,12 @@
 # Changelog
 
+## Version 2.1.0
+
+* update ckeditor 5 vendors to version 11
+* fix many problems with rex_link and rex_images plugins for ckeditor5 v11
+* add super-sub plugin https://github.com/mjadobson/ckeditor5-super-sub
+* add super and sub to profile editor
+
 ## Version 2.0.1
 
 * fix php compatibility problems

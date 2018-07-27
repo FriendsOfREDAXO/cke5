@@ -99,7 +99,7 @@ Example:
     $create = \Cke5\Creator\Cke5ProfilesApi::addProfile(
         'full_cke',
         'Cke5 with all possible tools',
-        ['heading', '|', 'fontSize', 'fontFamily', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'insertTable', 'code', 'link', 'rexImage', 'bulletedList', 'numberedList', 'blockQuote', 'highlight', 'emoji', 'undo', 'redo'],
+        ['heading', '|', 'fontSize', 'fontFamily', 'alignment', 'bold', 'italic', 'underline', 'super', 'sub', 'strikethrough', 'insertTable', 'code', 'link', 'rexImage', 'bulletedList', 'numberedList', 'blockQuote', 'highlight', 'emoji', 'undo', 'redo'],
         ['paragraph', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
         ['left', 'right', 'center', 'justify'],
         ['imageTextAlternative', '|', 'full', 'alignLeft', 'alignCenter', 'alignRight'],
