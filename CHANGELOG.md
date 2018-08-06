@@ -2,7 +2,8 @@
 
 ## Version 2.1.1
 
-* added uninstall.php @TobiasKrais 
+* add uninstall.php @TobiasKrais
+* add gif-demos @crydotsnake 
 
 ## Version 2.1.0
 
