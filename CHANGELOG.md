@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 2.1.1
+
+* added uninstall.php @TobiasKrais 
+
 ## Version 2.1.0
 
 * update ckeditor 5 vendors to version 11
