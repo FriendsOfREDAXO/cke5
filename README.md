@@ -17,6 +17,10 @@ Integrates the [CKEditor5](https://ckeditor.com) into REDAXO CMS.
 - Mediapool-Support
 - MBlock-Support
 
+## Demo
+
+![Screenshot](https://raw.githubusercontent.com/crydotsnake/cke5/master/assets/images/ckeditor5_demo.gif)
+
 ## Code Examples
 
 ### Use in general:
