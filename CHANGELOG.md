@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 2.1.2
+
+* fix given profile sub_settings was ignored
+
 ## Version 2.1.1
 
 * add uninstall.php @TobiasKrais
