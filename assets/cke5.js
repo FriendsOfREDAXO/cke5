@@ -85,6 +85,9 @@ function cke5_pastinit(element, sub_options) {
     let next = element.next();
     if (next.length && next.hasClass('ck')) {
         let editable = next.find('.ck-editor__editable');
+        if (sub_options[0] != undefined) {
+            sub_options = sub_options[0];
+        }
         if ('min-height' in sub_options && editable.length && sub_options['min-height'] !== 'none') {
             next.find('.ck-editor__editable').css('min-height', sub_options['min-height'] + 'px');
         }
