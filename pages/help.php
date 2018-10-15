@@ -12,7 +12,7 @@
 if (rex_i18n::getLocale() != 'de_de') {
     $file = rex_file::get(rex_path::addon('cke5', 'README.md'));
 } else {
-    $file = rex_file::get(rex_path::addon('cke5', 'README_de_de.md'));
+    $file = rex_file::get(rex_path::addon('cke5', 'README.de.md'));
 }
 
 $body = '<div class="markdown-body">' . rex_markdown::factory()->parse($file) . '</div>';
