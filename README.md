@@ -1,3 +1,5 @@
+<p align="right">🌎 <a href="https://github.com/FriendsOfREDAXO/cke5/blob/master/README.de.md">Deutsch</a></p>
+
 # CKEditor5 for REDAXO CMS
 
 ![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/ckeditor_01.png)
