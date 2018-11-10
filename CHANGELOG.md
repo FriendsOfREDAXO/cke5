@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 2.1.4
+
+* remove php version requirement to make addon for php7 installable: https://github.com/redaxo/redaxo/issues/2204
+
 ## Version 2.1.3
 
 * add rex:ready  @dergel
