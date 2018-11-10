@@ -1,0 +1,41 @@
+.rainbowJSON{
+    font-size: 13px;
+    line-height: 18px;
+    font-family: 'Droid Sans Mono', 'DejaVu Sans', courier, monospace;
+    margin-top: 10px;
+}
+.rainbowJSON > a{ color: #999; font-size: 12px; text-decoration: none; }
+.rainbowJSON > a:hover{ color: #333; }
+
+.formattedJSON{
+    margin: 10px 0 0 0;
+    padding: 10px;
+    background: #F5FAFF;
+    border-left: 3px solid #007AC6;
+    color: #333;
+    font-size: 13px;
+    word-wrap: break-word;
+}
+
+pre.plainJSON{
+    display: none;
+    max-width: 100%;
+    word-wrap: break-word;
+    margin: 10px 0 0 0;
+    font-family: 'Droid Sans Mono', 'DejaVu Sans', courier, monospace;
+}
+
+.formattedJSON div div{ margin: 0 20px; }
+.formattedJSON span.rainbowArray{ display: block; }
+
+.formattedJSON .rainbowType{ color: #777; }
+.formattedJSON .rainbowValue{ color: #9CBF24; }
+.formattedJSON .rainbowValue.string{ color: #FD7A1F; }
+.formattedJSON .rainbowValue.boolean{ color: #54B21A; }
+.formattedJSON .rainbowValue.number{ color: #C300EA; }
+.formattedJSON .rainbowEmpty{ color: #ccc; }
+.formattedJSON .rainbowEmpty:hover{ color: #777; }
+.formattedJSON .rainbowToggle{ font-size: 15px; }
+
+.formattedJSON a{ color: #999; text-decoration: none; }
+.formattedJSON a:hover{ color: #444; }

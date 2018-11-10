@@ -54,78 +54,9 @@ class Cke5ProfilesCreator
 
             foreach ($profiles as $profile) {
 
-                $toolbar = self::toArray($profile['toolbar']);
-                $jsonProfile = ['toolbar' => $toolbar];
-                $jsonSuboption = [];
-
-                if (in_array('link', $toolbar) && !empty($profile['rexlink'])) {
-                    $jsonProfile['link'] = ['rexlink' => self::toArray($profile['rexlink'])];
-                }
-
-                if (!empty($profile['image_toolbar'])) {
-                    $imageKeys = self::toArray($profile['image_toolbar']);
-                    $jsonProfile['image'] = ['toolbar' => self::getImageToolbar($imageKeys), 'styles' => self::getImageStyles($imageKeys)];
-                }
-
-                if (in_array('insertTable', $toolbar) && !empty($profile['table_toolbar'])) {
-                    $jsonProfile['table'] = ['toolbar' => self::toArray($profile['table_toolbar'])];
-                }
-
-                if (in_array('alignment', $toolbar) && !empty($profile['alignment'])) {
-                    $jsonProfile['alignment'] = self::toArray($profile['alignment']);
-                }
-
-                if (in_array('fontSize', $toolbar) && !empty($profile['fontsize'])) {
-                    $jsonProfile['fontSize'] = ['options' => self::toArray($profile['fontsize'])];
-                }
-
-                if (in_array('heading', $toolbar) && !empty($profile['heading'])) {
-                    $jsonProfile['heading'] = ['options' => self::getHeadings(self::toArray($profile['heading']))];
-                }
-
-                if (in_array('highlight', $toolbar) && !empty($profile['highlight'])) {
-                    $jsonProfile['highlight'] = ['options' => self::getHighlight(self::toArray($profile['highlight']))];
-                }
-
-                // "rexImage": {"media_type" : "testtype"},
-                // "ckfinder": {"uploadUrl": ".\/index.php?cke5upload=1&media_type=testtype&media_category=2"}
-
-                if (in_array('rexImage', $toolbar) && !empty($profile['mediatype'])) {
-                    $jsonProfile['rexImage'] = ['media_type' => $profile['mediatype']];
-                }
-
-                if (!is_null($profile['upload_default']) or !empty($profile['upload_default'])) {
-                    $ckFinderUrl = self::UPLOAD_URL;
-
-                    if (!empty($profile['mediatype'])) {
-                        $ckFinderUrl .= '&media_type=' . $profile['mediatype'];
-                    }
-
-                    if (!empty($profile['mediacategory'])) {
-                        $ckFinderUrl .= '&media_category=' . $profile['mediacategory'];
-                    }
-
-                    $jsonProfile['ckfinder'] = ['uploadUrl' => $ckFinderUrl];
-                }
-
-                if (!empty($profile['lang'])) {
-                    $jsonProfile['language'] = $profile['lang'];
-                }
-
-                if (is_null($profile['height_default']) or empty($profile['height_default'])) {
-                    foreach (['min', 'max'] as $key) {
-                        if (!empty($profile[$key . '_height'])) {
-                            if ((int)$profile[$key . '_height'] == 0) {
-                                $jsonSuboption[] = [$key . '-height' => 'none'];
-                            } else {
-                                $jsonSuboption[] = [$key . '-height' => (int)$profile[$key . '_height']];
-                            }
-                        }
-                    }
-                }
-
-                $jsonSuboptions[$profile['name']] = $jsonSuboption;
-                $jsonProfiles[$profile['name']] = $jsonProfile;
+                $result = self::mapProfile($profile);
+                $jsonSuboptions[$profile['name']] = $result['suboptions'];
+                $jsonProfiles[$profile['name']] = $result['profile'];
 
             }
 
@@ -142,6 +73,86 @@ const cke5suboptions = $suboptions;
         if (!rex_file::put(self::getAddon()->getAssetsPath(self::PROFILES_FILENAME), $content)) {
             throw new \rex_functional_exception(\rex_i18n::msg('cke5_profiles_creation_exception'));
         }
+    }
+
+    /**
+     * @param array $profile
+     * @return array
+     * @author Joachim Doerr
+     */
+    public static function mapProfile(array $profile)
+    {
+        $toolbar = self::toArray($profile['toolbar']);
+        $jsonProfile = ['toolbar' => $toolbar];
+        $jsonSuboption = [];
+
+        if (in_array('link', $toolbar) && !empty($profile['rexlink'])) {
+            $jsonProfile['link'] = ['rexlink' => self::toArray($profile['rexlink'])];
+        }
+
+        if (!empty($profile['image_toolbar'])) {
+            $imageKeys = self::toArray($profile['image_toolbar']);
+            $jsonProfile['image'] = ['toolbar' => self::getImageToolbar($imageKeys), 'styles' => self::getImageStyles($imageKeys)];
+        }
+
+        if (in_array('insertTable', $toolbar) && !empty($profile['table_toolbar'])) {
+            $jsonProfile['table'] = ['toolbar' => self::toArray($profile['table_toolbar'])];
+        }
+
+        if (in_array('alignment', $toolbar) && !empty($profile['alignment'])) {
+            $jsonProfile['alignment'] = self::toArray($profile['alignment']);
+        }
+
+        if (in_array('fontSize', $toolbar) && !empty($profile['fontsize'])) {
+            $jsonProfile['fontSize'] = ['options' => self::toArray($profile['fontsize'])];
+        }
+
+        if (in_array('heading', $toolbar) && !empty($profile['heading'])) {
+            $jsonProfile['heading'] = ['options' => self::getHeadings(self::toArray($profile['heading']))];
+        }
+
+        if (in_array('highlight', $toolbar) && !empty($profile['highlight'])) {
+            $jsonProfile['highlight'] = ['options' => self::getHighlight(self::toArray($profile['highlight']))];
+        }
+
+        // "rexImage": {"media_type" : "testtype"},
+        // "ckfinder": {"uploadUrl": ".\/index.php?cke5upload=1&media_type=testtype&media_category=2"}
+
+        if (in_array('rexImage', $toolbar) && !empty($profile['mediatype'])) {
+            $jsonProfile['rexImage'] = ['media_type' => $profile['mediatype']];
+        }
+
+        if (!is_null($profile['upload_default']) or !empty($profile['upload_default'])) {
+            $ckFinderUrl = self::UPLOAD_URL;
+
+            if (!empty($profile['mediatype'])) {
+                $ckFinderUrl .= '&media_type=' . $profile['mediatype'];
+            }
+
+            if (!empty($profile['mediacategory'])) {
+                $ckFinderUrl .= '&media_category=' . $profile['mediacategory'];
+            }
+
+            $jsonProfile['ckfinder'] = ['uploadUrl' => $ckFinderUrl];
+        }
+
+        if (!empty($profile['lang'])) {
+            $jsonProfile['language'] = $profile['lang'];
+        }
+
+        if (is_null($profile['height_default']) or empty($profile['height_default'])) {
+            foreach (['min', 'max'] as $key) {
+                if (!empty($profile[$key . '_height'])) {
+                    if ((int)$profile[$key . '_height'] == 0) {
+                        $jsonSuboption[] = [$key . '-height' => 'none'];
+                    } else {
+                        $jsonSuboption[] = [$key . '-height' => (int)$profile[$key . '_height']];
+                    }
+                }
+            }
+        }
+
+        return array('suboptions' => $jsonSuboption, 'profile' => $jsonProfile);
     }
 
     /**

@@ -13,6 +13,7 @@ cke5_features = Funciones de Editor y Complemento
 # heading
 cke5_subnavigation_header_title = CKEditor 5 para Redaxo 5
 cke5_subnavigation_header_photo = Foto de %s en %s
+cke5_editor_preview_shop_profile_settings = Show profile-settings
 
 # profiles list & form
 cke5_list_profiles = Perfiles de CKEditor 5

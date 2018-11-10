@@ -58,6 +58,23 @@ class Cke5AssetsProvider
     }
 
     /**
+     * @author Joachim Doerr
+     */
+    public static function provideCke5PreviewData()
+    {
+        if (rex_be_controller::getCurrentPagePart(3) == 'preview') {
+            // add js vendors
+            self::addJS([
+                'rainbowjson' => 'vendor/rainbow-json/rainbowjson.js',
+            ]);
+            // add css vendors
+            self::addCss([
+                'rainbowjson' => 'vendor/rainbow-json/rainbowjson.css',
+            ]);
+        }
+    }
+
+    /**
      * @param array $js
      * @author Joachim Doerr
      */

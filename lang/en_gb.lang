@@ -14,6 +14,7 @@ cke5_preview = Profile previews
 # preview
 cke5_editor_preview = Editor preview
 cke5_editor_preview_info = Entries in the editor preview will not be saved, the preview will be displayed after save or apply
+cke5_editor_preview_shop_profile_settings = Show profile-settings
 
 # heading
 cke5_subnavigation_header_title = CKEditor 5 for Redaxo 5

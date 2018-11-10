@@ -16,6 +16,7 @@ if (rex::isBackend() && is_object(rex::getUser())) {
 if (rex::isBackend() && rex::getUser()) {
     // load assets
     \Cke5\Provider\Cke5AssetsProvider::provideCke5ProfileEditData();
+    \Cke5\Provider\Cke5AssetsProvider::provideCke5PreviewData();
     \Cke5\Provider\Cke5AssetsProvider::provideCke5BaseData();
 
     // upload image
