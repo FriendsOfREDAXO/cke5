@@ -10,7 +10,7 @@ let ckedit = '.cke5_profile_edit',
     imageDragDrop;
 
 
-$(document).on('ready pjax:success', function () {
+$(document).on('rex:ready', function (event, container) {
     if ($(ckedit).length) {
         cke5_init_edit();
     }
@@ -155,7 +155,8 @@ function cke5_init_edit() {
     }
 
     if (minheight.length) {
-        minheight.slider({
+        let $minval = minheight.val();
+        minheight.bootstrapSlider({
             tooltip: 'show',
             min: 0,
             max: 600,
@@ -163,10 +164,12 @@ function cke5_init_edit() {
             ticks: [0, 100, 200, 300, 400, 500, 600],
             ticks_labels: ['none', '100px', '200px', '300px', '400px', '500px', '600px'],
         });
+        minheight.bootstrapSlider('setValue', $minval);
     }
 
     if (maxheight.length) {
-        maxheight.slider({
+        let $maxval = maxheight.val();
+        maxheight.bootstrapSlider({
             tooltip: 'show',
             min: 0,
             max: 600,
@@ -174,6 +177,7 @@ function cke5_init_edit() {
             ticks: [0, 200, 400, 600, 800, 1000, 1200],
             ticks_labels: ['none', '200px', '400px', '600px', '800px', '1000px', '1200px'],
         });
+        maxheight.bootstrapSlider('setValue', $maxval);
     }
 
     if (height.length) {
