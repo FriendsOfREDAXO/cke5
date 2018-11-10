@@ -11,10 +11,11 @@ $(document).on('rex:ready', function(e, container) {
     container.find(ckareas).each(function() {
         cke5_init($(this));
     });
-})
+});
 
 $(document).on('ready', function () {
     if (typeof mblock_module === 'object') {
+        // add callback for mblock
         mblock_module.registerCallback('reindex_end', function () {
             if ($(ckareas).length) {
                 if (mblock_module.lastAction === 'add_item') {
@@ -33,43 +34,49 @@ function cke5_init_all(elements) {
 }
 
 function cke5_init(element) {
-    let unique_id = 'ck' + Math.random().toString(16).slice(2),
-        options = {},
-        sub_options = {},
-        profile_set = element.attr('data-profile'),
-        min_height = element.attr('data-min-height'),
-        max_height = element.attr('data-max-height'),
-        lang = element.attr('data-lang');
+    if (!element.next().hasClass('ck')) {
+        let unique_id = 'ck' + Math.random().toString(16).slice(2),
+            options = {},
+            sub_options = {},
+            profile_set = element.attr('data-profile'),
+            min_height = element.attr('data-min-height'),
+            max_height = element.attr('data-max-height'),
+            lang = element.attr('data-lang');
 
-    element.attr('id', unique_id);
+        element.attr('id', unique_id);
 
-    if (typeof profile_set === 'undefined' || !profile_set) { } else {
-        if (profile_set in cke5profiles) {
-            options = cke5profiles[profile_set];
+        if (typeof profile_set === 'undefined' || !profile_set) {
+        } else {
+            if (profile_set in cke5profiles) {
+                options = cke5profiles[profile_set];
+            }
+            if (profile_set in cke5suboptions) {
+                sub_options = cke5suboptions[profile_set];
+            }
         }
-        if (profile_set in cke5suboptions) {
-            sub_options = cke5suboptions[profile_set];
+        if (typeof min_height === 'undefined' || !min_height) {
+        } else {
+            sub_options['min-height'] = min_height;
         }
-    }
-    if (typeof min_height === 'undefined' || !min_height) { } else {
-        sub_options['min-height'] = min_height;
-    }
-    if (typeof max_height === 'undefined' || !max_height) { } else {
-        sub_options['max-height'] = max_height;
-    }
-    if (typeof lang === 'undefined' || !lang) { } else {
-        options['language'] = lang;
-    }
+        if (typeof max_height === 'undefined' || !max_height) {
+        } else {
+            sub_options['max-height'] = max_height;
+        }
+        if (typeof lang === 'undefined' || !lang) {
+        } else {
+            options['language'] = lang;
+        }
 
-    // init editor
-    ClassicEditor.create(document.querySelector('#' + unique_id), options)
-        .then(editor => {
-            ckeditors[unique_id] = editor; // Save for later use.
-            cke5_pastinit(element, sub_options);
-        })
-        .catch(error => {
-            console.error(error);
-        });
+        // init editor
+        ClassicEditor.create(document.querySelector('#' + unique_id), options)
+            .then(editor => {
+                ckeditors[unique_id] = editor; // Save for later use.
+                cke5_pastinit(element, sub_options);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
 }
 
 function cke5_destroy(elements) {
