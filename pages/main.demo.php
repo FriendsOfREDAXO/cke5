@@ -12,6 +12,8 @@ $content = \Cke5\Provider\Cke5NavigationProvider::getSubNavigationHeader() .
 <div class="cke5-demo">
     <div name="content" id="editor" class="cke5-editor" data-profile="default" data-lang="' . \Cke5\Utils\Cke5Lang::getUserLang() . '">
     
+        <figure class="media"><oembed url="https://vimeo.com/5080397"></oembed></figure>
+    
         <h1>Space Shuttle Programm</h1>
         
         <p>Nach dem letzten <a href="https://de.wikipedia.org/wiki/Apollo-Programm" title="Apollo-Programm">Apollo</a>-Flug 1975 war das Shuttle ab 1981 das Arbeitspferd der NASA. Der erste Flug des Systems fand am 12. April 1981 statt, seither wurden insgesamt 135 Flüge durchgeführt, wobei es zu zwei fatalen Unfällen kam; bei beiden starben die jeweils sieben Besatzungsmitglieder und die Raumfähren gingen verloren.</p>
