@@ -1,5 +1,17 @@
 # Changelog
 
+## Version 2.1.3
+
+* add rex:ready  @dergel
+* fix duplicate by pjax call
+* editor height range slider don't notice profile update fixed
+* add link to profile edit in preview site
+* add mform code example to preview site
+* add profile info to preview site
+* show profile settings add to preview site
+* execute building process and add newest cke5 version 11.1.1 with media embed
+* add Media embed in default profile
+
 ## Version 2.1.2
 
 * fix given profile sub_settings was ignored
