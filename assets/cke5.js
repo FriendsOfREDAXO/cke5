@@ -7,6 +7,12 @@
 let ckeditors = {},
     ckareas = '.cke5-editor';
 
+$(document).on('rex:ready', function(e, container) {
+    container.find(ckareas).each(function() {
+        cke5_init($(this));
+    });
+})
+
 $(document).on('ready', function () {
     if (typeof mblock_module === 'object') {
         mblock_module.registerCallback('reindex_end', function () {
@@ -17,12 +23,6 @@ $(document).on('ready', function () {
                 }
             }
         });
-    }
-});
-
-$(document).on('ready pjax:success', function () {
-    if ($(ckareas).length) {
-        cke5_init_all($(ckareas));
     }
 });
 
