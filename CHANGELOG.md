@@ -1,6 +1,6 @@
 # Changelog
 
-## Version 2.1.3
+## Version 3.0.0
 
 * add rex:ready  @dergel
 * fix duplicate by pjax call
@@ -12,6 +12,9 @@
 * execute building process and add newest cke5 version 11.1.1 with media embed
 * add Media embed in default profile
 * remove php version requirement to make addon for php7 installable: https://github.com/redaxo/redaxo/issues/2204
+* remove supersub plugin, add supsub plugin
+* `super` toolbar key was replaced with `sup`
+* add embed media example to demo page
 
 ## Version 2.1.2
 
