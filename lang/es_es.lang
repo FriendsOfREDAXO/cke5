@@ -9,6 +9,11 @@ cke5_main = Descripción general y Demos
 cke5_demo = CKEditor 5 Demo
 cke5_mblock_demo = MBlock Demo
 cke5_features = Funciones de Editor y Complemento
+cke5_preview = Vistas previas de perfil
+
+# preview
+cke5_editor_preview = Vista previa del editor
+cke5_editor_preview_info = Las entradas en la vista previa del editor no se guardarán, la vista previa se mostrará después de guardar o aplicar
 
 # heading
 cke5_subnavigation_header_title = CKEditor 5 para Redaxo 5
