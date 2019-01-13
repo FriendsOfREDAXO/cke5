@@ -1,5 +1,21 @@
 # Changelog
 
+## Version 3.1.0
+
+* eecute building process and added new cke5 version 11.2.0 https://ckeditor.com/blog/CKEditor-5-v11.2.0-with-paste-from-Word-and-file-manager-support-released/
+* add new toolbar elements to creation array 
+* remove ckeditor5-supersub module there will replace by:
+  
+```
+@ckeditor/ckeditor5-basic-styles/src/subscript
+@ckeditor/ckeditor5-basic-styles/src/superscript
+```
+
+*NOTICE:* `sub`, `sup` will not work anymore
+
+* update issue from 2.0.1 to 3.0.x fixed
+* added sql update statement in `update.php` for all profiles there contains `sub`, `sup`. There will replace `sub`, `sup` with `subscript`, `superscript`.
+
 ## Version 3.0.0
 
 * add rex:ready  @dergel
