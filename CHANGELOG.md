@@ -2,7 +2,8 @@
 
 ## Version 3.1.0
 
-* eecute building process and added new cke5 version 11.2.0 https://ckeditor.com/blog/CKEditor-5-v11.2.0-with-paste-from-Word-and-file-manager-support-released/
+* execute building process and added new cke5 version 11.2.0 
+https://ckeditor.com/blog/CKEditor-5-v11.2.0-with-paste-from-Word-and-file-manager-support-released/
 * add new toolbar elements to creation array 
 * remove ckeditor5-supersub module there will replace by:
   
