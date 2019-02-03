@@ -19,6 +19,11 @@ class Cke5ProfilesCreator
     const TRANSLATION_FILENAME = 'cke5translations.js';
     const TRANSLATION_PATH = 'vendor/ckeditor5-classic/translations/%s.js';
 
+    const EDITOR_SETTINGS = [
+        'cktypes' => ['heading', 'fontSize', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable'],
+        'ckimgtypes' => ['rexImage', 'imageUpload']
+    ];
+
     const ALLOWED_FIELDS = [
         'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript','superscript', 'insertTable', 'code', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji'],
         'alignment' => ['left', 'right', 'center', 'justify'],
@@ -37,6 +42,19 @@ class Cke5ProfilesCreator
             '70', '71', '72', '73', '74', '75', '76', '77', '78', '79'],
         'min_height' => ['none', '100px', '200px', '300px', '400px', '500px', '600px'],
         'max_height' => ['none', '200px', '400px', '600px', '800px', '1000px', '1200px'],
+    ];
+
+    const DEFAULTS = [
+        'toolbar' => 'heading,|',
+        'alignment' => 'left,right,center',
+        'table_toolbar' => 'tableColumn,tableRow,mergeTableCells',
+        'heading' => 'paragraph,h1,h2,h3',
+        'highlight' => 'yellowMarker,greenMarker,redPen,greenPen',
+        'image_toolbar' => 'imageTextAlternative,|,full,alignLeft,alignRight',
+        'rexlink' => 'internal,media',
+        'fontsize' => 'tiny,small,default,big,huge',
+        'min_height' => [0, 100, 200, 300, 400, 500, 600],
+        'max_height' => [0, 200, 400, 600, 800, 1000, 1200],
     ];
 
     /**

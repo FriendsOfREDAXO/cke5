@@ -5,6 +5,8 @@
  * @license MIT
  */
 
+use Cke5\Creator\Cke5ProfilesCreator;
+
 /** @var rex_addon $this */
 
 $func = rex_request::request('func', 'string');
@@ -139,6 +141,9 @@ if ($func == '') {
     // toolbar
     $field = $form->addTextField('toolbar');
     $field->setAttribute('id', 'cke5toolbar-input');
+    $field->setAttribute('data-tag-init', 1);
+    $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['toolbar']);
+    $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['toolbar']) . '"]');
     $field->setLabel(rex_i18n::msg('cke5_toolbar'));
     if ($default_value) $field->setAttribute('data-default-tags',1);
 
@@ -146,6 +151,9 @@ if ($func == '') {
     $form->addRawField('<div class="collapse ' . $in_heading . '" id="cke5heading-collapse">');
     $field = $form->addTextField('heading');
     $field->setAttribute('id', 'cke5heading-input');
+    $field->setAttribute('data-tag-init', 1);
+    $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['heading']);
+    $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['heading']) . '"]');
     $field->setLabel(rex_i18n::msg('cke5_heading'));
     if ($default_value) $field->setAttribute('data-default-tags',1);
     $form->addRawField('</div>');
@@ -154,6 +162,9 @@ if ($func == '') {
     $form->addRawField('<div class="collapse  ' . $in_alignment . '" id="cke5alignment-collapse">');
     $field = $form->addTextField('alignment');
     $field->setAttribute('id', 'cke5alignment-input');
+    $field->setAttribute('data-tag-init', 1);
+    $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['alignment']);
+    $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['alignment']) . '"]');
     $field->setLabel(rex_i18n::msg('cke5_alignment'));
     if ($default_value) $field->setAttribute('data-default-tags',1);
     $form->addRawField('</div>');
@@ -162,6 +173,9 @@ if ($func == '') {
     $form->addRawField('<div class="collapse  ' . $in_table . '" id="cke5insertTable-collapse">');
     $field = $form->addTextField('table_toolbar');
     $field->setAttribute('id', 'cke5inserttable-input');
+    $field->setAttribute('data-tag-init', 1);
+    $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['table_toolbar']);
+    $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['table_toolbar']) . '"]');
     $field->setLabel(rex_i18n::msg('cke5_table_toolbar'));
     if ($default_value) $field->setAttribute('data-default-tags',1);
     $form->addRawField('</div>');
@@ -169,8 +183,11 @@ if ($func == '') {
     // fontsize
     $form->addRawField('<div class="collapse ' . $in_fontsize . '" id="cke5fontSize-collapse">');
     $field = $form->addTextField('fontsize');
-    $field->setAttribute('id', 'cke5fontsize-input');
     $field->setLabel(rex_i18n::msg('cke5_fontSize'));
+    $field->setAttribute('id', 'cke5fontsize-input');
+    $field->setAttribute('data-tag-init', 1);
+    $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['fontsize']);
+    $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['fontsize']) . '"]');
     if ($default_value) $field->setAttribute('data-default-tags',1);
     $form->addRawField('</div>');
 
@@ -178,6 +195,9 @@ if ($func == '') {
     $form->addRawField('<div class="collapse ' . $in_rexlink . '" id="cke5link-collapse">');
     $field = $form->addTextField('rexlink');
     $field->setAttribute('id', 'cke5link-input');
+    $field->setAttribute('data-tag-init', 1);
+    $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['rexlink']);
+    $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['rexlink']) . '"]');
     $field->setLabel(rex_i18n::msg('cke5_link'));
     if ($default_value) $field->setAttribute('data-default-tags',1);
     $form->addRawField('</div>');
@@ -186,9 +206,9 @@ if ($func == '') {
     $form->addRawField('<div class="collapse ' . $in_highlight . '" id="cke5highlight-collapse">');
     $field = $form->addTextField('highlight');
     $field->setAttribute('id', 'cke5highlight-input');
-    // TODO load defaults and tags from config
-    $field->setAttribute('data-defaults', 'yellowMarker,greenMarker,redPen,greenPen');
-    $field->setAttribute('data-tags', '["yellowMarker", "greenMarker", "pinkMarker", "blueMarker", "redPen", "greenPen"]');
+    $field->setAttribute('data-tag-init', 1);
+    $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['highlight']);
+    $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['highlight']) . '"]');
     $field->setLabel(rex_i18n::msg('cke5_highlight'));
     if ($default_value) $field->setAttribute('data-default-tags',1);
     $form->addRawField('</div>');
@@ -199,6 +219,9 @@ if ($func == '') {
     $form->addRawField('<div class="collapse ' . $in_imagetoolbar . '" id="cke5imagetoolbar-collapse">');
     $field = $form->addTextField('image_toolbar');
     $field->setAttribute('id', 'cke5image-input');
+    $field->setAttribute('data-tag-init', 1);
+    $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['image_toolbar']);
+    $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['image_toolbar']) . '"]');
     $field->setLabel(rex_i18n::msg('cke5_image_toolbar'));
     if ($default_value) $field->setAttribute('data-default-tags',1);
     $form->addRawField('</div>');
@@ -215,14 +238,18 @@ if ($func == '') {
     // min height default 0 = none
     $field = $form->addTextField('min_height');
     $field->setAttribute('id', 'cke5minheight-input');
-    $field->setLabel(rex_i18n::msg('cke5_min_height'));
+    $field->setAttribute('data-range-values', '[' . implode(',', Cke5ProfilesCreator::DEFAULTS['min_height']) . ']');
+    $field->setAttribute('data-range', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['min_height']) . '"]');
     $field->setAttribute('data-slider-value', $min_height);
+    $field->setLabel(rex_i18n::msg('cke5_min_height'));
 
     // max height default 0 = none
     $field = $form->addTextField('max_height');
     $field->setAttribute('id', 'cke5maxheight-input');
-    $field->setLabel(rex_i18n::msg('cke5_max_height'));
+    $field->setAttribute('data-range-values', '[' . implode(',', Cke5ProfilesCreator::DEFAULTS['max_height']) . ']');
+    $field->setAttribute('data-range', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['max_height']) . '"]');
     $field->setAttribute('data-slider-value', $max_height);
+    $field->setLabel(rex_i18n::msg('cke5_max_height'));
     $form->addRawField('</div>');
 
     // upload default
@@ -284,10 +311,10 @@ if ($func == '') {
     }
 
     // show
-    $content = $form->get();
+    $content = '<div class="cke5_profile_edit" data-cktypes=\'["' . implode('","', Cke5ProfilesCreator::EDITOR_SETTINGS['cktypes']) . '"]\' data-ckimgtypes=\'["' . implode('","', Cke5ProfilesCreator::EDITOR_SETTINGS['ckimgtypes']) . '"]\'>' . $form->get() . '</div>';
 
     $fragment = new rex_fragment();
-    $fragment->setVar('class', 'edit cke5_profile_edit', false);
+    $fragment->setVar('class', 'edit', false);
     $fragment->setVar('title', ($func == 'edit') ? rex_i18n::msg('cke5_profile_edit') : rex_i18n::msg('cke5_profile_add'));
     $fragment->setVar('body', $content, false);
     echo $fragment->parse('core/page/section.php');

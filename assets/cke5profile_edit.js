@@ -5,34 +5,28 @@
  */
 
 let ckedit = '.cke5_profile_edit',
-    cktypes = ['heading', 'fontSize', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable'],
-    ckimgtypes = ['rexImage', 'imageUpload'],
-    imageDragDrop;
+    cktypes, ckimgtypes, imageDragDrop;
 
 
 $(document).on('rex:ready', function (event, container) {
-    if ($(ckedit).length) {
-        cke5_init_edit();
+    if (container.find(ckedit).length) {
+        cke5_init_edit($(ckedit));
     }
 });
 
-function cke5_init_edit() {
+function cke5_init_edit(element) {
 
-    let toolbar = $('#cke5toolbar-input'),
-        alignment = $('#cke5alignment-input'),
-        insertTable = $('#cke5inserttable-input'),
-        heading = $('#cke5heading-input'),
-        fontsize = $('#cke5fontsize-input'),
-        rexlink = $('#cke5link-input'),
-        name = $('#cke5name-input'),
-        image = $('#cke5image-input'),
-        minheight = $('#cke5minheight-input'),
-        maxheight = $('#cke5maxheight-input'),
-        height = $('#cke5height-input-default-height'),
-        highlight = $('#cke5highlight-input')
-    ;
+    let taginputs = element.find('input[data-tag-init=1]'),
+        toolbar = element.find('#cke5toolbar-input'),
+        name = element.find('#cke5name-input'),
+        minheight = element.find('#cke5minheight-input'),
+        maxheight = element.find('#cke5maxheight-input'),
+        height = element.find('#cke5height-input-default-height');
 
-    imageDragDrop = $('#cke5uploaddefault-input-default-upload');
+    cktypes = JSON.parse(element.attr('data-cktypes'));
+    ckimgtypes = JSON.parse(element.attr('data-ckimgtypes'));
+
+    imageDragDrop = element.find('#cke5uploaddefault-input-default-upload');
 
     if (name.length) {
         name.alphanum({
@@ -45,112 +39,26 @@ function cke5_init_edit() {
         });
     }
 
-    if (toolbar.length) {
-        if (toolbar.attr('data-default-tags') === '1') {
-            toolbar.attr('value', 'heading,|')
-        }
-        toolbar.cke5InputTags({
-            autocomplete: {
-                values: ['|', 'heading', 'fontSize', 'fontFamily', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript','superscript', 'insertTable', 'code', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji']
-            },
-            create: function (e) {
-                cke5_toolbar_create_tag('toolbar', e.tags);
-            },
-            destroy: function (e) {
-                cke5_toolbar_destroy_tag('toolbar', e.tags);
+    if (taginputs.length) {
+        taginputs.each(function(){
+            if ($(this).attr('data-default-tags') === '1') {
+                $(this).attr('value', $(this).attr('data-defaults'))
             }
-        });
-    }
-
-    if (alignment.length) {
-        if (alignment.attr('data-default-tags') === '1') {
-            alignment.attr('value', 'left,right,center')
-        }
-        alignment.cke5InputTags({
-            autocomplete: {
-                values: ['left', 'right', 'center', 'justify']
-            },
-            max: 4
-        });
-    }
-
-    if (insertTable.length) {
-        if (insertTable.attr('data-default-tags') === '1') {
-            insertTable.attr('value', 'tableColumn,tableRow,mergeTableCells')
-        }
-        insertTable.cke5InputTags({
-            autocomplete: {
-                values: ['tableColumn', 'tableRow', 'mergeTableCells']
-            },
-            max: 3
-        });
-    }
-
-    if (heading.length) {
-        if (heading.attr('data-default-tags') === '1') {
-            heading.attr('value', 'paragraph,h1,h2,h3');
-        }
-        heading.cke5InputTags({
-            autocomplete: {
-                values: ['paragraph', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
-            },
-            max: 7
-        });
-    }
-
-    if (fontsize.length) {
-        if (fontsize.attr('data-default-tags') === '1') {
-            fontsize.attr('value', 'tiny,small,default,big,huge');
-        }
-        fontsize.cke5InputTags({
-            autocomplete: {
-                values: ['tiny', 'small', 'default', 'big', 'huge', '8', '9',
-                    '10', '11', '12', '13', '14', '15', '16', '17', '18', '19',
-                    '20', '21', '22', '23', '24', '25', '26', '27', '28', '29',
-                    '30', '31', '32', '33', '34', '35', '36', '37', '38', '39',
-                    '40', '41', '42', '43', '44', '45', '46', '47', '48', '49',
-                    '50', '51', '52', '53', '54', '55', '56', '57', '58', '59',
-                    '60', '61', '62', '63', '64', '65', '66', '67', '68', '69',
-                    '70', '71', '72', '73', '74', '75', '76', '77', '78', '79']
-            }
-        });
-    }
-
-    if (rexlink.length) {
-        if (rexlink.attr('data-default-tags') === '1') {
-            rexlink.attr('value', 'internal,media');
-        }
-        rexlink.cke5InputTags({
-            autocomplete: {
-                values: ['internal', 'media'],
-                max: 2
-            }
-        });
-    }
-
-    if (image.length) {
-        if (image.attr('data-default-tags') === '1') {
-            image.attr('value', 'imageTextAlternative,|,full,alignLeft,alignRight');
-        }
-        image.cke5InputTags({
-            autocomplete: {
-                values: ['|', 'imageTextAlternative', 'full', 'alignLeft', 'alignCenter', 'alignRight'],
-                max: 12
-            }
-        });
-    }
-
-    if (highlight.length) {
-        if (highlight.attr('data-default-tags') === '1') {
-            let defaults = highlight.attr('data-defaults');
-            highlight.attr('value', defaults);
-        }
-
-        highlight.cke5InputTags({
-            autocomplete: {
-                values: JSON.parse(highlight.attr('data-tags')),
-                max: 12
-            }
+            $(this).cke5InputTags({
+                autocomplete: {
+                    values: JSON.parse($(this).attr('data-tags')),
+                },
+                create: function (e) {
+                    if ($(this).attr('id') === toolbar.attr('id')) {
+                        cke5_toolbar_create_tag('toolbar', e.tags);
+                    }
+                },
+                destroy: function (e) {
+                    if ($(this).attr('id') === toolbar.attr('id')) {
+                        cke5_toolbar_destroy_tag('toolbar', e.tags);
+                    }
+                }
+            });
         });
     }
 
@@ -161,8 +69,8 @@ function cke5_init_edit() {
             min: 0,
             max: 600,
             step: 10,
-            ticks: [0, 100, 200, 300, 400, 500, 600],
-            ticks_labels: ['none', '100px', '200px', '300px', '400px', '500px', '600px'],
+            ticks: JSON.parse(minheight.attr('data-range-values')),
+            ticks_labels: JSON.parse(minheight.attr('data-range')),
         });
         minheight.bootstrapSlider('setValue', $minval);
     }
@@ -174,8 +82,8 @@ function cke5_init_edit() {
             min: 0,
             max: 600,
             step: 10,
-            ticks: [0, 200, 400, 600, 800, 1000, 1200],
-            ticks_labels: ['none', '200px', '400px', '600px', '800px', '1000px', '1200px'],
+            ticks: JSON.parse(maxheight.attr('data-range-values')),
+            ticks_labels: JSON.parse(maxheight.attr('data-range')),
         });
         maxheight.bootstrapSlider('setValue', $maxval);
     }
@@ -185,7 +93,7 @@ function cke5_init_edit() {
         height.bootstrapToggle();
 
         if (!height.prop('checked')) {
-            $('#cke5minmax-collapse').addClass('in');
+            element.find('#cke5minmax-collapse').addClass('in');
             window.dispatchEvent(new Event('resize'));
         }
 
@@ -208,7 +116,7 @@ function cke5_init_edit() {
         })
     }
 
-    $('.cke5InputTags-list').each(function () {
+    element.find('.cke5InputTags-list').each(function () {
         $(this).sortable({
             update: function () {
                 let _input = $(this).prev(),
