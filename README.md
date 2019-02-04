@@ -75,6 +75,54 @@ $mform->addTextAreaField("$id.0.text",
 echo MBlock::show($id, $mform->show());
 ```
 
+## CSS Definitons for images
+
+```css
+figure.image {
+max-width: 100%;
+margin-bottom: 1.2em;
+}
+
+figure.image img {
+max-width: 100%;
+height: auto;
+}
+
+figure.image.image-style-align-center {
+   max-width: 80%;
+   margin-left: auto;
+   margin-right: auto;
+}
+
+figure.image.image-style-align-right,
+figure.image.image-style-align-left {
+   max-width: 50%;
+   margin-bottom: 0.5em;
+   margin-top: 0.4em;
+}
+
+figure.image.image-style-align-right img,
+figure.image.image-style-align-left img {
+   max-width: 100%;
+
+}
+
+figure.image figcaption {
+   font-size: 0.8em;
+   line-height: 1.24em;
+   padding-bottom: 0.5em;
+}
+
+
+.image-style-align-left {
+   float: left;
+   margin-right: 1em;
+}
+.image-style-align-right {
+   float: right;
+   margin-left: 1em;
+}
+```
 
 ## Keyboard support
 
