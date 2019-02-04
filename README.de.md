@@ -77,8 +77,6 @@ echo MBlock::show($id, $mform->show());
 
 ## CSS Definitionen für Bilder aus CKE5
 
-## CSS Definitons for images
-
 ```css
 figure.image {
 max-width: 100%;
