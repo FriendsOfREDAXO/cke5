@@ -79,13 +79,13 @@ echo MBlock::show($id, $mform->show());
 
 ```css
 figure.image {
-max-width: 100%;
-margin-bottom: 1.2em;
+   max-width: 100%;
+   margin-bottom: 1.2em;
 }
 
 figure.image img {
-max-width: 100%;
-height: auto;
+   max-width: 100%;
+   height: auto;
 }
 
 figure.image.image-style-align-center {
@@ -104,7 +104,6 @@ figure.image.image-style-align-left {
 figure.image.image-style-align-right img,
 figure.image.image-style-align-left img {
    max-width: 100%;
-
 }
 
 figure.image figcaption {
@@ -113,11 +112,11 @@ figure.image figcaption {
    padding-bottom: 0.5em;
 }
 
-
 .image-style-align-left {
    float: left;
    margin-right: 1em;
 }
+
 .image-style-align-right {
    float: right;
    margin-left: 1em;
