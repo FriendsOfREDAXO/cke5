@@ -1,5 +1,13 @@
 # Changelog
 
+## Version 3.2.0
+
+* clang support for rex_link-button
+* set /.media/ by definition
+* ckeditor5_reximage plugin updated for cke5 version 11.2.0
+* image support issue in mblock and multiple initialized editors fixed
+* use default values for editor tags by data parameters
+
 ## Version 3.1.0
 
 * execute building process and added new cke5 version 11.2.0 
