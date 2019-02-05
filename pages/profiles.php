@@ -42,7 +42,7 @@ if ($func == '') {
     $list->removeColumn('id');
 
     // action add/edit
-    $thIcon = '<a href="' . $list->getUrl(['func' => 'add']) . '" title="'.rex_i18n::msg('cke5_add_profile').'"><i class="rex-icon rex-icon-add-action"></i></a>';
+    $thIcon = '<a href="' . $list->getUrl(['func' => 'add']) . '" title="' . rex_i18n::msg('cke5_add_profile') . '"><i class="rex-icon rex-icon-add-action"></i></a>';
     $tdIcon = '<i class="rex-icon fa-cube"></i>';
 
     $list->addColumn($thIcon, $tdIcon, 0, ['<th class="rex-table-icon">###VALUE###</th>', '<td class="rex-table-icon">###VALUE###</td>']);
@@ -69,7 +69,7 @@ if ($func == '') {
         $list = $params['list'];
         return $list->getColumnLink($params['params']['name'], "<span class=\"{$params['params']['icon_type']}\"><i class=\"rex-icon {$params['params']['icon']}\"></i> {$params['params']['msg']}</span>");
 
-    }, array('list'=> $list, 'name' => 'delete', 'icon' => 'rex-icon-delete', 'icon_type' => 'rex-offline', 'msg' => rex_i18n::msg('delete')));
+    }, array('list' => $list, 'name' => 'delete', 'icon' => 'rex-icon-delete', 'icon_type' => 'rex-offline', 'msg' => rex_i18n::msg('delete')));
     $list->addLinkAttribute('delete', 'data-confirm', rex_i18n::msg('delete') . ' ?');
 
     // clone
@@ -103,14 +103,25 @@ if ($func == '') {
     $max_height = 0;
     $default_value = ($func == 'add' && $send == false) ? true : false;
     $profile = '';
+    $in_mediapath = '';
+    $mediapath = str_replace(['../', '/'], '', rex_url::media());
 
-    if ($func == 'add') { $in_heading = 'in'; $in_imagetoolbar = 'in'; }
+    if ($func == 'add') {
+        $in_heading = 'in';
+        $in_imagetoolbar = 'in';
+    }
     if ($func == 'edit') {
         $form->addParam('id', $id);
+        $result = rex_request::post($form->getName(), 'array', 'null');
 
-        $result = $form->getSql()->getRow();
-        $prefix = rex::getTable('cke5_profiles');
-        $toolbar = explode(',', $result[$prefix . '.toolbar']);
+        if (is_array($result)) {
+            $prefix = '';
+        } else {
+            $result = $form->getSql()->getRow();
+            $prefix = rex::getTable('cke5_profiles') . '.';
+        }
+
+        $toolbar = explode(',', $result[$prefix . 'toolbar']);
 
         if (in_array('heading', $toolbar)) $in_heading = 'in';
         if (in_array('alignment', $toolbar)) $in_alignment = 'in';
@@ -120,10 +131,11 @@ if ($func == '') {
         if (in_array('highlight', $toolbar)) $in_highlight = 'in';
         if (in_array('rexImage', $toolbar) || in_array('imageUpload', $toolbar)) $in_imagetoolbar = 'in';
 
-        $min_height = (int) $result[$prefix . '.min_height'];
-        $max_height = (int) $result[$prefix . '.max_height'];
-
-        $profile = $result[$prefix . '.name'];
+        $min_height = (int)$result[$prefix . 'min_height'];
+        $max_height = (int)$result[$prefix . 'max_height'];
+        $in_mediapath = (empty($result[$prefix . 'mediatype'])) ? 'in' : '';
+        $profile = $result[$prefix . 'name'];
+        $mediapath = (empty($result[$prefix . 'mediapath'])) ? $mediapath : $result[$prefix . 'mediapath'];
     }
 
     // name
@@ -136,7 +148,7 @@ if ($func == '') {
     $field = $form->addTextField('description');
     $field->setLabel(rex_i18n::msg('cke5_description'));
     $field->setAttribute('placeholder', rex_i18n::msg('cke5_description_placeholder'));
-    $field->getValidator()->add( 'notEmpty', rex_i18n::msg('cke5_description_empty_error'));
+    $field->getValidator()->add('notEmpty', rex_i18n::msg('cke5_description_empty_error'));
 
     // toolbar
     $field = $form->addTextField('toolbar');
@@ -145,7 +157,7 @@ if ($func == '') {
     $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['toolbar']);
     $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['toolbar']) . '"]');
     $field->setLabel(rex_i18n::msg('cke5_toolbar'));
-    if ($default_value) $field->setAttribute('data-default-tags',1);
+    if ($default_value) $field->setAttribute('data-default-tags', 1);
 
     // heading
     $form->addRawField('<div class="collapse ' . $in_heading . '" id="cke5heading-collapse">');
@@ -155,7 +167,7 @@ if ($func == '') {
     $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['heading']);
     $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['heading']) . '"]');
     $field->setLabel(rex_i18n::msg('cke5_heading'));
-    if ($default_value) $field->setAttribute('data-default-tags',1);
+    if ($default_value) $field->setAttribute('data-default-tags', 1);
     $form->addRawField('</div>');
 
     // alignment
@@ -166,7 +178,7 @@ if ($func == '') {
     $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['alignment']);
     $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['alignment']) . '"]');
     $field->setLabel(rex_i18n::msg('cke5_alignment'));
-    if ($default_value) $field->setAttribute('data-default-tags',1);
+    if ($default_value) $field->setAttribute('data-default-tags', 1);
     $form->addRawField('</div>');
 
     // table
@@ -177,7 +189,7 @@ if ($func == '') {
     $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['table_toolbar']);
     $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['table_toolbar']) . '"]');
     $field->setLabel(rex_i18n::msg('cke5_table_toolbar'));
-    if ($default_value) $field->setAttribute('data-default-tags',1);
+    if ($default_value) $field->setAttribute('data-default-tags', 1);
     $form->addRawField('</div>');
 
     // fontsize
@@ -188,7 +200,7 @@ if ($func == '') {
     $field->setAttribute('data-tag-init', 1);
     $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['fontsize']);
     $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['fontsize']) . '"]');
-    if ($default_value) $field->setAttribute('data-default-tags',1);
+    if ($default_value) $field->setAttribute('data-default-tags', 1);
     $form->addRawField('</div>');
 
     // rex link
@@ -199,7 +211,7 @@ if ($func == '') {
     $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['rexlink']);
     $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['rexlink']) . '"]');
     $field->setLabel(rex_i18n::msg('cke5_link'));
-    if ($default_value) $field->setAttribute('data-default-tags',1);
+    if ($default_value) $field->setAttribute('data-default-tags', 1);
     $form->addRawField('</div>');
 
     // highlight
@@ -210,7 +222,7 @@ if ($func == '') {
     $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['highlight']);
     $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['highlight']) . '"]');
     $field->setLabel(rex_i18n::msg('cke5_highlight'));
-    if ($default_value) $field->setAttribute('data-default-tags',1);
+    if ($default_value) $field->setAttribute('data-default-tags', 1);
     $form->addRawField('</div>');
 
     // TODO add special fonts
@@ -223,7 +235,7 @@ if ($func == '') {
     $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['image_toolbar']);
     $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['image_toolbar']) . '"]');
     $field->setLabel(rex_i18n::msg('cke5_image_toolbar'));
-    if ($default_value) $field->setAttribute('data-default-tags',1);
+    if ($default_value) $field->setAttribute('data-default-tags', 1);
     $form->addRawField('</div>');
 
     // default height
@@ -234,7 +246,7 @@ if ($func == '') {
     if ($default_value) $field->setValue('default_height');
 
     // min max height collapse
-    $form->addRawField('<div class="collapse" id="cke5minmax-collapse">');
+    $form->addRawField('<div class="collapse" id="cke5minmax-collapse"><div class="minmax-inner">');
     // min height default 0 = none
     $field = $form->addTextField('min_height');
     $field->setAttribute('id', 'cke5minheight-input');
@@ -250,7 +262,7 @@ if ($func == '') {
     $field->setAttribute('data-range', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['max_height']) . '"]');
     $field->setAttribute('data-slider-value', $max_height);
     $field->setLabel(rex_i18n::msg('cke5_max_height'));
-    $form->addRawField('</div>');
+    $form->addRawField('</div></div>');
 
     // upload default
     $field = $form->addCheckboxField('upload_default');
@@ -274,15 +286,37 @@ if ($func == '') {
     // set current lang again to fix lang problem with php 7.0 and php 5.x
     rex_i18n::setLocale($lang, false);
 
+    // mediapath
+    $form->addRawField('
+    <div class="collapse  ' . $in_mediapath . '" id="cke5insertMediapath-collapse">
+        <dl class="rex-form-group form-group">
+            <dt><label class="control-label" for="mediapath">' . rex_i18n::msg('cke5_mediapath') . '</label></dt>
+            <dd class="form-inline">
+              <div class="input-group col-sm-12">
+                <span class="input-group-addon" style="width: 20px">/</span>
+                <input id ="cke5mediapath-input" class="form-control" type="text" value="' . $mediapath . '" placeholder="default /' . $mediapath . '/">
+                <span class="input-group-addon" style="width: 20px">/</span>
+              </div>
+            </dd>
+        </dl>
+    </div>
+    ');
+
+    $field = $form->addTextField('mediapath');
+    $field->setAttribute('id', 'cke5mediapath-hidden');
+
     if (rex_addon::exists('media_manager') && rex_addon::get('media_manager')->isAvailable()) {
+        // medaitype
         $field = $form->addSelectField('mediatype');
         $field->setAttribute('class', 'form-control selectpicker');
+        $field->setAttribute('id', 'cke5mediatype-select');
         $field->setLabel(rex_i18n::msg('cke5_media_manager_type'));
-        $field->getSelect()->addOption('default ./media/', '');
+        $field->getSelect()->addOption('default /' . $mediapath . '/', '');
         $field->getSelect()->addDBSqlOptions('SELECT name, name FROM ' . rex::getTablePrefix() . 'media_manager_type ORDER BY status, name');
     }
 
     if (rex_addon::exists('mediapool') && rex_addon::get('mediapool')->isAvailable()) {
+        // mediacategory
         $field = $form->addSelectField('mediacategory');
         $field->setAttribute('class', 'form-control selectpicker');
         $field->setLabel(rex_i18n::msg('cke5_media_category'));

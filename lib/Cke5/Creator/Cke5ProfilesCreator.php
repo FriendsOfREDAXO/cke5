@@ -136,8 +136,12 @@ const cke5suboptions = $suboptions;
         // "rexImage": {"media_type" : "testtype"},
         // "ckfinder": {"uploadUrl": ".\/index.php?cke5upload=1&media_type=testtype&media_category=2"}
 
-        if (in_array('rexImage', $toolbar) && !empty($profile['mediatype'])) {
-            $jsonProfile['rexImage'] = ['media_type' => $profile['mediatype']];
+        if (in_array('rexImage', $toolbar)) {
+            if (!empty($profile['mediatype'])) {
+                $jsonProfile['rexImage'] = ['media_type' => $profile['mediatype']];
+            } else {
+                $jsonProfile['rexImage'] = ['media_path' => $profile['mediapath']];
+            }
         }
 
         if (!is_null($profile['upload_default']) or !empty($profile['upload_default'])) {
@@ -145,6 +149,8 @@ const cke5suboptions = $suboptions;
 
             if (!empty($profile['mediatype'])) {
                 $ckFinderUrl .= '&media_type=' . $profile['mediatype'];
+            } else {
+                $ckFinderUrl .= '&media_path=' . $profile['mediapath'];
             }
 
             if (!empty($profile['mediacategory'])) {

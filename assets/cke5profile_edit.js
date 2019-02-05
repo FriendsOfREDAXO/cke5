@@ -21,7 +21,11 @@ function cke5_init_edit(element) {
         name = element.find('#cke5name-input'),
         minheight = element.find('#cke5minheight-input'),
         maxheight = element.find('#cke5maxheight-input'),
-        height = element.find('#cke5height-input-default-height');
+        height = element.find('#cke5height-input-default-height'),
+        mediapath_input = element.find('#cke5mediapath-input'),
+        mediapath_hidden = element.find('#cke5mediapath-hidden'),
+        mediapath_collapse = element.find('#cke5insertMediapath-collapse'),
+        mediatype = element.find('#cke5mediatype-select');
 
     cktypes = JSON.parse(element.attr('data-cktypes'));
     ckimgtypes = JSON.parse(element.attr('data-ckimgtypes'));
@@ -39,8 +43,26 @@ function cke5_init_edit(element) {
         });
     }
 
+    if (mediapath_input.length && mediapath_hidden.length) {
+        mediapath_input.on("keyup change", function () {
+            mediapath_hidden.val(mediapath_input.val());
+            mediapath_collapse.next().find('select option:first-child').text('default /' + mediapath_input.val() + '/');
+            mediapath_collapse.next().find('select').selectpicker('refresh');
+        });
+    }
+
+    if (mediatype.length) {
+        mediatype.on('change', function() {
+            if ($(this).val() === '') {
+                toggle_collapse('insertMediapath', 'show');
+            } else {
+                toggle_collapse('insertMediapath', 'hide');
+            }
+        });
+    }
+
     if (taginputs.length) {
-        taginputs.each(function(){
+        taginputs.each(function () {
             if ($(this).attr('data-default-tags') === '1') {
                 $(this).attr('value', $(this).attr('data-defaults'))
             }

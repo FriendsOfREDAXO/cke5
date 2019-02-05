@@ -49,6 +49,7 @@ cke5_media_manager_type = Media-Manager type
 cke5_media_category = Mediakagetori
 cke5_upload_default = Image-Drag&Drop-Upload
 cke5_upload_default_description = Bilder kan läggas i textfältet via drag + drop
+cke5_mediapath = Mediapath
 
 # profiles list & form actions
 rex_cke5_profiles_cloned = Profilen duplicerades
