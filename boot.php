@@ -29,6 +29,6 @@ if (rex::isBackend() && rex::getUser()) {
         rex_extension::register('PAGE_TITLE', ['\Cke5\Handler\Cke5ExtensionHandler', 'addIcon'], rex_extension::EARLY);
         rex_extension::register('PAGES_PREPARED', ['\Cke5\Handler\Cke5ExtensionHandler', 'hiddenMain'], rex_extension::EARLY);
         rex_extension::register('REX_FORM_CONTROL_FIELDS', ['\Cke5\Handler\Cke5ExtensionHandler', 'removeDemoControlFields'], rex_extension::LATE);
-        rex_extension::register(['REX_FORM_SAVED', 'REX_FORM_DELETED', 'CKE5_PROFILE_CLONE', 'CKE5_PROFILE_DELETE', 'CKE5_PROFILE_ADD'], ['\Cke5\Handler\Cke5ExtensionHandler', 'createProfiles']);
+        rex_extension::register(['REX_FORM_SAVED', 'REX_FORM_DELETED', 'CKE5_PROFILE_CLONE', 'CKE5_PROFILE_DELETE', 'CKE5_PROFILE_ADD', 'CKE5_PROFILE_UPDATED'], ['\Cke5\Handler\Cke5ExtensionHandler', 'createProfiles']);
     }
 }

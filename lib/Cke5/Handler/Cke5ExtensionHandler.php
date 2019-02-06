@@ -84,7 +84,13 @@ class Cke5ExtensionHandler
             } catch (\rex_functional_exception $e) {
                 print rex_view::error($e->getMessage());
             }
-            # print rex_view::info(\rex_i18n::msg('cke5_profiles_created'));
+        } else if ($ep->getName() == 'CKE5_PROFILE_UPDATED') {
+            try {
+                Cke5ProfilesCreator::profilesCreate($ep->getParams());
+                Cke5ProfilesCreator::languageFileCreate();
+            } catch (\rex_functional_exception $e) {
+                print rex_view::error($e->getMessage());
+            }
         }
     }
 }

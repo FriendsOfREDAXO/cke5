@@ -58,10 +58,11 @@ class Cke5ProfilesCreator
     ];
 
     /**
+     * @param null|array $profile
      * @throws \rex_functional_exception
      * @author Joachim Doerr
      */
-    public static function profilesCreate()
+    public static function profilesCreate($getProfile = null)
     {
         $profiles = Cke5DatabaseHandler::getAllProfiles();
         $content = '';
@@ -71,6 +72,10 @@ class Cke5ProfilesCreator
             $jsonSuboptions = [];
 
             foreach ($profiles as $profile) {
+
+                if (isset($getProfile['name']) && $profile['name'] == $getProfile['name']) {
+                    $profile = $getProfile;
+                }
 
                 $result = self::mapProfile($profile);
                 $jsonSuboptions[$profile['name']] = $result['suboptions'];
@@ -140,7 +145,7 @@ const cke5suboptions = $suboptions;
             if (!empty($profile['mediatype'])) {
                 $jsonProfile['rexImage'] = ['media_type' => $profile['mediatype']];
             } else {
-                $jsonProfile['rexImage'] = ['media_path' => $profile['mediapath']];
+                $jsonProfile['rexImage'] = ['media_path' => '/'. $profile['mediapath'] . '/'];
             }
         }
 
