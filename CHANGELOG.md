@@ -7,6 +7,7 @@
 * ckeditor5_reximage plugin updated for cke5 version 11.2.0
 * image support issue in mblock and multiple initialized editors fixed
 * use default values for editor tags by data parameters
+* fix smooth scrolling effect by height collapse toggle
 
 ## Version 3.1.0
 

@@ -136,6 +136,10 @@ if ($func == '') {
         $in_mediapath = (empty($result[$prefix . 'mediatype'])) ? 'in' : '';
         $profile = $result[$prefix . 'name'];
         $mediapath = (empty($result[$prefix . 'mediapath'])) ? $mediapath : $result[$prefix . 'mediapath'];
+
+        #if (rex_request::get('send', 'boolean', false)) {
+        #    rex_extension::registerPoint(new rex_extension_point('CKE5_PROFILE_UPDATED', '', $result, true));
+        #}
     }
 
     // name
@@ -302,7 +306,7 @@ if ($func == '') {
     </div>
     ');
 
-    $field = $form->addTextField('mediapath');
+    $field = $form->addHiddenField('mediapath');
     $field->setAttribute('id', 'cke5mediapath-hidden');
 
     if (rex_addon::exists('media_manager') && rex_addon::get('media_manager')->isAvailable()) {
