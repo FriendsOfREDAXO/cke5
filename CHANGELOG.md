@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 3.2.1
+
+* user cke5-rex_link v1.2.1
+* fix media path not used in drag&drop image plugin
+* toggle for media categories in profile settings
+
 ## Version 3.2.0
 
 * clang support for rex_link-button
