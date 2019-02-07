@@ -129,11 +129,16 @@ function cke5_init_edit(element) {
     }
 
     if (imageDragDrop.length) {
+        if (imageDragDrop.prop('checked')) {
+            element.find('#cke5mediacat-collapse').addClass('in');
+        }
         imageDragDrop.change(function () {
             if ($(this).prop('checked')) {
                 toggle_collapse('imagetoolbar', 'show');
+                toggle_collapse('mediacat', 'show');
             } else {
                 cke5_toolbar_destroy_tag('toolbar', toolbar.val().split(','))
+                toggle_collapse('mediacat', 'hide');
             }
         })
     }

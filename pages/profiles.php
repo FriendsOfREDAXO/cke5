@@ -321,6 +321,7 @@ if ($func == '') {
 
     if (rex_addon::exists('mediapool') && rex_addon::get('mediapool')->isAvailable()) {
         // mediacategory
+        $form->addRawField('<div class="collapse" id="cke5mediacat-collapse">');
         $field = $form->addSelectField('mediacategory');
         $field->setAttribute('class', 'form-control selectpicker');
         $field->setLabel(rex_i18n::msg('cke5_media_category'));
@@ -329,6 +330,7 @@ if ($func == '') {
         $cats_sel->setName('mediacategory');
         $cats_sel->addOption(rex_i18n::msg('pool_kats_no'), '0');
         $field->setSelect($cats_sel);
+        $form->addRawField('</div>');
     }
 
 
