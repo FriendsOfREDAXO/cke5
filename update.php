@@ -5,4 +5,4 @@
  * @license MIT
  */
 
-include_once (__DIR__ . 'install.php');
+include_once (__DIR__ . '/install.php');
