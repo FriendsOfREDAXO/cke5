@@ -16,7 +16,7 @@ use rex_response;
 
 class Cke5UploadHandler
 {
-    const MEDIA_TYPE_PATH = 'index.php?rex_media_type=%s&rex_media_file=';
+    const MEDIA_TYPE_PATH = '/index.php?rex_media_type=%s&rex_media_file=';
     const MEDIA_PATH = '/media/';
 
     /**
@@ -40,7 +40,7 @@ class Cke5UploadHandler
             }
 
             $mediaType = \rex_request::get('media_type', 'string', '');
-            $mediaSrcPath = self::MEDIA_PATH;
+            $mediaSrcPath = '/' . \rex_request::get('media_path', 'string', self::MEDIA_PATH) . '/';
 
             if (!empty($mediaType)) {
                 $mediaSrcPath = sprintf(self::MEDIA_TYPE_PATH, $mediaType);
