@@ -1,5 +1,5 @@
 package: cke5
-version: '3.2.1'
+version: '3.2.2'
 author: Friends Of REDAXO
 supportpage: https://github.com/FriendsOfREDAXO/cke5/issues
 
@@ -22,7 +22,7 @@ page:
         profiles:
             title: 'translate:profiles'
         help:
-            title: 'translate:help'
+             { title: 'translate:help', subPath: README.md }
 
 requires:
     redaxo: '^5.5'
