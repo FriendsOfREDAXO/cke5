@@ -20,7 +20,7 @@ class Cke5ProfilesCreator
     const TRANSLATION_PATH = 'vendor/ckeditor5-classic/translations/%s.js';
 
     const EDITOR_SETTINGS = [
-        'cktypes' => ['heading', 'fontSize', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable'],
+        'cktypes' => ['heading', 'fontSize', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable', 'mediaEmbed'],
         'ckimgtypes' => ['rexImage', 'imageUpload']
     ];
 
@@ -42,6 +42,7 @@ class Cke5ProfilesCreator
             '70', '71', '72', '73', '74', '75', '76', '77', '78', '79'],
         'min_height' => ['none', '100px', '200px', '300px', '400px', '500px', '600px'],
         'max_height' => ['none', '200px', '400px', '600px', '800px', '1000px', '1200px'],
+        "providers" => ['dailymotion', 'spotify', 'youtube', 'vimeo', 'instagram', 'twitter', 'googleMaps', 'flickr', 'facebook']
     ];
 
     const DEFAULTS = [
@@ -55,6 +56,7 @@ class Cke5ProfilesCreator
         'fontsize' => 'tiny,small,default,big,huge',
         'min_height' => [0, 100, 200, 300, 400, 500, 600],
         'max_height' => [0, 200, 400, 600, 800, 1000, 1200],
+        'mediaembed' => 'youtube,vimeo',
     ];
 
     /**
@@ -136,6 +138,21 @@ const cke5suboptions = $suboptions;
 
         if (in_array('highlight', $toolbar) && !empty($profile['highlight'])) {
             $jsonProfile['highlight'] = ['options' => self::getHighlight(self::toArray($profile['highlight']))];
+        }
+
+        // "mediaEmbed": {
+        // "removeProviders": [ 'instagram', 'twitter', 'googleMaps', 'flickr', 'facebook' ]
+        // }
+
+        if (in_array('mediaEmbed', $toolbar) && !empty($profile['mediaembed'])) {
+            $remove = array();
+            $hold = self::toArray($profile['mediaembed']);
+            foreach (self::ALLOWED_FIELDS['providers'] as $value) {
+                if (!in_array($value, $hold)) {
+                    $remove[] = $value;
+                }
+            }
+            $jsonProfile['mediaEmbed'] = ['removeProviders' => $remove];
         }
 
         // "rexImage": {"media_type" : "testtype"},
