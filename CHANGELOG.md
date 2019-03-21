@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 3.3.0
+
+* added mediaEmbed providers to profile editor
+* update cke5 vendor to v12.0.0
+* remove help.php
+
 ## Version 3.2.1
 
 * user cke5-rex_link v1.2.1
