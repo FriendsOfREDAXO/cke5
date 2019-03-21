@@ -50,6 +50,7 @@ cke5_media_category = Categoría de medios
 cke5_upload_default = Imagen-Arrastrar y Soltar-Subir
 cke5_upload_default_description = Las imágenes se pueden poner en textarea a través de arrastrar + soltar
 cke5_mediapath = Mediapath
+cke5_mediaembed = MediaEmbed Provider
 
 # profiles list & form actions
 rex_cke5_profiles_cloned = El perfil fue duplicado

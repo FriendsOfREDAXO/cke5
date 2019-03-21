@@ -20,12 +20,12 @@ class Cke5ProfilesCreator
     const TRANSLATION_PATH = 'vendor/ckeditor5-classic/translations/%s.js';
 
     const EDITOR_SETTINGS = [
-        'cktypes' => ['heading', 'fontSize', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable', 'mediaEmbed'],
+        'cktypes' => ['heading', 'fontSize', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable'],
         'ckimgtypes' => ['rexImage', 'imageUpload']
     ];
 
     const ALLOWED_FIELDS = [
-        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript','superscript', 'insertTable', 'code', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji'],
+        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji'],
         'alignment' => ['left', 'right', 'center', 'justify'],
         'table_toolbar' => ['tableColumn', 'tableRow', 'mergeTableCells'],
         'heading' => ['paragraph', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
@@ -140,11 +140,7 @@ const cke5suboptions = $suboptions;
             $jsonProfile['highlight'] = ['options' => self::getHighlight(self::toArray($profile['highlight']))];
         }
 
-        // "mediaEmbed": {
-        // "removeProviders": [ 'instagram', 'twitter', 'googleMaps', 'flickr', 'facebook' ]
-        // }
-
-        if (in_array('mediaEmbed', $toolbar) && !empty($profile['mediaembed'])) {
+        if (!empty($profile['mediaembed'])) {
             $remove = array();
             $hold = self::toArray($profile['mediaembed']);
             foreach (self::ALLOWED_FIELDS['providers'] as $value) {
@@ -152,17 +148,17 @@ const cke5suboptions = $suboptions;
                     $remove[] = $value;
                 }
             }
-            $jsonProfile['mediaEmbed'] = ['removeProviders' => $remove];
+            $provider = $remove;
+        } else {
+            $provider = self::ALLOWED_FIELDS['providers'];
         }
-
-        // "rexImage": {"media_type" : "testtype"},
-        // "ckfinder": {"uploadUrl": ".\/index.php?cke5upload=1&media_type=testtype&media_category=2"}
+        $jsonProfile['mediaEmbed'] = ['removeProviders' => $provider];
 
         if (in_array('rexImage', $toolbar)) {
             if (!empty($profile['mediatype'])) {
                 $jsonProfile['rexImage'] = ['media_type' => $profile['mediatype']];
             } else {
-                $jsonProfile['rexImage'] = ['media_path' => '/'. $profile['mediapath'] . '/'];
+                $jsonProfile['rexImage'] = ['media_path' => '/' . $profile['mediapath'] . '/'];
             }
         }
 

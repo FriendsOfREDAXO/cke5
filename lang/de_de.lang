@@ -50,6 +50,7 @@ cke5_media_category = Medienkagetorie
 cke5_upload_default = Image-Drag&Drop-Upload
 cke5_upload_default_description = Bilder können via drag+drop in das Textfeld gesetzt werden
 cke5_mediapath = Medienpfad
+cke5_mediaembed = MediaEmbed Provider
 
 # profiles list & form actions
 rex_cke5_profiles_cloned = Profile wurde dupliziert
