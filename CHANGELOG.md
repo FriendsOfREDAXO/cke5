@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.4.0
+
+* update editor vendor to 12.1.0
+* added font-color
+* added font-background-color
+* added remove format
+
 ## Version 3.3.0
 
 * added mediaEmbed providers to profile editor
