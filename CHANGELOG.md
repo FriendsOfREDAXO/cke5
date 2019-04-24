@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.4.0
+## Version 3.4.0
 
 * update editor vendor to 12.1.0
 * added font-color
