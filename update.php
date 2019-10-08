@@ -9,14 +9,13 @@ use Cke5\Handler\Cke5DatabaseHandler;
 
 include_once (__DIR__ . '/install.php');
 
-if (rex_string::versionCompare($this->getVersion(), '3.0.0', '<')) {
-    try {
+try {
+    if (rex_string::versionCompare($this->getVersion(), '3.0.0', '<')) {
         // open db replace sub and sup
         $profiles = Cke5DatabaseHandler::getAllProfiles();
         foreach ($profiles as $key => $profile) {
             if ((isset($profile['toolbar']) && isset($profile['id'])) &&
-                (strpos($profile['toolbar'] . ',', 'sub,') !== false || strpos($profile['toolbar'] . ',', 'sup,') !== false))
-            {
+                (strpos($profile['toolbar'] . ',', 'sub,') !== false || strpos($profile['toolbar'] . ',', 'sup,') !== false)) {
                 $sql = rex_sql::factory();
                 try {
                     $sql->setTable(rex::getTable('cke5_profiles'))
@@ -30,7 +29,15 @@ if (rex_string::versionCompare($this->getVersion(), '3.0.0', '<')) {
         }
         // regenerate profiles general
         Cke5ProfilesCreator::profilesCreate();
-    } catch (rex_functional_exception $e) {
-        rex_logger::logException($e);
     }
+    if (rex_string::versionCompare($this->getVersion(), '3.3.0', '<')) {
+        // add content lang column
+        rex_sql_table::get(rex::getTable('cke5_profiles'))
+            ->addColumn(new rex_sql_column('lang_content', 'varchar(2)', true))
+            ->alter();
+        // regenerate lang file general
+        Cke5ProfilesCreator::languageFileCreate();
+    }
+} catch (rex_functional_exception $e) {
+    rex_logger::logException($e);
 }
