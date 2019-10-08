@@ -1,5 +1,16 @@
 # Changelog
 
+## Version 3.5.0
+
+* update editor vendor to 12.3.0
+* added outdent and indent
+* added content language- and rtl-support
+* added default font size option
+* set mediaEmbed provider as collapse input filed
+* update default profiles
+* added mform and html code example to editor preview
+* added getOutputLang to Cke5Lang class
+
 ## Version 3.4.0
 
 * update editor vendor to 12.1.0
