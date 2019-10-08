@@ -274,3 +274,9 @@ picture img {
     -moz-box-shadow: none;
     box-shadow: none;
 }
+
+.minmax-inner {
+    display: block;
+    clear: both;
+    min-height: 100px;
+}
