@@ -77,20 +77,15 @@ class Cke5ExtensionHandler
      */
     public static function createProfiles(rex_extension_point $ep)
     {
-        if (rex_be_controller::getCurrentPagePart(2) == 'profiles' or $ep->getName() == 'CKE5_PROFILE_ADD') {
-            try {
+        try {
+            if (rex_be_controller::getCurrentPagePart(2) == 'profiles' or $ep->getName() == 'CKE5_PROFILE_ADD') {
                 Cke5ProfilesCreator::profilesCreate();
-                Cke5ProfilesCreator::languageFileCreate();
-            } catch (\rex_functional_exception $e) {
-                print rex_view::error($e->getMessage());
-            }
-        } else if ($ep->getName() == 'CKE5_PROFILE_UPDATED') {
-            try {
+            } else if ($ep->getName() == 'CKE5_PROFILE_UPDATED') {
                 Cke5ProfilesCreator::profilesCreate($ep->getParams());
-                Cke5ProfilesCreator::languageFileCreate();
-            } catch (\rex_functional_exception $e) {
-                print rex_view::error($e->getMessage());
             }
+        } catch (\rex_functional_exception $e) {
+            \rex_logger::logException($e);
+            print rex_view::error($e->getMessage());
         }
     }
 }
