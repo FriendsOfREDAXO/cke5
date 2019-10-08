@@ -22,4 +22,17 @@ class Cke5Lang
         }
         return strtolower(substr($lang, 0, 2));
     }
+
+    public static function getOutputLang()
+    {
+//        $langFiles = glob(self::getAddon()->getPath('assets/vendor/ckeditor5-classic/translations/*.js'));
+
+//        foreach ($langFiles as $langFile) {
+//            $content .= rex_file::get(self::getAddon()->getAssetsPath(sprintf(self::TRANSLATION_PATH, pathinfo($langFile, PATHINFO_FILENAME))));
+//        }
+
+
+
+        return 'en';
+    }
 }
