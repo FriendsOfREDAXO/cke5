@@ -280,3 +280,7 @@ picture img {
     clear: both;
     min-height: 100px;
 }
+
+#rex-addon-editmode .cke5-preview-code {
+    margin-bottom: 0;
+}
