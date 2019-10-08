@@ -363,6 +363,10 @@ if ($func == '') {
     }
 
     if ($func == 'edit') {
+        $profileResult = array();
+        foreach ($result as $key => $value) {
+            $profileResult[str_replace($prefix, '', $key)] = $value;
+        }
         $form->addRawField('
         <div class="cke5-preview-row">
             <dl class="rex-form-group form-group">
@@ -371,7 +375,11 @@ if ($func == '') {
                 </dt>
                 <dd>
                     <div class="cke5-editor" data-profile="' . $profile . '" data-lang="' . \Cke5\Utils\Cke5Lang::getUserLang() . '"></div>           
-                    <div class="cke5-editor-info"><p>' . rex_i18n::msg('cke5_editor_preview_info') . '</p></div> 
+                    <div class="cke5-editor-info"><p>' . rex_i18n::msg('cke5_editor_preview_info') . '</p></div>
+                    <div class="cke5-preview-code">
+                        ' . \Cke5\Utils\Cke5PreviewHelper::getHtmlCode($profileResult) . '
+                        ' . \Cke5\Utils\Cke5PreviewHelper::getMFormCode($profileResult) . '
+                    </div>
                 </dd>
             </dl>
         </div>
