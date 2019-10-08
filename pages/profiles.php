@@ -6,6 +6,7 @@
  */
 
 use Cke5\Creator\Cke5ProfilesCreator;
+use Cke5\Utils\CKE5ISO6391;
 
 /** @var rex_addon $this */
 
@@ -288,14 +289,29 @@ if ($func == '') {
     // lang
     $field = $form->addSelectField('lang');
     $field->setAttribute('class', 'form-control selectpicker');
+    $field->setAttribute('data-live-search', 'true');
     $field->setLabel(rex_i18n::msg('cke5_lang'));
     $field->getSelect()->addOption('default', '');
+
+    // content lang
+    $fieldContentLang = $form->addSelectField('lang_content');
+    $fieldContentLang->setAttribute('class', 'form-control selectpicker');
+    $fieldContentLang->setAttribute('data-live-search', 'true');
+    $fieldContentLang->setLabel(rex_i18n::msg('cke5_content_lang'));
+    $fieldContentLang->getSelect()->addOption('default', '');
+
     // get current lang
     $lang = rex_i18n::getLocale();
-    foreach (rex_i18n::getLocales() as $locale) {
-        rex_i18n::setLocale($locale, false);
-        $field->getSelect()->addOption(rex_i18n::msg('lang'), substr($locale, 0, 2));
+    $langFiles = glob($this->getPath('assets/vendor/ckeditor5-classic/translations/*.js'));
+
+    foreach ($langFiles as $langFile) {
+        $key = substr(pathinfo($langFile, PATHINFO_FILENAME), 0, 2);
+        if (isset(CKE5ISO6391::$isolang[$key])) {
+            $field->getSelect()->addOption(CKE5ISO6391::$isolang[$key] . ' [' . pathinfo($langFile, PATHINFO_FILENAME) . ']', pathinfo($langFile, PATHINFO_FILENAME));
+            $fieldContentLang->getSelect()->addOption(CKE5ISO6391::$isolang[$key] . ' [' . pathinfo($langFile, PATHINFO_FILENAME) . ']', pathinfo($langFile, PATHINFO_FILENAME));
+        }
     }
+
     // set current lang again to fix lang problem with php 7.0 and php 5.x
     rex_i18n::setLocale($lang, false);
 
@@ -341,7 +357,6 @@ if ($func == '') {
         $field->setSelect($cats_sel);
         $form->addRawField('</div>');
     }
-
 
     if ($func == 'edit') {
         $form->addRawField('
