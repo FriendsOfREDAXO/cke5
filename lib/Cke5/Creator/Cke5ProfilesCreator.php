@@ -11,6 +11,7 @@ namespace Cke5\Creator;
 use Cke5\Handler\Cke5DatabaseHandler;
 use rex_file;
 use rex_i18n;
+use rex_sql;
 
 class Cke5ProfilesCreator
 {
@@ -25,7 +26,7 @@ class Cke5ProfilesCreator
     ];
 
     const ALLOWED_FIELDS = [
-        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat'],
+        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat', 'outdent', 'indent'],
         'alignment' => ['left', 'right', 'center', 'justify'],
         'table_toolbar' => ['tableColumn', 'tableRow', 'mergeTableCells'],
         'heading' => ['paragraph', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
@@ -178,8 +179,14 @@ const cke5suboptions = $suboptions;
             $jsonProfile['ckfinder'] = ['uploadUrl' => $ckFinderUrl];
         }
 
-        if (!empty($profile['lang'])) {
-            $jsonProfile['language'] = $profile['lang'];
+        if (!empty($profile['lang_content']) || !empty($profile['lang'])) {
+            $jsonProfile['language'] = array();
+            if (!empty($profile['lang'])) {
+                $jsonProfile['language']['ui'] = $profile['lang'];
+            }
+            if (!empty($profile['lang_content'])) {
+                $jsonProfile['language']['content'] = $profile['lang_content'];
+            }
         }
 
         if (is_null($profile['height_default']) or empty($profile['height_default'])) {
@@ -204,11 +211,10 @@ const cke5suboptions = $suboptions;
     public static function languageFileCreate()
     {
         $content = '';
-        foreach (rex_i18n::getLocales() as $locale) {
-            if (substr($locale, 0, 2) == 'en') {
-                continue;
-            }
-            $content .= rex_file::get(self::getAddon()->getAssetsPath(sprintf(self::TRANSLATION_PATH, substr($locale, 0, 2)))) . "\n";
+        $langFiles = glob(self::getAddon()->getPath('assets/vendor/ckeditor5-classic/translations/*.js'));
+
+        foreach ($langFiles as $langFile) {
+            $content .= rex_file::get(self::getAddon()->getAssetsPath(sprintf(self::TRANSLATION_PATH, pathinfo($langFile, PATHINFO_FILENAME))));
         }
 
         if (!rex_file::put(self::getAddon()->getAssetsPath(self::TRANSLATION_FILENAME), $content)) {
