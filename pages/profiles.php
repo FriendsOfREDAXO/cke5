@@ -96,6 +96,7 @@ if ($func == '') {
     $in_alignment = '';
     $in_table = '';
     $in_fontsize = '';
+    $in_mediaembed = '';
     $in_rexlink = '';
     $in_minmax = '';
     $in_imagetoolbar = '';
@@ -128,6 +129,7 @@ if ($func == '') {
         if (in_array('alignment', $toolbar)) $in_alignment = 'in';
         if (in_array('insertTable', $toolbar)) $in_table = 'in';
         if (in_array('fontSize', $toolbar)) $in_fontsize = 'in';
+        if (in_array('mediaEmbed', $toolbar)) $in_mediaembed = 'in';
         if (in_array('link', $toolbar)) $in_rexlink = 'in';
         if (in_array('highlight', $toolbar)) $in_highlight = 'in';
         if (in_array('rexImage', $toolbar) || in_array('imageUpload', $toolbar)) $in_imagetoolbar = 'in';
@@ -243,14 +245,16 @@ if ($func == '') {
     if ($default_value) $field->setAttribute('data-default-tags', 1);
     $form->addRawField('</div>');
 
-    // mediaEmbed
+    // mediaEmbed provider
+    $form->addRawField('<div class="collapse ' . $in_mediaembed . '" id="cke5mediaEmbed-collapse">');
     $field = $form->addTextField('mediaembed');
+    $field->setLabel(rex_i18n::msg('cke5_mediaembed'));
     $field->setAttribute('id', 'cke5mediaEmbed-input');
     $field->setAttribute('data-tag-init', 1);
     $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['mediaembed']);
     $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['providers']) . '"]');
-    $field->setLabel(rex_i18n::msg('cke5_mediaembed'));
     if ($default_value) $field->setAttribute('data-default-tags', 1);
+    $form->addRawField('</div>');
 
     // default height
     $field = $form->addCheckboxField('height_default');

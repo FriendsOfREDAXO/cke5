@@ -21,7 +21,7 @@ class Cke5ProfilesCreator
     const TRANSLATION_PATH = 'vendor/ckeditor5-classic/translations/%s.js';
 
     const EDITOR_SETTINGS = [
-        'cktypes' => ['heading', 'fontSize', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable'],
+        'cktypes' => ['heading', 'fontSize', 'mediaEmbed', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable'],
         'ckimgtypes' => ['rexImage', 'imageUpload']
     ];
 
