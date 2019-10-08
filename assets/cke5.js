@@ -41,7 +41,9 @@ function cke5_init(element) {
             profile_set = element.attr('data-profile'),
             min_height = element.attr('data-min-height'),
             max_height = element.attr('data-max-height'),
-            lang = element.attr('data-lang');
+            lang = { },
+            ui_lang = element.attr('data-lang'),
+            content_lang = element.attr('data-content-lang');
 
         element.attr('id', unique_id);
 
@@ -62,8 +64,15 @@ function cke5_init(element) {
         } else {
             sub_options['max-height'] = max_height;
         }
-        if (typeof lang === 'undefined' || !lang) {
+        if (typeof ui_lang === 'undefined' || !ui_lang) {
         } else {
+            lang['ui'] = ui_lang;
+        }
+        if (typeof content_lang === 'undefined' || !content_lang) {
+        } else {
+            lang['content'] = content_lang;
+        }
+        if (lang['ui'] !== 'undefined' || lang['content'] !== 'undefined') {
             options['language'] = lang;
         }
 
