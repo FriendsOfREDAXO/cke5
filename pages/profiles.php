@@ -92,15 +92,6 @@ if ($func == '') {
     $form->addParam('start', $start);
     $form->addParam('send', true);
 
-    $in_heading = '';
-    $in_alignment = '';
-    $in_table = '';
-    $in_fontsize = '';
-    $in_mediaembed = '';
-    $in_rexlink = '';
-    $in_minmax = '';
-    $in_imagetoolbar = '';
-    $in_highlight = '';
     $min_height = 0;
     $max_height = 0;
     $default_value = ($func == 'add' && $send == false) ? true : false;
@@ -109,8 +100,7 @@ if ($func == '') {
     $mediapath = str_replace(['../', '/'], '', rex_url::media());
 
     if ($func == 'add') {
-        $in_heading = 'in';
-        $in_imagetoolbar = 'in';
+        $toolbar = array('heading', 'imageUpload');
     }
     if ($func == 'edit') {
         $form->addParam('id', $id);
@@ -124,15 +114,6 @@ if ($func == '') {
         }
 
         $toolbar = explode(',', $result[$prefix . 'toolbar']);
-
-        if (in_array('heading', $toolbar)) $in_heading = 'in';
-        if (in_array('alignment', $toolbar)) $in_alignment = 'in';
-        if (in_array('insertTable', $toolbar)) $in_table = 'in';
-        if (in_array('fontSize', $toolbar)) $in_fontsize = 'in';
-        if (in_array('mediaEmbed', $toolbar)) $in_mediaembed = 'in';
-        if (in_array('link', $toolbar)) $in_rexlink = 'in';
-        if (in_array('highlight', $toolbar)) $in_highlight = 'in';
-        if (in_array('rexImage', $toolbar) || in_array('imageUpload', $toolbar)) $in_imagetoolbar = 'in';
 
         $min_height = (int)$result[$prefix . 'min_height'];
         $max_height = (int)$result[$prefix . 'max_height'];
@@ -167,7 +148,7 @@ if ($func == '') {
     if ($default_value) $field->setAttribute('data-default-tags', 1);
 
     // heading
-    $form->addRawField('<div class="collapse ' . $in_heading . '" id="cke5heading-collapse">');
+    $form->addRawField('<div class="collapse ' . ((in_array('heading', $toolbar)) ? 'in' : '') . '" id="cke5heading-collapse">');
     $field = $form->addTextField('heading');
     $field->setAttribute('id', 'cke5heading-input');
     $field->setAttribute('data-tag-init', 1);
@@ -178,7 +159,7 @@ if ($func == '') {
     $form->addRawField('</div>');
 
     // alignment
-    $form->addRawField('<div class="collapse  ' . $in_alignment . '" id="cke5alignment-collapse">');
+    $form->addRawField('<div class="collapse  ' . ((in_array('alignment', $toolbar)) ? 'in' : '') . '" id="cke5alignment-collapse">');
     $field = $form->addTextField('alignment');
     $field->setAttribute('id', 'cke5alignment-input');
     $field->setAttribute('data-tag-init', 1);
@@ -189,7 +170,7 @@ if ($func == '') {
     $form->addRawField('</div>');
 
     // table
-    $form->addRawField('<div class="collapse  ' . $in_table . '" id="cke5insertTable-collapse">');
+    $form->addRawField('<div class="collapse  ' . ((in_array('insertTable', $toolbar)) ? 'in' : '') . '" id="cke5insertTable-collapse">');
     $field = $form->addTextField('table_toolbar');
     $field->setAttribute('id', 'cke5inserttable-input');
     $field->setAttribute('data-tag-init', 1);
@@ -200,7 +181,7 @@ if ($func == '') {
     $form->addRawField('</div>');
 
     // fontsize
-    $form->addRawField('<div class="collapse ' . $in_fontsize . '" id="cke5fontSize-collapse">');
+    $form->addRawField('<div class="collapse ' . ((in_array('fontSize', $toolbar)) ? 'in' : '') . '" id="cke5fontSize-collapse">');
     $field = $form->addTextField('fontsize');
     $field->setLabel(rex_i18n::msg('cke5_fontSize'));
     $field->setAttribute('id', 'cke5fontsize-input');
@@ -210,8 +191,57 @@ if ($func == '') {
     if ($default_value) $field->setAttribute('data-default-tags', 1);
     $form->addRawField('</div>');
 
+    // image toolbar
+    $form->addRawField('<div class="collapse ' . ((in_array('rexImage', $toolbar) || in_array('imageUpload', $toolbar)) ? 'in' : '') . '" id="cke5imagetoolbar-collapse">');
+    $field = $form->addTextField('image_toolbar');
+    $field->setAttribute('id', 'cke5image-input');
+    $field->setAttribute('data-tag-init', 1);
+    $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['image_toolbar']);
+    $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['image_toolbar']) . '"]');
+    $field->setLabel(rex_i18n::msg('cke5_image_toolbar'));
+    if ($default_value) $field->setAttribute('data-default-tags', 1);
+    $form->addRawField('</div>');
+
+    // font color
+    $form->addRawField('<div class="collapse ' . ((in_array('fontColor', $toolbar)) ? 'in' : '') . '" id="cke5fontColor-collapse">');
+    // default font color
+    $field = $form->addCheckboxField('font_color_default');
+    $field->setAttribute('id', 'cke5font-color-default-input');
+    $field->setLabel(rex_i18n::msg('cke5_font_color_default'));
+    $field->addOption(rex_i18n::msg('cke5_font_color_default_description'), 'default_font_color');
+    if ($default_value) $field->setValue('default_font_color');
+
+    // custom font color
+    $form->addRawField('<div class="collapse" id="cke5customFontColor-collapse">');
+    $field = $form->addTextAreaField('font_color');
+    $field->setLabel(rex_i18n::msg('cke5_font_color'));
+    $field->setAttribute('id', 'cke5fontcolor-area');
+    $field->setAttribute('data-color-placeholder', rex_i18n::msg('cke5_color_placeholder'));
+    $field->setAttribute('data-color-name-placeholder', rex_i18n::msg('cke5_color_name_placeholder'));
+    $field->setAttribute('data-has-border-label', rex_i18n::msg('cke5_has_border_label'));
+    $form->addRawField('</div></div>');
+
+    // font background color
+    $form->addRawField('<div class="collapse ' . ((in_array('fontBackgroundColor', $toolbar)) ? 'in' : '') . '" id="cke5fontBackgroundColor-collapse">');
+    // default font color
+    $field = $form->addCheckboxField('font_background_color_default');
+    $field->setAttribute('id', 'cke5font-background-color-default-input');
+    $field->setLabel(rex_i18n::msg('cke5_font_background_color_default'));
+    $field->addOption(rex_i18n::msg('cke5_font_background_color_default_description'), 'default_font_background_color');
+    if ($default_value) $field->setValue('default_font_background_color');
+
+    // custom font color
+    $form->addRawField('<div class="collapse" id="cke5customFontBackgroundColor-collapse">');
+    $field = $form->addTextAreaField('font_background_color');
+    $field->setLabel(rex_i18n::msg('cke5_font_background_color'));
+    $field->setAttribute('id', 'cke5fontbgcolor-area');
+    $field->setAttribute('data-color-placeholder', rex_i18n::msg('cke5_color_placeholder'));
+    $field->setAttribute('data-color-name-placeholder', rex_i18n::msg('cke5_color_name_placeholder'));
+    $field->setAttribute('data-has-border-label', rex_i18n::msg('cke5_has_border_label'));
+    $form->addRawField('</div></div>');
+
     // rex link
-    $form->addRawField('<div class="collapse ' . $in_rexlink . '" id="cke5link-collapse">');
+    $form->addRawField('<div class="collapse ' . ((in_array('link', $toolbar)) ? 'in' : '') . '" id="cke5link-collapse">');
     $field = $form->addTextField('rexlink');
     $field->setAttribute('id', 'cke5link-input');
     $field->setAttribute('data-tag-init', 1);
@@ -222,7 +252,7 @@ if ($func == '') {
     $form->addRawField('</div>');
 
     // highlight
-    $form->addRawField('<div class="collapse ' . $in_highlight . '" id="cke5highlight-collapse">');
+    $form->addRawField('<div class="collapse ' . ((in_array('highlight', $toolbar)) ? 'in' : '') . '" id="cke5highlight-collapse">');
     $field = $form->addTextField('highlight');
     $field->setAttribute('id', 'cke5highlight-input');
     $field->setAttribute('data-tag-init', 1);
@@ -234,19 +264,8 @@ if ($func == '') {
 
     // TODO add special fonts
 
-    // image toolbar
-    $form->addRawField('<div class="collapse ' . $in_imagetoolbar . '" id="cke5imagetoolbar-collapse">');
-    $field = $form->addTextField('image_toolbar');
-    $field->setAttribute('id', 'cke5image-input');
-    $field->setAttribute('data-tag-init', 1);
-    $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['image_toolbar']);
-    $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['image_toolbar']) . '"]');
-    $field->setLabel(rex_i18n::msg('cke5_image_toolbar'));
-    if ($default_value) $field->setAttribute('data-default-tags', 1);
-    $form->addRawField('</div>');
-
     // mediaEmbed provider
-    $form->addRawField('<div class="collapse ' . $in_mediaembed . '" id="cke5mediaEmbed-collapse">');
+    $form->addRawField('<div class="collapse ' . ((in_array('mediaEmbed', $toolbar)) ? 'in' : '') . '" id="cke5mediaEmbed-collapse">');
     $field = $form->addTextField('mediaembed');
     $field->setLabel(rex_i18n::msg('cke5_mediaembed'));
     $field->setAttribute('id', 'cke5mediaEmbed-input');
