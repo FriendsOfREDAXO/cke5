@@ -33,8 +33,12 @@ try {
     if (rex_string::versionCompare($this->getVersion(), '3.3.0', '<')) {
         // add content lang column
         rex_sql_table::get(rex::getTable('cke5_profiles'))
-            ->addColumn(new rex_sql_column('lang_content', 'varchar(2)', true))
-            ->alter();
+            ->ensureColumn(new rex_sql_column('lang_content', 'varchar(2)', true))
+            ->ensureColumn(new rex_sql_column('font_color', 'text', true))
+            ->ensureColumn(new rex_sql_column('font_color_default', 'varchar(255)', true))
+            ->ensureColumn(new rex_sql_column('font_background_color', 'text', true))
+            ->ensureColumn(new rex_sql_column('font_background_color_default', 'varchar(255)', true))
+            ->ensure();
         // regenerate lang file general
         Cke5ProfilesCreator::languageFileCreate();
     }
