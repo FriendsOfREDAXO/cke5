@@ -233,7 +233,6 @@ picture img {
     linear-gradient(-45deg, transparent 75%, #f7f7f7 75%);
     background-size: 20px 20px;
     background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
-
 }
 
 .cke5-preview-row dl {
@@ -283,4 +282,35 @@ picture img {
 
 #rex-addon-editmode .cke5-preview-code {
     margin-bottom: 0;
+}
+
+#cke5fontBackgroundColor-collapse .row.inputElement .form-group,
+#cke5fontColor-collapse .row.inputElement .form-group {
+    padding-right: 0;
+    margin-bottom: 0;
+}
+
+.colpick.colpick_full {
+    z-index: 2;
+}
+
+.colpick .colpick_field_letter {
+    width: 14px;
+    padding-left: 0;
+    text-align: center;
+}
+
+.inputWrapper .inputElement {
+    margin-right: -15px;
+    margin-left: 35px;
+}
+
+.inputWrapper .add {
+    left: 0;
+    right: inherit;
+}
+
+.inputWrapper .remove {
+    left: 20px;
+    right: inherit;
 }
