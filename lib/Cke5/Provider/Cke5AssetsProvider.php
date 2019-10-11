@@ -39,7 +39,7 @@ class Cke5AssetsProvider
      */
     public static function provideCke5ProfileEditData()
     {
-        if (rex_be_controller::getCurrentPagePart(2) == 'profiles') {
+        if (rex_be_controller::getCurrentPagePart(2) == 'profiles' && rex_be_controller::getCurrentPagePart(1) == 'cke5') {
             // add js vendors
             self::addJS([
                 'cke5InputTags' => 'vendor/cke5InputTags/cke5InputTags.js',
@@ -47,12 +47,16 @@ class Cke5AssetsProvider
                 'bootstrap-toggle' => 'vendor/bootstrap-toggle/bootstrap-toggle.min.js',
                 'jquery.alphanum' => 'vendor/alphanum/jquery.alphanum.js',
                 'cke5profile_edit' => 'cke5profile_edit.js',
+                'jq.multiinput' => 'vendor/multiinput/dist/js/jq.multiinput.min.js',
+                'colpick' => 'vendor/colpick/js/colpick.js',
             ]);
             // add css vendors
             self::addCss([
                 'cke5InputTags' => 'vendor/cke5InputTags/cke5InputTags.css',
                 'bootstrap-slider' => 'vendor/bootstrap-slider/bootstrap-slider.min.css',
                 'bootstrap-toggle' => 'vendor/bootstrap-toggle/bootstrap-toggle.min.css',
+                'jq.multiinput' => 'vendor/multiinput/dist/css/jq.multiinput.min.css',
+                'colpick' => 'vendor/colpick/css/colpick.css',
             ]);
         }
     }
@@ -62,7 +66,7 @@ class Cke5AssetsProvider
      */
     public static function provideCke5PreviewData()
     {
-        if (rex_be_controller::getCurrentPagePart(3) == 'preview') {
+        if (rex_be_controller::getCurrentPagePart(3) == 'preview' && rex_be_controller::getCurrentPagePart(1) == 'cke5') {
             // add js vendors
             self::addJS([
                 'rainbowjson' => 'vendor/rainbow-json/rainbowjson.js',
