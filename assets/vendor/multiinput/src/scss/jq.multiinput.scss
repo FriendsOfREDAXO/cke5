@@ -1,0 +1,14 @@
+.inputWrapper {
+	position: relative;
+	.inputElement {
+		margin-right: 50px;
+	}
+	.add, .remove {
+		position: absolute;
+		top: 25px;
+		right: 0;
+	}
+	.add {
+		right: 25px;
+	}
+}

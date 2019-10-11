@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jQuery multiInput Plugin Example</title>
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet">
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" rel="stylesheet">
+    <link href="dist/css/jq.multiinput.min.css" rel="stylesheet">
+    <link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+    <style>
+    body { background-color: #fafafa; }
+    .container { margin: 150px auto; max-width: 640px; }
+</style>
+</head>
+<body>
+<div id="jquery-script-menu">
+<div class="jquery-script-center">
+<ul>
+<li><a href="https://www.jqueryscript.net/form/repeatable-form-elements-multiinput.html">Download This Plugin</a></li>
+<li><a href="https://www.jqueryscript.net/">Back To jQueryScript.Net</a></li>
+</ul>
+<div class="jquery-script-ads"><script type="text/javascript"><!--
+google_ad_client = "ca-pub-2783044520727903";
+/* jQuery_demo */
+google_ad_slot = "2780937993";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="https://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script></div>
+<div class="jquery-script-clear"></div>
+</div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <h1>MultiInput Demo</h1>
+            <form>
+                <textarea class="form-control" id="participants" name="participants">[{"tn_firstname":"jquery","tn_lastname":"script"},{"tn_firstname":"html5","tn_lastname":"css3"}]</textarea>
+            </form>
+        </div>
+    </div>
+</div>
+<script crossorigin="anonymous" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script crossorigin="anonymous" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="src/js/jq.multiinput.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#participants').multiInput({
+            json: true,
+            input: $('<div class="row inputElement">\n' +
+                '<div class="multiinput-title col-xs-12">Teilnehmer <span class="number">1</span></div>\n' +
+                '<div class="form-group col-xs-6">\n' +
+                '<input class="form-control" name="tn_firstname" placeholder="Vorname" type="text">\n' +
+                '</div>\n' +
+                '<div class="form-group col-xs-6">\n' +
+                '<input class="form-control" name="tn_lastname" placeholder="Nachname" type="text">\n' +
+                '</div>\n' +
+                '</div>\n'),
+            limit: 10,
+            onElementAdd: function (el, plugin) {
+                console.log(plugin.elementCount);
+            },
+            onElementRemove: function (el, plugin) {
+                console.log(plugin.elementCount);
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36251023-1']);
+  _gaq.push(['_setDomainName', 'jqueryscript.net']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+</html>
