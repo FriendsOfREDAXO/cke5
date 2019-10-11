@@ -25,12 +25,19 @@ function cke5_init_edit(element) {
         mediapath_input = element.find('#cke5mediapath-input'),
         mediapath_hidden = element.find('#cke5mediapath-hidden'),
         mediapath_collapse = element.find('#cke5insertMediapath-collapse'),
-        mediatype = element.find('#cke5mediatype-select');
+        mediatype = element.find('#cke5mediatype-select'),
+        fontcolor_area = element.find('#cke5fontcolor-area'),
+        fontcolor_default = element.find('#cke5font-color-default-input-default-font-color'),
+        fontbgcolor_area = element.find('#cke5fontbgcolor-area'),
+        fontbgcolor_default = element.find('#cke5font-background-color-default-input-default-font-background-color');
 
     cktypes = JSON.parse(element.attr('data-cktypes'));
     ckimgtypes = JSON.parse(element.attr('data-ckimgtypes'));
 
     imageDragDrop = element.find('#cke5uploaddefault-input-default-upload');
+
+    cke5_addColorFields(fontcolor_area);
+    cke5_addColorFields(fontbgcolor_area);
 
     if (name.length) {
         name.alphanum({
@@ -128,6 +135,42 @@ function cke5_init_edit(element) {
         });
     }
 
+    if (fontcolor_default.length) {
+        fontcolor_default.parent().attr('for', '');
+        fontcolor_default.bootstrapToggle();
+
+        if (!fontcolor_default.prop('checked')) {
+            element.find('#cke5customFontColor-collapse').addClass('in');
+            window.dispatchEvent(new Event('resize'));
+        }
+
+        fontcolor_default.on('change', function () {
+            let toogle_it = 'show';
+            if ($(this).prop('checked')) {
+                toogle_it = 'hide';
+            }
+            toggle_collapse('customFontColor', toogle_it);
+        });
+    }
+
+    if (fontbgcolor_default.length) {
+        fontbgcolor_default.parent().attr('for', '');
+        fontbgcolor_default.bootstrapToggle();
+
+        if (!fontbgcolor_default.prop('checked')) {
+            element.find('#cke5customFontBackgroundColor-collapse').addClass('in');
+            window.dispatchEvent(new Event('resize'));
+        }
+
+        fontbgcolor_default.on('change', function () {
+            let toogle_it = 'show';
+            if ($(this).prop('checked')) {
+                toogle_it = 'hide';
+            }
+            toggle_collapse('customFontBackgroundColor', toogle_it);
+        });
+    }
+
     if (imageDragDrop.length) {
         if (imageDragDrop.prop('checked')) {
             element.find('#cke5mediacat-collapse').addClass('in');
@@ -164,6 +207,59 @@ function cke5_init_edit(element) {
             }
         });
     });
+}
+
+function cke5_addColorFields(element) {
+    if (element.length) {
+        let color_placeholder = element.data('color-placeholder'),
+            color_name_placeholder = element.data('color-name-placeholder'),
+            has_border_label = element.data('has-border-label');
+        element.multiInput({
+            json: true,
+            input: $('<div class="row inputElement">\n' +
+                '<div class="form-group col-xs-5">\n' +
+                '<input class="form-control color" name="color" placeholder="' + color_placeholder + '" type="text" readonly>\n' +
+                '</div>\n' +
+                '<div class="form-group col-xs-4">\n' +
+                '<input class="form-control color-name" name="label" placeholder="' + color_name_placeholder + '" type="text">\n' +
+                '</div>\n' +
+                '<div class="form-group col-xs-3">\n' +
+                '<label><input class="border" name="hasBorder" type="checkbox"> ' + has_border_label + '</label>\n' +
+                '</div>\n' +
+                '</div>\n'),
+            limit: 50,
+            onElementAdd: function (el, plugin) {
+                let input_color = el.find('input.color'),
+                    input_border = el.find('input.border');
+                input_color.css('background',input_color.val());
+                input_color.colpick({
+                    onChange:function(hsb,hex,rgb,el,bySetColor) {
+                        $(el).val('rgb('+rgb.r+', '+rgb.g+', '+rgb.b+')');
+                        $(el).css('background',$(el).val());
+                        // $(el).val('#'+hex);
+                    },
+                    onSubmit:function(hsb,hex,rgb,el,bySetColor) {
+                        // $(el).val('#'+hex);
+                        $(el).val('rgb('+rgb.r+', '+rgb.g+', '+rgb.b+')');
+                        $(el).css('background',$(el).val());
+                        $(el).colpickHide();
+                    }
+                });
+                if (input_border.val() === 'true') {
+                    input_border.prop('checked', true);
+                }
+                input_border.val(JSON.parse(input_border.is(':checked')));
+                input_border.change(function() {
+                    input_border.val(JSON.parse(input_border.is(':checked')));
+                    plugin.saveElementsValues();
+                });
+                input_border.bootstrapToggle();
+            },
+            onElementRemove: function (el, plugin) {
+                // console.log(plugin.elementCount);
+            }
+        });
+    }
 }
 
 function cke5_toolbar_create_tag(typename, tags) {
