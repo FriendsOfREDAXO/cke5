@@ -52,6 +52,15 @@ cke5_upload_default = Image-Drag&Drop-Upload
 cke5_upload_default_description = Pictures can be put into the textarea via drag + drop
 cke5_mediapath = Mediapath
 cke5_mediaembed = MediaEmbed Provider
+cke5_font_color = FontColors
+cke5_font_color_default = Default FontColors
+cke5_font_color_default_description = Use CKEditor5 default FontColors
+cke5_font_background_color = FontBackgroundColors
+cke5_font_background_color_default = Default FontBGColors
+cke5_font_background_color_default_description = Use CKEditor5 default FontBGColors
+cke5_color_placeholder = rgb()
+cke5_color_name_placeholder = Colorname
+cke5_has_border_label = Border
 
 # profiles list & form actions
 rex_cke5_profiles_cloned = Profile was duplicated
