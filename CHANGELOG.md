@@ -10,6 +10,7 @@
 * update default profiles
 * added mform and html code example to editor preview
 * added getOutputLang to Cke5Lang class
+* added custom fontcolor and font backgroundcolor editor 
 
 ## Version 3.4.0
 
