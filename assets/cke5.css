@@ -291,7 +291,7 @@ picture img {
 }
 
 .colpick.colpick_full {
-    z-index: 2;
+    z-index: 10;
 }
 
 .colpick .colpick_field_letter {
