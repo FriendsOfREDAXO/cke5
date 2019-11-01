@@ -29,7 +29,9 @@ function cke5_init_edit(element) {
         fontcolor_area = element.find('#cke5fontcolor-area'),
         fontcolor_default = element.find('#cke5font-color-default-input-default-font-color'),
         fontbgcolor_area = element.find('#cke5fontbgcolor-area'),
-        fontbgcolor_default = element.find('#cke5font-background-color-default-input-default-font-background-color');
+        fontbgcolor_default = element.find('#cke5font-background-color-default-input-default-font-background-color'),
+        fontfamily_area = element.find('#cke5fontfamily-area'),
+        fontfamily_default = element.find('#cke5font-family-default-input-default-font-family');
 
     cktypes = JSON.parse(element.attr('data-cktypes'));
     ckimgtypes = JSON.parse(element.attr('data-ckimgtypes'));
@@ -38,6 +40,11 @@ function cke5_init_edit(element) {
 
     cke5_addColorFields(fontcolor_area);
     cke5_addColorFields(fontbgcolor_area);
+    cke5_addFontFamiliesFields(fontfamily_area);
+    cke5_bootstrapToggle_collapse(fontcolor_default);
+    cke5_bootstrapToggle_collapse(fontbgcolor_default);
+    cke5_bootstrapToggle_collapse(fontfamily_default);
+    cke5_bootstrapToggle_collapse(height);
 
     if (name.length) {
         name.alphanum({
@@ -59,7 +66,7 @@ function cke5_init_edit(element) {
     }
 
     if (mediatype.length) {
-        mediatype.on('change', function() {
+        mediatype.on('change', function () {
             if ($(this).val() === '') {
                 toggle_collapse('insertMediapath', 'show');
             } else {
@@ -115,60 +122,6 @@ function cke5_init_edit(element) {
             ticks_labels: JSON.parse(maxheight.attr('data-range')),
         });
         maxheight.bootstrapSlider('setValue', $maxval);
-    }
-
-    if (height.length) {
-        height.parent().attr('for', '');
-        height.bootstrapToggle();
-
-        if (!height.prop('checked')) {
-            element.find('#cke5minmax-collapse').addClass('in');
-            window.dispatchEvent(new Event('resize'));
-        }
-
-        height.on('change', function () {
-            let toogle_it = 'show';
-            if ($(this).prop('checked')) {
-                toogle_it = 'hide';
-            }
-            toggle_collapse('minmax', toogle_it);
-        });
-    }
-
-    if (fontcolor_default.length) {
-        fontcolor_default.parent().attr('for', '');
-        fontcolor_default.bootstrapToggle();
-
-        if (!fontcolor_default.prop('checked')) {
-            element.find('#cke5customFontColor-collapse').addClass('in');
-            window.dispatchEvent(new Event('resize'));
-        }
-
-        fontcolor_default.on('change', function () {
-            let toogle_it = 'show';
-            if ($(this).prop('checked')) {
-                toogle_it = 'hide';
-            }
-            toggle_collapse('customFontColor', toogle_it);
-        });
-    }
-
-    if (fontbgcolor_default.length) {
-        fontbgcolor_default.parent().attr('for', '');
-        fontbgcolor_default.bootstrapToggle();
-
-        if (!fontbgcolor_default.prop('checked')) {
-            element.find('#cke5customFontBackgroundColor-collapse').addClass('in');
-            window.dispatchEvent(new Event('resize'));
-        }
-
-        fontbgcolor_default.on('change', function () {
-            let toogle_it = 'show';
-            if ($(this).prop('checked')) {
-                toogle_it = 'hide';
-            }
-            toggle_collapse('customFontBackgroundColor', toogle_it);
-        });
     }
 
     if (imageDragDrop.length) {
@@ -231,17 +184,17 @@ function cke5_addColorFields(element) {
             onElementAdd: function (el, plugin) {
                 let input_color = el.find('input.color'),
                     input_border = el.find('input.border');
-                input_color.css('background',input_color.val());
+                input_color.css('background', input_color.val());
                 input_color.colpick({
-                    onChange:function(hsb,hex,rgb,el,bySetColor) {
-                        $(el).val('rgb('+rgb.r+', '+rgb.g+', '+rgb.b+')');
-                        $(el).css('background',$(el).val());
+                    onChange: function (hsb, hex, rgb, el, bySetColor) {
+                        $(el).val('rgb(' + rgb.r + ', ' + rgb.g + ', ' + rgb.b + ')');
+                        $(el).css('background', $(el).val());
                         // $(el).val('#'+hex);
                     },
-                    onSubmit:function(hsb,hex,rgb,el,bySetColor) {
+                    onSubmit: function (hsb, hex, rgb, el, bySetColor) {
                         // $(el).val('#'+hex);
-                        $(el).val('rgb('+rgb.r+', '+rgb.g+', '+rgb.b+')');
-                        $(el).css('background',$(el).val());
+                        $(el).val('rgb(' + rgb.r + ', ' + rgb.g + ', ' + rgb.b + ')');
+                        $(el).css('background', $(el).val());
                         $(el).colpickHide();
                     }
                 });
@@ -249,11 +202,32 @@ function cke5_addColorFields(element) {
                     input_border.prop('checked', true);
                 }
                 input_border.val(JSON.parse(input_border.is(':checked')));
-                input_border.change(function() {
+                input_border.change(function () {
                     input_border.val(JSON.parse(input_border.is(':checked')));
                     plugin.saveElementsValues();
                 });
                 input_border.bootstrapToggle();
+            },
+            onElementRemove: function (el, plugin) {
+                // console.log(plugin.elementCount);
+            }
+        });
+    }
+}
+
+function cke5_addFontFamiliesFields(element) {
+    if (element.length) {
+        let color_placeholder = element.data('family-placeholder');
+        element.multiInput({
+            json: true,
+            input: $('<div class="row inputElement">\n' +
+                '<div class="form-group col-xs-12">\n' +
+                '<input class="form-control color" name="family" placeholder="' + color_placeholder + '" type="text">\n' +
+                '</div>\n' +
+                '</div>\n'),
+            limit: 50,
+            onElementAdd: function (el, plugin) {
+                // let input_font = el.find('input.family');
             },
             onElementRemove: function (el, plugin) {
                 // console.log(plugin.elementCount);
@@ -295,6 +269,23 @@ function cke5_toolbar_destroy_tag(typename, tags) {
     });
     if (imghide === 2) {
         toggle_collapse('imagetoolbar', 'hide');
+    }
+}
+
+function cke5_bootstrapToggle_collapse(element) {
+    if (element.length) {
+        element.parent().attr('for', '');
+        if (!element.prop('checked')) {
+            $('#cke5' + element.data('collapse-target') + '-collapse').addClass('in');
+            window.dispatchEvent(new Event('resize'));
+        }
+        element.on('change', function () {
+            let toogle_it = 'show';
+            if ($(this).prop('checked')) {
+                toogle_it = 'hide';
+            }
+            toggle_collapse(element.data('collapse-target'), toogle_it);
+        });
     }
 }
 
