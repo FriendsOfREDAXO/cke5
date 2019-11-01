@@ -88,7 +88,7 @@ Die Schriften werden in gewohnter CSS-Schreibweise im Abschnitt *FontFamily* des
 
 ## CSS Content-Styles CSS
 
-[Link to Styleguide](https://ckeditor.com/docs/ckeditor5/latest/builds/guides/integration/content-styles.html)
+[Link zum Styleguide](https://ckeditor.com/docs/ckeditor5/latest/builds/guides/integration/content-styles.html)
 
 Die folgenden Stile sind mit dem Präfix '.ck-content` versehen. Man sollte diese Class zu deinem Output-Element hinzufügen.
 
