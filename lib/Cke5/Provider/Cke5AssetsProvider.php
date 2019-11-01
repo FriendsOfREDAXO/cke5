@@ -26,6 +26,10 @@ class Cke5AssetsProvider
             // add cke5 editor and translation
             rex_view::addCssFile(self::getAddon()->getAssetsUrl('cke5.css'));
             rex_view::addJsFile(self::getAddon()->getAssetsUrl('vendor/ckeditor5-classic/ckeditor.js'));
+            // create translation file if not exist
+            if (!file_exists(self::getAddon()->getAssetsPath(Cke5ProfilesCreator::TRANSLATION_FILENAME))) {
+                Cke5ProfilesCreator::languageFileCreate();
+            }
             rex_view::addJsFile(self::getAddon()->getAssetsUrl(Cke5ProfilesCreator::TRANSLATION_FILENAME));
             rex_view::addJsFile(self::getAddon()->getAssetsUrl(Cke5ProfilesCreator::PROFILES_FILENAME));
             rex_view::addJsFile(self::getAddon()->getAssetsUrl('cke5.js'));
