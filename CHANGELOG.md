@@ -1,5 +1,13 @@
 # Changelog
 
+## Version 5.6.0
+
+* check if translation file exist and recreate in case of not exist
+* update editor vendor to 15.0.0
+* added fonts selection in profile editor
+* mblock demo database removed
+* profile editor js extended 
+
 ## Version 3.5.0
 
 * update editor vendor to 12.3.0
