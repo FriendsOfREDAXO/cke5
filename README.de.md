@@ -2,7 +2,7 @@
 
 ![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/ckeditor_01.png)
 
-Integriert den [CKEditor5](https://ckeditor.com) ins REDAXO CMS.
+Integriert den [CKEditor5](https://ckeditor.com) im REDAXO CMS.
 
 ![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/ck5.png)
 
@@ -13,6 +13,8 @@ Integriert den [CKEditor5](https://ckeditor.com) ins REDAXO CMS.
 - Bildupload in den Medienpool per Drag & Drop ins Textfeld
 - Bildupload-Kategorie je Profil einstellbar
 - Mediamanager-Type je Profil einstellbar
+- Es können eigene Fonts eingebunden und verwaltet werden
+- Responsive Oberfläche
 - Linkmap-Support
 - Medienpool-Support
 - MBlock-Support
@@ -74,6 +76,12 @@ $mform->addTextAreaField("$id.0.text",
         );
 echo MBlock::show($id, $mform->show());
 ```
+
+## Eigene Schriften einbinden
+
+Damit die angegebenen Fonts im Backend sichtbar werden, müssen diese als Assets im Backend geladen werden. 
+Dies kann z.B. mit dem Projekt-AddOn oder Theme-AddOn erfolgen. 
+Die Schriften werden in gewohnter CSS-Schreibweise im Abschnitt *FontFamily* des Profile-Editors hinterlegt. 
 
 ## CSS Definitionen für Bilder aus CKE5
 
