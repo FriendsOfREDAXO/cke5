@@ -85,7 +85,7 @@ This can be done, for example, with the boot.php of Project AddOn or backend.css
 The fonts should be defined in the usual CSS notation in the *FontFamily* section of the Profile Editor. 
 
 
-## CSS Content-Styles CSS
+## CSS Content-Styles 
 
 [Link to Styleguide](https://ckeditor.com/docs/ckeditor5/latest/builds/guides/integration/content-styles.html)
 
