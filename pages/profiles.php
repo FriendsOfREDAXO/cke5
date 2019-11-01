@@ -246,7 +246,7 @@ if ($func == '') {
 
     // font family
     $form->addRawField('<div class="collapse ' . ((in_array('fontFamily', $toolbar)) ? 'in' : '') . '" id="cke5fontFamily-collapse">');
-    // default font color
+    // default font family
     $field = $form->addCheckboxField('font_family_default');
     $field->setAttribute('id', 'cke5font-family-default-input');
     $field->setAttribute('data-toggle', 'toggle');
@@ -285,8 +285,6 @@ if ($func == '') {
     if ($default_value) $field->setAttribute('data-default-tags', 1);
     $form->addRawField('</div>');
 
-    // TODO add special fonts
-
     // mediaEmbed provider
     $form->addRawField('<div class="collapse ' . ((in_array('mediaEmbed', $toolbar)) ? 'in' : '') . '" id="cke5mediaEmbed-collapse">');
     $field = $form->addTextField('mediaembed');
@@ -301,6 +299,8 @@ if ($func == '') {
     // default height
     $field = $form->addCheckboxField('height_default');
     $field->setAttribute('id', 'cke5height-input');
+    $field->setAttribute('data-toggle', 'toggle');
+    $field->setAttribute('data-collapse-target', 'minmax');
     $field->setLabel(rex_i18n::msg('cke5_height_default'));
     $field->addOption(rex_i18n::msg('cke5_height_default_description'), 'default_height');
     if ($default_value) $field->setValue('default_height');
