@@ -80,7 +80,7 @@ echo MBlock::show($id, $mform->show());
 ![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/fonts.png)
 
 To make the specified fonts visible in the backend, they must be loaded as assets in the backend. 
-This can be done, for example, with the Project AddOn or Theme AddOn. 
+This can be done, for example, with the boot.php of Project AddOn or backend.css of Theme AddOn. 
 The fonts should be defined in the usual CSS notation in the *FontFamily* section of the Profile Editor. 
 
 
