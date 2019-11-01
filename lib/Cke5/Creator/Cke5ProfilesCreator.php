@@ -21,7 +21,7 @@ class Cke5ProfilesCreator
     const TRANSLATION_PATH = 'vendor/ckeditor5-classic/translations/%s.js';
 
     const EDITOR_SETTINGS = [
-        'cktypes' => ['heading', 'fontSize', 'mediaEmbed', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable', 'fontBackgroundColor', 'fontColor'],
+        'cktypes' => ['heading', 'fontSize', 'mediaEmbed', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable', 'fontBackgroundColor', 'fontColor', 'fontFamily'],
         'ckimgtypes' => ['rexImage', 'imageUpload']
     ];
 
@@ -149,6 +149,17 @@ const cke5suboptions = $suboptions;
         if (in_array('fontBackgroundColor', $toolbar) && !empty($profile['font_background_color']) &&
             (is_null($profile['font_background_color_default']) or empty($profile['font_background_color_default']))) {
             $jsonProfile['fontBackgroundColor'] = ['colors' => json_decode($profile['font_background_color'])];
+        }
+
+        if (in_array('fontFamily', $toolbar) &&
+            (is_null($profile['font_family_default']) or empty($profile['font_family_default'])) &&
+            !empty($profile['font_families'])) {
+            $values = array_values(json_decode($profile['font_families'], true));
+            $options = array();
+            foreach ($values as $value) {
+                $options[] = $value['family'];
+            }
+            $jsonProfile['fontFamily'] = ['options' => $options];
         }
 
         if (!empty($profile['mediaembed'])) {
