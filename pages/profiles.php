@@ -88,7 +88,7 @@ if ($func == '') {
 } elseif ($func == 'edit' || $func == 'add') {
 
     $id = rex_request('id', 'int');
-    $form = rex_form::factory($profileTable, '', 'id=' . $id, 'post', true);
+    $form = rex_form::factory($profileTable, '', 'id=' . $id, 'post', false);
     $form->addParam('start', $start);
     $form->addParam('send', true);
 
