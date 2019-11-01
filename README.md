@@ -87,7 +87,7 @@ The fonts should be defined in the usual CSS notation in the *FontFamily* sectio
 
 ## CSS Content-Styles CSS
 
-![Link to Styleguide]https://ckeditor.com/docs/ckeditor5/latest/builds/guides/integration/content-styles.html
+[Link to Styleguide](https://ckeditor.com/docs/ckeditor5/latest/builds/guides/integration/content-styles.html)
 
 The following Styles are prefixed with '.ck-content`. You should add this class to your output eöement.
 
