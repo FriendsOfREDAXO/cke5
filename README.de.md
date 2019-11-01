@@ -82,7 +82,7 @@ echo MBlock::show($id, $mform->show());
 ![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/fonts.png)
 
 Damit die angegebenen Fonts im Backend sichtbar werden, müssen diese als Assets im Backend geladen werden. 
-Dies kann z.B. mit dem Projekt-AddOn oder Theme-AddOn erfolgen. 
+Dies kann z.B. in der boot.php Projekt-AddOn oder im backend.css des Theme-AddOn erfolgen. 
 Die Schriften werden in gewohnter CSS-Schreibweise im Abschnitt *FontFamily* des Profile-Editors hinterlegt. 
 
 ## CSS Definitionen für Bilder aus CKE5
