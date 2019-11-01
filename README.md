@@ -75,6 +75,13 @@ $mform->addTextAreaField("$id.0.text",
 echo MBlock::show($id, $mform->show());
 ```
 
+## Adding own fonts
+
+To make the specified fonts visible in the backend, they must be loaded as assets in the backend. 
+This can be done, for example, with the Project AddOn or Theme AddOn. 
+The fonts should be defined in the usual CSS notation in the *FontFamily* section of the Profile Editor. 
+
+
 ## CSS Definitons for images
 
 ```css
