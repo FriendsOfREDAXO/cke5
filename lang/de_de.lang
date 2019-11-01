@@ -61,6 +61,10 @@ cke5_font_background_color_default_description = CKEditor5 default FontBGColors 
 cke5_color_placeholder = rgb()
 cke5_color_name_placeholder = Name der Farbe
 cke5_has_border_label = Border
+cke5_font_family = FontFamily
+cke5_font_family_default = Default FontFamily
+cke5_font_family_default_description = CKEditor5 default FontFamilies nutzen
+cke5_family_name_placeholder = Ubuntu Mono, Courier New, Courier, monospace
 
 # profiles list & form actions
 rex_cke5_profiles_cloned = Profile wurde dupliziert
