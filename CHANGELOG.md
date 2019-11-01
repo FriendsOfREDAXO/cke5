@@ -7,6 +7,7 @@
 * added fonts selection in profile editor
 * mblock demo database removed
 * profile editor js extended 
+* added hr
 
 ## Version 3.5.0
 
