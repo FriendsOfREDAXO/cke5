@@ -88,7 +88,7 @@ if ($func == '') {
 } elseif ($func == 'edit' || $func == 'add') {
 
     $id = rex_request('id', 'int');
-    $form = rex_form::factory($profileTable, '', 'id=' . $id, 'post', false);
+    $form = rex_form::factory($profileTable, '', 'id=' . $id, 'post', true);
     $form->addParam('start', $start);
     $form->addParam('send', true);
 
@@ -207,6 +207,8 @@ if ($func == '') {
     // default font color
     $field = $form->addCheckboxField('font_color_default');
     $field->setAttribute('id', 'cke5font-color-default-input');
+    $field->setAttribute('data-toggle', 'toggle');
+    $field->setAttribute('data-collapse-target', 'customFontColor');
     $field->setLabel(rex_i18n::msg('cke5_font_color_default'));
     $field->addOption(rex_i18n::msg('cke5_font_color_default_description'), 'default_font_color');
     if ($default_value) $field->setValue('default_font_color');
@@ -226,6 +228,8 @@ if ($func == '') {
     // default font color
     $field = $form->addCheckboxField('font_background_color_default');
     $field->setAttribute('id', 'cke5font-background-color-default-input');
+    $field->setAttribute('data-toggle', 'toggle');
+    $field->setAttribute('data-collapse-target', 'customFontBackgroundColor');
     $field->setLabel(rex_i18n::msg('cke5_font_background_color_default'));
     $field->addOption(rex_i18n::msg('cke5_font_background_color_default_description'), 'default_font_background_color');
     if ($default_value) $field->setValue('default_font_background_color');
@@ -238,6 +242,25 @@ if ($func == '') {
     $field->setAttribute('data-color-placeholder', rex_i18n::msg('cke5_color_placeholder'));
     $field->setAttribute('data-color-name-placeholder', rex_i18n::msg('cke5_color_name_placeholder'));
     $field->setAttribute('data-has-border-label', rex_i18n::msg('cke5_has_border_label'));
+    $form->addRawField('</div></div>');
+
+    // font family
+    $form->addRawField('<div class="collapse ' . ((in_array('fontFamily', $toolbar)) ? 'in' : '') . '" id="cke5fontFamily-collapse">');
+    // default font color
+    $field = $form->addCheckboxField('font_family_default');
+    $field->setAttribute('id', 'cke5font-family-default-input');
+    $field->setAttribute('data-toggle', 'toggle');
+    $field->setAttribute('data-collapse-target', 'customFontFamily');
+    $field->setLabel(rex_i18n::msg('cke5_font_family_default'));
+    $field->addOption(rex_i18n::msg('cke5_font_family_default_description'), 'default_font_family');
+    if ($default_value) $field->setValue('default_font_family');
+
+    // custom font family
+    $form->addRawField('<div class="collapse" id="cke5customFontFamily-collapse">');
+    $field = $form->addTextAreaField('font_families');
+    $field->setLabel(rex_i18n::msg('cke5_font_family'));
+    $field->setAttribute('id', 'cke5fontfamily-area');
+    $field->setAttribute('data-family-placeholder', rex_i18n::msg('cke5_family_name_placeholder'));
     $form->addRawField('</div></div>');
 
     // rex link

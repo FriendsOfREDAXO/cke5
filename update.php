@@ -38,6 +38,8 @@ try {
             ->ensureColumn(new rex_sql_column('font_color_default', 'varchar(255)', true))
             ->ensureColumn(new rex_sql_column('font_background_color', 'text', true))
             ->ensureColumn(new rex_sql_column('font_background_color_default', 'varchar(255)', true))
+            ->ensureColumn(new rex_sql_column('font_families', 'text', true))
+            ->ensureColumn(new rex_sql_column('font_family_default', 'varchar(255)', true))
             ->ensure();
         // regenerate lang file general
         Cke5ProfilesCreator::languageFileCreate();
