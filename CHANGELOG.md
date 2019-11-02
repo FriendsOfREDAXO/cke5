@@ -1,6 +1,6 @@
 # Changelog
 
-## Version 3.6.1
+## Version 3.7.0
 
 * added todoList
 * added page break
