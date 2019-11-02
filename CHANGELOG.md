@@ -1,6 +1,10 @@
 # Changelog
 
-## Version 5.6.0
+## Version 3.6.1
+
+* added todoList
+
+## Version 3.6.0
 
 * check if translation file exist and recreate in case of not exist
 * update editor vendor to 15.0.0
