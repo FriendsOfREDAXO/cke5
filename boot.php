@@ -18,6 +18,7 @@ if (rex::isBackend() && rex::getUser()) {
     \Cke5\Provider\Cke5AssetsProvider::provideCke5ProfileEditData();
     \Cke5\Provider\Cke5AssetsProvider::provideCke5PreviewData();
     \Cke5\Provider\Cke5AssetsProvider::provideCke5BaseData();
+    \Cke5\Provider\Cke5AssetsProvider::provideCke5CustomData();
 
     // upload image
     if (rex_request::request('cke5upload') == 1) {

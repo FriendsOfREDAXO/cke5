@@ -12,10 +12,26 @@ use Cke5\Creator\Cke5ProfilesCreator;
 use rex_be_controller;
 use rex_exception;
 use rex_logger;
+use rex_path;
+use rex_url;
 use rex_view;
 
 class Cke5AssetsProvider
 {
+    /**
+     * @author Joachim Doerr
+     */
+    public static function provideCke5CustomData()
+    {
+        if (file_exists(rex_path::assets('addons/cke5_custom_data/custom-style.css'))) {
+            try {
+                rex_view::addCssFile(rex_url::assets('addons/cke5_custom_data/custom-style.css'));
+            } catch (rex_exception $e) {
+                rex_logger::logException($e);
+            }
+        }
+    }
+
     /**
      * @author Joachim Doerr
      */

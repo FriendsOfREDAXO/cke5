@@ -61,6 +61,13 @@ try {
     ) {
         rex_sql_util::importDump($this->getPath('data.sql'));
     }
+    // copy custom data to assets folder
+    if (!file_exists(rex_path::assets('addons/cke5_custom_data'))) {
+        mkdir(rex_path::assets('addons/cke5_custom_data'));
+    }
+    if (!file_exists(rex_path::assets('addon/cke5_custom_data/custom-style.css'))) {
+        rex_file::copy($this->getPath('custom_data/custom-style.css'), rex_path::assets('addon/cke5_custom_data/custom-style.css'));
+    }
 } catch (rex_sql_exception $e) {
     rex_logger::logException($e);
     print rex_view::error($e->getMessage());

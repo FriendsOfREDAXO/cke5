@@ -4,6 +4,7 @@
 
 * added todoList
 * added page break
+* added cke5 custom css file
 
 ## Version 3.6.0
 

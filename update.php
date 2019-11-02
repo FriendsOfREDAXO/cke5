@@ -43,6 +43,13 @@ try {
             ->ensure();
         // regenerate lang file general
         Cke5ProfilesCreator::languageFileCreate();
+        // copy custom data to assets folder
+        if (!file_exists(rex_path::assets('addons/cke5_custom_data'))) {
+            mkdir(rex_path::assets('addons/cke5_custom_data'));
+        }
+        if (!file_exists(rex_path::assets('addon/cke5_custom_data/custom-style.css'))) {
+            rex_file::copy($this->getPath('custom_data/custom-style.css'), rex_path::assets('addon/cke5_custom_data/custom-style.css'));
+        }
     }
 } catch (rex_functional_exception $e) {
     rex_logger::logException($e);
