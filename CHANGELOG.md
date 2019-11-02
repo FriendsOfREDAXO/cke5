@@ -3,6 +3,7 @@
 ## Version 3.6.1
 
 * added todoList
+* added page break
 
 ## Version 3.6.0
 
