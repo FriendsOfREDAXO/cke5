@@ -85,6 +85,9 @@ Damit die angegebenen Fonts im Backend sichtbar werden, müssen diese als Assets
 Dies kann z.B. in der boot.php Projekt-AddOn oder im backend.css des Theme-AddOn erfolgen. 
 Die Schriften werden in gewohnter CSS-Schreibweise im Abschnitt *FontFamily* des Profile-Editors hinterlegt. 
 
+## Individualisieren 
+
+Die Darstellung des Editors kann per CSS an die Fronteid-Ausgabe angepasst werden. Hierfür steht Im Ordner 'assets/addons/cke5_custom_data' eine CSS-Datei bereit
 
 ## CSS Content-Styles CSS
 
