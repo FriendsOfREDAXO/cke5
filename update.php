@@ -47,8 +47,8 @@ try {
         if (!file_exists(rex_path::assets('addons/cke5_custom_data'))) {
             mkdir(rex_path::assets('addons/cke5_custom_data'));
         }
-        if (!file_exists(rex_path::assets('addon/cke5_custom_data/custom-style.css'))) {
-            rex_file::copy($this->getPath('custom_data/custom-style.css'), rex_path::assets('addon/cke5_custom_data/custom-style.css'));
+        if (!file_exists(rex_path::assets('addons/cke5_custom_data/custom-style.css'))) {
+            rex_file::copy($this->getPath('custom_data/custom-styles.css'), rex_path::assets('addons/cke5_custom_data/custom-style.css'));
         }
     }
 } catch (rex_functional_exception $e) {
