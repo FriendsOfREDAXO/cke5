@@ -74,13 +74,6 @@
     margin-bottom: 15px;
 }
 
-picture img {
-    max-width: 100%;
-    min-height: 260px;
-    max-height: 360px;
-    opacity: 0;
-}
-
 .panel-body > .cke5-header {
     margin-left: -15px;
     margin-right: -15px;
