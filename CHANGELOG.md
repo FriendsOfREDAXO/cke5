@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 3.7.1-dev
+
+- Backend css fix @alexplusde 
+
 ## Version 3.7.0
 
 * added todoList
