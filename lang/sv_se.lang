@@ -14,11 +14,11 @@ cke5_preview = Profile previews
 # preview
 cke5_editor_preview = Editor Preview
 cke5_editor_preview_info = Inlägg i redigeringsförhandsgranskningen sparas inte, förhandsgranskningen visas efter "Spara" | "Apply" uppdaterar
+cke5_editor_preview_shop_profile_settings = Show profile-settings
 
 # heading
 cke5_subnavigation_header_title = CKEditor 5 till Redaxo 5
 cke5_subnavigation_header_photo = Foto från %s på %s
-cke5_editor_preview_shop_profile_settings = Show profile-settings
 
 # profiles list & form
 cke5_list_profiles = CKEditor 5 Profile
@@ -38,6 +38,7 @@ cke5_alignment = Textjustering
 cke5_fontSize = Teckenstorlekar
 cke5_link = Rexdaxo-länkar
 cke5_lang = UI Språk
+cke5_content_lang = Content språk
 cke5_image_toolbar = Image-Plugin Toolbar
 cke5_table_toolbar = Table-plugin toolbar
 cke5_height_default = CKEditor 5 default höjd
@@ -51,6 +52,19 @@ cke5_upload_default = Image-Drag&Drop-Upload
 cke5_upload_default_description = Bilder kan läggas i textfältet via drag + drop
 cke5_mediapath = Mediapath
 cke5_mediaembed = MediaEmbed Provider
+cke5_font_color = FontColors
+cke5_font_color_default = Default FontColors
+cke5_font_color_default_description = Använda CKEditor5 default FontColors nutzen
+cke5_font_background_color = FontBackgroundColors
+cke5_font_background_color_default = Default FontBGColors
+cke5_font_background_color_default_description = Använda CKEditor5 default FontBGColors nutzen
+cke5_color_placeholder = rgb()
+cke5_color_name_placeholder = Färgens namn
+cke5_has_border_label = Border
+cke5_font_family = FontFamily
+cke5_font_family_default = Default FontFamily
+cke5_font_family_default_description = Använda CKEditor5 default FontFamilies
+cke5_family_name_placeholder = Ubuntu Mono, Courier New, Courier, monospace
 
 # profiles list & form actions
 rex_cke5_profiles_cloned = Profilen duplicerades
