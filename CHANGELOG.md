@@ -1,8 +1,9 @@
 # Changelog
 
-## Version 3.7.1-dev
+## Version 3.7.1
 
-- Backend css fix @alexplusde 
+* Backend css fix @alexplusde 
+* Traducción en castellan @nandes2062
 
 ## Version 3.7.0
 
