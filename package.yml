@@ -26,3 +26,5 @@ page:
 
 requires:
     redaxo: '^5.7'
+    php:
+        version: '^7.1'
