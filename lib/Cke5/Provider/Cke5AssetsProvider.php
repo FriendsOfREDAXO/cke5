@@ -9,6 +9,8 @@ namespace Cke5\Provider;
 
 
 use Cke5\Creator\Cke5ProfilesCreator;
+use Cke5\Utils\Cke5Lang;
+use rex;
 use rex_be_controller;
 use rex_exception;
 use rex_logger;
@@ -42,11 +44,34 @@ class Cke5AssetsProvider
             // add cke5 editor and translation
             rex_view::addCssFile(self::getAddon()->getAssetsUrl('cke5.css'));
             rex_view::addJsFile(self::getAddon()->getAssetsUrl('vendor/ckeditor5-classic/ckeditor.js'));
-            // create translation file if not exist
-            if (!file_exists(self::getAddon()->getAssetsPath(Cke5ProfilesCreator::TRANSLATION_FILENAME))) {
-                Cke5ProfilesCreator::languageFileCreate();
+
+            $sql = \rex_sql::factory();
+            $result = $sql->getArray('select lang as ui, lang_content as content from ' . rex::getTable('cke5_profiles') . ' where lang != \'\' or lang_content != \'\'');
+
+            $langKit = [];
+
+            if (count($result) > 0) {
+                foreach ($result as $lang) {
+                    if (!empty($lang['ui']) && !in_array($lang['ui'], $langKit)) {
+                        rex_view::addJsFile(self::getAddon()->getAssetsUrl('vendor/ckeditor5-classic/translations/' . $lang['ui'] . '.js'));
+                        $langKit[] = $lang['ui'];
+                    }
+                    if (!empty($lang['content']) && !in_array($lang['content'], $langKit)) {
+                        rex_view::addJsFile(self::getAddon()->getAssetsUrl('vendor/ckeditor5-classic/translations/' . $lang['content'] . '.js'));
+                        $langKit[] = $lang['content'];
+                    }
+                }
             }
-            rex_view::addJsFile(self::getAddon()->getAssetsUrl(Cke5ProfilesCreator::TRANSLATION_FILENAME));
+
+            if (!in_array(Cke5Lang::getUserLang(), $langKit)) {
+                rex_view::addJsFile(self::getAddon()->getAssetsUrl('vendor/ckeditor5-classic/translations/' . Cke5Lang::getUserLang() . '.js'));
+                $langKit[] = Cke5Lang::getUserLang();
+            }
+            if (!in_array(Cke5Lang::getOutputLang(), $langKit)) {
+                rex_view::addJsFile(self::getAddon()->getAssetsUrl('vendor/ckeditor5-classic/translations/' . Cke5Lang::getOutputLang() . '.js'));
+                $langKit[] = Cke5Lang::getOutputLang();
+            }
+
             rex_view::addJsFile(self::getAddon()->getAssetsUrl(Cke5ProfilesCreator::PROFILES_FILENAME));
             rex_view::addJsFile(self::getAddon()->getAssetsUrl('cke5.js'));
         } catch (rex_exception $e) {
