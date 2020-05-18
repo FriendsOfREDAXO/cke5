@@ -68,7 +68,10 @@
     position: relative;
     display: block;
     background-size: cover;
-    background: #000 url(images/header-patrick-fore-357913-unsplash.jpg) no-repeat center top;
+    background-position: center top;
+    background-color: #000;
+    background-image: url(images/header-patrick-fore-357913-unsplash.jpg);
+    background-repeat: no-repeat;
     color: #fff;
     text-align: center;
     margin-bottom: 15px;
