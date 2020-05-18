@@ -47,7 +47,7 @@ function cke5_init(element) {
 
         element.attr('id', unique_id);
 
-        if (typeof profile_set === 'undefined' || !profile_set) {
+        if (typeof profile_set === undefined || !profile_set) {
         } else {
             if (profile_set in cke5profiles) {
                 options = cke5profiles[profile_set];
@@ -56,23 +56,19 @@ function cke5_init(element) {
                 sub_options = cke5suboptions[profile_set];
             }
         }
-        if (typeof min_height === 'undefined' || !min_height) {
-        } else {
+        if (typeof min_height === undefined || !min_height) {} else {
             sub_options['min-height'] = min_height;
         }
-        if (typeof max_height === 'undefined' || !max_height) {
-        } else {
+        if (typeof max_height === undefined || !max_height) {} else {
             sub_options['max-height'] = max_height;
         }
-        if (typeof ui_lang === 'undefined' || !ui_lang) {
-        } else {
+        if (typeof ui_lang === undefined || !ui_lang) {} else {
             lang['ui'] = ui_lang;
         }
-        if (typeof content_lang === 'undefined' || !content_lang) {
-        } else {
+        if (typeof content_lang === undefined || !content_lang) {} else {
             lang['content'] = content_lang;
         }
-        if (lang['ui'] !== 'undefined' || lang['content'] !== 'undefined') {
+        if (lang['ui'] !== undefined || lang['content'] !== undefined) {
             options['language'] = lang;
         }
 
@@ -101,7 +97,7 @@ function cke5_pastinit(element, sub_options) {
     let next = element.next();
     if (next.length && next.hasClass('ck')) {
         let editable = next.find('.ck-editor__editable');
-        if (sub_options[0] != undefined) {
+        if (sub_options[0] !== undefined) {
             sub_options = sub_options[0];
         }
         if ('min-height' in sub_options && editable.length && sub_options['min-height'] !== 'none') {
