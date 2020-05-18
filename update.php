@@ -41,8 +41,6 @@ try {
             ->ensureColumn(new rex_sql_column('font_families', 'text', true))
             ->ensureColumn(new rex_sql_column('font_family_default', 'varchar(255)', true))
             ->ensure();
-        // regenerate lang file general
-        Cke5ProfilesCreator::languageFileCreate();
         // copy custom data to assets folder
         if (!file_exists(rex_path::assets('addons/cke5_custom_data'))) {
             mkdir(rex_path::assets('addons/cke5_custom_data'));
