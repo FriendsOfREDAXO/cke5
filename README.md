@@ -38,7 +38,10 @@ Configure your editor as you need it.
  <textarea class="form-control cke5-editor" data-profile="default" data-lang="<?php echo \Cke5\Utils\Cke5Lang::getUserLang(); ?>" name="REX_INPUT_VALUE[1]">REX_VALUE[1]</textarea>
 ```
 ### Output Code
-`REX_VALUE[id="1" output="html"]`
+
+```html
+REX_VALUE[id="1" output="html"]
+```
 
 Further data attributes can be used to control the minimum and maximum height as well as the language:
 
@@ -47,6 +50,7 @@ Further data attributes can be used to control the minimum and maximum height as
 - data-lang
 
 ### Use in MForm
+
 ```php
 $mform = new MForm();
 $mform->addTextAreaField(1, 
