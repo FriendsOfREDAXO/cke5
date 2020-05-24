@@ -198,6 +198,12 @@ const cke5suboptions = $suboptions;
             $jsonProfile['ckfinder'] = ['uploadUrl' => $ckFinderUrl];
         }
 
+        foreach (rex_i18n::getLocales() as $locale) {
+            if (!empty($profile['placeholder_' . $locale])) {
+                $jsonProfile['placeholder_' . substr($locale,0,2)] = $profile['placeholder_' . $locale];
+            }
+        }
+
         if (!empty($profile['lang_content']) || !empty($profile['lang'])) {
             $jsonProfile['language'] = array();
             if (!empty($profile['lang'])) {
