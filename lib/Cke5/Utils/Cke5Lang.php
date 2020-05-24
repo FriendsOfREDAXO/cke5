@@ -35,11 +35,11 @@ class Cke5Lang
      */
     public static function getOutputLang()
     {
-//        $langFiles = glob(self::getAddon()->getPath('assets/vendor/ckeditor5-classic/translations/*.js'));
-//        foreach ($langFiles as $langFile) {
-//            $content .= rex_file::get(self::getAddon()->getAssetsPath(sprintf(self::TRANSLATION_PATH, pathinfo($langFile, PATHINFO_FILENAME))));
-//        }
-        return 'en';
+        if (strlen(\rex_clang::getCurrent()->getCode()) == 2) {
+            return \rex_clang::getCurrent()->getCode();
+        } else {
+            return 'en';
+        }
     }
 
     /**
