@@ -70,6 +70,10 @@ function cke5_init(element) {
         }
         if (lang['ui'] !== undefined || lang['content'] !== undefined) {
             options['language'] = lang;
+
+            if (lang['ui'] !== undefined && options['placeholder_' + lang['ui']] !== undefined) {
+                options['placeholder'] = options['placeholder_' + lang['ui']];
+            }
         }
 
         // init editor
