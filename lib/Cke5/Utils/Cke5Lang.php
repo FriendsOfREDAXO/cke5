@@ -10,9 +10,15 @@ namespace Cke5\Utils;
 
 use rex;
 use rex_i18n;
+use rex_sql_column;
+use rex_sql_table;
 
 class Cke5Lang
 {
+    /**
+     * @return string
+     * @author Joachim Doerr
+     */
     public static function getUserLang()
     {
         if (!empty(rex::getUser()->getLanguage())) {
@@ -23,16 +29,28 @@ class Cke5Lang
         return strtolower(substr($lang, 0, 2));
     }
 
+    /**
+     * @return string
+     * @author Joachim Doerr
+     */
     public static function getOutputLang()
     {
 //        $langFiles = glob(self::getAddon()->getPath('assets/vendor/ckeditor5-classic/translations/*.js'));
-
 //        foreach ($langFiles as $langFile) {
 //            $content .= rex_file::get(self::getAddon()->getAssetsPath(sprintf(self::TRANSLATION_PATH, pathinfo($langFile, PATHINFO_FILENAME))));
 //        }
-
-
-
         return 'en';
+    }
+
+    /**
+     * @author Joachim Doerr
+     */
+    public static function addPlaceholderLangColumns()
+    {
+        $sql = rex_sql_table::get(rex::getTable('cke5_profiles'));
+        foreach (rex_i18n::getLocales() as $locale) {
+            $sql->ensureColumn(new rex_sql_column('placeholder_' . $locale, 'varchar(255)', true));
+        }
+        $sql->ensure();
     }
 }

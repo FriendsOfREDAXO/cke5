@@ -7,8 +7,8 @@
 
 /** @var rex_addon $this */
 // install profiles database
-rex_sql_table::get(rex::getTable('cke5_profiles'))
-    ->ensurePrimaryIdColumn()
+$sql = rex_sql_table::get(rex::getTable('cke5_profiles'));
+$sql->ensurePrimaryIdColumn()
     ->ensureColumn(new rex_sql_column('name', 'varchar(40)', true))
     ->ensureColumn(new rex_sql_column('description', 'varchar(255)', true))
     ->ensureColumn(new rex_sql_column('toolbar', 'text', true))
@@ -38,8 +38,13 @@ rex_sql_table::get(rex::getTable('cke5_profiles'))
     ->ensureColumn(new rex_sql_column('createdate', 'datetime', true))
     ->ensureColumn(new rex_sql_column('updatedate', 'datetime', true))
     ->ensureColumn(new rex_sql_column('createuser', 'varchar(255)', true))
-    ->ensureColumn(new rex_sql_column('updateuser', 'varchar(255)', true))
-    ->ensure();
+    ->ensureColumn(new rex_sql_column('updateuser', 'varchar(255)', true));
+
+foreach (rex_i18n::getLocales() as $locale) {
+    $sql->ensureColumn(new rex_sql_column('placeholder_' . $locale, 'varchar(255)', true));
+}
+
+$sql->ensure();
 
 // install mblock demo database
 rex_sql_table::get(rex::getTable('cke5_mblock_demo'))

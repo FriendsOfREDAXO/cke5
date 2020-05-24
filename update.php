@@ -49,6 +49,14 @@ try {
             rex_file::copy($this->getPath('custom_data/custom-styles.css'), rex_path::assets('addons/cke5_custom_data/custom-style.css'));
         }
     }
+    if (rex_string::versionCompare($this->getVersion(), '4.0.0', '<')) {
+        // add placeholder lang columns
+        $sql = rex_sql_table::get(rex::getTable('cke5_profiles'));
+        foreach (rex_i18n::getLocales() as $locale) {
+            $sql->ensureColumn(new rex_sql_column('placeholder_' . $locale, 'varchar(255)', true));
+        }
+        $sql->ensure();
+    }
 } catch (rex_functional_exception $e) {
     rex_logger::logException($e);
 }

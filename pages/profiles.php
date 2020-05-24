@@ -126,17 +126,39 @@ if ($func == '') {
         #}
     }
 
+    // wrapper
+    $form->addRawField('<div class="cke5_wrap_rex_profile_data">');
+
     // name
     $field = $form->addTextField('name');
     $field->setAttribute('id', 'cke5name-input');
     $field->setLabel(rex_i18n::msg('cke5_name'));
     $field->setAttribute('placeholder', rex_i18n::msg('cke5_name_placeholder'));
+    $field->getValidator()->add('notEmpty', rex_i18n::msg('cke5_profile_name_empty_error'));
 
     // description
     $field = $form->addTextField('description');
     $field->setLabel(rex_i18n::msg('cke5_description'));
     $field->setAttribute('placeholder', rex_i18n::msg('cke5_description_placeholder'));
     $field->getValidator()->add('notEmpty', rex_i18n::msg('cke5_description_empty_error'));
+
+    // end wrapper
+    $form->addRawField('</div>');
+
+    $locales = rex_i18n::getLocales();
+    asort($locales);
+
+    \Sked\Utils\Cke5FormHelper::addRexLangTabs($form, 'wrapper', rex_i18n::getLocale());
+    foreach ($locales as $locale) {
+        \Sked\Utils\Cke5FormHelper::addRexLangTabs($form, 'inner_wrapper', $locale, rex_i18n::getLocale());
+
+        $field = $form->addTextField('placeholder_' . $locale);
+        $field->setLabel(rex_i18n::msg('cke5_placeholder'));
+        $field->setAttribute('placeholder', rex_i18n::msg('cke5_placeholder_placeholder') . ' ' . rex_i18n::msgInLocale('lang', $locale));
+
+        \Sked\Utils\Cke5FormHelper::addRexLangTabs($form, 'close_inner_wrapper');
+    }
+    \Sked\Utils\Cke5FormHelper::addRexLangTabs($form, 'close_wrapper');
 
     // toolbar
     $field = $form->addTextField('toolbar');
