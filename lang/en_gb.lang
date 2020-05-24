@@ -65,6 +65,8 @@ cke5_font_family = FontFamily
 cke5_font_family_default = Default FontFamily
 cke5_font_family_default_description = Use CKEditor5 default FontFamilies
 cke5_family_name_placeholder = Ubuntu Mono, Courier New, Courier, monospace
+cke5_placeholder = Placeholder (optional)
+cke5_placeholder_placeholder = Backend-language placeholder for
 
 # profiles list & form actions
 rex_cke5_profiles_cloned = Profile was duplicated
@@ -78,3 +80,4 @@ cke5_profiles_creation_exception = Profiles could not be generated
 # demo mblock error
 cke5_mblock_not_available = MBlock is not installed or activated. This demo can only be viewed with MBlock
 cke5_description_empty_error = Pleas enter a profile description
+cke5_profile_name_empty_error = Please enter a profile name
