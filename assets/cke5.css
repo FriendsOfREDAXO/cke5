@@ -77,6 +77,13 @@
     margin-bottom: 15px;
 }
 
+.cke5-header picture img {
+    max-width: 100%;
+    min-height: 260px;
+    max-height: 360px;
+    opacity: 0;
+}
+
 .panel-body > .cke5-header {
     margin-left: -15px;
     margin-right: -15px;
@@ -334,4 +341,62 @@
 .inputWrapper .remove {
     left: 20px;
     right: inherit;
+}
+
+.cke5_clangtabs {
+    margin-left: -15px;
+    margin-right: -15px;
+    border-bottom: 15px solid #e1ebe5;
+    margin-bottom: 20px;
+}
+
+.cke5_clangtabs .nav {
+    padding-left: 5px;
+    border-bottom: 1px solid #bfe0d8;
+}
+
+.cke5-tabform {
+    padding: 20px 15px 5px 15px;
+    background-color: #dadada;
+    border-bottom: 1px solid #bfe0d8;
+}
+
+.cke5_clangtabs .nav-tabs > li.active > a,
+.cke5_clangtabs .nav-tabs > li.active > a:hover,
+.cke5_clangtabs .nav-tabs > li.active > a:focus {
+    background-color: #dadada;
+    border-color: #bfe0d8;
+    border-top: 2px solid #3bb594;
+    border-bottom: 1px solid #dadada;
+    border-radius: 4px 4px 0 0;
+}
+
+.cke5_clangtabs .nav-tabs > li > a {
+    color: #333;
+    background-color: #e6eaf0;
+    border-color: #f1f6fc;
+    border-radius: 4px 4px 0 0;
+}
+
+.cke5_clangtabs .nav-tabs > li > a:hover {
+    color: #fff;
+    background-color: #5b7c81;
+    border-color: #3bb594;
+}
+
+.cke5_clangtabs .nav.nav-tabs {
+    background-color: #e1ebe5;
+    padding-top: 12px;
+    /*margin-top: -15px;*/
+}
+
+dl + .cke5_clangtabs .nav.nav-tabs,
+.cke5-first-group + .cke5_clangtabs .nav.nav-tabs {
+    margin-top: 0;
+}
+
+.cke5_wrap_rex_profile_data {
+    background-color: #e1ebe5;
+    margin: -15px;
+    padding: 15px;
 }
