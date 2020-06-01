@@ -154,6 +154,7 @@ div.cke5InputTags-list ul.cke5InputTags-autocomplete-list li.is-disabled {
   cursor: default;
   background-color: #f7f7f7;
   color: initial;
+  display: none;
 }
 p.cke5InputTags-error {
   position: relative;
