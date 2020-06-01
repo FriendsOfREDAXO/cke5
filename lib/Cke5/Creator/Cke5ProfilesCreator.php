@@ -24,9 +24,9 @@ class Cke5ProfilesCreator
     ];
 
     const ALLOWED_FIELDS = [
-        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak'],
+        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll'],
         'alignment' => ['left', 'right', 'center', 'justify'],
-        'table_toolbar' => ['tableColumn', 'tableRow', 'mergeTableCells'],
+        'table_toolbar' => ['tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties'],
         'heading' => ['paragraph', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
         'highlight' => ['yellowMarker', 'greenMarker', 'pinkMarker', 'blueMarker', 'redPen', 'greenPen'],
         'image_toolbar' => ['|', 'imageTextAlternative', 'full', 'alignLeft', 'alignCenter', 'alignRight'],
@@ -44,10 +44,45 @@ class Cke5ProfilesCreator
         "providers" => ['dailymotion', 'spotify', 'youtube', 'vimeo', 'instagram', 'twitter', 'googleMaps', 'flickr', 'facebook']
     ];
 
+    const PLUGINS = [
+        // 'UploadAdapter',
+        // 'Autoformat',
+        'Bold',
+        'Italic',
+        'BlockQuote',
+        // 'CKFinder',
+        // 'EasyImage',
+        'Heading',
+        // 'PasteFromOffice',
+        // 'TextTransformation',
+        // 'ImageResize',
+        'Alignment',
+        'Highlight',
+        'Strikethrough',
+        'Underline',
+        'Code',
+        'Subscript',
+        'Superscript',
+        'SelectAll',
+        // 'SpecialCharacters',
+        // 'SpecialCharactersCurrency',
+        // 'SpecialCharactersMathematical',
+        // 'SpecialCharactersLatin',
+        // 'SpecialCharactersArrows',
+        // 'SpecialCharactersText',
+        // 'SpecialCharactersEssentials',
+        // 'CodeBlock',
+        'Emoji',
+        'RemoveFormat',
+        'TodoList',
+        'HorizontalLine',
+        'PageBreak'
+    ];
+
     const DEFAULTS = [
         'toolbar' => 'heading,|',
         'alignment' => 'left,right,center',
-        'table_toolbar' => 'tableColumn,tableRow,mergeTableCells',
+        'table_toolbar' => 'tableColumn,tableRow,mergeTableCells,tableProperties,tableCellProperties',
         'heading' => 'paragraph,h1,h2,h3',
         'highlight' => 'yellowMarker,greenMarker,redPen,greenPen',
         'image_toolbar' => 'imageTextAlternative,|,full,alignLeft,alignRight',
@@ -109,6 +144,7 @@ const cke5suboptions = $suboptions;
         $toolbar = self::toArray($profile['toolbar']);
         $jsonProfile = ['toolbar' => $toolbar];
         $jsonSuboption = [];
+        $jsonProfile['removePlugins'] = [];
 
         if (in_array('link', $toolbar) && !empty($profile['rexlink'])) {
             $jsonProfile['link'] = ['rexlink' => self::toArray($profile['rexlink'])];
@@ -125,10 +161,8 @@ const cke5suboptions = $suboptions;
 
         if (in_array('alignment', $toolbar) && !empty($profile['alignment'])) {
             $jsonProfile['alignment'] = self::toArray($profile['alignment']);
-        }
-
-        if (in_array('fontSize', $toolbar) && !empty($profile['fontsize'])) {
-            $jsonProfile['fontSize'] = ['options' => self::toArray($profile['fontsize'])];
+        } else {
+            $jsonProfile['removePlugins'][] = 'Alignment';
         }
 
         if (in_array('heading', $toolbar) && !empty($profile['heading'])) {
@@ -139,14 +173,28 @@ const cke5suboptions = $suboptions;
             $jsonProfile['highlight'] = ['options' => self::getHighlight(self::toArray($profile['highlight']))];
         }
 
+        $noFontSize = true;
+        if (in_array('fontSize', $toolbar) && !empty($profile['fontsize'])) {
+            $jsonProfile['fontSize'] = ['options' => self::toArray($profile['fontsize'])];
+            $noFontSize = false;
+        }
+
+        $noFontColor = true;
         if (in_array('fontColor', $toolbar) && !empty($profile['font_color']) &&
             (is_null($profile['font_color_default']) or empty($profile['font_color_default']))) {
             $jsonProfile['fontColor'] = ['colors' => json_decode($profile['font_color'])];
+            $noFontColor = false;
         }
 
+        $noFontBgColor = true;
         if (in_array('fontBackgroundColor', $toolbar) && !empty($profile['font_background_color']) &&
             (is_null($profile['font_background_color_default']) or empty($profile['font_background_color_default']))) {
             $jsonProfile['fontBackgroundColor'] = ['colors' => json_decode($profile['font_background_color'])];
+            $noFontBgColor = false;
+        }
+
+        if ($noFontSize && $noFontColor && $noFontBgColor) {
+            $jsonProfile['removePlugins'][] = 'Font';
         }
 
         if (in_array('fontFamily', $toolbar) &&
@@ -160,19 +208,22 @@ const cke5suboptions = $suboptions;
             $jsonProfile['fontFamily'] = ['options' => $options];
         }
 
-        if (!empty($profile['mediaembed'])) {
-            $remove = array();
+        if (!in_array('fontFamily', $toolbar)) {
+            $jsonProfile['removePlugins'][] = 'FontFamily';
+        }
+
+        if (in_array('mediaEmbed', $toolbar) && !empty($profile['mediaembed'])) {
+            $provider = array();
             $hold = self::toArray($profile['mediaembed']);
             foreach (self::ALLOWED_FIELDS['providers'] as $value) {
                 if (!in_array($value, $hold)) {
-                    $remove[] = $value;
+                    $provider[] = $value;
                 }
             }
-            $provider = $remove;
+            $jsonProfile['mediaEmbed'] = ['removeProviders' => $provider];
         } else {
-            $provider = self::ALLOWED_FIELDS['providers'];
+            $jsonProfile['removePlugins'][] = 'MediaEmbed';
         }
-        $jsonProfile['mediaEmbed'] = ['removeProviders' => $provider];
 
         if (in_array('rexImage', $toolbar)) {
             if (!empty($profile['mediatype'])) {
@@ -200,7 +251,7 @@ const cke5suboptions = $suboptions;
 
         foreach (rex_i18n::getLocales() as $locale) {
             if (!empty($profile['placeholder_' . $locale])) {
-                $jsonProfile['placeholder_' . substr($locale,0,2)] = $profile['placeholder_' . $locale];
+                $jsonProfile['placeholder_' . substr($locale, 0, 2)] = $profile['placeholder_' . $locale];
             }
         }
 
@@ -225,6 +276,16 @@ const cke5suboptions = $suboptions;
                 }
             }
         }
+
+        $removePlugins = [];
+        foreach (self::PLUGINS as $plugin) {
+            if (!in_array(lcfirst($plugin), $toolbar)) {
+                $removePlugins[] = $plugin;
+            }
+        }
+
+        dump($removePlugins);
+        $jsonProfile['removePlugins'] = array_merge($jsonProfile['removePlugins'], $removePlugins);
 
         return array('suboptions' => $jsonSuboption, 'profile' => $jsonProfile);
     }
