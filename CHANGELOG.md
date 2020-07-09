@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 4.0.0
+
+* switch for expert or profile editor mode
+* add textarea for special options for profile editor mode
+
 ## Version 3.7.1
 
 * Backend css fix @alexplusde 

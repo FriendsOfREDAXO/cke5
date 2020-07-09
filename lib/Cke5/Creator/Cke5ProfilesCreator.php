@@ -24,7 +24,7 @@ class Cke5ProfilesCreator
     ];
 
     const ALLOWED_FIELDS = [
-        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll'],
+        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll'],
         'alignment' => ['left', 'right', 'center', 'justify'],
         'table_toolbar' => ['tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties'],
         'heading' => ['paragraph', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
@@ -71,7 +71,7 @@ class Cke5ProfilesCreator
         // 'SpecialCharactersArrows',
         // 'SpecialCharactersText',
         // 'SpecialCharactersEssentials',
-        // 'CodeBlock',
+        'CodeBlock',
         'Emoji',
         'RemoveFormat',
         'TodoList',
@@ -141,6 +141,19 @@ const cke5suboptions = $suboptions;
      */
     public static function mapProfile(array $profile)
     {
+        if (!empty($profile['expert'])) {
+            $jsonProfile = json_decode($profile['expert_definition'], true);
+            $jsonSuboption = json_decode($profile['expert_suboption'], true);
+
+            if (is_null($jsonSuboption)) $jsonSuboption = [];
+
+            if (is_array($jsonProfile)) {
+                return ['suboptions' => $jsonSuboption, 'profile' => $jsonProfile];
+            } else {
+                return ['suboptions' => [], 'profile' => []];
+            }
+        }
+
         $toolbar = self::toArray($profile['toolbar']);
         $jsonProfile = ['toolbar' => $toolbar];
         $jsonSuboption = [];
@@ -182,14 +195,14 @@ const cke5suboptions = $suboptions;
         $noFontColor = true;
         if (in_array('fontColor', $toolbar) && !empty($profile['font_color']) &&
             (is_null($profile['font_color_default']) or empty($profile['font_color_default']))) {
-            $jsonProfile['fontColor'] = ['colors' => json_decode($profile['font_color'])];
+            $jsonProfile['fontColor'] = ['colors' => json_decode($profile['font_color'], true)];
             $noFontColor = false;
         }
 
         $noFontBgColor = true;
         if (in_array('fontBackgroundColor', $toolbar) && !empty($profile['font_background_color']) &&
             (is_null($profile['font_background_color_default']) or empty($profile['font_background_color_default']))) {
-            $jsonProfile['fontBackgroundColor'] = ['colors' => json_decode($profile['font_background_color'])];
+            $jsonProfile['fontBackgroundColor'] = ['colors' => json_decode($profile['font_background_color'], true)];
             $noFontBgColor = false;
         }
 
@@ -201,7 +214,7 @@ const cke5suboptions = $suboptions;
             (is_null($profile['font_family_default']) or empty($profile['font_family_default'])) &&
             !empty($profile['font_families'])) {
             $values = array_values(json_decode($profile['font_families'], true));
-            $options = array();
+            $options = [];
             foreach ($values as $value) {
                 $options[] = $value['family'];
             }
@@ -213,7 +226,7 @@ const cke5suboptions = $suboptions;
         }
 
         if (in_array('mediaEmbed', $toolbar) && !empty($profile['mediaembed'])) {
-            $provider = array();
+            $provider = [];
             $hold = self::toArray($profile['mediaembed']);
             foreach (self::ALLOWED_FIELDS['providers'] as $value) {
                 if (!in_array($value, $hold)) {
@@ -256,7 +269,7 @@ const cke5suboptions = $suboptions;
         }
 
         if (!empty($profile['lang_content']) || !empty($profile['lang'])) {
-            $jsonProfile['language'] = array();
+            $jsonProfile['language'] = [];
             if (!empty($profile['lang'])) {
                 $jsonProfile['language']['ui'] = $profile['lang'];
             }
@@ -277,6 +290,13 @@ const cke5suboptions = $suboptions;
             }
         }
 
+        if (!empty($profile['extra'])) {
+            $extra = json_decode($profile['extra_definition'], true);
+            if (is_array($extra)) {
+                $jsonProfile = array_merge($jsonProfile, $extra);
+            }
+        }
+
         $removePlugins = [];
         foreach (self::PLUGINS as $plugin) {
             if (!in_array(lcfirst($plugin), $toolbar)) {
@@ -284,10 +304,9 @@ const cke5suboptions = $suboptions;
             }
         }
 
-        dump($removePlugins);
         $jsonProfile['removePlugins'] = array_merge($jsonProfile['removePlugins'], $removePlugins);
 
-        return array('suboptions' => $jsonSuboption, 'profile' => $jsonProfile);
+        return ['suboptions' => $jsonSuboption, 'profile' => $jsonProfile];
     }
 
     /**

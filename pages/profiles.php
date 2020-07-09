@@ -88,20 +88,13 @@ if ($func == '') {
 } elseif ($func == 'edit' || $func == 'add') {
 
     $id = rex_request('id', 'int');
-    $form = rex_form::factory($profileTable, '', 'id=' . $id, 'post', false);
+    $form = rex_form::factory($profileTable, '', 'id=' . $id, 'post');
     $form->addParam('start', $start);
     $form->addParam('send', true);
 
-    $min_height = 0;
-    $max_height = 0;
-    $default_value = ($func == 'add' && $send == false) ? true : false;
-    $profile = '';
-    $in_mediapath = '';
-    $mediapath = str_replace(['../', '/'], '', rex_url::media());
+    $result = array();
+    $prefix = '';
 
-    if ($func == 'add') {
-        $toolbar = array('heading', 'imageUpload');
-    }
     if ($func == 'edit') {
         $form->addParam('id', $id);
         $result = rex_request::post($form->getName(), 'array', 'null');
@@ -112,319 +105,373 @@ if ($func == '') {
             $result = $form->getSql()->getRow();
             $prefix = rex::getTable('cke5_profiles') . '.';
         }
+    }
 
-        $toolbar = explode(',', $result[$prefix . 'toolbar']);
+    $default_value = ($func == 'add' && $send == false) ? true : false;
+    $toolbar = (isset($result[$prefix . 'toolbar'])) ? explode(',', $result[$prefix . 'toolbar']) : array();
+    $min_height = (isset($result[$prefix . 'min_height'])) ? (int)$result[$prefix . 'min_height'] : 0;
+    $max_height = (isset($result[$prefix . 'max_height'])) ? (int)$result[$prefix . 'max_height'] : 0;
+    $in_mediapath = (isset($result[$prefix . 'mediatype']) && empty($result[$prefix . 'mediatype'])) ? 'in' : '';
+    $profile = (isset($result[$prefix . 'name'])) ? $result[$prefix . 'name'] : '';
+    $mediapath = (!isset($result[$prefix . 'mediapath']) || empty($result[$prefix . 'mediapath'])) ? str_replace(['../', '/'], '', rex_url::media()) : $result[$prefix . 'mediapath'];
+    $expert = (isset($result[$prefix . 'expert']) && !empty($result[$prefix . 'expert']));
 
-        $min_height = (int)$result[$prefix . 'min_height'];
-        $max_height = (int)$result[$prefix . 'max_height'];
-        $in_mediapath = (empty($result[$prefix . 'mediatype'])) ? 'in' : '';
-        $profile = $result[$prefix . 'name'];
-        $mediapath = (empty($result[$prefix . 'mediapath'])) ? $mediapath : $result[$prefix . 'mediapath'];
-
-        #if (rex_request::get('send', 'boolean', false)) {
-        #    rex_extension::registerPoint(new rex_extension_point('CKE5_PROFILE_UPDATED', '', $result, true));
-        #}
+    if ($func == 'add') {
+        $toolbar = array('heading', 'imageUpload');
     }
 
     // wrapper
     $form->addRawField('<div class="cke5_wrap_rex_profile_data">');
 
-    // name
-    $field = $form->addTextField('name');
-    $field->setAttribute('id', 'cke5name-input');
-    $field->setLabel(rex_i18n::msg('cke5_name'));
-    $field->setAttribute('placeholder', rex_i18n::msg('cke5_name_placeholder'));
-    $field->getValidator()->add('notEmpty', rex_i18n::msg('cke5_profile_name_empty_error'));
+        // name
+        $field = $form->addTextField('name');
+        $field->setAttribute('id', 'cke5name-input');
+        $field->setLabel(rex_i18n::msg('cke5_name'));
+        $field->setAttribute('placeholder', rex_i18n::msg('cke5_name_placeholder'));
+        $field->getValidator()->add('notEmpty', rex_i18n::msg('cke5_profile_name_empty_error'));
 
-    // description
-    $field = $form->addTextField('description');
-    $field->setLabel(rex_i18n::msg('cke5_description'));
-    $field->setAttribute('placeholder', rex_i18n::msg('cke5_description_placeholder'));
-    $field->getValidator()->add('notEmpty', rex_i18n::msg('cke5_description_empty_error'));
+        // description
+        $field = $form->addTextField('description');
+        $field->setLabel(rex_i18n::msg('cke5_description'));
+        $field->setAttribute('placeholder', rex_i18n::msg('cke5_description_placeholder'));
+        $field->getValidator()->add('notEmpty', rex_i18n::msg('cke5_description_empty_error'));
+
+        // custom area for experts
+        $field = $form->addCheckboxField('expert');
+        $field->setAttribute('id', 'cke5-expert-toggle');
+        $field->setAttribute('data-toggle', 'toggle');
+        $field->setLabel(rex_i18n::msg('cke5_expert_definition'));
+        $field->addOption(rex_i18n::msg('cke5_expert_definition_description'), 'expert_definition');
+        if ($default_value) $field->setAttribute('data-default-tags', 1);
+
+        // expert area
+        $form->addRawField('<div class="collapse '.(($expert) ? 'in' : '').'" id="cke5expertDefinition-collapse">');
+
+            // text area
+            $field = $form->addTextAreaField('expert_definition');
+            $field->setAttribute('id', 'cke5-expert-definition-area');
+            $field->setLabel(rex_i18n::msg('cke5_expert_definition_area'));
+            if ($default_value) $field->setAttribute('data-default-tags', '');
+
+            // text area
+            $field = $form->addTextAreaField('expert_suboption');
+            $field->setAttribute('id', 'cke5-expert-suboption-area');
+            $field->setLabel(rex_i18n::msg('cke5_expert_suboption_area'));
+            if ($default_value) $field->setAttribute('data-default-tags', '');
+
+        // end collapse
+        $form->addRawField('</div>');
 
     // end wrapper
     $form->addRawField('</div>');
 
-    $locales = rex_i18n::getLocales();
-    asort($locales);
+    // profile editor
+    $form->addRawField('<div class="collapse '.(($expert) ? '' : 'in').'" id="cke5profileEditor-collapse">');
 
-    \Sked\Utils\Cke5FormHelper::addRexLangTabs($form, 'wrapper', rex_i18n::getLocale());
-    foreach ($locales as $locale) {
-        \Sked\Utils\Cke5FormHelper::addRexLangTabs($form, 'inner_wrapper', $locale, rex_i18n::getLocale());
+        $locales = rex_i18n::getLocales();
+        asort($locales);
 
-        $field = $form->addTextField('placeholder_' . $locale);
-        $field->setLabel(rex_i18n::msg('cke5_placeholder'));
-        $field->setAttribute('placeholder', rex_i18n::msg('cke5_placeholder_placeholder') . ' ' . rex_i18n::msgInLocale('lang', $locale));
+        \Sked\Utils\Cke5FormHelper::addRexLangTabs($form, 'wrapper', rex_i18n::getLocale());
+        foreach ($locales as $locale) {
+            \Sked\Utils\Cke5FormHelper::addRexLangTabs($form, 'inner_wrapper', $locale, rex_i18n::getLocale());
 
-        \Sked\Utils\Cke5FormHelper::addRexLangTabs($form, 'close_inner_wrapper');
-    }
-    \Sked\Utils\Cke5FormHelper::addRexLangTabs($form, 'close_wrapper');
+            $field = $form->addTextField('placeholder_' . $locale);
+            $field->setLabel(rex_i18n::msg('cke5_placeholder'));
+            $field->setAttribute('placeholder', rex_i18n::msg('cke5_placeholder_placeholder') . ' ' . rex_i18n::msgInLocale('lang', $locale));
 
-    // toolbar
-    $field = $form->addTextField('toolbar');
-    $field->setAttribute('id', 'cke5toolbar-input');
-    $field->setAttribute('data-tag-init', 1);
-    $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['toolbar']);
-    $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['toolbar']) . '"]');
-    $field->setLabel(rex_i18n::msg('cke5_toolbar'));
-    if ($default_value) $field->setAttribute('data-default-tags', 1);
-
-    // heading
-    $form->addRawField('<div class="collapse ' . ((in_array('heading', $toolbar)) ? 'in' : '') . '" id="cke5heading-collapse">');
-    $field = $form->addTextField('heading');
-    $field->setAttribute('id', 'cke5heading-input');
-    $field->setAttribute('data-tag-init', 1);
-    $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['heading']);
-    $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['heading']) . '"]');
-    $field->setLabel(rex_i18n::msg('cke5_heading'));
-    if ($default_value) $field->setAttribute('data-default-tags', 1);
-    $form->addRawField('</div>');
-
-    // alignment
-    $form->addRawField('<div class="collapse  ' . ((in_array('alignment', $toolbar)) ? 'in' : '') . '" id="cke5alignment-collapse">');
-    $field = $form->addTextField('alignment');
-    $field->setAttribute('id', 'cke5alignment-input');
-    $field->setAttribute('data-tag-init', 1);
-    $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['alignment']);
-    $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['alignment']) . '"]');
-    $field->setLabel(rex_i18n::msg('cke5_alignment'));
-    if ($default_value) $field->setAttribute('data-default-tags', 1);
-    $form->addRawField('</div>');
-
-    // table
-    $form->addRawField('<div class="collapse  ' . ((in_array('insertTable', $toolbar)) ? 'in' : '') . '" id="cke5insertTable-collapse">');
-    $field = $form->addTextField('table_toolbar');
-    $field->setAttribute('id', 'cke5inserttable-input');
-    $field->setAttribute('data-tag-init', 1);
-    $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['table_toolbar']);
-    $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['table_toolbar']) . '"]');
-    $field->setLabel(rex_i18n::msg('cke5_table_toolbar'));
-    if ($default_value) $field->setAttribute('data-default-tags', 1);
-    $form->addRawField('</div>');
-
-    // fontsize
-    $form->addRawField('<div class="collapse ' . ((in_array('fontSize', $toolbar)) ? 'in' : '') . '" id="cke5fontSize-collapse">');
-    $field = $form->addTextField('fontsize');
-    $field->setLabel(rex_i18n::msg('cke5_fontSize'));
-    $field->setAttribute('id', 'cke5fontsize-input');
-    $field->setAttribute('data-tag-init', 1);
-    $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['fontsize']);
-    $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['fontsize']) . '"]');
-    if ($default_value) $field->setAttribute('data-default-tags', 1);
-    $form->addRawField('</div>');
-
-    // image toolbar
-    $form->addRawField('<div class="collapse ' . ((in_array('rexImage', $toolbar) || in_array('imageUpload', $toolbar)) ? 'in' : '') . '" id="cke5imagetoolbar-collapse">');
-    $field = $form->addTextField('image_toolbar');
-    $field->setAttribute('id', 'cke5image-input');
-    $field->setAttribute('data-tag-init', 1);
-    $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['image_toolbar']);
-    $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['image_toolbar']) . '"]');
-    $field->setLabel(rex_i18n::msg('cke5_image_toolbar'));
-    if ($default_value) $field->setAttribute('data-default-tags', 1);
-    $form->addRawField('</div>');
-
-    // font color
-    $form->addRawField('<div class="collapse ' . ((in_array('fontColor', $toolbar)) ? 'in' : '') . '" id="cke5fontColor-collapse">');
-    // default font color
-    $field = $form->addCheckboxField('font_color_default');
-    $field->setAttribute('id', 'cke5font-color-default-input');
-    $field->setAttribute('data-toggle', 'toggle');
-    $field->setAttribute('data-collapse-target', 'customFontColor');
-    $field->setLabel(rex_i18n::msg('cke5_font_color_default'));
-    $field->addOption(rex_i18n::msg('cke5_font_color_default_description'), 'default_font_color');
-    if ($default_value) $field->setValue('default_font_color');
-
-    // custom font color
-    $form->addRawField('<div class="collapse" id="cke5customFontColor-collapse">');
-    $field = $form->addTextAreaField('font_color');
-    $field->setLabel(rex_i18n::msg('cke5_font_color'));
-    $field->setAttribute('id', 'cke5fontcolor-area');
-    $field->setAttribute('data-color-placeholder', rex_i18n::msg('cke5_color_placeholder'));
-    $field->setAttribute('data-color-name-placeholder', rex_i18n::msg('cke5_color_name_placeholder'));
-    $field->setAttribute('data-has-border-label', rex_i18n::msg('cke5_has_border_label'));
-    $form->addRawField('</div></div>');
-
-    // font background color
-    $form->addRawField('<div class="collapse ' . ((in_array('fontBackgroundColor', $toolbar)) ? 'in' : '') . '" id="cke5fontBackgroundColor-collapse">');
-    // default font color
-    $field = $form->addCheckboxField('font_background_color_default');
-    $field->setAttribute('id', 'cke5font-background-color-default-input');
-    $field->setAttribute('data-toggle', 'toggle');
-    $field->setAttribute('data-collapse-target', 'customFontBackgroundColor');
-    $field->setLabel(rex_i18n::msg('cke5_font_background_color_default'));
-    $field->addOption(rex_i18n::msg('cke5_font_background_color_default_description'), 'default_font_background_color');
-    if ($default_value) $field->setValue('default_font_background_color');
-
-    // custom font color
-    $form->addRawField('<div class="collapse" id="cke5customFontBackgroundColor-collapse">');
-    $field = $form->addTextAreaField('font_background_color');
-    $field->setLabel(rex_i18n::msg('cke5_font_background_color'));
-    $field->setAttribute('id', 'cke5fontbgcolor-area');
-    $field->setAttribute('data-color-placeholder', rex_i18n::msg('cke5_color_placeholder'));
-    $field->setAttribute('data-color-name-placeholder', rex_i18n::msg('cke5_color_name_placeholder'));
-    $field->setAttribute('data-has-border-label', rex_i18n::msg('cke5_has_border_label'));
-    $form->addRawField('</div></div>');
-
-    // font family
-    $form->addRawField('<div class="collapse ' . ((in_array('fontFamily', $toolbar)) ? 'in' : '') . '" id="cke5fontFamily-collapse">');
-    // default font family
-    $field = $form->addCheckboxField('font_family_default');
-    $field->setAttribute('id', 'cke5font-family-default-input');
-    $field->setAttribute('data-toggle', 'toggle');
-    $field->setAttribute('data-collapse-target', 'customFontFamily');
-    $field->setLabel(rex_i18n::msg('cke5_font_family_default'));
-    $field->addOption(rex_i18n::msg('cke5_font_family_default_description'), 'default_font_family');
-    if ($default_value) $field->setValue('default_font_family');
-
-    // custom font family
-    $form->addRawField('<div class="collapse" id="cke5customFontFamily-collapse">');
-    $field = $form->addTextAreaField('font_families');
-    $field->setLabel(rex_i18n::msg('cke5_font_family'));
-    $field->setAttribute('id', 'cke5fontfamily-area');
-    $field->setAttribute('data-family-placeholder', rex_i18n::msg('cke5_family_name_placeholder'));
-    $form->addRawField('</div></div>');
-
-    // rex link
-    $form->addRawField('<div class="collapse ' . ((in_array('link', $toolbar)) ? 'in' : '') . '" id="cke5link-collapse">');
-    $field = $form->addTextField('rexlink');
-    $field->setAttribute('id', 'cke5link-input');
-    $field->setAttribute('data-tag-init', 1);
-    $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['rexlink']);
-    $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['rexlink']) . '"]');
-    $field->setLabel(rex_i18n::msg('cke5_link'));
-    if ($default_value) $field->setAttribute('data-default-tags', 1);
-    $form->addRawField('</div>');
-
-    // highlight
-    $form->addRawField('<div class="collapse ' . ((in_array('highlight', $toolbar)) ? 'in' : '') . '" id="cke5highlight-collapse">');
-    $field = $form->addTextField('highlight');
-    $field->setAttribute('id', 'cke5highlight-input');
-    $field->setAttribute('data-tag-init', 1);
-    $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['highlight']);
-    $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['highlight']) . '"]');
-    $field->setLabel(rex_i18n::msg('cke5_highlight'));
-    if ($default_value) $field->setAttribute('data-default-tags', 1);
-    $form->addRawField('</div>');
-
-    // mediaEmbed provider
-    $form->addRawField('<div class="collapse ' . ((in_array('mediaEmbed', $toolbar)) ? 'in' : '') . '" id="cke5mediaEmbed-collapse">');
-    $field = $form->addTextField('mediaembed');
-    $field->setLabel(rex_i18n::msg('cke5_mediaembed'));
-    $field->setAttribute('id', 'cke5mediaEmbed-input');
-    $field->setAttribute('data-tag-init', 1);
-    $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['mediaembed']);
-    $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['providers']) . '"]');
-    if ($default_value) $field->setAttribute('data-default-tags', 1);
-    $form->addRawField('</div>');
-
-    // default height
-    $field = $form->addCheckboxField('height_default');
-    $field->setAttribute('id', 'cke5height-input');
-    $field->setAttribute('data-toggle', 'toggle');
-    $field->setAttribute('data-collapse-target', 'minmax');
-    $field->setLabel(rex_i18n::msg('cke5_height_default'));
-    $field->addOption(rex_i18n::msg('cke5_height_default_description'), 'default_height');
-    if ($default_value) $field->setValue('default_height');
-
-    // min max height collapse
-    $form->addRawField('<div class="collapse" id="cke5minmax-collapse"><div class="minmax-inner">');
-    // min height default 0 = none
-    $field = $form->addTextField('min_height');
-    $field->setAttribute('id', 'cke5minheight-input');
-    $field->setAttribute('data-range-values', '[' . implode(',', Cke5ProfilesCreator::DEFAULTS['min_height']) . ']');
-    $field->setAttribute('data-range', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['min_height']) . '"]');
-    $field->setAttribute('data-slider-value', $min_height);
-    $field->setLabel(rex_i18n::msg('cke5_min_height'));
-
-    // max height default 0 = none
-    $field = $form->addTextField('max_height');
-    $field->setAttribute('id', 'cke5maxheight-input');
-    $field->setAttribute('data-range-values', '[' . implode(',', Cke5ProfilesCreator::DEFAULTS['max_height']) . ']');
-    $field->setAttribute('data-range', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['max_height']) . '"]');
-    $field->setAttribute('data-slider-value', $max_height);
-    $field->setLabel(rex_i18n::msg('cke5_max_height'));
-    $form->addRawField('</div></div>');
-
-    // upload default
-    $field = $form->addCheckboxField('upload_default');
-    $field->setAttribute('data-toggle', 'toggle');
-    $field->setAttribute('id', 'cke5uploaddefault-input');
-    $field->setLabel(rex_i18n::msg('cke5_upload_default'));
-    $field->addOption(rex_i18n::msg('cke5_upload_default_description'), 'default_upload');
-    if ($default_value) $field->setValue('default_upload');
-
-    // lang
-    $field = $form->addSelectField('lang');
-    $field->setAttribute('class', 'form-control selectpicker');
-    $field->setAttribute('data-live-search', 'true');
-    $field->setLabel(rex_i18n::msg('cke5_lang'));
-    $field->getSelect()->addOption('default', '');
-
-    // content lang
-    $fieldContentLang = $form->addSelectField('lang_content');
-    $fieldContentLang->setAttribute('class', 'form-control selectpicker');
-    $fieldContentLang->setAttribute('data-live-search', 'true');
-    $fieldContentLang->setLabel(rex_i18n::msg('cke5_content_lang'));
-    $fieldContentLang->getSelect()->addOption('default', '');
-
-    // get current lang
-    $lang = rex_i18n::getLocale();
-    $langFiles = glob($this->getPath('assets/vendor/ckeditor5-classic/translations/*.js'));
-
-    foreach ($langFiles as $langFile) {
-        $key = substr(pathinfo($langFile, PATHINFO_FILENAME), 0, 2);
-        if (isset(CKE5ISO6391::$isolang[$key])) {
-            $field->getSelect()->addOption(CKE5ISO6391::$isolang[$key] . ' [' . pathinfo($langFile, PATHINFO_FILENAME) . ']', pathinfo($langFile, PATHINFO_FILENAME));
-            $fieldContentLang->getSelect()->addOption(CKE5ISO6391::$isolang[$key] . ' [' . pathinfo($langFile, PATHINFO_FILENAME) . ']', pathinfo($langFile, PATHINFO_FILENAME));
+            \Sked\Utils\Cke5FormHelper::addRexLangTabs($form, 'close_inner_wrapper');
         }
-    }
+        \Sked\Utils\Cke5FormHelper::addRexLangTabs($form, 'close_wrapper');
 
-    // set current lang again to fix lang problem with php 7.0 and php 5.x
-    rex_i18n::setLocale($lang, false);
+        // toolbar
+        $field = $form->addTextField('toolbar');
+        $field->setAttribute('id', 'cke5toolbar-input');
+        $field->setAttribute('data-tag-init', 1);
+        $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['toolbar']);
+        $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['toolbar']) . '"]');
+        $field->setLabel(rex_i18n::msg('cke5_toolbar'));
+        if ($default_value) $field->setAttribute('data-default-tags', 1);
 
-    // mediapath
-    $form->addRawField('
-    <div class="collapse  ' . $in_mediapath . '" id="cke5insertMediapath-collapse">
-        <dl class="rex-form-group form-group">
-            <dt><label class="control-label" for="mediapath">' . rex_i18n::msg('cke5_mediapath') . '</label></dt>
-            <dd class="form-inline">
-              <div class="input-group col-sm-12">
-                <span class="input-group-addon" style="width: 20px">/</span>
-                <input id ="cke5mediapath-input" class="form-control" type="text" value="' . $mediapath . '" placeholder="default /' . $mediapath . '/">
-                <span class="input-group-addon" style="width: 20px">/</span>
-              </div>
-            </dd>
-        </dl>
-    </div>
-    ');
-
-    $field = $form->addHiddenField('mediapath');
-    $field->setAttribute('id', 'cke5mediapath-hidden');
-
-    if (rex_addon::exists('media_manager') && rex_addon::get('media_manager')->isAvailable()) {
-        // medaitype
-        $field = $form->addSelectField('mediatype');
-        $field->setAttribute('class', 'form-control selectpicker');
-        $field->setAttribute('id', 'cke5mediatype-select');
-        $field->setLabel(rex_i18n::msg('cke5_media_manager_type'));
-        $field->getSelect()->addOption('default /' . $mediapath . '/', '');
-        $field->getSelect()->addDBSqlOptions('SELECT name, name FROM ' . rex::getTablePrefix() . 'media_manager_type ORDER BY status, name');
-    }
-
-    if (rex_addon::exists('mediapool') && rex_addon::get('mediapool')->isAvailable()) {
-        // mediacategory
-        $form->addRawField('<div class="collapse" id="cke5mediacat-collapse">');
-        $field = $form->addSelectField('mediacategory');
-        $field->setAttribute('class', 'form-control selectpicker');
-        $field->setLabel(rex_i18n::msg('cke5_media_category'));
-        $cats_sel = new rex_media_category_select();
-        $cats_sel->setStyle('class="form-control selectpicker"');
-        $cats_sel->setName('mediacategory');
-        $cats_sel->addOption(rex_i18n::msg('pool_kats_no'), '0');
-        $field->setSelect($cats_sel);
+        // heading
+        $form->addRawField('<div class="collapse ' . ((in_array('heading', $toolbar)) ? 'in' : '') . '" id="cke5heading-collapse">');
+        $field = $form->addTextField('heading');
+        $field->setAttribute('id', 'cke5heading-input');
+        $field->setAttribute('data-tag-init', 1);
+        $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['heading']);
+        $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['heading']) . '"]');
+        $field->setLabel(rex_i18n::msg('cke5_heading'));
+        if ($default_value) $field->setAttribute('data-default-tags', 1);
         $form->addRawField('</div>');
-    }
+
+        // alignment
+        $form->addRawField('<div class="collapse  ' . ((in_array('alignment', $toolbar)) ? 'in' : '') . '" id="cke5alignment-collapse">');
+        $field = $form->addTextField('alignment');
+        $field->setAttribute('id', 'cke5alignment-input');
+        $field->setAttribute('data-tag-init', 1);
+        $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['alignment']);
+        $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['alignment']) . '"]');
+        $field->setLabel(rex_i18n::msg('cke5_alignment'));
+        if ($default_value) $field->setAttribute('data-default-tags', 1);
+        $form->addRawField('</div>');
+
+        // table
+        $form->addRawField('<div class="collapse  ' . ((in_array('insertTable', $toolbar)) ? 'in' : '') . '" id="cke5insertTable-collapse">');
+        $field = $form->addTextField('table_toolbar');
+        $field->setAttribute('id', 'cke5inserttable-input');
+        $field->setAttribute('data-tag-init', 1);
+        $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['table_toolbar']);
+        $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['table_toolbar']) . '"]');
+        $field->setLabel(rex_i18n::msg('cke5_table_toolbar'));
+        if ($default_value) $field->setAttribute('data-default-tags', 1);
+        $form->addRawField('</div>');
+
+        // fontsize
+        $form->addRawField('<div class="collapse ' . ((in_array('fontSize', $toolbar)) ? 'in' : '') . '" id="cke5fontSize-collapse">');
+        $field = $form->addTextField('fontsize');
+        $field->setLabel(rex_i18n::msg('cke5_fontSize'));
+        $field->setAttribute('id', 'cke5fontsize-input');
+        $field->setAttribute('data-tag-init', 1);
+        $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['fontsize']);
+        $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['fontsize']) . '"]');
+        if ($default_value) $field->setAttribute('data-default-tags', 1);
+        $form->addRawField('</div>');
+
+        // image toolbar
+        $form->addRawField('<div class="collapse ' . ((in_array('rexImage', $toolbar) || in_array('imageUpload', $toolbar)) ? 'in' : '') . '" id="cke5imagetoolbar-collapse">');
+        $field = $form->addTextField('image_toolbar');
+        $field->setAttribute('id', 'cke5image-input');
+        $field->setAttribute('data-tag-init', 1);
+        $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['image_toolbar']);
+        $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['image_toolbar']) . '"]');
+        $field->setLabel(rex_i18n::msg('cke5_image_toolbar'));
+        if ($default_value) $field->setAttribute('data-default-tags', 1);
+        $form->addRawField('</div>');
+
+        // font color
+        $form->addRawField('<div class="collapse ' . ((in_array('fontColor', $toolbar)) ? 'in' : '') . '" id="cke5fontColor-collapse">');
+        // default font color
+        $field = $form->addCheckboxField('font_color_default');
+        $field->setAttribute('id', 'cke5font-color-default-input');
+        $field->setAttribute('data-toggle', 'toggle');
+        $field->setAttribute('data-collapse-target', 'customFontColor');
+        $field->setLabel(rex_i18n::msg('cke5_font_color_default'));
+        $field->addOption(rex_i18n::msg('cke5_font_color_default_description'), 'default_font_color');
+        if ($default_value) $field->setValue('default_font_color');
+
+        // custom font color
+        $form->addRawField('<div class="collapse" id="cke5customFontColor-collapse">');
+        $field = $form->addTextAreaField('font_color');
+        $field->setLabel(rex_i18n::msg('cke5_font_color'));
+        $field->setAttribute('id', 'cke5fontcolor-area');
+        $field->setAttribute('data-color-placeholder', rex_i18n::msg('cke5_color_placeholder'));
+        $field->setAttribute('data-color-name-placeholder', rex_i18n::msg('cke5_color_name_placeholder'));
+        $field->setAttribute('data-has-border-label', rex_i18n::msg('cke5_has_border_label'));
+        $form->addRawField('</div></div>');
+
+        // font background color
+        $form->addRawField('<div class="collapse ' . ((in_array('fontBackgroundColor', $toolbar)) ? 'in' : '') . '" id="cke5fontBackgroundColor-collapse">');
+        // default font color
+        $field = $form->addCheckboxField('font_background_color_default');
+        $field->setAttribute('id', 'cke5font-background-color-default-input');
+        $field->setAttribute('data-toggle', 'toggle');
+        $field->setAttribute('data-collapse-target', 'customFontBackgroundColor');
+        $field->setLabel(rex_i18n::msg('cke5_font_background_color_default'));
+        $field->addOption(rex_i18n::msg('cke5_font_background_color_default_description'), 'default_font_background_color');
+        if ($default_value) $field->setValue('default_font_background_color');
+
+        // custom font color
+        $form->addRawField('<div class="collapse" id="cke5customFontBackgroundColor-collapse">');
+        $field = $form->addTextAreaField('font_background_color');
+        $field->setLabel(rex_i18n::msg('cke5_font_background_color'));
+        $field->setAttribute('id', 'cke5fontbgcolor-area');
+        $field->setAttribute('data-color-placeholder', rex_i18n::msg('cke5_color_placeholder'));
+        $field->setAttribute('data-color-name-placeholder', rex_i18n::msg('cke5_color_name_placeholder'));
+        $field->setAttribute('data-has-border-label', rex_i18n::msg('cke5_has_border_label'));
+        $form->addRawField('</div></div>');
+
+        // font family
+        $form->addRawField('<div class="collapse ' . ((in_array('fontFamily', $toolbar)) ? 'in' : '') . '" id="cke5fontFamily-collapse">');
+        // default font family
+        $field = $form->addCheckboxField('font_family_default');
+        $field->setAttribute('id', 'cke5font-family-default-input');
+        $field->setAttribute('data-toggle', 'toggle');
+        $field->setAttribute('data-collapse-target', 'customFontFamily');
+        $field->setLabel(rex_i18n::msg('cke5_font_family_default'));
+        $field->addOption(rex_i18n::msg('cke5_font_family_default_description'), 'default_font_family');
+        if ($default_value) $field->setValue('default_font_family');
+
+        // custom font family
+        $form->addRawField('<div class="collapse" id="cke5customFontFamily-collapse">');
+        $field = $form->addTextAreaField('font_families');
+        $field->setLabel(rex_i18n::msg('cke5_font_family'));
+        $field->setAttribute('id', 'cke5fontfamily-area');
+        $field->setAttribute('data-family-placeholder', rex_i18n::msg('cke5_family_name_placeholder'));
+        $form->addRawField('</div></div>');
+
+        // rex link
+        $form->addRawField('<div class="collapse ' . ((in_array('link', $toolbar)) ? 'in' : '') . '" id="cke5link-collapse">');
+        $field = $form->addTextField('rexlink');
+        $field->setAttribute('id', 'cke5link-input');
+        $field->setAttribute('data-tag-init', 1);
+        $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['rexlink']);
+        $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['rexlink']) . '"]');
+        $field->setLabel(rex_i18n::msg('cke5_link'));
+        if ($default_value) $field->setAttribute('data-default-tags', 1);
+        $form->addRawField('</div>');
+
+        // highlight
+        $form->addRawField('<div class="collapse ' . ((in_array('highlight', $toolbar)) ? 'in' : '') . '" id="cke5highlight-collapse">');
+        $field = $form->addTextField('highlight');
+        $field->setAttribute('id', 'cke5highlight-input');
+        $field->setAttribute('data-tag-init', 1);
+        $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['highlight']);
+        $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['highlight']) . '"]');
+        $field->setLabel(rex_i18n::msg('cke5_highlight'));
+        if ($default_value) $field->setAttribute('data-default-tags', 1);
+        $form->addRawField('</div>');
+
+        // mediaEmbed provider
+        $form->addRawField('<div class="collapse ' . ((in_array('mediaEmbed', $toolbar)) ? 'in' : '') . '" id="cke5mediaEmbed-collapse">');
+        $field = $form->addTextField('mediaembed');
+        $field->setLabel(rex_i18n::msg('cke5_mediaembed'));
+        $field->setAttribute('id', 'cke5mediaEmbed-input');
+        $field->setAttribute('data-tag-init', 1);
+        $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['mediaembed']);
+        $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['providers']) . '"]');
+        if ($default_value) $field->setAttribute('data-default-tags', 1);
+        $form->addRawField('</div>');
+
+        // default height
+        $field = $form->addCheckboxField('height_default');
+        $field->setAttribute('id', 'cke5height-input');
+        $field->setAttribute('data-toggle', 'toggle');
+        $field->setAttribute('data-collapse-target', 'minmax');
+        $field->setLabel(rex_i18n::msg('cke5_height_default'));
+        $field->addOption(rex_i18n::msg('cke5_height_default_description'), 'default_height');
+        if ($default_value) $field->setValue('default_height');
+
+        // min max height collapse
+        $form->addRawField('<div class="collapse" id="cke5minmax-collapse"><div class="minmax-inner">');
+        // min height default 0 = none
+        $field = $form->addTextField('min_height');
+        $field->setAttribute('id', 'cke5minheight-input');
+        $field->setAttribute('data-range-values', '[' . implode(',', Cke5ProfilesCreator::DEFAULTS['min_height']) . ']');
+        $field->setAttribute('data-range', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['min_height']) . '"]');
+        $field->setAttribute('data-slider-value', $min_height);
+        $field->setLabel(rex_i18n::msg('cke5_min_height'));
+
+        // max height default 0 = none
+        $field = $form->addTextField('max_height');
+        $field->setAttribute('id', 'cke5maxheight-input');
+        $field->setAttribute('data-range-values', '[' . implode(',', Cke5ProfilesCreator::DEFAULTS['max_height']) . ']');
+        $field->setAttribute('data-range', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['max_height']) . '"]');
+        $field->setAttribute('data-slider-value', $max_height);
+        $field->setLabel(rex_i18n::msg('cke5_max_height'));
+        $form->addRawField('</div></div>');
+
+        // upload default
+        $field = $form->addCheckboxField('upload_default');
+        $field->setAttribute('data-toggle', 'toggle');
+        $field->setAttribute('id', 'cke5uploaddefault-input');
+        $field->setLabel(rex_i18n::msg('cke5_upload_default'));
+        $field->addOption(rex_i18n::msg('cke5_upload_default_description'), 'default_upload');
+        if ($default_value) $field->setValue('default_upload');
+
+        // lang
+        $field = $form->addSelectField('lang');
+        $field->setAttribute('class', 'form-control selectpicker');
+        $field->setAttribute('data-live-search', 'true');
+        $field->setLabel(rex_i18n::msg('cke5_lang'));
+        $field->getSelect()->addOption('default', '');
+
+        // content lang
+        $fieldContentLang = $form->addSelectField('lang_content');
+        $fieldContentLang->setAttribute('class', 'form-control selectpicker');
+        $fieldContentLang->setAttribute('data-live-search', 'true');
+        $fieldContentLang->setLabel(rex_i18n::msg('cke5_content_lang'));
+        $fieldContentLang->getSelect()->addOption('default', '');
+
+        // get current lang
+        $lang = rex_i18n::getLocale();
+        $langFiles = glob($this->getPath('assets/vendor/ckeditor5-classic/translations/*.js'));
+
+        foreach ($langFiles as $langFile) {
+            $key = substr(pathinfo($langFile, PATHINFO_FILENAME), 0, 2);
+            if (isset(CKE5ISO6391::$isolang[$key])) {
+                $field->getSelect()->addOption(CKE5ISO6391::$isolang[$key] . ' [' . pathinfo($langFile, PATHINFO_FILENAME) . ']', pathinfo($langFile, PATHINFO_FILENAME));
+                $fieldContentLang->getSelect()->addOption(CKE5ISO6391::$isolang[$key] . ' [' . pathinfo($langFile, PATHINFO_FILENAME) . ']', pathinfo($langFile, PATHINFO_FILENAME));
+            }
+        }
+
+        // set current lang again to fix lang problem with php 7.0 and php 5.x
+        rex_i18n::setLocale($lang, false);
+
+        // mediapath
+        $form->addRawField('
+        <div class="collapse  ' . $in_mediapath . '" id="cke5insertMediapath-collapse">
+            <dl class="rex-form-group form-group">
+                <dt><label class="control-label" for="mediapath">' . rex_i18n::msg('cke5_mediapath') . '</label></dt>
+                <dd class="form-inline">
+                  <div class="input-group col-sm-12">
+                    <span class="input-group-addon" style="width: 20px">/</span>
+                    <input id ="cke5mediapath-input" class="form-control" type="text" value="' . $mediapath . '" placeholder="default /' . $mediapath . '/">
+                    <span class="input-group-addon" style="width: 20px">/</span>
+                  </div>
+                </dd>
+            </dl>
+        </div>
+        ');
+
+        $field = $form->addHiddenField('mediapath');
+        $field->setAttribute('id', 'cke5mediapath-hidden');
+
+        if (rex_addon::exists('media_manager') && rex_addon::get('media_manager')->isAvailable()) {
+            // medaitype
+            $field = $form->addSelectField('mediatype');
+            $field->setAttribute('class', 'form-control selectpicker');
+            $field->setAttribute('id', 'cke5mediatype-select');
+            $field->setLabel(rex_i18n::msg('cke5_media_manager_type'));
+            $field->getSelect()->addOption('default /' . $mediapath . '/', '');
+            $field->getSelect()->addDBSqlOptions('SELECT name, name FROM ' . rex::getTablePrefix() . 'media_manager_type ORDER BY status, name');
+        }
+
+        if (rex_addon::exists('mediapool') && rex_addon::get('mediapool')->isAvailable()) {
+            // mediacategory
+            $form->addRawField('<div class="collapse" id="cke5mediacat-collapse">');
+            $field = $form->addSelectField('mediacategory');
+            $field->setAttribute('class', 'form-control selectpicker');
+            $field->setLabel(rex_i18n::msg('cke5_media_category'));
+            $cats_sel = new rex_media_category_select();
+            $cats_sel->setStyle('class="form-control selectpicker"');
+            $cats_sel->setName('mediacategory');
+            $cats_sel->addOption(rex_i18n::msg('pool_kats_no'), '0');
+            $field->setSelect($cats_sel);
+            $form->addRawField('</div>');
+        }
+
+        // custom area for experts
+        $field = $form->addCheckboxField('extra');
+        $field->setAttribute('id', 'cke5extra-definition-input');
+        $field->setAttribute('data-toggle', 'toggle');
+        $field->setAttribute('data-collapse-target', 'extraDefinition');
+        $field->setLabel(rex_i18n::msg('cke5_extra_definition'));
+        $field->addOption(rex_i18n::msg('cke5_extra_definition_description'), 'extra_definition');
+        // if ($default_value) $field->setAttribute('data-default-tags', '');
+
+        // expert area
+        $form->addRawField('<div class="collapse" id="cke5extraDefinition-collapse">');
+
+            // textarea
+            $field = $form->addTextAreaField('extra_definition');
+            $field->setAttribute('id', 'cke5-extra-area');
+            $field->setLabel(rex_i18n::msg('cke5_extra_definition_area'));
+            if ($default_value) $field->setAttribute('data-default-tags', '');
+
+        // end collapse
+        $form->addRawField('</div>');
+
+    // end collapse
+    $form->addRawField('</div>');
 
     if ($func == 'edit') {
         $profileResult = array();

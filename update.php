@@ -55,7 +55,10 @@ try {
         foreach (rex_i18n::getLocales() as $locale) {
             $sql->ensureColumn(new rex_sql_column('placeholder_' . $locale, 'varchar(255)', true));
         }
-        $sql->ensure();
+        $sql->ensureColumn(new rex_sql_column('expert_definition', 'varchar(255)', true))
+            ->ensureColumn(new rex_sql_column('definition', 'text', true))
+            ->ensureColumn(new rex_sql_column('extra_definition', 'text', true))
+            ->ensure();
     }
 } catch (rex_functional_exception $e) {
     rex_logger::logException($e);
