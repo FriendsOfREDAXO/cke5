@@ -19,12 +19,13 @@ class Cke5ProfilesCreator
     const PROFILES_FILENAME = 'cke5profiles.js';
 
     const EDITOR_SETTINGS = [
-        'cktypes' => ['heading', 'fontSize', 'mediaEmbed', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable', 'fontBackgroundColor', 'fontColor', 'fontFamily', 'codeBlock'],
+        /* todo: specialCharacters not work because : https://github.com/ckeditor/ckeditor5/issues/6160 */
+        'cktypes' => ['heading', 'fontSize', 'mediaEmbed', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable', 'fontBackgroundColor', 'fontColor', 'fontFamily', 'codeBlock'/*, 'specialCharacters' */],
         'ckimgtypes' => ['rexImage', 'imageUpload']
     ];
 
     const ALLOWED_FIELDS = [
-        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll'],
+        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll', 'specialCharacters'],
         'alignment' => ['left', 'right', 'center', 'justify'],
         'table_toolbar' => ['tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties'],
         'heading' => ['paragraph', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
@@ -42,7 +43,8 @@ class Cke5ProfilesCreator
         'min_height' => ['none', '100px', '200px', '300px', '400px', '500px', '600px'],
         'max_height' => ['none', '200px', '400px', '600px', '800px', '1000px', '1200px'],
         'providers' => ['dailymotion', 'spotify', 'youtube', 'vimeo', 'instagram', 'twitter', 'googleMaps', 'flickr', 'facebook'],
-        'code_block' => ['plaintext', 'c', 'cs', 'cpp', 'css', 'diff', 'html', 'java', 'javascript', 'php', 'python', 'ruby', 'typescript', 'xml']
+        'code_block' => ['plaintext', 'c', 'cs', 'cpp', 'css', 'diff', 'html', 'java', 'javascript', 'php', 'python', 'ruby', 'typescript', 'xml'],
+        'special_characters' => ['currency', 'mathematical', 'latin', 'arrows', 'text']
     ];
 
     const CODE_BLOCK = [
@@ -61,23 +63,6 @@ class Cke5ProfilesCreator
         'typescript' => ['label' => 'TypeScript', 'css' => 'block_type_script'],
         'xml' => ['label' => 'XML', 'class' => 'block_xml']
     ];
-
-    /*
-    { language: 'plaintext', label: 'Plain text' }, // The default language.
-    { language: 'c', label: 'C' },
-    { language: 'cs', label: 'C#' },
-    { language: 'cpp', label: 'C++' },
-    { language: 'css', label: 'CSS' },
-    { language: 'diff', label: 'Diff' },
-    { language: 'html', label: 'HTML' },
-    { language: 'java', label: 'Java' },
-    { language: 'javascript', label: 'JavaScript' },
-    { language: 'php', label: 'PHP' },
-    { language: 'python', label: 'Python' },
-    { language: 'ruby', label: 'Ruby' },
-    { language: 'typescript', label: 'TypeScript' },
-    { language: 'xml', label: 'XML' }
-    */
 
     const PLUGINS = [
         // 'UploadAdapter',
@@ -99,13 +84,13 @@ class Cke5ProfilesCreator
         'Subscript',
         'Superscript',
         'SelectAll',
-        // 'SpecialCharacters',
-        // 'SpecialCharactersCurrency',
-        // 'SpecialCharactersMathematical',
-        // 'SpecialCharactersLatin',
-        // 'SpecialCharactersArrows',
-        // 'SpecialCharactersText',
-        // 'SpecialCharactersEssentials',
+        'SpecialCharacters',
+        'SpecialCharactersCurrency',
+        'SpecialCharactersMathematical',
+        'SpecialCharactersLatin',
+        'SpecialCharactersArrows',
+        'SpecialCharactersText',
+        'SpecialCharactersEssentials',
         'CodeBlock',
         'Emoji',
         'RemoveFormat',
@@ -126,7 +111,8 @@ class Cke5ProfilesCreator
         'min_height' => [0, 100, 200, 300, 400, 500, 600],
         'max_height' => [0, 200, 400, 600, 800, 1000, 1200],
         'mediaembed' => 'youtube,vimeo',
-        'code_block' => 'plaintext,php,javascript,python'
+        'code_block' => 'plaintext,php,javascript,python',
+        'special_characters' => 'currency,mathematical,latin,arrows,text'
     ];
 
     /**
@@ -262,7 +248,7 @@ const cke5suboptions = $suboptions;
         }
 
         if (in_array('codeBlock', $toolbar) && !empty($profile['code_block'])) {
-            $codeBlocks = array_filter(self::toArray($profile['code_block']));
+            $codeBlocks = self::toArray($profile['code_block']);
             if (sizeof($codeBlocks) > 0) {
                 $jsonProfile['codeBlock']['languages'] = [];
                 foreach ($codeBlocks as $codeBlock) {
@@ -345,8 +331,36 @@ const cke5suboptions = $suboptions;
             }
         }
 
+        $removeSpecialCharPlugins = [];
+        /*
+         * todo: not work because : https://github.com/ckeditor/ckeditor5/issues/6160
+        if (in_array('specialCharacters', $toolbar) && !empty($profile['special_characters'])) {
+            $specialPlugins = self::toArray($profile['special_characters'].',essentials');
+            $specialCharPlugins = [];
+            foreach (self::PLUGINS as $plugin) {
+                if (strpos($plugin, 'SpecialCharacters') !== false && $plugin !== 'SpecialCharacters') {
+                    $specialCharPlugins[] = $plugin;
+                    continue;
+                }
+            }
+            foreach ($specialPlugins as $specialPlugin) {
+                foreach ($specialCharPlugins as $key => $specialCharPlugin) {
+                    if ($specialCharPlugin == 'SpecialCharacters' . ucfirst($specialPlugin)) {
+                        unset($specialCharPlugins[$key]);
+                    }
+                }
+            }
+            $removeSpecialCharPlugins = $specialCharPlugins;
+        }*/
+
         $removePlugins = [];
         foreach (self::PLUGINS as $plugin) {
+            if (strpos($plugin, 'SpecialCharacters') !== false) {
+                if (!in_array(lcfirst('SpecialCharacters'), $toolbar) || in_array($plugin, $removeSpecialCharPlugins)) {
+                    $removePlugins[] = $plugin;
+                }
+                continue;
+            }
             if (!in_array(lcfirst($plugin), $toolbar)) {
                 $removePlugins[] = $plugin;
             }
@@ -411,7 +425,7 @@ const cke5suboptions = $suboptions;
      */
     private static function toArray($string)
     {
-        return explode(',', $string);
+        return array_filter(explode(',', $string));
     }
 
     /**

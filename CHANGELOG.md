@@ -6,7 +6,7 @@
 * switch for expert or profile editor mode
 * add textarea for special options for profile editor mode
 * added codeBlock and codeBlock-languages
-*  
+* add special characters plugins
 
 ## Version 3.7.1
 

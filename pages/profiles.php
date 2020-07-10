@@ -214,6 +214,20 @@ if ($func == '') {
         if ($default_value) $field->setAttribute('data-default-tags', 1);
         $form->addRawField('</div>');
 
+        /*
+         * todo: not work because : https://github.com/ckeditor/ckeditor5/issues/6160
+        // special chars
+        $form->addRawField('<div class="collapse  ' . ((in_array('codeBlock', $toolbar)) ? 'in' : '') . '" id="cke5specialCharacters-collapse">');
+        $field = $form->addTextField('special_characters');
+        $field->setAttribute('id', 'cke5specialCharacters-input');
+        $field->setAttribute('data-tag-init', 1);
+        $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['special_characters']);
+        $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['special_characters']) . '"]');
+        $field->setLabel(rex_i18n::msg('cke5_special_characters'));
+        if ($default_value) $field->setAttribute('data-default-tags', 1);
+        $form->addRawField('</div>');
+        */
+
         // table
         $form->addRawField('<div class="collapse  ' . ((in_array('insertTable', $toolbar)) ? 'in' : '') . '" id="cke5insertTable-collapse">');
         $field = $form->addTextField('table_toolbar');
@@ -319,7 +333,7 @@ if ($func == '') {
         if ($default_value) $field->setAttribute('data-default-tags', 1);
         $form->addRawField('</div>');
 
-        // table
+        // code block
         $form->addRawField('<div class="collapse  ' . ((in_array('codeBlock', $toolbar)) ? 'in' : '') . '" id="cke5codeBlock-collapse">');
         $field = $form->addTextField('code_block');
         $field->setAttribute('id', 'cke5codeBlock-input');

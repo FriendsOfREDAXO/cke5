@@ -58,6 +58,7 @@ try {
         $sql->ensureColumn(new rex_sql_column('expert_definition', 'varchar(255)', true))
             ->ensureColumn(new rex_sql_column('definition', 'text', true))
             ->ensureColumn(new rex_sql_column('extra_definition', 'text', true))
+            ->ensureColumn(new rex_sql_column('special_characters', 'text', true))
             ->ensureColumn(new rex_sql_column('code_block', 'text', true))
             ->ensure();
     }
