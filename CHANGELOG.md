@@ -2,8 +2,11 @@
 
 ## Version 4.0.0
 
+* vendor update to v1.19
 * switch for expert or profile editor mode
 * add textarea for special options for profile editor mode
+* added codeBlock and codeBlock-languages
+*  
 
 ## Version 3.7.1
 

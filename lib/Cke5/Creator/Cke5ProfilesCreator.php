@@ -19,7 +19,7 @@ class Cke5ProfilesCreator
     const PROFILES_FILENAME = 'cke5profiles.js';
 
     const EDITOR_SETTINGS = [
-        'cktypes' => ['heading', 'fontSize', 'mediaEmbed', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable', 'fontBackgroundColor', 'fontColor', 'fontFamily'],
+        'cktypes' => ['heading', 'fontSize', 'mediaEmbed', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable', 'fontBackgroundColor', 'fontColor', 'fontFamily', 'codeBlock'],
         'ckimgtypes' => ['rexImage', 'imageUpload']
     ];
 
@@ -41,8 +41,43 @@ class Cke5ProfilesCreator
             '70', '71', '72', '73', '74', '75', '76', '77', '78', '79'],
         'min_height' => ['none', '100px', '200px', '300px', '400px', '500px', '600px'],
         'max_height' => ['none', '200px', '400px', '600px', '800px', '1000px', '1200px'],
-        "providers" => ['dailymotion', 'spotify', 'youtube', 'vimeo', 'instagram', 'twitter', 'googleMaps', 'flickr', 'facebook']
+        'providers' => ['dailymotion', 'spotify', 'youtube', 'vimeo', 'instagram', 'twitter', 'googleMaps', 'flickr', 'facebook'],
+        'code_block' => ['plaintext', 'c', 'cs', 'cpp', 'css', 'diff', 'html', 'java', 'javascript', 'php', 'python', 'ruby', 'typescript', 'xml']
     ];
+
+    const CODE_BLOCK = [
+        'plaintext' => ['label' => 'Plain Text', 'class' => 'block_plain_text'],
+        'c' => ['label' => 'C', 'class' => 'block_c'],
+        'cs' => ['label' => 'C#', 'class' => 'block_cs'],
+        'cpp' => ['label' => 'C++', 'class' => 'block_cpp'],
+        'css' => ['label' => 'CSS', 'class' => 'block_css'],
+        'diff' => ['label' => 'Diff', 'class' => 'block_diff'],
+        'html' => ['label' => 'HTML', 'class' => 'block_html'],
+        'java' => ['label' => 'Java', 'class' => 'block_java'],
+        'javascript' => ['label' => 'JavaScript', 'class' => 'block_java_script'],
+        'php' => ['label' => 'PHP', 'class' => 'block_php'],
+        'python' => ['label' => 'Python', 'class' => 'block_python'],
+        'ruby' => ['label' => 'Ruby', 'class' => 'block_ruby'],
+        'typescript' => ['label' => 'TypeScript', 'css' => 'block_type_script'],
+        'xml' => ['label' => 'XML', 'class' => 'block_xml']
+    ];
+
+    /*
+    { language: 'plaintext', label: 'Plain text' }, // The default language.
+    { language: 'c', label: 'C' },
+    { language: 'cs', label: 'C#' },
+    { language: 'cpp', label: 'C++' },
+    { language: 'css', label: 'CSS' },
+    { language: 'diff', label: 'Diff' },
+    { language: 'html', label: 'HTML' },
+    { language: 'java', label: 'Java' },
+    { language: 'javascript', label: 'JavaScript' },
+    { language: 'php', label: 'PHP' },
+    { language: 'python', label: 'Python' },
+    { language: 'ruby', label: 'Ruby' },
+    { language: 'typescript', label: 'TypeScript' },
+    { language: 'xml', label: 'XML' }
+    */
 
     const PLUGINS = [
         // 'UploadAdapter',
@@ -91,6 +126,7 @@ class Cke5ProfilesCreator
         'min_height' => [0, 100, 200, 300, 400, 500, 600],
         'max_height' => [0, 200, 400, 600, 800, 1000, 1200],
         'mediaembed' => 'youtube,vimeo',
+        'code_block' => 'plaintext,php,javascript,python'
     ];
 
     /**
@@ -223,6 +259,18 @@ const cke5suboptions = $suboptions;
 
         if (!in_array('fontFamily', $toolbar)) {
             $jsonProfile['removePlugins'][] = 'FontFamily';
+        }
+
+        if (in_array('codeBlock', $toolbar) && !empty($profile['code_block'])) {
+            $codeBlocks = array_filter(self::toArray($profile['code_block']));
+            if (sizeof($codeBlocks) > 0) {
+                $jsonProfile['codeBlock']['languages'] = [];
+                foreach ($codeBlocks as $codeBlock) {
+                    if (isset(self::CODE_BLOCK[$codeBlock])) {
+                        $jsonProfile['codeBlock']['languages'][] = array_merge(['language' => $codeBlock], self::CODE_BLOCK[$codeBlock]);
+                    }
+                }
+            }
         }
 
         if (in_array('mediaEmbed', $toolbar) && !empty($profile['mediaembed'])) {

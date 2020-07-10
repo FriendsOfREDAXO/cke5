@@ -44,6 +44,7 @@ cke5_heading = Heading-Elemente
 cke5_alignment = Text Ausrichtung
 cke5_fontSize = Schriftgrößen
 cke5_link = Rexdaxo-Links
+cke5_code_block = CodeBlock Sprachen
 cke5_lang = UI Sprache
 cke5_content_lang = Content Sprache
 cke5_image_toolbar = Image-Plugin Toolbar

@@ -319,6 +319,17 @@ if ($func == '') {
         if ($default_value) $field->setAttribute('data-default-tags', 1);
         $form->addRawField('</div>');
 
+        // table
+        $form->addRawField('<div class="collapse  ' . ((in_array('codeBlock', $toolbar)) ? 'in' : '') . '" id="cke5codeBlock-collapse">');
+        $field = $form->addTextField('code_block');
+        $field->setAttribute('id', 'cke5codeBlock-input');
+        $field->setAttribute('data-tag-init', 1);
+        $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['code_block']);
+        $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['code_block']) . '"]');
+        $field->setLabel(rex_i18n::msg('cke5_code_block'));
+        if ($default_value) $field->setAttribute('data-default-tags', 1);
+        $form->addRawField('</div>');
+
         // highlight
         $form->addRawField('<div class="collapse ' . ((in_array('highlight', $toolbar)) ? 'in' : '') . '" id="cke5highlight-collapse">');
         $field = $form->addTextField('highlight');
