@@ -25,12 +25,12 @@ class Cke5ProfilesCreator
     ];
 
     const ALLOWED_FIELDS = [
-        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll', 'specialCharacters'],
+        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll', 'specialCharacters', 'pastePlainText'],
         'alignment' => ['left', 'right', 'center', 'justify'],
         'table_toolbar' => ['tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties'],
         'heading' => ['paragraph', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
         'highlight' => ['yellowMarker', 'greenMarker', 'pinkMarker', 'blueMarker', 'redPen', 'greenPen'],
-        'image_toolbar' => ['|', 'imageTextAlternative', 'full', 'alignLeft', 'alignCenter', 'alignRight'],
+        'image_toolbar' => ['|', 'imageTextAlternative', 'full', 'alignLeft', 'alignCenter', 'alignRight', 'linkImage'],
         'rexlink' => ['internal', 'media'],
         'fontsize' => ['default', 'tiny', 'small', 'big', 'huge', '8', '9',
             '10', '11', '12', '13', '14', '15', '16', '17', '18', '19',
@@ -96,7 +96,9 @@ class Cke5ProfilesCreator
         'RemoveFormat',
         'TodoList',
         'HorizontalLine',
-        'PageBreak'
+        'PageBreak',
+        // 'LinkImage',
+        'PastePlainText'
     ];
 
     const DEFAULTS = [
@@ -105,7 +107,7 @@ class Cke5ProfilesCreator
         'table_toolbar' => 'tableColumn,tableRow,mergeTableCells,tableProperties,tableCellProperties',
         'heading' => 'paragraph,h1,h2,h3',
         'highlight' => 'yellowMarker,greenMarker,redPen,greenPen',
-        'image_toolbar' => 'imageTextAlternative,|,full,alignLeft,alignRight',
+        'image_toolbar' => 'imageTextAlternative,|,full,alignLeft,alignRight,linkImage',
         'rexlink' => 'internal,media',
         'fontsize' => 'tiny,small,default,big,huge',
         'min_height' => [0, 100, 200, 300, 400, 500, 600],
@@ -245,6 +247,10 @@ const cke5suboptions = $suboptions;
 
         if (!in_array('fontFamily', $toolbar)) {
             $jsonProfile['removePlugins'][] = 'FontFamily';
+        }
+
+        if (!in_array('pastePlainText', $toolbar)) {
+            $jsonProfile['removePlugins'][] = 'PastePlainText';
         }
 
         if (in_array('codeBlock', $toolbar) && !empty($profile['code_block'])) {
