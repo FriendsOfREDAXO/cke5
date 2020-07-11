@@ -12,7 +12,7 @@
  */
 
 let ckedit = '.cke5_profile_edit',
-    cktypes, ckimgtypes, imageDragDrop;
+    cktypes, ckimgtypes, cktabletypes, imageDragDrop;
 
 
 $(document).on('rex:ready', function (event, container) {
@@ -27,6 +27,7 @@ function cke5_init_edit(element) {
         expert = element.find('#cke5-expert-toggle-expert-definition'),
         extra = element.find('#cke5extra-definition-input-extra-definition'),
         toolbar = element.find('#cke5toolbar-input'),
+        table_toolbar = element.find('#cke5inserttable-input'),
         name = element.find('#cke5name-input'),
         minheight = element.find('#cke5minheight-input'),
         maxheight = element.find('#cke5maxheight-input'),
@@ -35,6 +36,8 @@ function cke5_init_edit(element) {
         mediapath_hidden = element.find('#cke5mediapath-hidden'),
         mediapath_collapse = element.find('#cke5insertMediapath-collapse'),
         mediatype = element.find('#cke5mediatype-select'),
+        tablecolor_area = element.find('#cke5tablecolor-area'),
+        tablecolor_default = element.find('#cke5table-color-default-input-default-table-color'),
         fontcolor_area = element.find('#cke5fontcolor-area'),
         fontcolor_default = element.find('#cke5font-color-default-input-default-font-color'),
         fontbgcolor_area = element.find('#cke5fontbgcolor-area'),
@@ -44,15 +47,18 @@ function cke5_init_edit(element) {
 
     cktypes = JSON.parse(element.attr('data-cktypes'));
     ckimgtypes = JSON.parse(element.attr('data-ckimgtypes'));
+    cktabletypes = JSON.parse(element.attr('data-cktabletypes'));
 
     imageDragDrop = element.find('#cke5uploaddefault-input-default-upload');
 
     autosize($('#cke5expertDefinition-collapse textarea'));
     autosize($('#cke5extraDefinition-collapse textarea'));
 
+    cke5_addColorFields(tablecolor_area);
     cke5_addColorFields(fontcolor_area);
     cke5_addColorFields(fontbgcolor_area);
     cke5_addFontFamiliesFields(fontfamily_area);
+    cke5_bootstrapToggle_collapse(tablecolor_default);
     cke5_bootstrapToggle_collapse(fontcolor_default);
     cke5_bootstrapToggle_collapse(fontbgcolor_default);
     cke5_bootstrapToggle_collapse(fontfamily_default);
@@ -101,10 +107,16 @@ function cke5_init_edit(element) {
                     if ($(this).attr('id') === toolbar.attr('id')) {
                         cke5_toolbar_create_tag('toolbar', e.tags);
                     }
+                    if ($(this).attr('id') === table_toolbar.attr('id')) {
+                        cke5_toolbar_create_tag('table_toolbar', e.tags);
+                    }
                 },
                 destroy: function (e) {
                     if ($(this).attr('id') === toolbar.attr('id')) {
                         cke5_toolbar_destroy_tag('toolbar', e.tags);
+                    }
+                    if ($(this).attr('id') === table_toolbar.attr('id')) {
+                        cke5_toolbar_destroy_tag('table_toolbar', e.tags);
                     }
                 }
             });
@@ -273,10 +285,21 @@ function cke5_toolbar_create_tag(typename, tags) {
             toggle_collapse('imagetoolbar', 'show');
         }
     });
+    cktabletypes.forEach(function (type) {
+        console.log(cktabletypes);
+        console.log(type);
+        console.log($.inArray(type, tags));
+        console.log(typename + '===' +  'table_toolbar');
+        if ($.inArray(type, tags) !== -1 && typename === 'table_toolbar') {
+            console.log('show tabColor');
+            toggle_collapse('tableColor', 'show');
+        }
+    });
 }
 
 function cke5_toolbar_destroy_tag(typename, tags) {
-    let imghide = 0;
+    let imghide = 0,
+        tabhide = 0;
     cktypes.forEach(function (type) {
         if ($.inArray(type, tags) !== -1) {
         } else {
@@ -295,6 +318,18 @@ function cke5_toolbar_destroy_tag(typename, tags) {
     });
     if (imghide === 2) {
         toggle_collapse('imagetoolbar', 'hide');
+    }
+    cktabletypes.forEach(function (type) {
+        if ($.inArray(type, tags) !== -1) {
+        } else {
+            if (typename === 'table_toolbar') {
+                tabhide++;
+            }
+        }
+    });
+    console.log(tabhide);
+    if (tabhide === 2) {
+        toggle_collapse('tableColor', 'hide');
     }
 }
 

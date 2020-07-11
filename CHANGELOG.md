@@ -2,11 +2,14 @@
 
 ## Version 4.0.0
 
-* vendor update to v1.19
+* vendor update to v20.0.0
 * switch for expert or profile editor mode
 * add textarea for special options for profile editor mode
 * added codeBlock and codeBlock-languages
 * add special characters plugins
+* plugin past plaintext added https://github.com/Mistralys/ckeditor5-paste-plaintext
+* image link as image toolbar plugin added
+* add tableColors to profile editor 
 
 ## Version 3.7.1
 

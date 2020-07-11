@@ -21,7 +21,8 @@ class Cke5ProfilesCreator
     const EDITOR_SETTINGS = [
         /* todo: specialCharacters not work because : https://github.com/ckeditor/ckeditor5/issues/6160 */
         'cktypes' => ['heading', 'fontSize', 'mediaEmbed', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable', 'fontBackgroundColor', 'fontColor', 'fontFamily', 'codeBlock'/*, 'specialCharacters' */],
-        'ckimgtypes' => ['rexImage', 'imageUpload']
+        'ckimgtypes' => ['rexImage', 'imageUpload'],
+        'cktabletypes' => ['tableProperties', 'tableCellProperties']
     ];
 
     const ALLOWED_FIELDS = [
@@ -179,6 +180,7 @@ const cke5suboptions = $suboptions;
         }
 
         $toolbar = self::toArray($profile['toolbar']);
+        $tableToolbar = self::toArray($profile['table_toolbar']);
         $jsonProfile = ['toolbar' => $toolbar];
         $jsonSuboption = [];
         $jsonProfile['removePlugins'] = [];
@@ -193,7 +195,17 @@ const cke5suboptions = $suboptions;
         }
 
         if (in_array('insertTable', $toolbar) && !empty($profile['table_toolbar'])) {
-            $jsonProfile['table'] = ['toolbar' => self::toArray($profile['table_toolbar'])];
+            $jsonProfile['table'] = ['contentToolbar' => $tableToolbar];
+
+            foreach (self::EDITOR_SETTINGS['cktabletypes'] as $ckKey) {
+                if (in_array($ckKey, $tableToolbar) && !empty($profile['table_color']) &&
+                    (is_null($profile['table_color_default']) or empty($profile['table_color_default']))) {
+                    $jsonProfile['table'][$ckKey] = [
+                        'borderColors' => json_decode($profile['table_color'], true),
+                        'backgroundColors' => json_decode($profile['table_color'], true)
+                    ];
+                }
+            }
         }
 
         if (in_array('alignment', $toolbar) && !empty($profile['alignment'])) {

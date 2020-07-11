@@ -60,6 +60,8 @@ try {
             ->ensureColumn(new rex_sql_column('extra_definition', 'text', true))
             ->ensureColumn(new rex_sql_column('special_characters', 'text', true))
             ->ensureColumn(new rex_sql_column('code_block', 'text', true))
+            ->ensureColumn(new rex_sql_column('table_color_default', 'varchar(255)', true))
+            ->ensureColumn(new rex_sql_column('table_color', 'text', true))
             ->ensure();
     }
 } catch (rex_functional_exception $e) {
