@@ -85,7 +85,7 @@ class Cke5ProfilesCreator
         'Subscript',
         'Superscript',
         'SelectAll',
-        'SpecialCharacters',
+//        'SpecialCharacters',
         'SpecialCharactersCurrency',
         'SpecialCharactersMathematical',
         'SpecialCharactersLatin',
@@ -208,8 +208,11 @@ const cke5suboptions = $suboptions;
             }
         }
 
-        if (!empty($profile['transformation'])) {
-            $jsonProfile['typing']['transformations'] = ['extra' => json_decode($profile['transformation_extra'], true)];
+        if (!empty($profile['transformation']) && !empty($profile['transformation_extra'])) {
+            $definition = json_decode($profile['transformation_extra'], true);
+            if (is_array($definition)) {
+                $jsonProfile['typing']['transformations'] = ['extra' => $definition];
+            }
         }
 
         if (!empty($profile['blank_to_external'])) {
@@ -220,9 +223,12 @@ const cke5suboptions = $suboptions;
             $jsonProfile['link']['decorators'] = ['downloadable' => ['mode' => 'manual', 'label' => 'Downloadable', 'attributes' => ['download' => 'download']]];
         }
 
-        if (!empty($profile['link_decorators'])) {
-            if (!isset($jsonProfile['link']['decorators']) || !is_array($jsonProfile['link']['decorators'])) $jsonProfile['link']['decorators'] = [];
-            $jsonProfile['link']['decorators'] = array_merge($jsonProfile['link']['decorators'], json_decode($profile['link_decorators_definition'], true));
+        if (!empty($profile['link_decorators']) && !empty($profile['link_decorators_definition'])) {
+            $definition = json_decode($profile['link_decorators_definition'], true);
+            if (is_array($definition)) {
+                if (!isset($jsonProfile['link']['decorators']) || !is_array($jsonProfile['link']['decorators'])) $jsonProfile['link']['decorators'] = [];
+                $jsonProfile['link']['decorators'] = array_merge($jsonProfile['link']['decorators'], $definition);
+            }
         }
 
         if (in_array('alignment', $toolbar) && !empty($profile['alignment'])) {
@@ -360,9 +366,9 @@ const cke5suboptions = $suboptions;
         }
 
         if (!empty($profile['extra'])) {
-            $extra = json_decode($profile['extra_definition'], true);
-            if (is_array($extra)) {
-                $jsonProfile = array_merge($jsonProfile, $extra);
+            $definition = json_decode($profile['extra_definition'], true);
+            if (is_array($definition)) {
+                $jsonProfile = array_merge($jsonProfile, $definition);
             }
         }
 
