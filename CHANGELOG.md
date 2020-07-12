@@ -2,7 +2,7 @@
 
 ## Version 4.0.0
 
-* vendor update to v20.0.0
+* vendor update to v20.0.0 and support some new features https://github.com/FriendsOfREDAXO/cke5/issues/104
 * switch for expert or profile editor mode
 * add textarea for special options for profile editor mode
 * added codeBlock and codeBlock-languages
@@ -10,6 +10,11 @@
 * plugin past plaintext added https://github.com/Mistralys/ckeditor5-paste-plaintext
 * image link as image toolbar plugin added
 * add tableColors to profile editor 
+* load only needed plugins https://github.com/FriendsOfREDAXO/cke5/issues/106
+* add link decorators https://github.com/FriendsOfREDAXO/cke5/issues/90
+* fix reinstall bug https://github.com/FriendsOfREDAXO/cke5/issues/102
+* option to set placeholder for each lang
+* fix some lang ui bugs https://github.com/FriendsOfREDAXO/cke5/issues/82
 
 ## Version 3.7.1
 
