@@ -78,6 +78,9 @@ cke5_font_family_default_description = CKEditor5 default FontFamilies nutzen
 cke5_family_name_placeholder = Ubuntu Mono, Courier New, Courier, monospace
 cke5_placeholder = Placeholder (optional)
 cke5_placeholder_placeholder = Backend-Language Placeholder für
+cke5_transformation_definition = Transformations
+cke5_transformation_definition_description = From-To Ersetzungen, auch regex
+cke5_transformation_extra_definition_area = Ersetzungen
 
 # profiles list & form actions
 rex_cke5_profiles_cloned = Profile wurde dupliziert

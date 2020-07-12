@@ -62,6 +62,10 @@ try {
             ->ensureColumn(new rex_sql_column('code_block', 'text', true))
             ->ensureColumn(new rex_sql_column('table_color_default', 'varchar(255)', true))
             ->ensureColumn(new rex_sql_column('table_color', 'text', true))
+            ->ensureColumn(new rex_sql_column('transformation', 'varchar(255)', true))
+            ->ensureColumn(new rex_sql_column('transformation_extra', 'text', true))
+            ->ensureColumn(new rex_sql_column('transformation_remove', 'text', true))
+            ->ensureColumn(new rex_sql_column('transformation_include', 'text', true))
             ->ensure();
     }
 } catch (rex_functional_exception $e) {

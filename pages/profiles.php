@@ -524,6 +524,28 @@ if ($func == '') {
         }
 
         // custom area for experts
+        $field = $form->addCheckboxField('transformation');
+        $field->setAttribute('id', 'cke5transformation-definition-input');
+        $field->setAttribute('data-toggle', 'toggle');
+        $field->setAttribute('data-collapse-target', 'transformationDefinition');
+        $field->setLabel(rex_i18n::msg('cke5_transformation_definition'));
+        $field->addOption(rex_i18n::msg('cke5_transformation_definition_description'), 'transformation_definition');
+
+        // expert area
+        $form->addRawField('<div class="collapse" id="cke5transformationDefinition-collapse">');
+
+            // textarea
+            $field = $form->addTextAreaField('transformation_extra');
+            $field->setAttribute('id', 'cke5-transformation-extra-area');
+            $field->setAttribute('data-from-placeholder', 'from');
+            $field->setAttribute('data-to-placeholder', 'to');
+            $field->setLabel(rex_i18n::msg('cke5_transformation_extra_definition_area'));
+            if ($default_value) $field->setAttribute('data-default-tags', '');
+
+        // end collapse
+        $form->addRawField('</div>');
+
+        // custom area for experts
         $field = $form->addCheckboxField('extra');
         $field->setAttribute('id', 'cke5extra-definition-input');
         $field->setAttribute('data-toggle', 'toggle');

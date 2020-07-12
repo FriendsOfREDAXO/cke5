@@ -26,6 +26,8 @@ function cke5_init_edit(element) {
     let taginputs = element.find('input[data-tag-init=1]'),
         expert = element.find('#cke5-expert-toggle-expert-definition'),
         extra = element.find('#cke5extra-definition-input-extra-definition'),
+        transformation = element.find('#cke5transformation-definition-input-transformation-definition'),
+        transformation_extra_area = element.find('#cke5-transformation-extra-area'),
         toolbar = element.find('#cke5toolbar-input'),
         table_toolbar = element.find('#cke5inserttable-input'),
         name = element.find('#cke5name-input'),
@@ -57,6 +59,7 @@ function cke5_init_edit(element) {
     cke5_addColorFields(tablecolor_area);
     cke5_addColorFields(fontcolor_area);
     cke5_addColorFields(fontbgcolor_area);
+    cke5_addFromToFields(transformation_extra_area);
     cke5_addFontFamiliesFields(fontfamily_area);
     cke5_bootstrapToggle_collapse(tablecolor_default);
     cke5_bootstrapToggle_collapse(fontcolor_default);
@@ -64,6 +67,7 @@ function cke5_init_edit(element) {
     cke5_bootstrapToggle_collapse(fontfamily_default);
     cke5_bootstrapToggle_collapse(height);
     cke5_bootstrapToggle_collapse(extra, true);
+    cke5_bootstrapToggle_collapse(transformation, true);
 
     if (name.length) {
         name.alphanum({
@@ -198,6 +202,31 @@ function cke5_init_edit(element) {
         })
     }
 
+}
+
+function cke5_addFromToFields(element) {
+    if (element.length) {
+        let from_placeholder = element.data('from-placeholder'),
+            to_name_placeholder = element.data('to-placeholder');
+        element.multiInput({
+            json: true,
+            input: $('<div class="row inputElement">\n' +
+                '<div class="form-group col-xs-6">\n' +
+                '<input class="form-control" name="from" placeholder="' + from_placeholder + '" type="text">\n' +
+                '</div>\n' +
+                '<div class="form-group col-xs-6">\n' +
+                '<input class="form-control" name="to" placeholder="' + to_name_placeholder + '" type="text">\n' +
+                '</div>\n' +
+                '</div>\n'),
+            limit: 200,
+            onElementAdd: function (el, plugin) {
+                console.log(plugin.elementCount);
+            },
+            onElementRemove: function (el, plugin) {
+                console.log(plugin.elementCount);
+            }
+        });
+    }
 }
 
 function cke5_addColorFields(element) {
