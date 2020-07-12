@@ -212,6 +212,19 @@ const cke5suboptions = $suboptions;
             $jsonProfile['typing']['transformations'] = ['extra' => json_decode($profile['transformation_extra'], true)];
         }
 
+        if (!empty($profile['blank_to_external'])) {
+            $jsonProfile['link']['addTargetToExternalLinks'] = true;
+        }
+
+        if (!empty($profile['link_downloadable'])) {
+            $jsonProfile['link']['decorators'] = ['downloadable' => ['mode' => 'manual', 'label' => 'Downloadable', 'attributes' => ['download' => 'download']]];
+        }
+
+        if (!empty($profile['link_decorators'])) {
+            if (!isset($jsonProfile['link']['decorators']) || !is_array($jsonProfile['link']['decorators'])) $jsonProfile['link']['decorators'] = [];
+            $jsonProfile['link']['decorators'] = array_merge($jsonProfile['link']['decorators'], json_decode($profile['link_decorators_definition'], true));
+        }
+
         if (in_array('alignment', $toolbar) && !empty($profile['alignment'])) {
             $jsonProfile['alignment'] = self::toArray($profile['alignment']);
         } else {

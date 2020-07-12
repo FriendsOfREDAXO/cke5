@@ -81,6 +81,13 @@ cke5_placeholder_placeholder = Backend-Language Placeholder für
 cke5_transformation_definition = Transformations
 cke5_transformation_definition_description = From-To Ersetzungen, auch regex
 cke5_transformation_extra_definition_area = Ersetzungen
+cke5_blank_to_external = External Link
+cke5_blank_to_external_description = External Link in neuem Tab öffnen
+cke5_link_downloadable = Downloadable
+cke5_link_downloadable_description = Ermöglicht es Links als downloadable zu markieren
+cke5_link_decorators_definition = Link Decorators
+cke5_link_decorators_definition_description = Ermöglichst das anlegen von Custom Link-Decorators
+cke5_link_decorators_definition_area = Custom Link-Decorators
 
 # profiles list & form actions
 rex_cke5_profiles_cloned = Profile wurde dupliziert

@@ -44,6 +44,10 @@ try {
             ->ensureColumn(new rex_sql_column('transformation_extra', 'text', true))
             ->ensureColumn(new rex_sql_column('transformation_remove', 'text', true))
             ->ensureColumn(new rex_sql_column('transformation_include', 'text', true))
+            ->ensureColumn(new rex_sql_column('blank_to_external', 'varchar(255)', true))
+            ->ensureColumn(new rex_sql_column('link_downloadable', 'varchar(255)', true))
+            ->ensureColumn(new rex_sql_column('link_decorators', 'varchar(255)', true))
+            ->ensureColumn(new rex_sql_column('link_decorators_definition', 'text', true))
             ->ensure();
     }
 } catch (rex_functional_exception $e) {

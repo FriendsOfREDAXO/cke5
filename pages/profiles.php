@@ -151,12 +151,14 @@ if ($func == '') {
             // text area
             $field = $form->addTextAreaField('expert_definition');
             $field->setAttribute('id', 'cke5-expert-definition-area');
+            $field->setAttribute('rows', '2');
             $field->setLabel(rex_i18n::msg('cke5_expert_definition_area'));
             if ($default_value) $field->setAttribute('data-default-tags', '');
 
             // text area
             $field = $form->addTextAreaField('expert_suboption');
             $field->setAttribute('id', 'cke5-expert-suboption-area');
+            $field->setAttribute('rows', '2');
             $field->setLabel(rex_i18n::msg('cke5_expert_suboption_area'));
             if ($default_value) $field->setAttribute('data-default-tags', '');
 
@@ -380,6 +382,42 @@ if ($func == '') {
             $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['rexlink']) . '"]');
             $field->setLabel(rex_i18n::msg('cke5_link'));
             if ($default_value) $field->setAttribute('data-default-tags', 1);
+
+            // extern blank
+            $field = $form->addCheckboxField('blank_to_external');
+            $field->setAttribute('id', 'cke5blank-to-external-input');
+            $field->setAttribute('data-toggle', 'toggle');
+            $field->setLabel(rex_i18n::msg('cke5_blank_to_external'));
+            $field->addOption(rex_i18n::msg('cke5_blank_to_external_description'), 'blank_to_external');
+
+            // downloadable
+            $field = $form->addCheckboxField('link_downloadable');
+            $field->setAttribute('id', 'cke5link-downloadable-input');
+            $field->setAttribute('data-toggle', 'toggle');
+            $field->setLabel(rex_i18n::msg('cke5_link_downloadable'));
+            $field->addOption(rex_i18n::msg('cke5_link_downloadable_description'), 'link_downloadable');
+
+            // custom area for link decorators
+            $field = $form->addCheckboxField('link_decorators');
+            $field->setAttribute('id', 'cke5link-decorators-definition-input');
+            $field->setAttribute('data-toggle', 'toggle');
+            $field->setAttribute('data-collapse-target', 'linkDecoratorsDefinition');
+            $field->setLabel(rex_i18n::msg('cke5_link_decorators_definition'));
+            $field->addOption(rex_i18n::msg('cke5_link_decorators_definition_description'), 'link_decorators_definition');
+
+            // link decorators area
+            $form->addRawField('<div class="collapse" id="cke5linkDecoratorsDefinition-collapse">');
+
+                // textarea
+                $field = $form->addTextAreaField('link_decorators_definition');
+                $field->setAttribute('id', 'cke5-link-decorators-definition-area');
+                $field->setAttribute('rows', '2');
+                $field->setLabel(rex_i18n::msg('cke5_link_decorators_definition_area'));
+                if ($default_value) $field->setAttribute('data-default-tags', '');
+
+            // end collapse
+            $form->addRawField('</div>');
+
         $form->addRawField('</div>');
 
         // code block
@@ -560,6 +598,7 @@ if ($func == '') {
             // textarea
             $field = $form->addTextAreaField('extra_definition');
             $field->setAttribute('id', 'cke5-extra-area');
+            $field->setAttribute('rows', '2');
             $field->setLabel(rex_i18n::msg('cke5_extra_definition_area'));
             if ($default_value) $field->setAttribute('data-default-tags', '');
 
