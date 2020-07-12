@@ -208,6 +208,10 @@ const cke5suboptions = $suboptions;
             }
         }
 
+        if (!empty($profile['transformation'])) {
+            $jsonProfile['typing']['transformations'] = ['extra' => json_decode($profile['transformation_extra'], true)];
+        }
+
         if (in_array('alignment', $toolbar) && !empty($profile['alignment'])) {
             $jsonProfile['alignment'] = self::toArray($profile['alignment']);
         } else {
