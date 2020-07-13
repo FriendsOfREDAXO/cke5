@@ -19,6 +19,7 @@ Integrates the [CKEditor5](https://ckeditor.com) into REDAXO CMS.
 - Special char selection
 - Pasting raw text
 - Linkmap-Support
+- Define your own link decorator
 - Mediapool-Support
 - MBlock-Support
 - Transformations allow converting of e.g. shortcuts to speacial chars from (c) to ©
