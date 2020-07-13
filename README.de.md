@@ -8,16 +8,25 @@ Integriert den [CKEditor5](https://ckeditor.com) im REDAXO CMS.
 
 ## Features
 
-- WYSIWYG-Editor
-- Profil-Konfigurator mit Drag&Drop-Support, Profile können einfach zusammengeklickt werden
-- Bildupload in den Medienpool per Drag & Drop ins Textfeld
-- Bildupload-Kategorie je Profil einstellbar
-- Mediamanager-Type je Profil einstellbar
-- Es können eigene Fonts eingebunden und verwaltet werden
-- Responsive Oberfläche
-- Linkmap-Support
-- Medienpool-Support
-- MBlock-Support
+- WYSIWYG-Herausgeber
+- Profilkonfigurator mit Drag&Drop-Unterstützung, Profile können einfach zusammengeklickt werden
+- Bild-Upload in den Medienpool per Drag & Drop in das Textfeld
+- Eigene Schriften können integriert und verwaltet werden
+- Bild-Upload-Kategorie pro Profil einstellbar
+- Medienmanager-Typ pro Profil einstellbar
+- Bilder verlinken
+- Platzhalter für alle Backend-Sprachen
+- Auswahl von Sonderzeichen
+- Einfügen von Rohtext
+- Linkmap-Unterstützung
+- Mediapool-Unterstützung
+- MBlock-Unterstützung
+- Transformationen erlauben die Umwandlung von z.B. Abkürzungen zu Sonderzeichen von (c) in ©
+- Zusätzliche Optionen erlauben es Ihnen, den Editor anzupassen
+- Der Expertenmodus erlaubt es, Profile im Quellcode zu entwickeln
+und vieles mehr...
+
+Übersetzt mit www.DeepL.com/Translator (kostenlose Version)
 
 ## Demo
 
