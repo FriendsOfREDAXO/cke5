@@ -14,9 +14,17 @@ Integrates the [CKEditor5](https://ckeditor.com) into REDAXO CMS.
 - Own fonts can be integrated and managed
 - Image upload category per profile adjustable
 - Media manager type adjustable per profile
+- Linking images
+- Placeholders for all backend languages
+- Special char selection
+- Pasting raw text
 - Linkmap-Support
 - Mediapool-Support
 - MBlock-Support
+- Transformations allow converting of e.g. shortcuts to speacial chars from (c) to ©
+- Extra options allow you to customize the editor
+- The expert mode allows you to develop profiles in source code
+and much more…
 
 ## Demo
 
