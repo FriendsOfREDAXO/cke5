@@ -45,7 +45,8 @@ function cke5_init_edit(element) {
         fontbgcolor_area = element.find('#cke5fontbgcolor-area'),
         fontbgcolor_default = element.find('#cke5font-background-color-default-input-default-font-background-color'),
         fontfamily_area = element.find('#cke5fontfamily-area'),
-        fontfamily_default = element.find('#cke5font-family-default-input-default-font-family');
+        fontfamily_default = element.find('#cke5font-family-default-input-default-font-family'),
+        link_decorators = element.find('#cke5link-decorators-definition-input-link-decorators-definition');
 
     cktypes = JSON.parse(element.attr('data-cktypes'));
     ckimgtypes = JSON.parse(element.attr('data-ckimgtypes'));
@@ -55,6 +56,8 @@ function cke5_init_edit(element) {
 
     autosize($('#cke5expertDefinition-collapse textarea'));
     autosize($('#cke5extraDefinition-collapse textarea'));
+    autosize($('#cke5linkDecoratorsDefinition-collapse textarea'));
+    autosize($('#cke5transformationDefinition-collapse textarea'));
 
     cke5_addColorFields(tablecolor_area);
     cke5_addColorFields(fontcolor_area);
@@ -68,6 +71,7 @@ function cke5_init_edit(element) {
     cke5_bootstrapToggle_collapse(height);
     cke5_bootstrapToggle_collapse(extra, true);
     cke5_bootstrapToggle_collapse(transformation, true);
+    cke5_bootstrapToggle_collapse(link_decorators, true);
 
     if (name.length) {
         name.alphanum({
