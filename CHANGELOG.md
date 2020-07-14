@@ -15,6 +15,7 @@
 * fix reinstall bug https://github.com/FriendsOfREDAXO/cke5/issues/102
 * option to set placeholder for each lang
 * fix some lang ui bugs https://github.com/FriendsOfREDAXO/cke5/issues/82
+* Api and Cke5DatabaseHandler create profile now work with expert mode
 
 ## Version 3.7.1
 

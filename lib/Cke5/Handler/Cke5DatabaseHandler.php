@@ -32,43 +32,13 @@ class Cke5DatabaseHandler
     /**
      * @param $name
      * @param $description
-     * @param array $toolbar
-     * @param array $heading
-     * @param array $alignment
-     * @param array $image_toolbar
-     * @param array $fontsize
-     * @param array $highlight
-     * @param array $table_toolbar
-     * @param array $rexlink
-     * @param int|null $min_height
-     * @param int|null $max_height
-     * @param string|null $lang
-     * @param string|null $mediatype
-     * @param int $mediacategory
-     * @param bool $upload_default
+     * @param array $definition
+     * @param array $subOptions
      * @return array|null|string
      * @author Joachim Doerr
      */
-    public static function addProfile($name,
-                                      $description,
-                                      array $toolbar = [],
-                                      array $heading = [],
-                                      array $alignment = [],
-                                      array $image_toolbar = [],
-                                      array $fontsize = [],
-                                      array $highlight = [],
-                                      array $table_toolbar = [],
-                                      array $rexlink = [],
-                                      $min_height = null,
-                                      $max_height = null,
-                                      $lang = null,
-                                      $mediatype = null,
-                                      $mediacategory = 0,
-                                      $upload_default = true)
+    public static function addProfile($name, $description, array $definition, array $subOptions = [])
     {
-        $height_default = (is_null($min_height) && (is_null($max_height))) ? '|default_height|' : '';
-        $upload_default = ($upload_default === true) ? '|default_upload|' : '';
-
         try {
             if (self::profileExist($name)) {
                 throw new \rex_exception("Profile with name $name already exist");
@@ -78,21 +48,9 @@ class Cke5DatabaseHandler
             $sql->setTable(rex::getTable(Cke5DatabaseHandler::CKE5_PROFILES))
                 ->setValue('name', $name)
                 ->setValue('description', $description)
-                ->setValue('toolbar', self::getSettings($toolbar, 'toolbar'))
-                ->setValue('heading', self::getSettings($heading, 'heading'))
-                ->setValue('alignment', self::getSettings($alignment, 'alignment'))
-                ->setValue('image_toolbar', self::getSettings($image_toolbar, 'image_toolbar'))
-                ->setValue('fontsize', self::getSettings($fontsize, 'fontsize'))
-                ->setValue('highlight', self::getSettings($highlight, 'highlight'))
-                ->setValue('table_toolbar', self::getSettings($table_toolbar, 'table_toolbar'))
-                ->setValue('rexlink', self::getSettings($rexlink, 'rexlink'))
-                ->setValue('height_default', $height_default)
-                ->setValue('min_height', $min_height)
-                ->setValue('max_height', $max_height)
-                ->setValue('lang', $lang)
-                ->setValue('mediatype', $mediatype)
-                ->setValue('mediacategory', $mediacategory)
-                ->setValue('upload_default', $upload_default)
+                ->setValue('expert', '|expert_definition|')
+                ->setValue('expert_definition', json_encode($definition))
+                ->setValue('expert_suboption', (count($subOptions) > 0) ? json_encode($subOptions) : '')
                 ->setValue('createuser', rex::getUser()->getLogin())
                 ->setValue('updateuser', rex::getUser()->getLogin())
                 ->setValue('createdate', $now->format(\DateTime::ISO8601))
