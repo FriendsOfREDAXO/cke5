@@ -32,17 +32,22 @@ class Cke5DatabaseHandler
     /**
      * @param $name
      * @param $description
-     * @param array $definition
-     * @param array $subOptions
+     * @param $definition
+     * @param $subOptions
      * @return array|null|string
      * @author Joachim Doerr
      */
-    public static function addProfile($name, $description, array $definition, array $subOptions = [])
+    public static function addProfile($name, $description, $definition, $subOptions = '')
     {
         try {
             if (self::profileExist($name)) {
                 throw new \rex_exception("Profile with name $name already exist");
             }
+
+            // verify json syntax
+            $description = json_decode($description, true);
+            $subOptions = json_decode($subOptions, true);
+
             $now = new \DateTime();
             $sql = rex_sql::factory();
             $sql->setTable(rex::getTable(Cke5DatabaseHandler::CKE5_PROFILES))
@@ -50,7 +55,7 @@ class Cke5DatabaseHandler
                 ->setValue('description', $description)
                 ->setValue('expert', '|expert_definition|')
                 ->setValue('expert_definition', json_encode($definition))
-                ->setValue('expert_suboption', (count($subOptions) > 0) ? json_encode($subOptions) : '')
+                ->setValue('expert_suboption', (is_array($subOptions) && count($subOptions) > 0) ? json_encode($subOptions) : '')
                 ->setValue('createuser', rex::getUser()->getLogin())
                 ->setValue('updateuser', rex::getUser()->getLogin())
                 ->setValue('createdate', $now->format(\DateTime::ISO8601))

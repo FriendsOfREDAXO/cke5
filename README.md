@@ -389,16 +389,30 @@ Example:
 
 ```php
     $create = \Cke5\Creator\Cke5ProfilesApi::addProfile(
-        'full_cke',
-        'Cke5 with all possible tools',
-        ['heading', '|', 'fontSize', 'fontFamily', 'alignment', 'bold', 'italic', 'underline', 'super', 'sub', 'strikethrough', 'insertTable', 'code', 'link', 'rexImage', 'bulletedList', 'numberedList', 'blockQuote', 'highlight', 'emoji', 'undo', 'redo'],
-        ['paragraph', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
-        ['left', 'right', 'center', 'justify'],
-        ['imageTextAlternative', '|', 'full', 'alignLeft', 'alignCenter', 'alignRight'],
-        ['tiny', 'small', 'big', 'huge'],
-        ['yellowMarker', 'greenMarker', 'pinkMarker', 'blueMarker', 'redPen', 'greenPen'],
-        ['tableColumn', 'tableRow', 'mergeTableCells'],
-        ['internal', 'media']
+        'profile_name_cke5',
+        'API created Cke5 profile',
+        '{
+           "toolbar": ["link", "rexImage", "|", "undo", "redo", "|", "selectAll", "insertTable", "code", "codeBlock"],
+           "removePlugins": ["Alignment", "Font", "FontFamily", "MediaEmbed", "Bold", "Italic", "BlockQuote", "Heading", "Alignment", "Highlight", "Strikethrough", "Underline", "Subscript", "Superscript", "Emoji", "RemoveFormat", "TodoList", "HorizontalLine", "PageBreak"],
+           "link": {"rexlink": ["internal", "media"]},
+           "image": {
+             "toolbar": ["imageTextAlternative", "|", "imageStyle:full", "imageStyle:alignLeft", "imageStyle:alignRight", "imageStyle:alignCenter"],
+             "styles": ["full", "alignLeft", "alignRight", "alignCenter"]
+           },
+           "table": {"toolbar": ["tableColumn", "tableRow", "mergeTableCells", "tableProperties", "tableCellProperties"]},
+           "rexImage": {"media_path": "\/media\/"},
+           "ckfinder": {"uploadUrl": ".\/index.php?cke5upload=1&media_path=media"},
+           "placeholder_en": "Placeholder EN",
+           "placeholder_de": "Placeholder DE",
+           "codeBlock": {
+             "languages": [{"language": "plaintext", "label": "Plain text", "class": ""}, {
+               "language": "php",
+               "label": "PHP",
+               "class": "php-code"
+             }]
+           }
+         }',
+        '[{"min-height": 100}, {"max-height": 280}]'
     );
     echo (is_string($create)) ? $create : 'successful profile created';
 ```
