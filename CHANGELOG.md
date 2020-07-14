@@ -18,6 +18,7 @@
 * Api and Cke5DatabaseHandler create profile now work with expert mode
 * add demo profiles for expert and profile-editor mode
 * add group toolbar elements feature https://ckeditor.com/docs/ckeditor5/latest/api/module_core_editor_editorconfig-EditorConfig.html#member-toolbar
+* ensure that enter will not submit form in tag lists https://github.com/FriendsOfREDAXO/cke5/issues/87
 
 ## Version 3.7.1
 

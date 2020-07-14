@@ -128,6 +128,12 @@ function cke5_init_edit(element) {
                     }
                 }
             });
+            $(this).next().find('.cke5InputTags-field').keydown(function (e) {
+                if (e.keyCode == 13) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
         });
     }
 
