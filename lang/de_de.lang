@@ -88,6 +88,8 @@ cke5_link_downloadable_description = Ermöglicht es Links als downloadable zu ma
 cke5_link_decorators_definition = Link Decorators
 cke5_link_decorators_definition_description = Ermöglichst das anlegen von Custom Link-Decorators
 cke5_link_decorators_definition_area = Custom Link-Decorators
+cke5_group_when_full_default = Toolbar Group
+cke5_group_when_full_description = Gruppiert Toolbar-Elements. Ermöglicht es viele Toolbar-Element in nur eine Toolbar-Zeile zu platzieren.
 
 # profiles list & form actions
 rex_cke5_profiles_cloned = Profile wurde dupliziert

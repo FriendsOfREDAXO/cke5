@@ -453,6 +453,14 @@ if ($func == '') {
             if ($default_value) $field->setAttribute('data-default-tags', 1);
         $form->addRawField('</div>');
 
+        // group when full
+        $field = $form->addCheckboxField('group_when_full');
+        $field->setAttribute('id', 'cke5group-input');
+        $field->setAttribute('data-toggle', 'toggle');
+        $field->setLabel(rex_i18n::msg('cke5_group_when_full_default'));
+        $field->addOption(rex_i18n::msg('cke5_group_when_full_description'), 'group_when_full');
+        if ($default_value) $field->setValue('group_when_full');
+
         // default height
         $field = $form->addCheckboxField('height_default');
         $field->setAttribute('id', 'cke5height-input');

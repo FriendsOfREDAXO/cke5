@@ -16,7 +16,8 @@
 * option to set placeholder for each lang
 * fix some lang ui bugs https://github.com/FriendsOfREDAXO/cke5/issues/82
 * Api and Cke5DatabaseHandler create profile now work with expert mode
-* Add demo profiles for expert and profile-editor mode
+* add demo profiles for expert and profile-editor mode
+* add group toolbar elements feature https://ckeditor.com/docs/ckeditor5/latest/api/module_core_editor_editorconfig-EditorConfig.html#member-toolbar
 
 ## Version 3.7.1
 

@@ -181,7 +181,7 @@ const cke5suboptions = $suboptions;
 
         $toolbar = self::toArray($profile['toolbar']);
         $tableToolbar = self::toArray($profile['table_toolbar']);
-        $jsonProfile = ['toolbar' => $toolbar];
+        $jsonProfile = ['toolbar' => ['items' => $toolbar, 'shouldNotGroupWhenFull' => (empty($profile['group_when_full']))]];
         $jsonSuboption = [];
         $jsonProfile['removePlugins'] = [];
 
