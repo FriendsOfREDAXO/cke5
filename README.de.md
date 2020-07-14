@@ -211,7 +211,7 @@ Below is a list of the most important keystrokes supported by CKEditor 5 and its
 	</tbody>
 </table>
 
-## User interface and navigation
+#### User interface and navigation
 
 Use the following keystrokes for more efficient navigation in the CKEditor 5 user interface:
 
