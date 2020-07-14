@@ -252,17 +252,7 @@ Use the following keystrokes for more efficient navigation in the CKEditor 5 use
 	</tbody>
 </table>
 
-<style>
-.keyboard-shortcuts th {
-	text-align: center;
-}
-.keyboard-shortcuts td:nth-of-type(1) {
-	text-align: right;
-}
-.keyboard-shortcuts td:nth-of-type(2), .keyboard-shortcuts td:nth-of-type(3) {
-	width: 30%;
-}
-</style>
+
 
 
 
