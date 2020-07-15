@@ -19,6 +19,7 @@ Integrates the [CKEditor5](https://ckeditor.com) into REDAXO CMS.
 - Special char selection
 - Pasting raw text
 - Linkmap-Support
+- Linking of YForm-Datasets
 - Define your own link decorator
 - Mediapool-Support
 - MBlock-Support
@@ -258,6 +259,46 @@ Use the following keystrokes for more efficient navigation in the CKEditor 5 use
 
 ## For Developers
 
+### YForm links
+
+To replace the fictitious generated urls like `rex-yf-news://1`, the following script must be added to the `boot.php` of the `project` AddOn.
+This would require the code for the urls to be modified. 
+
+```php
+\rex_extension::register('OUTPUT_FILTER', function(\rex_extension_point $ep) {
+    return preg_replace_callback(
+        '@(rex-yf-(news|person))://(\d+)(?:-(\d+))?/?@i',
+        function ($matches) {
+            // table = $matches[1]
+            // id = $matches[3]
+            $url = '';
+            switch ($matches[1]) {
+                case 'rex-yf-news':
+                    // Example, if the Urls are generated via Url-AddOn  
+                    $object = News::get($matches[3]);
+                    if ($object) {
+                        $url = $object->getUrl();
+                        
+                        // the getUrl method could look like this
+                        // public function getUrl()
+                        // {
+                        //     return rex_getUrl('', '', ['news-id' => $this->id]);
+                        // }
+                    }
+                    break;
+                case 'rex-yf-person':
+                    // ein anderes Beispiel 
+                    $url = '/index.php?person='.$matches[3];
+                    break;
+            }
+            return $url;
+        },
+        $ep->getSubject()
+    );
+}, rex_extension::NORMAL);
+```
+
+### Profile API
 By using the API: `Cke5\Creator\Cke5ProfilesApi::addProfile`, it is possible to install own profiles beside of the profile editor. 
 
 Example: 
