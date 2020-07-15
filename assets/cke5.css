@@ -401,3 +401,27 @@ dl + .cke5_clangtabs .nav.nav-tabs,
     margin: -15px;
     padding: 15px;
 }
+
+.ck.ck-link-form_layout-vertical .ck-reset.ck-list + .ck-redaxo-link-dropdown {
+    margin-left: 0 !important;
+    min-height: var(--ck-ui-component-min-height);
+    margin-top: -1px;
+}
+
+.ck.ck-link-form_layout-vertical .ck-redaxo-link-dropdown .ck-reset.ck-list .ck-button {
+    width: 100% !important;
+}
+
+.ck.ck-link-form_layout-vertical .ck-reset.ck-list + .ck-button:not(.ck-button-save):not(.ck-button-cancel),
+.ck.ck-link-form_layout-vertical .ck-button,
+.ck.ck-link-form_layout-vertical .ck-button + .ck-button.ck-button-save,
+.ck.ck-link-form_layout-vertical .ck-button + .ck-button.ck-button-save + .ck-button.ck-button-cancel,
+.ck.ck-link-form_layout-vertical .ck-redaxo-link-dropdown,
+.ck.ck-link-form_layout-vertical .ck-redaxo-link-dropdown + .ck-button.ck-button-save,
+.ck.ck-link-form_layout-vertical .ck-redaxo-link-dropdown + .ck-button.ck-button-save + .ck-button.ck-button-cancel {
+    width: 33.33%;
+}
+
+.ck.ck-link-form_layout-vertical .ck-reset.ck-list + .ck-button:not(.ck-button-save):not(.ck-button-cancel) + .ck-button {
+    border-right: 1px solid var(--ck-color-base-border);
+}
