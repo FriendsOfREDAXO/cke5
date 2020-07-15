@@ -1,32 +1,42 @@
-# CKEditor5 für REDAXO CMS
+# CKEditor5 for REDAXO CMS
 
-![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/ckeditor_01.png)
-
-Integriert den [CKEditor5](https://ckeditor.com) im REDAXO CMS.
+Integrates the [CKEditor5](https://ckeditor.com) into REDAXO CMS.
 
 ![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/ck5.png)
 
 ## Features
 
-- WYSIWYG-Herausgeber
+- WYSIWYG-Editor
 - Profilkonfigurator mit Drag&Drop-Unterstützung, Profile können einfach zusammengeklickt werden
-- Bild-Upload in den Medienpool per Drag & Drop in das Textfeld
 - Eigene Schriften können integriert und verwaltet werden
 - Bild-Upload-Kategorie pro Profil einstellbar
-- Medienmanager-Typ pro Profil einstellbar
-- Bilder verlinken
+- Medienmanager-Typ je Profil einstellbar
+- Zusätzliche Optionen erlauben es den Editor anzupassen
+- Der Expertenmodus erlaubt es Profile frei im Quellcode zu entwickeln
 - Platzhalter für alle Backend-Sprachen
-- Auswahl von Sonderzeichen
-- Einfügen von Rohtext
-- Linkmap-Unterstützung
-- Mediapool-Unterstützung
-- MBlock-Unterstützung
-- Transformationen erlauben die Umwandlung von z.B. Abkürzungen zu Sonderzeichen von (c) in ©
-- Zusätzliche Optionen erlauben es Ihnen, den Editor anzupassen
-- Der Expertenmodus erlaubt es, Profile im Quellcode zu entwickeln
-und vieles mehr...
 
 Übersetzt mit www.DeepL.com/Translator (kostenlose Version)
+
+**Custom REDAXO Link-Widget**
+
+![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/writer.png)
+
+- Linkmap-Support
+- YForm-Datasets
+- Tel: and Mailto: links 
+- Medienlinks
+- Eigene  Link-Decorators
+
+
+**Editor Features**
+
+- Alle kostenlosen Anbieter-Plugins integriert
+- nur unterstützte Formate werden eingefügt
+- Einfügen von Klartext
+- Transformationen erlauben die Umwandlung von z.B. Abkürzungen zu Sonderzeichen von (c) in ©
+- Selektor für Sonderzeichen
+- Bild-Upload in den Medienpool per Drag & Drop in das Textfeld
+
 
 ## Demo
 
@@ -253,11 +263,70 @@ Use the following keystrokes for more efficient navigation in the CKEditor 5 use
 </table>
 
 
-## Für Entwickler
+
+
+
+## For Entwickler
+
+### Beispiel für einen benutzerdefinierten Link-Dekorator
+
+```js
+{"openInNewTab": {
+                    "mode": "manual",
+                    "label": "Open in a new tab",
+                    "attributes": {
+                        "target": "_blank",
+                        "rel": "noopener noreferrer"
+                    }
+                }
+}
+```
+
+
+### YForm links
+
+Um die fiktiv generierten Urls wie `rex-yf-news://1` zu ersetzen, muss das folgende Skript in die `boot.php` des `project` AddOns eingefügt werden.
+Der Code für die Urls muss modifiziert werden. 
+
+```php
+\rex_extension::register('OUTPUT_FILTER', function(\rex_extension_point $ep) {
+    return preg_replace_callback(
+        '@(rex-yf-(news|person))://(\d+)(?:-(\d+))?/?@i',
+        function ($matches) {
+            // table = $matches[1]
+            // id = $matches[3]
+            $url = '';
+            switch ($matches[1]) {
+                case 'rex-yf-news':
+                    // Example, if the Urls are generated via Url-AddOn  
+                    $object = News::get($matches[3]);
+                    if ($object) {
+                        $url = $object->getUrl();
+                        
+                        // the getUrl method could look like this
+                        // public function getUrl()
+                        // {
+                        //     return rex_getUrl('', '', ['news-id' => $this->id]);
+                        // }
+                    }
+                    break;
+                case 'rex-yf-person':
+                    // ein anderes Beispiel 
+                    $url = '/index.php?person='.$matches[3];
+                    break;
+            }
+            return $url;
+        },
+        $ep->getSubject()
+    );
+}, rex_extension::NORMAL);
+```
+
+### Profile API
 
 Über die API ist es möglich eigene Profile abseites des Profileditors anzulegen: `Cke5\Creator\Cke5ProfilesApi::addProfile`
 
-Beispiel: 
+Example: 
 
 ```php
     $create = \Cke5\Creator\Cke5ProfilesApi::addProfile(
@@ -289,24 +358,23 @@ Beispiel:
     echo (is_string($create)) ? $create : 'successful profile created';
 ```
 
-
-
 ## Bugtracker
 
-Du hast einen Fehler gefunden oder ein nettes Feature parat? [Lege ein Issue an](https://github.com/FriendsOfREDAXO/cke5/issues). Bevor du ein neues Issue erstellst, suche bitte ob bereits eines mit deinem Anliegen existiert und lese die [Issue Guidelines (englisch)](https://github.com/necolas/issue-guidelines) von [Nicolas Gallagher](https://github.com/necolas/).
+If you have found a error or maybe you have an idea, You can create a [Issue](https://github.com/FriendsOfREDAXO/cke5/issues). 
+Before you create a new issue, please search if there already exists an issue with your request, and read the [Issue Guidelines (englisch)](https://github.com/necolas/issue-guidelines) from [Nicolas Gallagher](https://github.com/necolas/).
 
 
 ## Changelog
 
-siehe [CHANGELOG.md](https://github.com/FriendsOfREDAXO/cke5/blob/master/CHANGELOG.md)
+see [CHANGELOG.md](https://github.com/FriendsOfREDAXO/cke5/blob/master/CHANGELOG.md)
 
-## Lizenzen
+## Licenses
 
 AddOn:[MIT LICENSE](https://github.com/FriendsOfREDAXO/cke5/blob/master/LICENSE)
 CKEDITOR [GPL LICENSE](https://github.com/ckeditor/ckeditor5/blob/master/LICENSE.md)
 
 
-## Autor
+## Author
 
 **Friends Of REDAXO**
 
