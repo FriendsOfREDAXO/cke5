@@ -1,7 +1,5 @@
 # CKEditor5 for REDAXO CMS
 
-![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/ckeditor_01.png)
-
 Integrates the [CKEditor5](https://ckeditor.com) into REDAXO CMS.
 
 ![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/ck5.png)
@@ -19,11 +17,14 @@ Integrates the [CKEditor5](https://ckeditor.com) into REDAXO CMS.
 
 **Custom REDAXO Link-Widget**
 
+![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/writer.png)
+
 - Linkmap-Support
 - YForm-Datasets
 - Tel: and Mailto: links 
 - Medialinks
 - Custom link decorators possible
+
 
 **Editor Features**
 
