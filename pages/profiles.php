@@ -110,6 +110,7 @@ if ($func == '') {
     $default_value = ($func == 'add' && $send == false) ? true : false;
     $toolbar = (isset($result[$prefix . 'toolbar'])) ? explode(',', $result[$prefix . 'toolbar']) : array();
     $table_toolbar = (isset($result[$prefix . 'table_toolbar'])) ? explode(',', $result[$prefix . 'table_toolbar']) : array();
+    $link_toolbar = (isset($result[$prefix . 'rexlink'])) ? explode(',', $result[$prefix . 'rexlink']) : array();
     $min_height = (isset($result[$prefix . 'min_height'])) ? (int)$result[$prefix . 'min_height'] : 0;
     $max_height = (isset($result[$prefix . 'max_height'])) ? (int)$result[$prefix . 'max_height'] : 0;
     $in_mediapath = (isset($result[$prefix . 'mediatype']) && empty($result[$prefix . 'mediatype'])) ? 'in' : '';
@@ -383,6 +384,16 @@ if ($func == '') {
             $field->setLabel(rex_i18n::msg('cke5_link'));
             if ($default_value) $field->setAttribute('data-default-tags', 1);
 
+            // link stuff
+            $form->addRawField('<div class="collapse ' . ((in_array('ytable', $link_toolbar)) ? 'in' : '') . '" id="cke5ytable-collapse">');
+                $field = $form->addTextAreaField('ytable');
+                $field->setLabel(rex_i18n::msg('cke5_ytable'));
+                $field->setAttribute('id', 'cke5ytable-area');
+                $field->setAttribute('data-ytable-table-placeholder', rex_i18n::msg('cke5_ytable_table_placeholder'));
+                $field->setAttribute('data-ytable-label-placeholder', rex_i18n::msg('cke5_ytable_label_placeholder'));
+                $field->setAttribute('data-ytable-title-placeholder', rex_i18n::msg('cke5_ytable_title_placeholder'));
+            $form->addRawField('</div>');
+
             // extern blank
             $field = $form->addCheckboxField('blank_to_external');
             $field->setAttribute('id', 'cke5blank-to-external-input');
@@ -639,7 +650,7 @@ if ($func == '') {
     }
 
     // show
-    $content = '<div class="cke5_profile_edit" data-cktypes=\'["' . implode('","', Cke5ProfilesCreator::EDITOR_SETTINGS['cktypes']) . '"]\' data-ckimgtypes=\'["' . implode('","', Cke5ProfilesCreator::EDITOR_SETTINGS['ckimgtypes']) . '"]\' data-cktabletypes=\'["' . implode('","', Cke5ProfilesCreator::EDITOR_SETTINGS['cktabletypes']) . '"]\'>' . $form->get() . '</div>';
+    $content = '<div class="cke5_profile_edit" data-cktypes=\'["' . implode('","', Cke5ProfilesCreator::EDITOR_SETTINGS['cktypes']) . '"]\' data-cklinktypes=\'["' . implode('","', Cke5ProfilesCreator::EDITOR_SETTINGS['cklinktypes']) . '"]\' data-ckimgtypes=\'["' . implode('","', Cke5ProfilesCreator::EDITOR_SETTINGS['ckimgtypes']) . '"]\' data-cktabletypes=\'["' . implode('","', Cke5ProfilesCreator::EDITOR_SETTINGS['cktabletypes']) . '"]\'>' . $form->get() . '</div>';
 
     $fragment = new rex_fragment();
     $fragment->setVar('class', 'edit', false);

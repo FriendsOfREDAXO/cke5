@@ -90,6 +90,10 @@ cke5_link_decorators_definition_description = Ermöglichst das anlegen von Custo
 cke5_link_decorators_definition_area = Custom Link-Decorators
 cke5_group_when_full_default = Toolbar Group
 cke5_group_when_full_description = Gruppiert Toolbar-Elements. Ermöglicht es viele Toolbar-Element in nur eine Toolbar-Zeile zu platzieren.
+cke5_ytable_table_placeholder = Tabelle [yTable DB-Table]
+cke5_ytable_title_placeholder = Titel
+cke5_ytable_label_placeholder = Label [DB-Column]
+cke5_ytable = yTables
 
 # profiles list & form actions
 rex_cke5_profiles_cloned = Profile wurde dupliziert

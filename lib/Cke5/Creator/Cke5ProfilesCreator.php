@@ -22,6 +22,7 @@ class Cke5ProfilesCreator
         /* todo: specialCharacters not work because : https://github.com/ckeditor/ckeditor5/issues/6160 */
         'cktypes' => ['heading', 'fontSize', 'mediaEmbed', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable', 'fontBackgroundColor', 'fontColor', 'fontFamily', 'codeBlock'/*, 'specialCharacters' */],
         'ckimgtypes' => ['rexImage', 'imageUpload'],
+        'cklinktypes' => ['ytable'],
         'cktabletypes' => ['tableProperties', 'tableCellProperties']
     ];
 
@@ -32,7 +33,7 @@ class Cke5ProfilesCreator
         'heading' => ['paragraph', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
         'highlight' => ['yellowMarker', 'greenMarker', 'pinkMarker', 'blueMarker', 'redPen', 'greenPen'],
         'image_toolbar' => ['|', 'imageTextAlternative', 'full', 'alignLeft', 'alignCenter', 'alignRight', 'linkImage'],
-        'rexlink' => ['internal', 'media'],
+        'rexlink' => ['internal', 'media', 'email', 'phone', 'ytable'],
         'fontsize' => ['default', 'tiny', 'small', 'big', 'huge', '8', '9',
             '10', '11', '12', '13', '14', '15', '16', '17', '18', '19',
             '20', '21', '22', '23', '24', '25', '26', '27', '28', '29',
@@ -109,7 +110,7 @@ class Cke5ProfilesCreator
         'heading' => 'paragraph,h1,h2,h3',
         'highlight' => 'yellowMarker,greenMarker,redPen,greenPen',
         'image_toolbar' => 'imageTextAlternative,|,full,alignLeft,alignRight,linkImage',
-        'rexlink' => 'internal,media',
+        'rexlink' => 'internal,media,email,phone',
         'fontsize' => 'tiny,small,default,big,huge',
         'min_height' => [0, 100, 200, 300, 400, 500, 600],
         'max_height' => [0, 200, 400, 600, 800, 1000, 1200],
@@ -180,14 +181,21 @@ const cke5suboptions = $suboptions;
         }
 
         $toolbar = self::toArray($profile['toolbar']);
+        $linkToolbar = self::toArray($profile['rexlink']);
         $tableToolbar = self::toArray($profile['table_toolbar']);
         $jsonProfile = ['toolbar' => ['items' => $toolbar, 'shouldNotGroupWhenFull' => (empty($profile['group_when_full']))]];
         $jsonSuboption = [];
         $jsonProfile['removePlugins'] = [];
 
-        if (in_array('link', $toolbar) && !empty($profile['rexlink'])) {
-            $jsonProfile['link'] = ['rexlink' => self::toArray($profile['rexlink'])];
+        if (in_array('link', $toolbar) && count($linkToolbar) > 0) {
+            $jsonProfile['link'] = ['rexlink' => $linkToolbar];
+
+            if (in_array('ytable', $linkToolbar) && !empty($profile['ytable'])) {
+                $jsonProfile['link']['ytable'] = json_decode($profile['ytable'], true);
+            }
         }
+
+
 
         if (!empty($profile['image_toolbar'])) {
             $imageKeys = self::toArray($profile['image_toolbar']);

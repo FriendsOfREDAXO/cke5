@@ -12,7 +12,7 @@
  */
 
 let ckedit = '.cke5_profile_edit',
-    cktypes, ckimgtypes, cktabletypes, imageDragDrop;
+    cktypes, ckimgtypes, cktabletypes, imageDragDrop, cklinktypes;
 
 
 $(document).on('rex:ready', function (event, container) {
@@ -30,6 +30,7 @@ function cke5_init_edit(element) {
         transformation_extra_area = element.find('#cke5-transformation-extra-area'),
         toolbar = element.find('#cke5toolbar-input'),
         table_toolbar = element.find('#cke5inserttable-input'),
+        rexlink_toolbar = element.find('#cke5link-input'),
         name = element.find('#cke5name-input'),
         minheight = element.find('#cke5minheight-input'),
         maxheight = element.find('#cke5maxheight-input'),
@@ -44,11 +45,13 @@ function cke5_init_edit(element) {
         fontcolor_default = element.find('#cke5font-color-default-input-default-font-color'),
         fontbgcolor_area = element.find('#cke5fontbgcolor-area'),
         fontbgcolor_default = element.find('#cke5font-background-color-default-input-default-font-background-color'),
+        ytable_area = element.find('#cke5ytable-area'),
         fontfamily_area = element.find('#cke5fontfamily-area'),
         fontfamily_default = element.find('#cke5font-family-default-input-default-font-family'),
         link_decorators = element.find('#cke5link-decorators-definition-input-link-decorators-definition');
 
     cktypes = JSON.parse(element.attr('data-cktypes'));
+    cklinktypes = JSON.parse(element.attr('data-cklinktypes'));
     ckimgtypes = JSON.parse(element.attr('data-ckimgtypes'));
     cktabletypes = JSON.parse(element.attr('data-cktabletypes'));
 
@@ -64,6 +67,7 @@ function cke5_init_edit(element) {
     cke5_addColorFields(fontbgcolor_area);
     cke5_addFromToFields(transformation_extra_area);
     cke5_addFontFamiliesFields(fontfamily_area);
+    cke5_addyTableFields(ytable_area);
     cke5_bootstrapToggle_collapse(tablecolor_default);
     cke5_bootstrapToggle_collapse(fontcolor_default);
     cke5_bootstrapToggle_collapse(fontbgcolor_default);
@@ -118,6 +122,9 @@ function cke5_init_edit(element) {
                     if ($(this).attr('id') === table_toolbar.attr('id')) {
                         cke5_toolbar_create_tag('table_toolbar', e.tags);
                     }
+                    if ($(this).attr('id') === rexlink_toolbar.attr('id')) {
+                        cke5_toolbar_create_tag('rexlink_toolbar', e.tags);
+                    }
                 },
                 destroy: function (e) {
                     if ($(this).attr('id') === toolbar.attr('id')) {
@@ -125,6 +132,9 @@ function cke5_init_edit(element) {
                     }
                     if ($(this).attr('id') === table_toolbar.attr('id')) {
                         cke5_toolbar_destroy_tag('table_toolbar', e.tags);
+                    }
+                    if ($(this).attr('id') === rexlink_toolbar.attr('id')) {
+                        cke5_toolbar_destroy_tag('rexlink_toolbar', e.tags);
                     }
                 }
             });
@@ -230,10 +240,10 @@ function cke5_addFromToFields(element) {
                 '</div>\n'),
             limit: 200,
             onElementAdd: function (el, plugin) {
-                console.log(plugin.elementCount);
+                // console.log(plugin.elementCount);
             },
             onElementRemove: function (el, plugin) {
-                console.log(plugin.elementCount);
+                // console.log(plugin.elementCount);
             }
         });
     }
@@ -292,6 +302,35 @@ function cke5_addColorFields(element) {
     }
 }
 
+function cke5_addyTableFields(element) {
+    if (element.length) {
+        let title_placeholder = element.data('ytable-title-placeholder'),
+            table_placeholder = element.data('ytable-table-placeholder'),
+            label_placeholder = element.data('ytable-label-placeholder');
+        element.multiInput({
+            json: true,
+            input: $('<div class="row inputElement">\n' +
+                '<div class="form-group col-xs-4">\n' +
+                '<input class="form-control" name="table" placeholder="' + table_placeholder + '" type="text">\n' +
+                '</div>\n' +
+                '<div class="form-group col-xs-4">\n' +
+                '<input class="form-control" name="label" placeholder="' + label_placeholder + '" type="text">\n' +
+                '</div>\n' +
+                '<div class="form-group col-xs-4">\n' +
+                '<input class="form-control" name="title" placeholder="' + title_placeholder + '" type="text">\n' +
+                '</div>\n' +
+                '</div>\n'),
+            limit: 20,
+            onElementAdd: function (el, plugin) {
+                // console.log(plugin.elementCount);
+            },
+            onElementRemove: function (el, plugin) {
+                // console.log(plugin.elementCount);
+            }
+        });
+    }
+}
+
 function cke5_addFontFamiliesFields(element) {
     if (element.length) {
         let color_placeholder = element.data('family-placeholder');
@@ -324,13 +363,13 @@ function cke5_toolbar_create_tag(typename, tags) {
             toggle_collapse('imagetoolbar', 'show');
         }
     });
+    cklinktypes.forEach(function (type) {
+        if ($.inArray(type, tags) !== -1 && typename === 'rexlink_toolbar') {
+            toggle_collapse(type, 'show');
+        }
+    });
     cktabletypes.forEach(function (type) {
-        console.log(cktabletypes);
-        console.log(type);
-        console.log($.inArray(type, tags));
-        console.log(typename + '===' +  'table_toolbar');
         if ($.inArray(type, tags) !== -1 && typename === 'table_toolbar') {
-            console.log('show tabColor');
             toggle_collapse('tableColor', 'show');
         }
     });
@@ -355,6 +394,14 @@ function cke5_toolbar_destroy_tag(typename, tags) {
             }
         }
     });
+    cklinktypes.forEach(function (type) {
+        if ($.inArray(type, tags) !== -1) {
+        } else {
+            if (typename === 'rexlink_toolbar') {
+                toggle_collapse(type, 'hide');
+            }
+        }
+    });
     if (imghide === 2) {
         toggle_collapse('imagetoolbar', 'hide');
     }
@@ -366,7 +413,6 @@ function cke5_toolbar_destroy_tag(typename, tags) {
             }
         }
     });
-    console.log(tabhide);
     if (tabhide === 2) {
         toggle_collapse('tableColor', 'hide');
     }

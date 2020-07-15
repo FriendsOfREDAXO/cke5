@@ -48,6 +48,7 @@ try {
             ->ensureColumn(new rex_sql_column('link_downloadable', 'varchar(255)', true))
             ->ensureColumn(new rex_sql_column('link_decorators', 'varchar(255)', true))
             ->ensureColumn(new rex_sql_column('link_decorators_definition', 'text', true))
+            ->ensureColumn(new rex_sql_column('ytable', 'text', true))
             ->ensureColumn(new rex_sql_column('group_when_full', 'varchar(255)', true))
             ->ensure();
     }
