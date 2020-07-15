@@ -10,23 +10,30 @@ Integrates the [CKEditor5](https://ckeditor.com) into REDAXO CMS.
 
 - WYSIWYG-Editor
 - Profile configurator with drag and drop support, profiles can be simply clicked together
-- Image upload into the media pool via drag & drop into the text field
 - Own fonts can be integrated and managed
 - Image upload category per profile adjustable
 - Media manager type adjustable per profile
-- Linking images
-- Placeholders for all backend languages
-- Special char selection
-- Pasting raw text
-- Linkmap-Support
-- Linking of YForm-Datasets
-- Define your own link decorator
-- Mediapool-Support
-- MBlock-Support
-- Transformations allow converting of e.g. shortcuts to speacial chars from (c) to ©
 - Extra options allow you to customize the editor
 - The expert mode allows you to develop profiles in source code
-and much more…
+- Placeholders for all backend languages
+
+**Custom REDAXO Link-Widget**
+
+- Linkmap-Support
+- YForm-Datasets
+- Tel: and Mailto: links 
+- Medialinks
+- Custom link decorators possible
+
+**Editor Features**
+
+- All free vendor plugins integrated
+- only supported formats will be pasted
+- plaintext pasting
+- Transformations allow converting of e.g. shortcuts to speacial chars from (c) to ©
+- Special char selector
+- Image upload into the media pool via drag & drop into the text field
+
 
 ## Demo
 
