@@ -2,6 +2,7 @@
 
 ## Version 4.0.0
 
+* New REDAXO Link-Widget supports: Linkmap, Media, YForm-Tables, Tel:, Mail
 * vendor update to v20.0.0 and support some new features https://github.com/FriendsOfREDAXO/cke5/issues/104
 * switch for expert or profile editor mode
 * add textarea for special options for profile editor mode
