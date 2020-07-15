@@ -53,23 +53,23 @@ class Cke5AssetsProvider
             if (count($result) > 0) {
                 foreach ($result as $lang) {
                     if (!empty($lang['ui']) && !in_array($lang['ui'], $langKit)) {
-                        rex_view::addJsFile(self::getAddon()->getAssetsUrl('vendor/ckeditor5-classic/translations/' . $lang['ui'] . '.js'));
-                        $langKit[] = $lang['ui'];
+                        rex_view::addJsFile(self::getAddon()->getAssetsUrl('vendor/ckeditor5-classic/translations/' . self::getLang($lang['ui']) . '.js'));
+                        $langKit[] = self::getLang($lang['ui']);
                     }
                     if (!empty($lang['content']) && !in_array($lang['content'], $langKit)) {
-                        rex_view::addJsFile(self::getAddon()->getAssetsUrl('vendor/ckeditor5-classic/translations/' . $lang['content'] . '.js'));
-                        $langKit[] = $lang['content'];
+                        rex_view::addJsFile(self::getAddon()->getAssetsUrl('vendor/ckeditor5-classic/translations/' . self::getLang($lang['content']) . '.js'));
+                        $langKit[] = self::getLang($lang['content']);
                     }
                 }
             }
 
             if (!in_array(Cke5Lang::getUserLang(), $langKit)) {
-                rex_view::addJsFile(self::getAddon()->getAssetsUrl('vendor/ckeditor5-classic/translations/' . Cke5Lang::getUserLang() . '.js'));
-                $langKit[] = Cke5Lang::getUserLang();
+                rex_view::addJsFile(self::getAddon()->getAssetsUrl('vendor/ckeditor5-classic/translations/' . self::getLang(Cke5Lang::getUserLang()) . '.js'));
+                $langKit[] = self::getLang(Cke5Lang::getUserLang());
             }
             if (!in_array(Cke5Lang::getOutputLang(), $langKit)) {
-                rex_view::addJsFile(self::getAddon()->getAssetsUrl('vendor/ckeditor5-classic/translations/' . Cke5Lang::getOutputLang() . '.js'));
-                $langKit[] = Cke5Lang::getOutputLang();
+                rex_view::addJsFile(self::getAddon()->getAssetsUrl('vendor/ckeditor5-classic/translations/' . self::getLang(Cke5Lang::getOutputLang()) . '.js'));
+                $langKit[] = self::getLang(Cke5Lang::getOutputLang());
             }
 
             rex_view::addJsFile(self::getAddon()->getAssetsUrl(Cke5ProfilesCreator::PROFILES_FILENAME));
@@ -77,6 +77,19 @@ class Cke5AssetsProvider
         } catch (rex_exception $e) {
             rex_logger::logException($e);
         }
+    }
+
+    /**
+     * @param $lang
+     * @return string
+     * @author Joachim Doerr
+     */
+    public static function getLang($lang)
+    {
+        if ($lang == 'en') {
+            return 'en-gb';
+        }
+        return $lang;
     }
 
     /**
