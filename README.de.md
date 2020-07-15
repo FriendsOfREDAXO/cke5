@@ -266,7 +266,7 @@ Use the following keystrokes for more efficient navigation in the CKEditor 5 use
 
 
 
-## For Entwickler
+## Für Entwickler
 
 ### Beispiel für einen benutzerdefinierten Link-Dekorator
 
