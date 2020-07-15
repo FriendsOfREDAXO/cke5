@@ -266,6 +266,21 @@ Use the following keystrokes for more efficient navigation in the CKEditor 5 use
 
 ## For Developers
 
+### Example for a custom link decorator
+
+```js
+{"openInNewTab": {
+                    "mode": "manual",
+                    "label": "Open in a new tab",
+                    "attributes": {
+                        "target": "_blank",
+                        "rel": "noopener noreferrer"
+                    }
+                }
+}
+```
+
+
 ### YForm links
 
 To replace the fictitious generated urls like `rex-yf-news://1`, the following script must be added to the `boot.php` of the `project` AddOn.
