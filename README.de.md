@@ -1,6 +1,6 @@
 # CKEditor5 for REDAXO CMS
 
-Integrates the [CKEditor5](https://ckeditor.com) into REDAXO CMS.
+Intergriert den [CKEditor5](https://ckeditor.com) in REDAXO CMS.
 
 ![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/ck5.png)
 
