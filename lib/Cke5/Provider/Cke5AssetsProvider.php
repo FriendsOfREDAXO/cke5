@@ -52,22 +52,22 @@ class Cke5AssetsProvider
 
             if (count($result) > 0) {
                 foreach ($result as $lang) {
-                    if (!empty($lang['ui']) && !in_array($lang['ui'], $langKit)) {
+                    if (!empty($lang['ui']) && !in_array(self::getLang($lang['ui']), $langKit)) {
                         rex_view::addJsFile(self::getAddon()->getAssetsUrl('vendor/ckeditor5-classic/translations/' . self::getLang($lang['ui']) . '.js'));
                         $langKit[] = self::getLang($lang['ui']);
                     }
-                    if (!empty($lang['content']) && !in_array($lang['content'], $langKit)) {
+                    if (!empty($lang['content']) && !in_array(self::getLang($lang['content']), $langKit)) {
                         rex_view::addJsFile(self::getAddon()->getAssetsUrl('vendor/ckeditor5-classic/translations/' . self::getLang($lang['content']) . '.js'));
                         $langKit[] = self::getLang($lang['content']);
                     }
                 }
             }
 
-            if (!in_array(Cke5Lang::getUserLang(), $langKit)) {
+            if (!in_array(self::getLang(Cke5Lang::getUserLang()), $langKit)) {
                 rex_view::addJsFile(self::getAddon()->getAssetsUrl('vendor/ckeditor5-classic/translations/' . self::getLang(Cke5Lang::getUserLang()) . '.js'));
                 $langKit[] = self::getLang(Cke5Lang::getUserLang());
             }
-            if (!in_array(Cke5Lang::getOutputLang(), $langKit)) {
+            if (!in_array(self::getLang(Cke5Lang::getOutputLang()), $langKit)) {
                 rex_view::addJsFile(self::getAddon()->getAssetsUrl('vendor/ckeditor5-classic/translations/' . self::getLang(Cke5Lang::getOutputLang()) . '.js'));
                 $langKit[] = self::getLang(Cke5Lang::getOutputLang());
             }
