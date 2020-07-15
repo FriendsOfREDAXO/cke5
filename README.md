@@ -284,32 +284,26 @@ Use the following keystrokes for more efficient navigation in the CKEditor 5 use
 
 ### YForm links
 
-To replace the fictitious generated urls like `rex-yf-news://1`, the following script must be added to the `boot.php` of the `project` AddOn.
+To replace the generated urls like `rex_news://1`, the following script must be added to the `boot.php` of the `project` AddOn.
 This would require the code for the urls to be modified. 
 
 ```php
-\rex_extension::register('OUTPUT_FILTER', function(\rex_extension_point $ep) {
+rex_extension::register('OUTPUT_FILTER', function(\rex_extension_point $ep) {
     return preg_replace_callback(
-        '@(rex-yf-(news|person))://(\d+)(?:-(\d+))?/?@i',
+        '@((rex_news|rex_person))://(\d+)(?:-(\d+))?/?@i',
         function ($matches) {
             // table = $matches[1]
             // id = $matches[3]
             $url = '';
             switch ($matches[1]) {
-                case 'rex-yf-news':
+                case 'news':
                     // Example, if the Urls are generated via Url-AddOn  
-                    $object = News::get($matches[3]);
-                    if ($object) {
-                        $url = $object->getUrl();
-                        
-                        // the getUrl method could look like this
-                        // public function getUrl()
-                        // {
-                        //     return rex_getUrl('', '', ['news-id' => $this->id]);
-                        // }
+                    $id = $matches[3];
+                    if ($id) {
+                       return rex_getUrl('', '', ['news' => $id]); 
                     }
                     break;
-                case 'rex-yf-person':
+                case 'person':
                     // ein anderes Beispiel 
                     $url = '/index.php?person='.$matches[3];
                     break;
