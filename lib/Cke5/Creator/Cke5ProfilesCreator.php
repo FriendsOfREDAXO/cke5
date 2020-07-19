@@ -260,6 +260,12 @@ const cke5suboptions = $suboptions;
         }
 
         $noFontColor = true;
+         if (in_array('fontColor', $toolbar))
+         {
+         $noFontColor = false;
+         }
+
+
         if (in_array('fontColor', $toolbar) && !empty($profile['font_color']) &&
             (is_null($profile['font_color_default']) or empty($profile['font_color_default']))) {
             $jsonProfile['fontColor'] = ['colors' => json_decode($profile['font_color'], true)];
@@ -267,11 +273,19 @@ const cke5suboptions = $suboptions;
         }
 
         $noFontBgColor = true;
+        if (in_array('fontBackgroundColor', $toolbar))
+        {    
+        $noFontBgColor = false;
+        }
+
+
         if (in_array('fontBackgroundColor', $toolbar) && !empty($profile['font_background_color']) &&
             (is_null($profile['font_background_color_default']) or empty($profile['font_background_color_default']))) {
             $jsonProfile['fontBackgroundColor'] = ['colors' => json_decode($profile['font_background_color'], true)];
             $noFontBgColor = false;
         }
+        
+
 
         if ($noFontSize && $noFontColor && $noFontBgColor) {
             $jsonProfile['removePlugins'][] = 'Font';
