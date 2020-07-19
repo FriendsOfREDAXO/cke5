@@ -264,28 +264,16 @@ if ($func == '') {
                 $form->addRawField('</div>');
             $form->addRawField('</div>');
         $form->addRawField('</div>');
-
-
-        // font background color
-        $form->addRawField('<div class="collapse ' . ((in_array('fontBackgroundColor', $toolbar)) ? 'in' : '') . '" id="cke5fontBackgroundColor-collapse">');
-            // default font color
-            $field = $form->addCheckboxField('font_background_color_default');
-            $field->setAttribute('id', 'cke5font-background-color-default-input');
-            $field->setAttribute('data-toggle', 'toggle');
-            $field->setAttribute('data-collapse-target', 'customFontBackgroundColor');
-            $field->setLabel(rex_i18n::msg('cke5_font_background_color_default'));
-            $field->addOption(rex_i18n::msg('cke5_font_background_color_default_description'), 'default_font_background_color');
-            if ($default_value) $field->setValue('default_font_background_color');
-
-            // custom font color
-            $form->addRawField('<div class="collapse" id="cke5customFontBackgroundColor-collapse">');
-                $field = $form->addTextAreaField('font_background_color');
-                $field->setLabel(rex_i18n::msg('cke5_font_background_color'));
-                $field->setAttribute('id', 'cke5fontbgcolor-area');
-                $field->setAttribute('data-color-placeholder', rex_i18n::msg('cke5_color_placeholder'));
-                $field->setAttribute('data-color-name-placeholder', rex_i18n::msg('cke5_color_name_placeholder'));
-                $field->setAttribute('data-has-border-label', rex_i18n::msg('cke5_has_border_label'));
-            $form->addRawField('</div>');
+       
+        // image toolbar
+        $form->addRawField('<div class="collapse ' . ((in_array('rexImage', $toolbar) || in_array('imageUpload', $toolbar)) ? 'in' : '') . '" id="cke5imagetoolbar-collapse">');
+            $field = $form->addTextField('image_toolbar');
+            $field->setAttribute('id', 'cke5image-input');
+            $field->setAttribute('data-tag-init', 1);
+            $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['image_toolbar']);
+            $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['image_toolbar']) . '"]');
+            $field->setLabel(rex_i18n::msg('cke5_image_toolbar'));
+            if ($default_value) $field->setAttribute('data-default-tags', 1);
         $form->addRawField('</div>');
 
         // fontsize
@@ -299,16 +287,7 @@ if ($func == '') {
             if ($default_value) $field->setAttribute('data-default-tags', 1);
         $form->addRawField('</div>');
 
-        // image toolbar
-        $form->addRawField('<div class="collapse ' . ((in_array('rexImage', $toolbar) || in_array('imageUpload', $toolbar)) ? 'in' : '') . '" id="cke5imagetoolbar-collapse">');
-            $field = $form->addTextField('image_toolbar');
-            $field->setAttribute('id', 'cke5image-input');
-            $field->setAttribute('data-tag-init', 1);
-            $field->setAttribute('data-defaults', Cke5ProfilesCreator::DEFAULTS['image_toolbar']);
-            $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['image_toolbar']) . '"]');
-            $field->setLabel(rex_i18n::msg('cke5_image_toolbar'));
-            if ($default_value) $field->setAttribute('data-default-tags', 1);
-        $form->addRawField('</div>');
+
 
         // font color
         $form->addRawField('<div class="collapse ' . ((in_array('fontColor', $toolbar)) ? 'in' : '') . '" id="cke5fontColor-collapse">');
@@ -658,3 +637,4 @@ if ($func == '') {
     $fragment->setVar('body', $content, false);
     echo $fragment->parse('core/page/section.php');
 }
+
