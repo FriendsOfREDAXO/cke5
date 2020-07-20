@@ -7,8 +7,8 @@
 let ckeditors = {},
     ckareas = '.cke5-editor';
 
-$(document).on('rex:ready', function(e, container) {
-    container.find(ckareas).each(function() {
+$(document).on('rex:ready', function (e, container) {
+    container.find(ckareas).each(function () {
         cke5_init($(this));
     });
 });
@@ -41,7 +41,7 @@ function cke5_init(element) {
             profile_set = element.attr('data-profile'),
             min_height = element.attr('data-min-height'),
             max_height = element.attr('data-max-height'),
-            lang = { },
+            lang = {},
             ui_lang = element.attr('data-lang'),
             content_lang = element.attr('data-content-lang');
 
@@ -53,19 +53,33 @@ function cke5_init(element) {
                 options = cke5profiles[profile_set];
             }
             if (profile_set in cke5suboptions) {
-                sub_options = cke5suboptions[profile_set];
+                if (cke5suboptions[profile_set].length > 0) {
+                    cke5suboptions[profile_set].forEach(function (value, key) {
+                        if (value.hasOwnProperty('min-height')) {
+                            sub_options['min-height'] = value['min-height'];
+                        }
+                        if (value.hasOwnProperty('max-height')) {
+                            sub_options['max-height'] = value['max-height'];
+                        }
+                    });
+                }
             }
         }
-        if (typeof min_height === undefined || !min_height) {} else {
+
+        if (typeof min_height === undefined || !min_height) {
+        } else {
             sub_options['min-height'] = min_height;
         }
-        if (typeof max_height === undefined || !max_height) {} else {
+        if (typeof max_height === undefined || !max_height) {
+        } else {
             sub_options['max-height'] = max_height;
         }
-        if (typeof ui_lang === undefined || !ui_lang) {} else {
+        if (typeof ui_lang === undefined || !ui_lang) {
+        } else {
             lang['ui'] = ui_lang;
         }
-        if (typeof content_lang === undefined || !content_lang) {} else {
+        if (typeof content_lang === undefined || !content_lang) {
+        } else {
             lang['content'] = content_lang;
         }
         if (lang['ui'] !== undefined || lang['content'] !== undefined) {
@@ -80,7 +94,7 @@ function cke5_init(element) {
         ClassicEditor.create(document.querySelector('#' + unique_id), options)
             .then(editor => {
                 ckeditors[unique_id] = editor; // Save for later use.
-                cke5_pastinit(element, sub_options);
+                cke5_pastinit(editor, sub_options);
             })
             .catch(error => {
                 console.error(error);
@@ -97,18 +111,21 @@ function cke5_destroy(elements) {
     });
 }
 
-function cke5_pastinit(element, sub_options) {
-    let next = element.next();
-    if (next.length && next.hasClass('ck')) {
-        let editable = next.find('.ck-editor__editable');
-        if (sub_options[0] !== undefined) {
-            sub_options = sub_options[0];
+function cke5_pastinit(editor, sub_options) {
+
+    editor.editing.view.change(writer => {
+        if ('min-height' in sub_options && sub_options['min-height'] !== 'none') {
+            writer.setStyle('min-height', sub_options['min-height'] + 'px', editor.editing.view.document.getRoot());
         }
-        if ('min-height' in sub_options && editable.length && sub_options['min-height'] !== 'none') {
-            next.find('.ck-editor__editable').css('min-height', sub_options['min-height'] + 'px');
+        if ('max-height' in sub_options && sub_options['max-height'] !== 'none') {
+            writer.setStyle('max-height', sub_options['max-height'] + 'px', editor.editing.view.document.getRoot());
         }
-        if ('max-height' in sub_options && editable.length && sub_options['max-height'] !== 'none') {
-            next.find('.ck-editor__editable').css('max-height', sub_options['max-height'] + 'px');
-        }
-    }
+    });
+
+    // editor.plugins.get( 'SpecialCharacters' ).addItems( 'a', [
+    //     { title: 'D simple arrow left', character: '←' },
+    //     { title: 'simple arrow up', character: '↑' },
+    //     { title: 'simple arrow right', character: '→' },
+    //     { title: 'simple arrow down', character: '↓' }
+    // ] );
 }
