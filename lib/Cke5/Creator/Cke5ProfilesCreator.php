@@ -7,7 +7,6 @@
 
 namespace Cke5\Creator;
 
-
 use Cke5\Handler\Cke5DatabaseHandler;
 use rex_file;
 use rex_i18n;
@@ -134,7 +133,6 @@ class Cke5ProfilesCreator
             $jsonSuboptions = [];
 
             foreach ($profiles as $profile) {
-
                 if (isset($getProfile['name']) && $profile['name'] == $getProfile['name']) {
                     $profile = $getProfile;
                 }
@@ -142,7 +140,6 @@ class Cke5ProfilesCreator
                 $result = self::mapProfile($profile);
                 $jsonSuboptions[$profile['name']] = $result['suboptions'];
                 $jsonProfiles[$profile['name']] = $result['profile'];
-
             }
 
             $profiles = json_encode($jsonProfiles);
@@ -171,7 +168,9 @@ const cke5suboptions = $suboptions;
             $jsonProfile = json_decode($profile['expert_definition'], true);
             $jsonSuboption = json_decode($profile['expert_suboption'], true);
 
-            if (is_null($jsonSuboption)) $jsonSuboption = [];
+            if (is_null($jsonSuboption)) {
+                $jsonSuboption = [];
+            }
 
             if (is_array($jsonProfile)) {
                 return ['suboptions' => $jsonSuboption, 'profile' => $jsonProfile];
@@ -234,7 +233,9 @@ const cke5suboptions = $suboptions;
         if (!empty($profile['link_decorators']) && !empty($profile['link_decorators_definition'])) {
             $definition = json_decode($profile['link_decorators_definition'], true);
             if (is_array($definition)) {
-                if (!isset($jsonProfile['link']['decorators']) || !is_array($jsonProfile['link']['decorators'])) $jsonProfile['link']['decorators'] = [];
+                if (!isset($jsonProfile['link']['decorators']) || !is_array($jsonProfile['link']['decorators'])) {
+                    $jsonProfile['link']['decorators'] = [];
+                }
                 $jsonProfile['link']['decorators'] = array_merge($jsonProfile['link']['decorators'], $definition);
             }
         }
@@ -260,18 +261,28 @@ const cke5suboptions = $suboptions;
         }
 
         $noFontColor = true;
+        if (in_array('fontColor', $toolbar) && !empty($profile['font_color_default'])) {
+            $noFontColor = false;
+        }
+
+
         if (in_array('fontColor', $toolbar) && !empty($profile['font_color']) &&
             (is_null($profile['font_color_default']) or empty($profile['font_color_default']))) {
             $jsonProfile['fontColor'] = ['colors' => json_decode($profile['font_color'], true)];
             $noFontColor = false;
         }
-
+       
         $noFontBgColor = true;
+        if (in_array('fontBackgroundColor', $toolbar) && !empty($profile['font_background_color_default'])) {
+            $noFontBgColor = false;
+        }
+
         if (in_array('fontBackgroundColor', $toolbar) && !empty($profile['font_background_color']) &&
             (is_null($profile['font_background_color_default']) or empty($profile['font_background_color_default']))) {
             $jsonProfile['fontBackgroundColor'] = ['colors' => json_decode($profile['font_background_color'], true)];
             $noFontBgColor = false;
         }
+        
 
         if ($noFontSize && $noFontColor && $noFontBgColor) {
             $jsonProfile['removePlugins'][] = 'Font';
@@ -601,7 +612,6 @@ const cke5suboptions = $suboptions;
 
         return $return;
     }
-
 }
 
 /*
