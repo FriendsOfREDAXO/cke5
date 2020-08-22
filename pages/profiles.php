@@ -373,6 +373,19 @@ if ($func == '') {
                 $field->setAttribute('data-ytable-title-placeholder', rex_i18n::msg('cke5_ytable_title_placeholder'));
             $form->addRawField('</div>');
 
+            // https
+            $field = $form->addSelectField('auto_link');
+            $field->setAttribute('class', 'form-control selectpicker');
+            $field->setLabel(rex_i18n::msg('cke5_auto_link'));
+            $auto_sel = new rex_select();
+            $auto_sel->setStyle('class="form-control selectpicker"');
+            $auto_sel->setName('autolink');
+            $auto_sel->addOption(rex_i18n::msg('cke5_auto_link_https'), 'https');
+            $auto_sel->addOption(rex_i18n::msg('cke5_auto_link_http'), 'http');
+            $auto_sel->addOption(rex_i18n::msg('cke5_auto_link_disable'), '0');
+            $field->setSelect($auto_sel);
+
+
             // extern blank
             $field = $form->addCheckboxField('blank_to_external');
             $field->setAttribute('id', 'cke5blank-to-external-input');

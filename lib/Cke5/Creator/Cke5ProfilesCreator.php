@@ -142,7 +142,7 @@ class Cke5ProfilesCreator
                 $jsonProfiles[$profile['name']] = $result['profile'];
             }
 
-            $profiles = json_encode($jsonProfiles);
+            $profiles = str_replace(":\/\/", "://", json_encode($jsonProfiles));
             $suboptions = json_encode($jsonSuboptions);
 
             $content =
@@ -194,8 +194,6 @@ const cke5suboptions = $suboptions;
             }
         }
 
-
-
         if (!empty($profile['image_toolbar'])) {
             $imageKeys = self::toArray($profile['image_toolbar']);
             $jsonProfile['image'] = ['toolbar' => self::getImageToolbar($imageKeys), 'styles' => self::getImageStyles($imageKeys)];
@@ -220,6 +218,17 @@ const cke5suboptions = $suboptions;
             if (is_array($definition)) {
                 $jsonProfile['typing']['transformations'] = ['extra' => $definition];
             }
+        }
+
+        switch($profile['auto_link']) {
+            case '0':
+            default:
+                $jsonProfile['removePlugins'][] = 'AutoLink';
+                break;
+            case 'http':
+            case 'https':
+                $jsonProfile['link']['defaultProtocol'] = $profile['auto_link'] . '://';
+                break;
         }
 
         if (!empty($profile['blank_to_external'])) {

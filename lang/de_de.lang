@@ -94,6 +94,10 @@ cke5_ytable_table_placeholder = Tabelle [yTable DB-Table]
 cke5_ytable_title_placeholder = Titel
 cke5_ytable_label_placeholder = Label [DB-Column]
 cke5_ytable = yTables
+cke5_auto_link = AutoLink
+cke5_auto_link_disable = inaktiv
+cke5_auto_link_http = aktive (http Protokol)
+cke5_auto_link_https = aktive (https Protokol)
 
 # profiles list & form actions
 rex_cke5_profiles_cloned = Das Profil wurde dupliziert
