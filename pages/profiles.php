@@ -114,6 +114,7 @@ if ($func == '') {
     $min_height = (isset($result[$prefix . 'min_height'])) ? (int)$result[$prefix . 'min_height'] : 0;
     $max_height = (isset($result[$prefix . 'max_height'])) ? (int)$result[$prefix . 'max_height'] : 0;
     $in_mediapath = (isset($result[$prefix . 'mediatype']) && empty($result[$prefix . 'mediatype'])) ? 'in' : '';
+    $in_resizeoptions = (isset($result[$prefix . 'image_resize_options']) && empty($result[$prefix . 'image_resize_options'])) ? 'in' : '';
     $profile = (isset($result[$prefix . 'name'])) ? $result[$prefix . 'name'] : '';
     $mediapath = (!isset($result[$prefix . 'mediapath']) || empty($result[$prefix . 'mediapath'])) ? str_replace(['../', '/'], '', rex_url::media()) : $result[$prefix . 'mediapath'];
     $expert = (isset($result[$prefix . 'expert']) && !empty($result[$prefix . 'expert']));
@@ -385,7 +386,6 @@ if ($func == '') {
             $auto_sel->addOption(rex_i18n::msg('cke5_auto_link_disable'), '0');
             $field->setSelect($auto_sel);
 
-
             // extern blank
             $field = $form->addCheckboxField('blank_to_external');
             $field->setAttribute('id', 'cke5blank-to-external-input');
@@ -464,6 +464,35 @@ if ($func == '') {
         $field->addOption(rex_i18n::msg('cke5_group_when_full_description'), 'group_when_full');
         if ($default_value) $field->setValue('group_when_full');
 
+        // lang
+        $field = $form->addSelectField('lang');
+        $field->setAttribute('class', 'form-control selectpicker');
+        $field->setAttribute('data-live-search', 'true');
+        $field->setLabel(rex_i18n::msg('cke5_lang'));
+        $field->getSelect()->addOption('default', '');
+
+        // content lang
+        $fieldContentLang = $form->addSelectField('lang_content');
+        $fieldContentLang->setAttribute('class', 'form-control selectpicker');
+        $fieldContentLang->setAttribute('data-live-search', 'true');
+        $fieldContentLang->setLabel(rex_i18n::msg('cke5_content_lang'));
+        $fieldContentLang->getSelect()->addOption('default', '');
+
+        // get current lang
+        $lang = rex_i18n::getLocale();
+        $langFiles = glob($this->getPath('assets/vendor/ckeditor5-classic/translations/*.js'));
+
+        foreach ($langFiles as $langFile) {
+            $key = substr(pathinfo($langFile, PATHINFO_FILENAME), 0, 2);
+            if (isset(CKE5ISO6391::$isolang[$key])) {
+                $field->getSelect()->addOption(CKE5ISO6391::$isolang[$key] . ' [' . pathinfo($langFile, PATHINFO_FILENAME) . ']', pathinfo($langFile, PATHINFO_FILENAME));
+                $fieldContentLang->getSelect()->addOption(CKE5ISO6391::$isolang[$key] . ' [' . pathinfo($langFile, PATHINFO_FILENAME) . ']', pathinfo($langFile, PATHINFO_FILENAME));
+            }
+        }
+
+        // set current lang again to fix lang problem with php 7.0 and php 5.x
+        rex_i18n::setLocale($lang, false);
+
         // default height
         $field = $form->addCheckboxField('height_default');
         $field->setAttribute('id', 'cke5height-input');
@@ -500,34 +529,35 @@ if ($func == '') {
         $field->addOption(rex_i18n::msg('cke5_upload_default_description'), 'default_upload');
         if ($default_value) $field->setValue('default_upload');
 
-        // lang
-        $field = $form->addSelectField('lang');
+        // image resize unit
+        $field = $form->addSelectField('image_resize_unit');
         $field->setAttribute('class', 'form-control selectpicker');
-        $field->setAttribute('data-live-search', 'true');
-        $field->setLabel(rex_i18n::msg('cke5_lang'));
-        $field->getSelect()->addOption('default', '');
+        $field->setLabel(rex_i18n::msg('cke5_resize_unit'));
+        $auto_sel = new rex_select();
+        $auto_sel->setStyle('class="form-control selectpicker"');
+        $auto_sel->setName('resizeunit');
+        $auto_sel->addOption(rex_i18n::msg('cke5_image_resize_unit_percent'), '%');
+        $auto_sel->addOption(rex_i18n::msg('cke5_image_resize_unit_px'), 'px');
+        $field->setSelect($auto_sel);
 
-        // content lang
-        $fieldContentLang = $form->addSelectField('lang_content');
-        $fieldContentLang->setAttribute('class', 'form-control selectpicker');
-        $fieldContentLang->setAttribute('data-live-search', 'true');
-        $fieldContentLang->setLabel(rex_i18n::msg('cke5_content_lang'));
-        $fieldContentLang->getSelect()->addOption('default', '');
+        // image resize options
+        $field = $form->addCheckboxField('image_resize_options');
+        $field->setAttribute('id', 'cke5image-resize-option-input');
+        $field->setAttribute('data-toggle', 'toggle');
+        $field->setAttribute('data-collapse-target', 'resizeOptions');
+        $field->setLabel(rex_i18n::msg('cke5_image_resize_options'));
+        $field->addOption(rex_i18n::msg('cke5_image_resize_options_description'), 'default_resize_options');
+        if ($default_value) $field->setValue('default_resize_options');
 
-        // get current lang
-        $lang = rex_i18n::getLocale();
-        $langFiles = glob($this->getPath('assets/vendor/ckeditor5-classic/translations/*.js'));
-
-        foreach ($langFiles as $langFile) {
-            $key = substr(pathinfo($langFile, PATHINFO_FILENAME), 0, 2);
-            if (isset(CKE5ISO6391::$isolang[$key])) {
-                $field->getSelect()->addOption(CKE5ISO6391::$isolang[$key] . ' [' . pathinfo($langFile, PATHINFO_FILENAME) . ']', pathinfo($langFile, PATHINFO_FILENAME));
-                $fieldContentLang->getSelect()->addOption(CKE5ISO6391::$isolang[$key] . ' [' . pathinfo($langFile, PATHINFO_FILENAME) . ']', pathinfo($langFile, PATHINFO_FILENAME));
-            }
-        }
-
-        // set current lang again to fix lang problem with php 7.0 and php 5.x
-        rex_i18n::setLocale($lang, false);
+        // custom table color
+        $form->addRawField('<div class="collapse ' . $in_resizeoptions . '" id="cke5resizeOptions-collapse">');
+            $field = $form->addTextAreaField('image_resize_options_definition');
+            $field->setLabel(rex_i18n::msg('cke5_image_resize_options_definition'));
+            $field->setAttribute('id', 'cke5resizeoptions-area');
+            $field->setAttribute('data-name-placeholder', rex_i18n::msg('cke5_name_placeholder'));
+            $field->setAttribute('data-icon-placeholder', rex_i18n::msg('cke5_icon_placeholder'));
+            $field->setAttribute('data-value-placeholder', rex_i18n::msg('cke5_value_placeholder'));
+        $form->addRawField('</div>');
 
         // mediapath
         $form->addRawField('

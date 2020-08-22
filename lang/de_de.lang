@@ -98,6 +98,15 @@ cke5_auto_link = AutoLink
 cke5_auto_link_disable = inaktiv
 cke5_auto_link_http = aktive (http Protokol)
 cke5_auto_link_https = aktive (https Protokol)
+cke5_image_resize_options = Image Resize Buttons
+cke5_image_resize_options_description = Image Resize Buttons werden in der Img-Toolbar angezeigt
+cke5_image_resize_options_definition = Image Resize Options
+cke5_name_placeholder = Name [25|50|75|original]
+cke5_value_placeholder = Value [25|50|75|null] (numeric or null)
+cke5_icon_placeholder = Icon [small|medium|large|original]
+cke5_image_resize_unit_percent = Prozent [%]
+cke5_image_resize_unit_px = Pixel [px]
+cke5_resize_unit = Image Resize Unit
 
 # profiles list & form actions
 rex_cke5_profiles_cloned = Das Profil wurde dupliziert

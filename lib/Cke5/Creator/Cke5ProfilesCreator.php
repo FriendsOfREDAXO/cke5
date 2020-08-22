@@ -142,7 +142,7 @@ class Cke5ProfilesCreator
                 $jsonProfiles[$profile['name']] = $result['profile'];
             }
 
-            $profiles = str_replace(":\/\/", "://", json_encode($jsonProfiles));
+            $profiles = str_replace([":\/\/","null"], ["://",null], json_encode($jsonProfiles));
             $suboptions = json_encode($jsonSuboptions);
 
             $content =
@@ -194,9 +194,33 @@ const cke5suboptions = $suboptions;
             }
         }
 
+        // image unit
+        $jsonProfile['image'] = [];
+        $resizeOptions = null;
+
+        if (!empty($profile['image_resize_unit'])) {
+            $jsonProfile['image']['resizeUnit'] = $profile['image_resize_unit'];
+        }
+
+        if (!empty($profile['image_resize_options_definition'])) {
+            $resizeOptions = array_filter(json_decode($profile['image_resize_options_definition'], true));
+            foreach ($resizeOptions as $key => $option) {
+                $resizeOptions[$key]['name'] = 'imageResize:' . $option['name'];
+            }
+            $jsonProfile['image'] = ['resizeOptions' => $resizeOptions];
+        }
+
         if (!empty($profile['image_toolbar'])) {
             $imageKeys = self::toArray($profile['image_toolbar']);
-            $jsonProfile['image'] = ['toolbar' => self::getImageToolbar($imageKeys), 'styles' => self::getImageStyles($imageKeys)];
+            $jsonProfile['image']['toolbar'] = self::getImageToolbar($imageKeys);
+            $jsonProfile['image']['styles'] = self::getImageStyles($imageKeys);
+
+            if (!is_null($resizeOptions) && sizeof($resizeOptions) > 0) {
+                $jsonProfile['image']['toolbar'][] = '|';
+                foreach ($resizeOptions as $option) {
+                    $jsonProfile['image']['toolbar'][] = $option['name'];
+                }
+            }
         }
 
         if (in_array('insertTable', $toolbar) && !empty($profile['table_toolbar'])) {
@@ -622,8 +646,3 @@ const cke5suboptions = $suboptions;
         return $return;
     }
 }
-
-/*
- * TODO:
- * cke5profiles['default']['fontFamily'] = { 'options' : ['default', 'Ubuntu, Arial, sans-serif', 'Ubuntu Mono, Courier New, Courier, monospace'] };
- */
