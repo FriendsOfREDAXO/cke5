@@ -19,7 +19,7 @@ class Cke5ProfilesCreator
 
     const EDITOR_SETTINGS = [
         /* todo: specialCharacters not work because : https://github.com/ckeditor/ckeditor5/issues/6160 */
-        'cktypes' => ['heading', 'fontSize', 'mediaEmbed', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable', 'fontBackgroundColor', 'fontColor', 'fontFamily', 'codeBlock'/*, 'specialCharacters' */],
+        'cktypes' => ['heading', 'fontSize', 'mediaEmbed', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable', 'fontBackgroundColor', 'fontColor', 'codeBlock', 'bulletedList', 'numberedList'/*, 'specialCharacters' */],
         'ckimgtypes' => ['rexImage', 'imageUpload'],
         'cklinktypes' => ['ytable'],
         'cktabletypes' => ['tableProperties', 'tableCellProperties']
@@ -99,7 +99,8 @@ class Cke5ProfilesCreator
         'HorizontalLine',
         'PageBreak',
         // 'LinkImage',
-        'PastePlainText'
+        'PastePlainText',
+//        'ListStyle',
     ];
 
     const DEFAULTS = [
@@ -277,6 +278,10 @@ const cke5suboptions = $suboptions;
             $jsonProfile['alignment'] = self::toArray($profile['alignment']);
         } else {
             $jsonProfile['removePlugins'][] = 'Alignment';
+        }
+
+        if (empty($profile['list_style'])) {
+            $jsonProfile['removePlugins'][] = 'ListStyle';
         }
 
         if (in_array('heading', $toolbar) && !empty($profile['heading'])) {

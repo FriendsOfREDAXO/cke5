@@ -107,6 +107,8 @@ cke5_icon_placeholder = Icon [small|medium|large|original]
 cke5_image_resize_unit_percent = Prozent [%]
 cke5_image_resize_unit_px = Pixel [px]
 cke5_resize_unit = Image Resize Unit
+cke5_liststyle = List Style
+cke5_liststyle_description = Schafft die Option List-Styles wählen zu können
 
 # profiles list & form actions
 rex_cke5_profiles_cloned = Das Profil wurde dupliziert

@@ -48,7 +48,9 @@ function cke5_init_edit(element) {
         ytable_area = element.find('#cke5ytable-area'),
         fontfamily_area = element.find('#cke5fontfamily-area'),
         fontfamily_default = element.find('#cke5font-family-default-input-default-font-family'),
-        link_decorators = element.find('#cke5link-decorators-definition-input-link-decorators-definition');
+        link_decorators = element.find('#cke5link-decorators-definition-input-link-decorators-definition'),
+        imgresizeoptions_input = element.find('#cke5image-resize-option-input-default-resize-options'),
+        imgresizeoptions_area = element.find('#cke5resizeoptions-area');
 
     cktypes = JSON.parse(element.attr('data-cktypes'));
     cklinktypes = JSON.parse(element.attr('data-cklinktypes'));
@@ -68,6 +70,7 @@ function cke5_init_edit(element) {
     cke5_addFromToFields(transformation_extra_area);
     cke5_addFontFamiliesFields(fontfamily_area);
     cke5_addyTableFields(ytable_area);
+    cke5_addResizeOptionsFields(imgresizeoptions_area);
     cke5_bootstrapToggle_collapse(tablecolor_default);
     cke5_bootstrapToggle_collapse(fontcolor_default);
     cke5_bootstrapToggle_collapse(fontbgcolor_default);
@@ -76,6 +79,7 @@ function cke5_init_edit(element) {
     cke5_bootstrapToggle_collapse(extra, true);
     cke5_bootstrapToggle_collapse(transformation, true);
     cke5_bootstrapToggle_collapse(link_decorators, true);
+    cke5_bootstrapToggle_collapse(imgresizeoptions_input, true);
 
     if (name.length) {
         name.alphanum({
@@ -331,6 +335,41 @@ function cke5_addyTableFields(element) {
     }
 }
 
+function cke5_addResizeOptionsFields(element) {
+    if (element.length) {
+        let name_placeholder = element.data('name-placeholder'),
+            icon_placeholder = element.data('icon-placeholder'),
+            value_placeholder = element.data('value-placeholder');
+        element.multiInput({
+            json: true,
+            input: $('<div class="row inputElement">\n' +
+                '<div class="form-group col-xs-4">\n' +
+                '<input class="form-control" name="name" placeholder="' + name_placeholder + '" type="text">\n' +
+                '</div>\n' +
+                '<div class="form-group col-xs-4">\n' +
+                '<input class="form-control" name="value" placeholder="' + value_placeholder + '" type="text">\n' +
+                '</div>\n' +
+                '<div class="form-group col-xs-4">\n' +
+                // '<select name="icon" size="1" class="form-control selectpicker">\n' +
+                // '<select name="icon" size="1" class="form-control">\n' +
+                // '        <option value="original" selected="selected">aktive (https Protokol)</option>\n' +
+                // '        <option value="http">aktive (http Protokol)</option>\n' +
+                // '        <option value="0">inaktiv</option>\n' +
+                // '</select>' +
+                '<input class="form-control" name="icon" placeholder="' + icon_placeholder + '" type="text">\n' +
+                '</div>\n' +
+                '</div>\n'),
+            limit: 20,
+            onElementAdd: function (el, plugin) {
+                // console.log(plugin.elementCount);
+            },
+            onElementRemove: function (el, plugin) {
+                // console.log(plugin.elementCount);
+            }
+        });
+    }
+}
+
 function cke5_addFontFamiliesFields(element) {
     if (element.length) {
         let color_placeholder = element.data('family-placeholder');
@@ -353,9 +392,14 @@ function cke5_addFontFamiliesFields(element) {
 }
 
 function cke5_toolbar_create_tag(typename, tags) {
+    let liststyleshow = 0;
     cktypes.forEach(function (type) {
         if ($.inArray(type, tags) !== -1 && typename === 'toolbar') {
-            toggle_collapse(type, 'show');
+            if (type === 'bulletedList' || type === 'numberedList') {
+                toggle_collapse('liststyle', 'show');
+            } else {
+                toggle_collapse(type, 'show');
+            }
         }
     });
     ckimgtypes.forEach(function (type) {
@@ -377,6 +421,7 @@ function cke5_toolbar_create_tag(typename, tags) {
 
 function cke5_toolbar_destroy_tag(typename, tags) {
     let imghide = 0,
+        liststylehide = 0,
         tabhide = 0;
     cktypes.forEach(function (type) {
         if ($.inArray(type, tags) !== -1) {
@@ -384,8 +429,14 @@ function cke5_toolbar_destroy_tag(typename, tags) {
             if (typename === 'toolbar') {
                 toggle_collapse(type, 'hide');
             }
+            if (type === 'bulletedList' || type === 'numberedList') {
+                liststylehide++;
+            }
         }
     });
+    if (liststylehide === 2) {
+        toggle_collapse('liststyle', 'hide');
+    }
     ckimgtypes.forEach(function (type) {
         if ($.inArray(type, tags) !== -1) {
         } else {

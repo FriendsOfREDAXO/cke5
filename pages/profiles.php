@@ -288,8 +288,6 @@ if ($func == '') {
             if ($default_value) $field->setAttribute('data-default-tags', 1);
         $form->addRawField('</div>');
 
-
-
         // font color
         $form->addRawField('<div class="collapse ' . ((in_array('fontColor', $toolbar)) ? 'in' : '') . '" id="cke5fontColor-collapse">');
             // default font color
@@ -352,6 +350,16 @@ if ($func == '') {
                 $field->setAttribute('id', 'cke5fontfamily-area');
                 $field->setAttribute('data-family-placeholder', rex_i18n::msg('cke5_family_name_placeholder'));
             $form->addRawField('</div>');
+        $form->addRawField('</div>');
+
+        // liststyle
+        $form->addRawField('<div class="collapse ' . ((in_array('bulletedList', $toolbar) || in_array('numberedList', $toolbar)) ? 'in' : '') . '" id="cke5liststyle-collapse">');
+            $field = $form->addCheckboxField('list_style');
+            $field->setAttribute('id', 'cke5liststyle-input');
+            $field->setAttribute('data-toggle', 'toggle');
+            $field->setLabel(rex_i18n::msg('cke5_liststyle'));
+            $field->addOption(rex_i18n::msg('cke5_liststyle_description'), 'liststyle');
+            if ($default_value) $field->setValue('liststyle');
         $form->addRawField('</div>');
 
         // rex link
