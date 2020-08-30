@@ -1,5 +1,12 @@
 # Changelog
 
+## Version 4.1.0
+
+* vendor update to 22.0.0
+* add autolink options
+* add image resize option buttons
+* add list style option
+
 ## Version 4.0.0
 
 * New REDAXO Link-Widget supports: Linkmap, Media, YForm-Tables, Tel:, Mail
