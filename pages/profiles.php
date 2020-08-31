@@ -173,21 +173,7 @@ if ($func == '') {
     // profile editor
     $form->addRawField('<div class="collapse '.(($expert) ? '' : 'in').'" id="cke5profileEditor-collapse">');
 
-        $locales = rex_i18n::getLocales();
-        asort($locales);
-
-        \Sked\Utils\Cke5FormHelper::addRexLangTabs($form, 'wrapper', rex_i18n::getLocale());
-        foreach ($locales as $locale) {
-            \Sked\Utils\Cke5FormHelper::addRexLangTabs($form, 'inner_wrapper', $locale, rex_i18n::getLocale());
-
-            $field = $form->addTextField('placeholder_' . $locale);
-            $field->setLabel(rex_i18n::msg('cke5_placeholder'));
-            $field->setAttribute('placeholder', rex_i18n::msg('cke5_placeholder_placeholder') . ' ' . rex_i18n::msgInLocale('lang', $locale));
-
-            \Sked\Utils\Cke5FormHelper::addRexLangTabs($form, 'close_inner_wrapper');
-        }
-        \Sked\Utils\Cke5FormHelper::addRexLangTabs($form, 'close_wrapper');
-
+        $field = $form->addFieldset(rex_i18n::msg('cke5_label_toolbar'));
         // toolbar
         $field = $form->addTextField('toolbar');
         $field->setAttribute('id', 'cke5toolbar-input');
@@ -464,6 +450,30 @@ if ($func == '') {
             if ($default_value) $field->setAttribute('data-default-tags', 1);
         $form->addRawField('</div>');
 
+        
+    
+
+
+    
+     // profile editor
+    $form->addRawField('<div class="collapse '.(($expert) ? '' : 'in').'" id="cke5profileEditor-collapse">');
+    $field = $form->addFieldset(rex_i18n::msg('cke5_label_settings'));                          
+        $locales = rex_i18n::getLocales();
+        asort($locales);
+
+        \Sked\Utils\Cke5FormHelper::addRexLangTabs($form, 'wrapper', rex_i18n::getLocale());
+        foreach ($locales as $locale) {
+            \Sked\Utils\Cke5FormHelper::addRexLangTabs($form, 'inner_wrapper', $locale, rex_i18n::getLocale());
+
+            $field = $form->addTextField('placeholder_' . $locale);
+            $field->setLabel(rex_i18n::msg('cke5_placeholder'));
+            $field->setAttribute('placeholder', rex_i18n::msg('cke5_placeholder_placeholder') . ' ' . rex_i18n::msgInLocale('lang', $locale));
+
+            \Sked\Utils\Cke5FormHelper::addRexLangTabs($form, 'close_inner_wrapper');
+        }
+        \Sked\Utils\Cke5FormHelper::addRexLangTabs($form, 'close_wrapper');
+    
+    
         // group when full
         $field = $form->addCheckboxField('group_when_full');
         $field->setAttribute('id', 'cke5group-input');
@@ -688,4 +698,5 @@ if ($func == '') {
     $fragment->setVar('body', $content, false);
     echo $fragment->parse('core/page/section.php');
 }
+
 
