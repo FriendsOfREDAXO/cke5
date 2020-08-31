@@ -28,6 +28,8 @@ cke5_list_function = Funktion
 cke5_clone = duplizieren
 
 # profiles columns names
+cke5_label_toolbar = Toolbar und Optionen
+cke5_label_settings = Einstellungen
 cke5_name = Profile-Namen
 cke5_name_placeholder = profile_name
 cke5_expert_definition = Experten Modus
