@@ -245,6 +245,9 @@ const cke5suboptions = $suboptions;
             }
         }
 
+        $jsonProfile['removePlugins'][] = 'AutoLink';
+
+        /*
         switch($profile['auto_link']) {
             case '0':
             default:
@@ -255,6 +258,7 @@ const cke5suboptions = $suboptions;
                 $jsonProfile['link']['defaultProtocol'] = $profile['auto_link'] . '://';
                 break;
         }
+        */
 
         if (!empty($profile['blank_to_external'])) {
             $jsonProfile['link']['addTargetToExternalLinks'] = true;
