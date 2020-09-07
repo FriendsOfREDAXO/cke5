@@ -31,7 +31,6 @@ $content = \Cke5\Provider\Cke5NavigationProvider::getSubNavigationHeader() .
         </ol>
 
         <h2>Die Story</h2>
-        <pre><code class="language-php">&lt;?php echo "Hello Space";?&gt;</code></pre>
 
         <p>Nach dem letzten <a href="https://de.wikipedia.org/wiki/Apollo-Programm" title="Apollo-Programm">Apollo</a>-Flug 1975 war das Shuttle ab 1981 das Arbeitspferd der NASA. Der erste Flug des Systems fand am 12. April 1981 statt, seither wurden insgesamt 135 Flüge durchgeführt, wobei es zu zwei fatalen Unfällen kam; bei beiden starben die jeweils sieben Besatzungsmitglieder und die Raumfähren gingen verloren.</p>
         
