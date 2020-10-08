@@ -265,7 +265,7 @@ const cke5suboptions = $suboptions;
         }
 
         if (!empty($profile['link_downloadable'])) {
-            $jsonProfile['link']['decorators'] = ['downloadable' => ['mode' => 'manual', 'label' => 'Downloadable', 'attributes' => ['download' => 'download']]];
+            $jsonProfile['link']['decorators'] = ['downloadable' => ['mode' => 'manual', 'label' => 'Downloadable', 'attributes' => ['download' => '']]];
         }
 
         if (!empty($profile['link_decorators']) && !empty($profile['link_decorators_definition'])) {
