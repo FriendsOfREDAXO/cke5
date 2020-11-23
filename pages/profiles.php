@@ -219,6 +219,15 @@ if ($func == '') {
             if ($default_value) $field->setAttribute('data-default-tags', 1);
         $form->addRawField('</div>');
 
+        // embed html_preview
+        $form->addRawField('<div class="collapse ' . ((in_array('htmlEmbed', $toolbar)) ? 'in' : '') . '" id="cke5htmlEmbed-collapse">');
+            $field = $form->addCheckboxField('html_preview');
+            $field->setAttribute('id', 'cke5htmlEmbed-input');
+            $field->setAttribute('data-toggle', 'toggle');
+            $field->setLabel(rex_i18n::msg('cke5_html_embed_default'));
+            $field->addOption(rex_i18n::msg('cke5_html_embed_default_description'), 'html_preview');
+        $form->addRawField('</div>');
+
         /*
          * todo: not work because : https://github.com/ckeditor/ckeditor5/issues/6160
         // special chars

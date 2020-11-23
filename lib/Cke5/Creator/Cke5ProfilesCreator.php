@@ -19,7 +19,7 @@ class Cke5ProfilesCreator
 
     const EDITOR_SETTINGS = [
         /* todo: specialCharacters not work because : https://github.com/ckeditor/ckeditor5/issues/6160 */
-        'cktypes' => ['heading', 'fontSize', 'mediaEmbed', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable', 'fontBackgroundColor', 'fontColor', 'codeBlock', 'bulletedList', 'numberedList'/*, 'specialCharacters' */],
+        'cktypes' => ['heading', 'fontSize', 'mediaEmbed', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable', 'fontBackgroundColor', 'fontColor', 'codeBlock', 'bulletedList', 'numberedList', 'htmlEmbed'/*, 'specialCharacters' */],
         'ckimgtypes' => ['rexImage', 'imageUpload'],
         'cklinktypes' => ['ytable'],
         'cktabletypes' => ['tableProperties', 'tableCellProperties']
@@ -296,8 +296,10 @@ const cke5suboptions = $suboptions;
             $jsonProfile['highlight'] = ['options' => self::getHighlight(self::toArray($profile['highlight']))];
         }
 
-        if (in_array('htmlEmbed', $toolbar) && empty($profile['htmlEmbed'])) {
-            $jsonProfile['htmlEmbed'] = ['showPreviews' => true];
+        if (in_array('htmlEmbed', $toolbar)) {
+            if (!empty($profile['html_preview'])) $jsonProfile['htmlEmbed'] = ['showPreviews' => true];
+        } else {
+            $jsonProfile['removePlugins'][] = 'HtmlEmbed';
         }
 
         $noFontSize = true;

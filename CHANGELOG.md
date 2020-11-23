@@ -4,6 +4,7 @@
 
 * vendor update to 23.1.0
 * add htmlEmbed
+* add htmlEmbed preview optional
 
 ## Version 4.1.0
 

@@ -109,6 +109,8 @@ cke5_image_resize_unit_px = Pixel [px]
 cke5_resize_unit = Image Resize Unit
 cke5_liststyle = List Style
 cke5_liststyle_description = Schafft die Option List-Styles wählen zu können
+cke5_html_embed_default = Embed-HTML Preview
+cke5_html_embed_default_description = Stellt embed-HTML im Editor als Preview dar
 
 # profiles list & form actions
 rex_cke5_profiles_cloned = Das Profil wurde dupliziert
