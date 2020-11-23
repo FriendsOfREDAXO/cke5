@@ -5,7 +5,6 @@
 * vendor update to 23.1.0
 * add htmlEmbed
 * add htmlEmbed preview optional
-* remove PastePlainText support for now https://github.com/Mistralys/ckeditor5-paste-plaintext/issues/3
 
 ## Version 4.1.0
 
