@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 4.2.0
+
+* vendor update to 23.1.0
+* add htmlEmbed
+
 ## Version 4.1.0
 
 * vendor update to 22.0.0
