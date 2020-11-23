@@ -26,7 +26,7 @@ class Cke5ProfilesCreator
     ];
 
     const ALLOWED_FIELDS = [
-        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll', 'specialCharacters', 'pastePlainText'],
+        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll', 'specialCharacters', 'pastePlainText', 'htmlEmbed'],
         'alignment' => ['left', 'right', 'center', 'justify'],
         'table_toolbar' => ['tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties'],
         'heading' => ['paragraph', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
@@ -85,7 +85,7 @@ class Cke5ProfilesCreator
         'Subscript',
         'Superscript',
         'SelectAll',
-//        'SpecialCharacters',
+        // 'SpecialCharacters',
         'SpecialCharactersCurrency',
         'SpecialCharactersMathematical',
         'SpecialCharactersLatin',
@@ -100,7 +100,7 @@ class Cke5ProfilesCreator
         'PageBreak',
         // 'LinkImage',
         'PastePlainText',
-//        'ListStyle',
+        // 'ListStyle',
     ];
 
     const DEFAULTS = [
@@ -294,6 +294,10 @@ const cke5suboptions = $suboptions;
 
         if (in_array('highlight', $toolbar) && !empty($profile['highlight'])) {
             $jsonProfile['highlight'] = ['options' => self::getHighlight(self::toArray($profile['highlight']))];
+        }
+
+        if (in_array('htmlEmbed', $toolbar) && empty($profile['htmlEmbed'])) {
+            $jsonProfile['htmlEmbed'] = ['showPreviews' => true];
         }
 
         $noFontSize = true;
