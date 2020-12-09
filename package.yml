@@ -1,5 +1,5 @@
 package: cke5
-version: '4.2.0'
+version: '4.2.1-dev'
 author: Friends Of REDAXO
 supportpage: https://github.com/FriendsOfREDAXO/cke5/issues
 
@@ -27,4 +27,4 @@ page:
 requires:
     redaxo: '^5.7'
     php:
-        version: '^7.1'
+        version: '>=7.1, <9'
