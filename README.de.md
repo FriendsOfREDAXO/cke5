@@ -118,6 +118,10 @@ Die Darstellung des Editors kann per CSS an die Fronteid-Ausgabe angepasst werde
 
 Den Styles ist das Präfix `.ck-content` vorangestellt. Die Klasse sollte dem Ausgabeelement hinzugefügt werden und die mitgelieferte `cke5_content_styles.css` aus dem Asset-Ordner geladen werden.  
 
+## CKE im Fromtend verwenden
+
+[siehe: REDAXO Tricks](https://friendsofredaxo.github.io/tricks/snippets/ckeditor_im_frontend)
+
 
 
 ## Keyboard support
