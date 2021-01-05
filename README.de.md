@@ -69,6 +69,11 @@ REX_VALUE[id="1" output="html"]
 - data-min-height
 - data-lang
 
+### Verwendung in YForm
+
+- Im individuellen Attribute-Feld: ``` {"class":"cke5-editor","data-profile":"default","data-lang":"de"} ```
+- Weitere Attribute kommagetrennt möglich
+
 ### Verwendung in MForm
 
 ```php
