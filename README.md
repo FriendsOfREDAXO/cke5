@@ -269,8 +269,10 @@ Use the following keystrokes for more efficient navigation in the CKEditor 5 use
 
 ### Example for a custom link decorator
 
+> key should be lowercase
+
 ```js
-{"openInNewTab": {
+{"openinnewtab": {
                     "mode": "manual",
                     "label": "Open in a new tab",
                     "attributes": {
