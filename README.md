@@ -67,6 +67,11 @@ Further data attributes can be used to control the minimum and maximum height as
 - data-min-height
 - data-lang
 
+### Use in YForm
+
+- individual attribute field: ``` {"class":"cke5-editor","data-profile":"default","data-lang":"en"} ```
+- further attributes possible separated by commas
+
 ### Use in MForm
 
 ```php
