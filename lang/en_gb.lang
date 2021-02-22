@@ -94,6 +94,23 @@ cke5_ytable_table_placeholder = table [yTable DB-Table]
 cke5_ytable_title_placeholder = Title
 cke5_ytable_label_placeholder = Label [DB-Column]
 cke5_ytable = yTables
+cke5_auto_link = AutoLink
+cke5_auto_link_disable = inactive
+cke5_auto_link_http = active (http protocol)
+cke5_auto_link_https = active (https protocol)
+cke5_image_resize_options = Image Resize buttons
+cke5_image_resize_options_description = Image Resize buttons will be shown within the img toolbar
+cke5_image_resize_options_definition = Imare Resize options
+cke5_name_placeholder = profile_name
+cke5_value_placeholder = Value [25|50|75|null] (numeric or null)
+cke5_icon_placeholder = Icon [small|medium|large|original]
+cke5_image_resize_unit_percent = Percent [%]
+cke5_image_resize_unit_px = Pixel [px]
+cke5_resize_unit = Image Resize unit
+cke5_liststyle = List style
+cke5_liststyle_description = Displays option to select list styles
+cke5_html_embed_default = Embed HTML preview
+cke5_html_embed_default_description = Display option to preview HTML embeds
 
 # profiles list & form actions
 rex_cke5_profiles_cloned = Profile was duplicated
