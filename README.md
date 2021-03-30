@@ -274,19 +274,35 @@ Use the following keystrokes for more efficient navigation in the CKEditor 5 use
 
 ### Example for a custom link decorator
 
-> key should be lowercase
+*Attention, keys should be lowercase*
 
 ```js
-{"openinnewtab": {
-                    "mode": "manual",
-                    "label": "Open in a new tab",
-                    "attributes": {
-                        "target": "_blank",
-                        "rel": "noopener noreferrer"
-                    }
-                }
+{
+	"newtab": {
+		"mode": "manual",
+	        "label": "Open in a new tab",
+	        "attributes": {
+        		"target": "_blank",
+                	"rel": "noopener noreferrer"
+		}
+	}
+}
+
+```
+```js
+{
+	"arrowclass": {
+		"mode": "manual",	
+		"label": "Link mit CSS Klasse",
+		"defaultValue": "true",
+		"attributes": {
+			"class": "arrow"
+		}
+	}
 }
 ```
+
+
 
 
 ### YForm links
