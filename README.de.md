@@ -277,17 +277,32 @@ Use the following keystrokes for more efficient navigation in the CKEditor 5 use
 
 ## Für Entwickler
 
-### Beispiel für einen benutzerdefinierten Link-Dekorator
+### Beispiel für benutzerdefinierte Link-Dekorator
+*Achtung, die Keys müssen in Kleinbuchstaben geschrieben werden*
 
 ```js
-{"openInNewTab": {
-                    "mode": "manual",
-                    "label": "Open in a new tab",
-                    "attributes": {
-                        "target": "_blank",
-                        "rel": "noopener noreferrer"
-                    }
-                }
+{
+	"newtab": {
+		"mode": "manual",
+	        "label": "Open in a new tab",
+	        "attributes": {
+        		"target": "_blank",
+                	"rel": "noopener noreferrer"
+		}
+	}
+}
+
+```
+```js
+{
+	"arrowclass": {
+		"mode": "manual",	
+		"label": "Link mit CSS Klasse",
+		"defaultValue": "true",
+		"attributes": {
+			"class": "arrow"
+		}
+	}
 }
 ```
 
