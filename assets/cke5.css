@@ -405,11 +405,26 @@ dl + .cke5_clangtabs .nav.nav-tabs,
 .ck.ck-link-form_layout-vertical .ck-reset.ck-list + .ck-redaxo-link-dropdown {
     margin-left: 0 !important;
     min-height: var(--ck-ui-component-min-height);
-    margin-top: -1px;
+    margin-top: var(--ck-spacing-medium);
+}
+
+.ck-vertical-form > .ck-redaxo-link-dropdown > .ck-button:after {
+    content: "";
+    width: 0;
+    position: absolute;
+    right: -1px;
+    top: var(--ck-spacing-small);
+    bottom: var(--ck-spacing-small);
+    z-index: 1;
+    border-right: 1px solid var(--ck-color-base-border);
 }
 
 .ck.ck-link-form_layout-vertical .ck-redaxo-link-dropdown .ck-reset.ck-list .ck-button {
     width: 100% !important;
+}
+
+.ck.ck-link-form_layout-vertical .ck-redaxo-link-dropdown .ck-reset.ck-list {
+    margin: 0!important;
 }
 
 .ck.ck-link-form_layout-vertical .ck-reset.ck-list + .ck-button:not(.ck-button-save):not(.ck-button-cancel),

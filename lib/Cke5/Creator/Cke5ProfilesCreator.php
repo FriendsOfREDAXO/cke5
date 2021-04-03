@@ -65,44 +65,6 @@ class Cke5ProfilesCreator
         'xml' => ['label' => 'XML', 'class' => 'block_xml']
     ];
 
-    const PLUGINS = [
-        // 'UploadAdapter',
-        // 'Autoformat',
-        'Bold',
-        'Italic',
-        'BlockQuote',
-        // 'CKFinder',
-        // 'EasyImage',
-        'Heading',
-        // 'PasteFromOffice',
-        // 'TextTransformation',
-        // 'ImageResize',
-        'Alignment',
-        'Highlight',
-        'Strikethrough',
-        'Underline',
-        'Code',
-        'Subscript',
-        'Superscript',
-        'SelectAll',
-        // 'SpecialCharacters',
-        'SpecialCharactersCurrency',
-        'SpecialCharactersMathematical',
-        'SpecialCharactersLatin',
-        'SpecialCharactersArrows',
-        'SpecialCharactersText',
-        'SpecialCharactersEssentials',
-        'CodeBlock',
-        'Emoji',
-        'RemoveFormat',
-        'TodoList',
-        'HorizontalLine',
-        'PageBreak',
-        // 'LinkImage',
-        'PastePlainText',
-        // 'ListStyle',
-    ];
-
     const DEFAULTS = [
         'toolbar' => 'heading,|',
         'alignment' => 'left,right,center',
@@ -245,7 +207,7 @@ const cke5suboptions = $suboptions;
             }
         }
 
-        $jsonProfile['removePlugins'][] = 'AutoLink';
+//        $jsonProfile['removePlugins'][] = 'AutoLink';
 
         /*
         switch($profile['auto_link']) {
@@ -331,11 +293,6 @@ const cke5suboptions = $suboptions;
             $noFontBgColor = false;
         }
         
-
-        if ($noFontSize && $noFontColor && $noFontBgColor) {
-            $jsonProfile['removePlugins'][] = 'Font';
-        }
-
         if (in_array('fontFamily', $toolbar) &&
             (is_null($profile['font_family_default']) or empty($profile['font_family_default'])) &&
             !empty($profile['font_families'])) {
@@ -347,12 +304,8 @@ const cke5suboptions = $suboptions;
             $jsonProfile['fontFamily'] = ['options' => $options];
         }
 
-        if (!in_array('fontFamily', $toolbar)) {
-            $jsonProfile['removePlugins'][] = 'FontFamily';
-        }
-
-        if (!in_array('pastePlainText', $toolbar)) {
-            $jsonProfile['removePlugins'][] = 'PastePlainText';
+        if ($noFontSize && $noFontColor && $noFontBgColor && !in_array('fontFamily', $toolbar)) {
+            $jsonProfile['removePlugins'][] = 'Font';
         }
 
         if (in_array('codeBlock', $toolbar) && !empty($profile['code_block'])) {
@@ -376,8 +329,6 @@ const cke5suboptions = $suboptions;
                 }
             }
             $jsonProfile['mediaEmbed'] = ['removeProviders' => $provider];
-        } else {
-            $jsonProfile['removePlugins'][] = 'MediaEmbed';
         }
 
         if (in_array('rexImage', $toolbar)) {
@@ -438,43 +389,6 @@ const cke5suboptions = $suboptions;
                 $jsonProfile = array_merge($jsonProfile, $definition);
             }
         }
-
-        $removeSpecialCharPlugins = [];
-        /*
-         * todo: not work because : https://github.com/ckeditor/ckeditor5/issues/6160
-        if (in_array('specialCharacters', $toolbar) && !empty($profile['special_characters'])) {
-            $specialPlugins = self::toArray($profile['special_characters'].',essentials');
-            $specialCharPlugins = [];
-            foreach (self::PLUGINS as $plugin) {
-                if (strpos($plugin, 'SpecialCharacters') !== false && $plugin !== 'SpecialCharacters') {
-                    $specialCharPlugins[] = $plugin;
-                    continue;
-                }
-            }
-            foreach ($specialPlugins as $specialPlugin) {
-                foreach ($specialCharPlugins as $key => $specialCharPlugin) {
-                    if ($specialCharPlugin == 'SpecialCharacters' . ucfirst($specialPlugin)) {
-                        unset($specialCharPlugins[$key]);
-                    }
-                }
-            }
-            $removeSpecialCharPlugins = $specialCharPlugins;
-        }*/
-
-        $removePlugins = [];
-        foreach (self::PLUGINS as $plugin) {
-            if (strpos($plugin, 'SpecialCharacters') !== false) {
-                if (!in_array(lcfirst('SpecialCharacters'), $toolbar) || in_array($plugin, $removeSpecialCharPlugins)) {
-                    $removePlugins[] = $plugin;
-                }
-                continue;
-            }
-            if (!in_array(lcfirst($plugin), $toolbar)) {
-                $removePlugins[] = $plugin;
-            }
-        }
-
-        $jsonProfile['removePlugins'] = array_merge($jsonProfile['removePlugins'], $removePlugins);
 
         return ['suboptions' => $jsonSuboption, 'profile' => $jsonProfile];
     }

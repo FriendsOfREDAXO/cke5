@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 4.3.0
+
+* vendor update to 27.0.0
+
 ## Version 4.2.0
 
 * vendor update to 23.1.0
