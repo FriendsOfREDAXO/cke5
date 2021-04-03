@@ -331,14 +331,17 @@ const cke5suboptions = $suboptions;
             $jsonProfile['mediaEmbed'] = ['removeProviders' => $provider];
         }
 
+        dump($profile);
+
         if (in_array('rexImage', $toolbar)) {
             if (!empty($profile['mediatype'])) {
                 $jsonProfile['rexImage'] = ['media_type' => $profile['mediatype']];
             } else {
-                $jsonProfile['rexImage'] = ['media_path' => '/' . $profile['mediapath'] . '/'];
+                $path = (!empty($profile['mediapath'])) ? $profile['mediapath'] : 'media';
+                $jsonProfile['rexImage'] = ['media_path' => '/' . $path . '/'];
             }
         }
-
+        dump($jsonProfile);
         if (!is_null($profile['upload_default']) or !empty($profile['upload_default'])) {
             $ckFinderUrl = self::UPLOAD_URL;
 
