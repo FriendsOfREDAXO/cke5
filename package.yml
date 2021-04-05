@@ -13,10 +13,6 @@ page:
             subpages:
                 demo:
                     title: 'translate:demo'
-                mblock_demo:
-                    title: 'translate:mblock_demo'
-                    requires:
-                        mblock: '^5.1.0'
                 preview:
                     title: 'translate:preview'
         profiles:
