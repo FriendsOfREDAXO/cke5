@@ -11,6 +11,12 @@
 if (rex::isBackend() && is_object(rex::getUser())) {
     rex_perm::register('cke5_addon[]');
 }
+// Check if mblock is available
+if (rex_addon::get('mblock')->isAvailable()) {
+$page = $this->getProperty('page');
+    $page['subpages']['mblock_demo'] = ['title' =>  $this->i18n('mblock_demo')];
+    $this->setProperty('page', $page);
+}
 
 // add assets to backend
 if (rex::isBackend() && rex::getUser()) {
