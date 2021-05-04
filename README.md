@@ -278,28 +278,28 @@ Use the following keystrokes for more efficient navigation in the CKEditor 5 use
 
 ```js
 {
-	"newtab": {
-		"mode": "manual",
-	        "label": "Open in a new tab",
-	        "attributes": {
-        		"target": "_blank",
-                	"rel": "noopener noreferrer"
-		}
-	}
+    "newtab": {
+        "mode": "manual",
+        "label": "Open in a new tab",
+        "attributes": {
+            "target": "_blank",
+            "rel": "noopener noreferrer"
+        }
+    }
 }
-
 ```
 ```js
 {
-	"arrowclass": {
-		"mode": "manual",	
-		"label": "Link mit CSS Klasse",
-		"defaultValue": "true",
-		"attributes": {
-			"class": "arrow"
-		}
-	}
+    "arrowclass": {
+        "mode": "manual",
+        "label": "Link mit CSS Klasse",
+        "defaultValue": "true",
+        "attributes": {
+            "class": "arrow"
+        }
+    }
 }
+
 ```
 
 
