@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author mail[at]doerr-softwaredevelopment[dot]com Joachim Doerr
  * @package redaxo5
@@ -10,33 +11,25 @@
 // register permissions
 if (rex::isBackend() && is_object(rex::getUser())) {
     rex_perm::register('cke5_addon[]');
-}
 
-if ($user = rex::requireUser())
-{	
+    if ($user = rex::requireUser()) {
 
-	if ($theme_type = $user->getValue('theme'))
-	{
-		$theme = $theme_type;
-	}
-	else {
-		$theme = 'auto';
-	}
+        if ($theme_type = $user->getValue('theme')) {
+            $theme = $theme_type;
+        } else {
+            $theme = 'auto';
+        }
+    }
 
-}	
+    // Check REDAXO version
+    if (rex_string::versionCompare(rex::getVersion(), '5.13.0-dev', '>=')) {
+        // set theme properties
+        rex_view::setJsProperty('cke5theme', (string)$theme);
+        rex_view::setJsProperty('cke5darkcss', rex_url::addonAssets('cke5') . 'dark.css');
+    } else {
+        rex_view::setJsProperty('cke5theme', 'notheme');
+    }
 
-if(rex_string::versionCompare(rex::getVersion(), '5.13.0-dev', '>=')) {
-    rex_view::setJsProperty('cke5theme', (string)$theme);
-	rex_view::setJsProperty('cke5darkcss', rex_url::addonAssets('cke5').'dark.css');
-	
-}
-else {
-rex_view::setJsProperty('cke5theme', 'notheme');
-}
-
-
-// add assets to backend
-if (rex::isBackend() && rex::getUser()) {
     // load assets
     \Cke5\Provider\Cke5AssetsProvider::provideCke5ProfileEditData();
     \Cke5\Provider\Cke5AssetsProvider::provideCke5PreviewData();
@@ -56,4 +49,3 @@ if (rex::isBackend() && rex::getUser()) {
         rex_extension::register(['REX_FORM_SAVED', 'REX_FORM_DELETED', 'CKE5_PROFILE_CLONE', 'CKE5_PROFILE_DELETE', 'CKE5_PROFILE_ADD', 'CKE5_PROFILE_UPDATED'], ['\Cke5\Handler\Cke5ExtensionHandler', 'createProfiles']);
     }
 }
-
