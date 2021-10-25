@@ -11,12 +11,29 @@
 if (rex::isBackend() && is_object(rex::getUser())) {
     rex_perm::register('cke5_addon[]');
 }
-// Check if mblock is available
-if (rex_addon::get('mblock')->isAvailable()) {
-$page = $this->getProperty('page');
-    $page['subpages']['mblock_demo'] = ['title' =>  $this->i18n('mblock_demo')];
-    $this->setProperty('page', $page);
+
+if ($user = rex::requireUser())
+{	
+
+	if ($theme_type = $user->getValue('theme'))
+	{
+		$theme = $theme_type;
+	}
+	else {
+		$theme = 'auto';
+	}
+
+}	
+
+if(rex_string::versionCompare(rex::getVersion(), '5.13.0-dev', '>=')) {
+    rex_view::setJsProperty('cke5theme', (string)$theme);
+	rex_view::setJsProperty('cke5darkcss', rex_url::addonAssets('cke5').'dark.css');
+	
 }
+else {
+rex_view::setJsProperty('cke5theme', 'notheme');
+}
+
 
 // add assets to backend
 if (rex::isBackend() && rex::getUser()) {
@@ -39,3 +56,4 @@ if (rex::isBackend() && rex::getUser()) {
         rex_extension::register(['REX_FORM_SAVED', 'REX_FORM_DELETED', 'CKE5_PROFILE_CLONE', 'CKE5_PROFILE_DELETE', 'CKE5_PROFILE_ADD', 'CKE5_PROFILE_UPDATED'], ['\Cke5\Handler\Cke5ExtensionHandler', 'createProfiles']);
     }
 }
+
