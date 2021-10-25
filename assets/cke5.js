@@ -22,7 +22,6 @@ $(document).on('rex:ready', function (e, container) {
                 window.matchMedia('(prefers-color-scheme: dark)')
                     .addEventListener('change', event => {
                         if (event.matches) {
-                            //   $('head').append('<link id="ckedark" rel="stylesheet" type="text/css" href="/assets/addons/cke5/dark.css">');
                             $('head').append('<link id="ckedark" rel="stylesheet" type="text/css" href="' + rex.cke5darkcss + '">');
                         } else {
                             $('head').find("#ckedark").remove();
@@ -31,7 +30,6 @@ $(document).on('rex:ready', function (e, container) {
             }
         }
     });
-
 });
 
 $(document).on('ready', function () {
