@@ -10,7 +10,28 @@ let ckeditors = {},
 $(document).on('rex:ready', function (e, container) {
     container.find(ckareas).each(function () {
         cke5_init($(this));
+        if (rex.cke5theme != 'notheme') {
+            if (rex.cke5theme == 'dark') {
+                $('head').append('<link id="ckedark" rel="stylesheet" type="text/css" href="' + rex.cke5darkcss + '">');
+            }
+
+            if (rex.cke5theme == 'auto') {
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    $('head').append('<link id="ckedark" rel="stylesheet" type="text/css" href="' + rex.cke5darkcss + '">');
+                }
+                window.matchMedia('(prefers-color-scheme: dark)')
+                    .addEventListener('change', event => {
+                        if (event.matches) {
+                            //   $('head').append('<link id="ckedark" rel="stylesheet" type="text/css" href="/assets/addons/cke5/dark.css">');
+                            $('head').append('<link id="ckedark" rel="stylesheet" type="text/css" href="' + rex.cke5darkcss + '">');
+                        } else {
+                            $('head').find("#ckedark").remove();
+                        }
+                    })
+            }
+        }
     });
+
 });
 
 $(document).on('ready', function () {
@@ -129,3 +150,4 @@ function cke5_pastinit(editor, sub_options) {
     //     { title: 'simple arrow down', character: '↓' }
     // ] );
 }
+
