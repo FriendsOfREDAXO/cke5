@@ -61,7 +61,7 @@ body.rex-theme-dark ´ div.cke5InputTags-list ul.cke5InputTags-autocomplete-list
 
 body.rex-theme-dark ´ div.cke5InputTags-list span.cke5InputTags-item {
   background-color: rgba(25, 187, 156, 0.56);
-  color: #fff;
+  color: #000;
 
 }
 
@@ -149,7 +149,7 @@ body.rex-has-theme:not(.rex-theme-light) div.cke5InputTags-list ul.cke5InputTags
 
 body.rex-has-theme:not(.rex-theme-light) div.cke5InputTags-list span.cke5InputTags-item {
   background-color: rgba(25, 187, 156, 0.56);
-  color: #fff;
+  color: #000;
 
 }
 
@@ -171,3 +171,5 @@ body.rex-has-theme:not(.rex-theme-light) .cke5-editor-info {
 }
 
 
+
+ 
