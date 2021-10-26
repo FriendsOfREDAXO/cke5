@@ -1,42 +1,42 @@
-body.rex-theme-dark.cke5_wrap_rex_profile_data {
+body.rex-theme-dark .cke5_wrap_rex_profile_data {
     background-color: rgba(255, 255, 255, 0.07);
 }
 
-body.rex-theme-dark.cke5_clangtabs .nav.nav-tabs {
+body.rex-theme-dark .cke5_clangtabs .nav.nav-tabs {
     background-color: rgba(224, 235, 228, 0.12);
     padding-top: 12px;
    
 }
 
-body.rex-theme-dark.cke5-tabform {
+body.rex-theme-dark .cke5-tabform {
     background-color: rgba(117, 117, 117, 0.2);
     border: 0;
 }
 
-body.rex-theme-dark.cke5_clangtabs {
+body.rex-theme-dark .cke5_clangtabs {
     border-bottom: 15px solid rgba(224, 235, 228, 0.24);
 }
 
-body.rex-theme-dark.cke5_clangtabs .nav-tabs > li > a {
+body.rex-theme-dark .cke5_clangtabs .nav-tabs > li > a {
     color: #333;
     background-color: rgba(1, 1, 1, 0.24);
     border-color: #000;
     border: 0;}
 
-body.rex-theme-dark.cke5_clangtabs .nav-tabs > li.active > a,
-body.rex-theme-dark.cke5_clangtabs .nav-tabs > li.active > a:hover,
-body.rex-theme-dark.cke5_clangtabs .nav-tabs > li.active > a:focus {
+body.rex-theme-dark .cke5_clangtabs .nav-tabs > li.active > a,
+body.rex-theme-dark .cke5_clangtabs .nav-tabs > li.active > a:hover,
+body.rex-theme-dark .cke5_clangtabs .nav-tabs > li.active > a:focus {
     background-color: rgba(117, 117, 117, 0);
     border-radius: 4px 4px 0 0;
 border: 0;
 }
 
-body.rex-theme-dark.cke5_clangtabs .nav-tabs > li > a {
+body.rex-theme-dark .cke5_clangtabs .nav-tabs > li > a {
     color: #fff;
 
 }
 
-body.rex-theme-dark.cke5_clangtabs .nav {
+body.rex-theme-dark .cke5_clangtabs .nav {
     padding-left: 5px;
     border-bottom: 1px solid rgba(192, 224, 217, 0.2);
 }
@@ -65,7 +65,7 @@ body.rex-theme-darkdiv.cke5InputTags-list span.cke5InputTags-item {
 
 }
 
-body.rex-theme-dark.cke5-preview-row {
+body.rex-theme-dark .cke5-preview-row {
     background: rgba(255, 255, 255, 0.07);
     border: 1px solid #080909;
     border-left: none;
@@ -76,10 +76,9 @@ body.rex-theme-dark.cke5-preview-row {
 }
 
 
-body.rex-theme-dark.cke5-editor-info {
+body.rex-theme-dark .cke5-editor-info {
     background: rgba(189, 121, 23, 0.4);
     border: 0;
-
 
 
 
