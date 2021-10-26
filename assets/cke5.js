@@ -1,5 +1,5 @@
 /**
- * @author mail[at]doerr-softwaredevelopment[dot]com Joachim Doerr
+ * @author FriendsOfRedaxo: Joachim Doerr https://github.com/joachimdoerr
  * @package redaxo5
  * @license MIT
  */
