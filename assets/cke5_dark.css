@@ -1,0 +1,173 @@
+body.rex-theme-dark ´ .cke5_wrap_rex_profile_data {
+    background-color: rgba(255, 255, 255, 0.07);
+}
+
+body.rex-theme-dark ´ .cke5_clangtabs .nav.nav-tabs {
+    background-color: rgba(224, 235, 228, 0.12);
+    padding-top: 12px;
+   
+}
+
+body.rex-theme-dark ´ .cke5-tabform {
+    background-color: rgba(218, 218, 218, 0.2);
+    border: 0;
+}
+
+body.rex-theme-dark ´ .cke5_clangtabs {
+    border-bottom: 15px solid rgba(224, 235, 228, 0.24);
+}
+
+body.rex-theme-dark ´ .cke5_clangtabs .nav-tabs > li > a {
+    color: #333;
+    background-color: rgba(230, 234, 240, 0.22);
+    border-color: #f1f6fc;
+    border: 0;}
+
+body.rex-theme-dark ´ .cke5_clangtabs .nav-tabs > li.active > a,
+body.rex-theme-dark ´ .cke5_clangtabs .nav-tabs > li.active > a:hover,
+body.rex-theme-dark ´ .cke5_clangtabs .nav-tabs > li.active > a:focus {
+    background-color: rgba(218, 218, 218, 0.12);
+    border-radius: 4px 4px 0 0;
+border: 0;
+}
+
+body.rex-theme-dark ´ .cke5_clangtabs .nav-tabs > li > a {
+    color: #fff;
+
+}
+
+body.rex-theme-dark ´ .cke5_clangtabs .nav {
+    padding-left: 5px;
+    border-bottom: 1px solid rgba(192, 224, 217, 0.2);
+}
+
+body.rex-theme-dark ´ div.cke5InputTags-list {
+
+  background-color: rgba(249, 249, 249, 0.05);
+
+}
+
+body.rex-theme-dark ´ div.cke5InputTags-list ul.cke5InputTags-autocomplete-list {
+background-color: #1f1616;
+ border: 1px solid rgba(221, 221, 221, 0.29);	
+}
+
+
+body.rex-theme-dark ´ div.cke5InputTags-list ul.cke5InputTags-autocomplete-list li {
+
+  border-bottom: 1px solid rgba(221, 221, 221, 0.28);
+
+}
+
+body.rex-theme-dark ´ div.cke5InputTags-list span.cke5InputTags-item {
+  background-color: rgba(25, 187, 156, 0.56);
+  color: #fff;
+
+}
+
+body.rex-theme-dark ´ .cke5-preview-row {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid #080909;
+    border-left: none;
+    border-right: none;
+    margin: 0 -15px 1.5em -15px;
+    background-image: none;
+    
+}
+
+
+body.rex-theme-dark ´ .cke5-editor-info {
+    background: rgba(189, 121, 23, 0.4);
+    border: 0;
+}
+
+
+
+
+
+@media (prefers-color-scheme: dark) {
+body.rex-has-theme:not(.rex-theme-light) .cke5_wrap_rex_profile_data {
+    background-color: rgba(255, 255, 255, 0.07);
+}
+
+body.rex-has-theme:not(.rex-theme-light) .cke5_clangtabs .nav.nav-tabs {
+    background-color: rgba(224, 235, 228, 0.12);
+    padding-top: 12px;
+   
+}
+
+body.rex-has-theme:not(.rex-theme-light) .cke5-tabform {
+    background-color: rgba(218, 218, 218, 0.2);
+    border: 0;
+}
+
+body.rex-has-theme:not(.rex-theme-light) .cke5_clangtabs {
+    border-bottom: 15px solid rgba(224, 235, 228, 0.24);
+}
+
+body.rex-has-theme:not(.rex-theme-light) .cke5_clangtabs .nav-tabs > li > a {
+    color: #333;
+    background-color: rgba(230, 234, 240, 0.22);
+    border-color: #f1f6fc;
+    border: 0;}
+
+body.rex-has-theme:not(.rex-theme-light) .cke5_clangtabs .nav-tabs > li.active > a,
+body.rex-has-theme:not(.rex-theme-light) .cke5_clangtabs .nav-tabs > li.active > a:hover,
+body.rex-has-theme:not(.rex-theme-light) .cke5_clangtabs .nav-tabs > li.active > a:focus {
+    background-color: rgba(218, 218, 218, 0.12);
+    border-radius: 4px 4px 0 0;
+border: 0;
+}
+
+body.rex-has-theme:not(.rex-theme-light) .cke5_clangtabs .nav-tabs > li > a {
+    color: #fff;
+
+}
+
+body.rex-has-theme:not(.rex-theme-light) .cke5_clangtabs .nav {
+    padding-left: 5px;
+    border-bottom: 1px solid rgba(192, 224, 217, 0.2);
+}
+
+body.rex-has-theme:not(.rex-theme-light) div.cke5InputTags-list {
+
+  background-color: rgba(249, 249, 249, 0.05);
+
+}
+
+body.rex-has-theme:not(.rex-theme-light) div.cke5InputTags-list ul.cke5InputTags-autocomplete-list {
+background-color: #1f1616;
+ border: 1px solid rgba(221, 221, 221, 0.29);	
+}
+
+
+body.rex-has-theme:not(.rex-theme-light) div.cke5InputTags-list ul.cke5InputTags-autocomplete-list li {
+
+  border-bottom: 1px solid rgba(221, 221, 221, 0.28);
+
+}
+
+body.rex-has-theme:not(.rex-theme-light) div.cke5InputTags-list span.cke5InputTags-item {
+  background-color: rgba(25, 187, 156, 0.56);
+  color: #fff;
+
+}
+
+body.rex-has-theme:not(.rex-theme-light) .cke5-preview-row {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid #080909;
+    border-left: none;
+    border-right: none;
+    margin: 0 -15px 1.5em -15px;
+    background-image: none;
+    
+}
+
+
+body.rex-has-theme:not(.rex-theme-light) .cke5-editor-info {
+    background: rgba(189, 121, 23, 0.4);
+    border: 0;
+}
+}
+
+
