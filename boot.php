@@ -35,6 +35,7 @@ if (rex::isBackend() && is_object(rex::getUser())) {
     \Cke5\Provider\Cke5AssetsProvider::provideCke5PreviewData();
     \Cke5\Provider\Cke5AssetsProvider::provideCke5BaseData();
     \Cke5\Provider\Cke5AssetsProvider::provideCke5CustomData();
+    rex_view::addCssFile($this->getAssetsUrl('cke5_dark.css'));
 
     // upload image
     if (rex_request::request('cke5upload') == 1) {
