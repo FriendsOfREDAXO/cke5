@@ -14,7 +14,7 @@ Integrates the [CKEditor5](https://ckeditor.com) into REDAXO CMS.
 - Extra options allow you to customize the editor
 - The expert mode allows you to develop profiles in source code
 - Placeholders for all backend languages
-- Dark-mode suupport for REDAXO >= 5.13
+- Dark-mode support for REDAXO >= 5.13
 
 **Custom REDAXO Link-Widget**
 
