@@ -14,6 +14,7 @@ Intergriert den [CKEditor5](https://ckeditor.com) in REDAXO CMS.
 - Zusätzliche Optionen erlauben es den Editor anzupassen
 - Der Expertenmodus erlaubt es Profile frei im Quellcode zu entwickeln
 - Platzhalter für alle Backend-Sprachen
+- Dark-mode-support für REDAXO >= 5.13
 
 Übersetzt mit www.DeepL.com/Translator (kostenlose Version)
 
