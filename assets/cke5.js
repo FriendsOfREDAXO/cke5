@@ -12,9 +12,10 @@ $(document).on('rex:ready', function (e, container) {
         cke5_init($(this));
         if (rex.cke5theme != 'notheme') {
             if (rex.cke5theme == 'dark') {
+                if(!$('#ckedark').length){
                 $('head').append('<link id="ckedark" rel="stylesheet" type="text/css" href="' + rex.cke5darkcss + '">');
+                }
             }
-
             if (rex.cke5theme == 'auto') {
                 if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
                     $('head').append('<link id="ckedark" rel="stylesheet" type="text/css" href="' + rex.cke5darkcss + '">');
