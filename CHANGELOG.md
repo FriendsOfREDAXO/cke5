@@ -3,6 +3,8 @@
 ## Version 4.3.0
 
 * vendor update to 27.0.0
+* dark-mode
+* some small fixes
 
 ## Version 4.2.0
 
