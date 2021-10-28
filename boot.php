@@ -12,17 +12,16 @@
 if (rex::isBackend() && is_object(rex::getUser())) {
     rex_perm::register('cke5_addon[]');
 
-    if ($user = rex::requireUser()) {
-        // get user settings for theme
-        if ($theme_type = $user->getValue('theme')) {
-            $theme = $theme_type;
-        } else {
-            $theme = 'auto';
-        }
-    }
-
     // Check REDAXO version
     if (rex_string::versionCompare(rex::getVersion(), '5.13.0-dev', '>=')) {
+        if ($user = rex::requireUser()) {
+            // get user settings for theme
+            if ($theme_type = $user->getValue('theme')) {
+                $theme = $theme_type;
+            } else {
+                $theme = 'auto';
+            }
+        }
         // set theme properties
         rex_view::setJsProperty('cke5theme', (string)$theme);
         rex_view::setJsProperty('cke5darkcss', rex_url::addonAssets('cke5') . 'dark.css');
