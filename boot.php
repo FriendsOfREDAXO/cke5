@@ -12,7 +12,7 @@
 if (rex::isBackend() && is_object(rex::getUser())) {
     rex_perm::register('cke5_addon[]');
 
-    if ($user = rex::requireUser()) {
+    if ($user = rex::getUser()) {
         // get user settings for theme
         if ($theme_type = $user->getValue('theme')) {
             $theme = $theme_type;
