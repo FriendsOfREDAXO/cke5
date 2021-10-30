@@ -27,6 +27,18 @@ cke5_profile_add = Neues CKEditor 5 Profile erstellen
 cke5_list_function = Funktion
 cke5_clone = duplizieren
 
+# fieldset
+cke5_toolbar = Toolbar
+cke5_base_text_styles = Basis Text Styles
+cke5_embed_support = Media- und Html-Embed
+cke5_images = Images
+cke5_fonts = Fonts
+cke5_links = Links
+cke5_default_setup = Grundeinstellungen
+cke5_emoji = Emoji
+cke5_highlights = Highlight
+cke5_html_support = HtmlSupport
+
 # profiles columns names
 cke5_name = Profile-Namen
 cke5_name_placeholder = profile_name
@@ -39,7 +51,7 @@ cke5_extra_definition_area = Optionen
 cke5_extra_definition_description = Zur Erfasseung zusätzlicher Optionen
 cke5_description = Profil-Beschreibung
 cke5_description_placeholder = Einsatzzweck und Umfang des Profils
-cke5_toolbar = Toolbar-Elemente
+cke5_toolbar_elements = Toolbar-Elemente
 cke5_heading = Überschrift-Elemente
 cke5_alignment = Text Ausrichtung
 cke5_fontSize = Schriftgrößen
@@ -111,6 +123,11 @@ cke5_liststyle = List Style
 cke5_liststyle_description = Schafft die Option List-Styles wählen zu können
 cke5_html_embed_default = Embed-HTML Preview
 cke5_html_embed_default_description = Stellt embed-HTML im Editor als Preview dar
+cke5_empji = EmojiGroup
+cke5_html_support_allow = HtmlSupport Allow
+cke5_html_support_disallow = HtmlSupport Disallow
+cke5_image_resize_group_options = Group Resize Icons
+cke5_image_resize_group_options_description = Gruppiert die Image Resize Icons in der Image Toolbar
 
 # profiles list & form actions
 rex_cke5_profiles_cloned = Das Profil wurde dupliziert

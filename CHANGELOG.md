@@ -1,5 +1,21 @@
 # Changelog
 
+## Version 4.5.0
+
+* vendor update to v31
+* add `toggleTableCaption` feature
+* add `fullscreen` plugin and as well add `|` to table toolbar
+* extend emoji add `EmojiPeople`, `EmojiNature`, `EmojiPlaces`, `EmojiFood`, `EmojiActivity`, `EmojiObjects`, `EmojiSymbols`, `EmojiFlags` group
+* add `sourceEditing` and `htmlSupport`
+* fix some ugly profile editor javascript issues
+* add `inline`, `side`, `alignBlockLeft`, `alignBlockRight`, `toggleImageCaption` for images
+* add better profile editor structure
+* add option to group buttons in the image toolbar
+
+### Breaking Change
+
+* The imageStyle property `full` was replaced by vendor with `block`
+
 ## Version 4.3.0
 
 * vendor update to 27.0.0

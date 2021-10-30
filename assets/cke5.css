@@ -31,6 +31,15 @@
     url('fonts/montserrat-v14-latin-700.svg#Montserrat') format('svg'); /* Legacy iOS */
 }
 
+.rex-slice .ck-editor iframe,
+.rex-slice .ck-editor img,
+.rex-slice .ck-editor svg,
+.rex-slice .ck-editor video,
+.rex-slice .ck-editor object,
+.rex-slice .ck-editor embed {
+    max-width: unset;
+}
+
 .slider.slider-horizontal {
     width: 96%;
     margin: 0 2%;

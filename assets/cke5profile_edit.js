@@ -63,6 +63,7 @@ function cke5_init_edit(element) {
     autosize($('#cke5extraDefinition-collapse textarea'));
     autosize($('#cke5linkDecoratorsDefinition-collapse textarea'));
     autosize($('#cke5transformationDefinition-collapse textarea'));
+    autosize($('#cke5sourceEditing-collapse textarea'));
 
     cke5_addColorFields(tablecolor_area);
     cke5_addColorFields(fontcolor_area);
@@ -112,9 +113,9 @@ function cke5_init_edit(element) {
 
     if (taginputs.length) {
         taginputs.each(function () {
-            if ($(this).attr('data-default-tags') === '1') {
-                $(this).attr('value', $(this).attr('data-defaults'))
-            }
+            // if ($(this).attr('data-default-tags') === '1') {
+            //     $(this).attr('value', $(this).attr('data-defaults'))
+            // }
             $(this).cke5InputTags({
                 autocomplete: {
                     values: JSON.parse($(this).attr('data-tags')),
@@ -191,6 +192,11 @@ function cke5_init_edit(element) {
             }
         })
     }
+
+    // init collapse
+    if (toolbar.val() !== undefined) cke5_toolbar_create_tag('toolbar', toolbar.val().split(','));
+    if (table_toolbar.val() !== undefined) cke5_toolbar_create_tag('table_toolbar', table_toolbar.val().split(','));
+    if (rexlink_toolbar.val() !== undefined) cke5_toolbar_create_tag('rexlink_toolbar', rexlink_toolbar.val().split(','));
 
     element.find('.cke5InputTags-list').each(function () {
         $(this).sortable({
@@ -392,13 +398,16 @@ function cke5_addFontFamiliesFields(element) {
 }
 
 function cke5_toolbar_create_tag(typename, tags) {
-    let liststyleshow = 0;
+
     cktypes.forEach(function (type) {
         if ($.inArray(type, tags) !== -1 && typename === 'toolbar') {
-            if (type === 'bulletedList' || type === 'numberedList') {
-                toggle_collapse('liststyle', 'show');
-            } else {
-                toggle_collapse(type, 'show');
+            switch (type) {
+                case 'bulletedList':
+                case 'numberedList':
+                    toggle_collapse('liststyle', 'show');
+                    break;
+                default:
+                    toggle_collapse(type, 'show');
             }
         }
     });
@@ -414,7 +423,14 @@ function cke5_toolbar_create_tag(typename, tags) {
     });
     cktabletypes.forEach(function (type) {
         if ($.inArray(type, tags) !== -1 && typename === 'table_toolbar') {
-            toggle_collapse('tableColor', 'show');
+            console.log([typename, type]);
+            console.log(tags);
+            switch (type) {
+                case 'tableProperties':
+                case 'tableCellProperties':
+                    toggle_collapse('tableColor', 'show');
+                    break;
+            }
         }
     });
 }
@@ -422,26 +438,48 @@ function cke5_toolbar_create_tag(typename, tags) {
 function cke5_toolbar_destroy_tag(typename, tags) {
     let imghide = 0,
         liststylehide = 0,
+        fonthide = 0,
+        embedhide = 0,
         tabhide = 0;
     cktypes.forEach(function (type) {
         if ($.inArray(type, tags) !== -1) {
         } else {
             if (typename === 'toolbar') {
-                toggle_collapse(type, 'hide');
-            }
-            if (type === 'bulletedList' || type === 'numberedList') {
-                liststylehide++;
+                switch (type) {
+                    case 'bulletedList':
+                    case 'numberedList':
+                        liststylehide++;
+                        if (liststylehide === 2) {
+                            toggle_collapse('liststyle', 'hide');
+                        }
+                        break;
+                    case 'htmlEmbed':
+                    case 'mediaEmbed':
+                        embedhide++;
+                        console.log(embedhide + ' - ' + type);
+                        toggle_collapse(type, 'hide', (embedhide === 2));
+                        break;
+                    case 'fontSize':
+                    case 'fontFamily':
+                    case 'fontColor':
+                    case 'fontBackgroundColor':
+                        fonthide++;
+                        toggle_collapse(type, 'hide', (fonthide === 4));
+                        break;
+                    default:
+                        toggle_collapse(type, 'hide');
+                }
             }
         }
     });
-    if (liststylehide === 2) {
-        toggle_collapse('liststyle', 'hide');
-    }
     ckimgtypes.forEach(function (type) {
         if ($.inArray(type, tags) !== -1) {
         } else {
             if (typename === 'toolbar' && !imageDragDrop.prop('checked')) {
                 imghide++;
+                if (imghide === 2) {
+                    toggle_collapse('imagetoolbar', 'hide');
+                }
             }
         }
     });
@@ -453,20 +491,17 @@ function cke5_toolbar_destroy_tag(typename, tags) {
             }
         }
     });
-    if (imghide === 2) {
-        toggle_collapse('imagetoolbar', 'hide');
-    }
     cktabletypes.forEach(function (type) {
         if ($.inArray(type, tags) !== -1) {
         } else {
             if (typename === 'table_toolbar') {
                 tabhide++;
+                if (tabhide === 2) {
+                    toggle_collapse('tableColor', 'hide');
+                }
             }
         }
     });
-    if (tabhide === 2) {
-        toggle_collapse('tableColor', 'hide');
-    }
 }
 
 function cke5_bootstrapToggle_collapse(element, invert = false) {
@@ -493,9 +528,25 @@ function cke5_bootstrapToggle_collapse(element, invert = false) {
     }
 }
 
-function toggle_collapse(typename, direction) { // direction => [show,hide]
+function toggle_collapse(typename, direction, hideParent = false) { // direction => [show,hide]
     let element = $('#cke5' + typename + '-collapse');
+    let parent = element.parent().parent();
     if (element.length) {
+
+        if (hideParent) {
+
+            console.log(parent);
+        }
+
+        if (parent.length && parent.hasClass('collapse')) {
+            if (
+                (!parent.hasClass('in') && direction === 'show') ||
+                (hideParent && direction === 'hide')
+            ) {
+                parent.collapse(direction);
+            }
+        }
+
         element.collapse(direction);
         window.dispatchEvent(new Event('resize'));
     }

@@ -19,19 +19,31 @@ class Cke5ProfilesCreator
 
     const EDITOR_SETTINGS = [
         /* todo: specialCharacters not work because : https://github.com/ckeditor/ckeditor5/issues/6160 */
-        'cktypes' => ['heading', 'fontSize', 'mediaEmbed', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable', 'fontBackgroundColor', 'fontColor', 'codeBlock', 'bulletedList', 'numberedList', 'htmlEmbed'/*, 'specialCharacters' */],
+        'cktypes' => ['heading', 'fontSize', 'mediaEmbed', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable', 'fontBackgroundColor', 'fontColor', 'codeBlock', 'bulletedList', 'numberedList', 'htmlEmbed', 'emoji', 'sourceEditing'/*, 'specialCharacters' */],
         'ckimgtypes' => ['rexImage', 'imageUpload'],
         'cklinktypes' => ['ytable'],
         'cktabletypes' => ['tableProperties', 'tableCellProperties']
     ];
 
+    const DEFAULT_VALUES = [
+        'html_support_allow' => '[
+    {
+        "name": "regex(/.*/)",
+        "attributes": true,
+        "classes": true,
+        "styles": true
+    }
+]',
+    ];
+
     const ALLOWED_FIELDS = [
-        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll', 'specialCharacters', 'pastePlainText', 'htmlEmbed'],
+        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll', 'specialCharacters', 'pastePlainText', 'htmlEmbed', 'fullScreen', 'sourceEditing'],
         'alignment' => ['left', 'right', 'center', 'justify'],
-        'table_toolbar' => ['tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties'],
+        'table_toolbar' => ['|','tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties', 'toggleTableCaption'],
         'heading' => ['paragraph', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+        'emoji' => ['EmojiPeople', 'EmojiNature', 'EmojiPlaces', 'EmojiFood', 'EmojiActivity', 'EmojiObjects', 'EmojiSymbols', 'EmojiFlags'],
         'highlight' => ['yellowMarker', 'greenMarker', 'pinkMarker', 'blueMarker', 'redPen', 'greenPen'],
-        'image_toolbar' => ['|', 'imageTextAlternative', 'full', 'alignLeft', 'alignCenter', 'alignRight', 'linkImage'],
+        'image_toolbar' => ['|', 'imageTextAlternative', 'block', 'inline', 'side', 'alignLeft', 'alignCenter', 'alignRight', 'alignBlockLeft', 'alignBlockRight', 'linkImage', 'toggleImageCaption'],
         'rexlink' => ['internal', 'media', 'email', 'phone', 'ytable'],
         'fontsize' => ['default', 'tiny', 'small', 'big', 'huge', '8', '9',
             '10', '11', '12', '13', '14', '15', '16', '17', '18', '19',
@@ -68,7 +80,7 @@ class Cke5ProfilesCreator
     const DEFAULTS = [
         'toolbar' => 'heading,|',
         'alignment' => 'left,right,center',
-        'table_toolbar' => 'tableColumn,tableRow,mergeTableCells,tableProperties,tableCellProperties',
+        'table_toolbar' => 'tableColumn,tableRow,mergeTableCells,tableProperties,tableCellProperties,toggleTableCaption',
         'heading' => 'paragraph,h1,h2,h3',
         'highlight' => 'yellowMarker,greenMarker,redPen,greenPen',
         'image_toolbar' => 'imageTextAlternative,|,full,alignLeft,alignRight,linkImage',
@@ -78,7 +90,8 @@ class Cke5ProfilesCreator
         'max_height' => [0, 200, 400, 600, 800, 1000, 1200],
         'mediaembed' => 'youtube,vimeo',
         'code_block' => 'plaintext,php,javascript,python',
-        'special_characters' => 'currency,mathematical,latin,arrows,text'
+        'special_characters' => 'currency,mathematical,latin,arrows,text',
+        'emoji' => 'EmojiPeople,EmojiSymbols,EmojiFlags',
     ];
 
     /**
@@ -105,7 +118,7 @@ class Cke5ProfilesCreator
                 $jsonProfiles[$profile['name']] = $result['profile'];
             }
 
-            $profiles = str_replace([":\/\/","null"], ["://",null], json_encode($jsonProfiles));
+            $profiles = str_replace([":\/\/","null",'"regex(\/', '\/)"'], ["://",null,'/','/'], json_encode($jsonProfiles));
             $suboptions = json_encode($jsonSuboptions);
 
             $content =
@@ -179,9 +192,15 @@ const cke5suboptions = $suboptions;
             $jsonProfile['image']['styles'] = self::getImageStyles($imageKeys);
 
             if (!is_null($resizeOptions) && sizeof($resizeOptions) > 0) {
-                $jsonProfile['image']['toolbar'][] = '|';
-                foreach ($resizeOptions as $option) {
-                    $jsonProfile['image']['toolbar'][] = $option['name'];
+                // if toggle setting group sizes...
+                if (!empty($profile['image_resize_group_options'])) {
+                    if (sizeof($jsonProfile['image']['toolbar']) > 0) $jsonProfile['image']['toolbar'][] = '|';
+                    $jsonProfile['image']['toolbar'][] = 'resizeImage';
+                } else {
+                    $jsonProfile['image']['toolbar'][] = '|';
+                    foreach ($resizeOptions as $option) {
+                        $jsonProfile['image']['toolbar'][] = $option['name'];
+                    }
                 }
             }
         }
@@ -250,8 +269,24 @@ const cke5suboptions = $suboptions;
             $jsonProfile['removePlugins'][] = 'ListStyle';
         }
 
+        if (!in_array('sourceEditing', $toolbar)) {
+            $jsonProfile['removePlugins'][] = 'SourceEditing';
+            $jsonProfile['removePlugins'][] = 'GeneralHtmlSupport';
+        }
+
         if (in_array('heading', $toolbar) && !empty($profile['heading'])) {
             $jsonProfile['heading'] = ['options' => self::getHeadings(self::toArray($profile['heading']))];
+        }
+
+        if (in_array('emoji', $toolbar) && !empty($profile['emoji'])) {
+            $emojiGroups = self::toArray($profile['emoji']);
+            foreach (self::ALLOWED_FIELDS['emoji'] as $emoji) {
+                if (!in_array($emoji, $emojiGroups)) {
+                    $jsonProfile['removePlugins'][] = $emoji;
+                }
+            }
+        } else {
+            $jsonProfile['removePlugins'] = array_merge($jsonProfile['removePlugins'], self::ALLOWED_FIELDS['emoji']);
         }
 
         if (in_array('highlight', $toolbar) && !empty($profile['highlight'])) {
@@ -331,7 +366,7 @@ const cke5suboptions = $suboptions;
             $jsonProfile['mediaEmbed'] = ['removeProviders' => $provider];
         }
 
-        dump($profile);
+//        dump($profile);
 
         if (in_array('rexImage', $toolbar)) {
             if (!empty($profile['mediatype'])) {
@@ -341,7 +376,8 @@ const cke5suboptions = $suboptions;
                 $jsonProfile['rexImage'] = ['media_path' => '/' . $path . '/'];
             }
         }
-        dump($jsonProfile);
+
+//        dump($jsonProfile);
         if (!is_null($profile['upload_default']) or !empty($profile['upload_default'])) {
             $ckFinderUrl = self::UPLOAD_URL;
 
@@ -386,11 +422,27 @@ const cke5suboptions = $suboptions;
             }
         }
 
+        if (!empty($profile['html_support_allow']) || !empty($profile['html_support_disallow'])) {
+            $htmlSupport = ['htmlSupport' => []];
+            if (!empty($profile['html_support_allow'])) {
+                $htmlSupport['htmlSupport']['allow'] = json_decode($profile['html_support_allow'], true);
+            }
+            if (!empty($profile['html_support_disallow'])) {
+                $htmlSupport['htmlSupport']['disallow'] = json_decode($profile['html_support_disallow'], true);
+            }
+            $jsonProfile = array_merge($jsonProfile, $htmlSupport);
+        } else {
+            $jsonProfile['removePlugins'][] = 'SourceEditing';
+            $jsonProfile['removePlugins'][] = 'GeneralHtmlSupport';
+        }
+
         if (!empty($profile['extra'])) {
             $definition = json_decode($profile['extra_definition'], true);
             if (is_array($definition)) {
                 $jsonProfile = array_merge($jsonProfile, $definition);
             }
+
+            $jsonProfile['removePlugins'] = array_unique($jsonProfile['removePlugins']);
         }
 
         return ['suboptions' => $jsonSuboption, 'profile' => $jsonProfile];
@@ -415,7 +467,7 @@ const cke5suboptions = $suboptions;
         $return = [];
 
         foreach ($keys as $key) {
-            if (in_array($key, ['full', 'alignLeft', 'alignCenter', 'alignRight'])) {
+            if (in_array($key, ['block', 'inline', 'side', 'alignLeft', 'alignCenter', 'alignRight', 'alignBlockRight', 'alignBlockLeft'])) {
                 $return[] = 'imageStyle:' . $key;
             } else {
                 $return[] = $key;
@@ -435,7 +487,7 @@ const cke5suboptions = $suboptions;
         $return = [];
 
         foreach ($keys as $key) {
-            if (in_array($key, ['full', 'alignLeft', 'alignCenter', 'alignRight'])) {
+            if (in_array($key, ['block', 'inline', 'side', 'alignLeft', 'alignCenter', 'alignRight', 'alignBlockRight', 'alignBlockLeft'])) {
                 $return[] = $key;
             }
         }
