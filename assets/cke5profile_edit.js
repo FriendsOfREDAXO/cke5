@@ -88,7 +88,7 @@ function cke5_init_edit(element) {
             allowUpper: false,
             allowOtherCharSets: false,
             maxLength: 18,
-            allow: '_-',
+            allow: '_',
             allowNumeric: true
         });
     }
