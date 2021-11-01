@@ -353,7 +353,7 @@ if ($func == '') {
                     $field = $form->addTextAreaField('image_resize_options_definition');
                     $field->setLabel(rex_i18n::msg('cke5_image_resize_options_definition'));
                     $field->setAttribute('id', 'cke5resizeoptions-area');
-                    $field->setAttribute('data-name-placeholder', rex_i18n::msg('cke5_name_placeholder'));
+                    $field->setAttribute('data-name-placeholder', rex_i18n::msg('cke5_resize_option_placeholder'));
                     $field->setAttribute('data-icon-placeholder', rex_i18n::msg('cke5_icon_placeholder'));
                     $field->setAttribute('data-value-placeholder', rex_i18n::msg('cke5_value_placeholder'));
 
