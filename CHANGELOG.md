@@ -1,6 +1,6 @@
 # Changelog
 
-## Version 4.5.0
+## Version 5.0.0
 
 * vendor update to v31
 * add `toggleTableCaption` feature
