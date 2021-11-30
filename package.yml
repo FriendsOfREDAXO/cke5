@@ -24,3 +24,7 @@ requires:
     redaxo: '^5.12'
     php:
         version: '>=7.2, <9'
+conflicts:
+    packages:
+        mblock: '<3.4.0'
+        mbform: '<6.1.0'
