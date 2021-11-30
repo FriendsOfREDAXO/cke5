@@ -360,7 +360,7 @@ Example:
            "link": {"rexlink": ["internal", "media"]},
            "image": {
              "toolbar": ["imageTextAlternative", "|", "imageStyle:full", "imageStyle:alignLeft", "imageStyle:alignRight", "imageStyle:alignCenter"],
-             "styles": ["full", "alignLeft", "alignRight", "alignCenter"]
+             "styles": ["block", "alignLeft", "alignRight", "alignCenter"]
            },
            "table": {"toolbar": ["tableColumn", "tableRow", "mergeTableCells", "tableProperties", "tableCellProperties"]},
            "rexImage": {"media_path": "\/media\/"},

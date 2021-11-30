@@ -27,7 +27,7 @@ const cke5profiles = {
                 "icon": "medium"
             }, {"name": "imageResize:75", "value": "75", "icon": "large"}],
             "toolbar": ["imageTextAlternative", "|", "imageStyle:block", "imageStyle:alignLeft", "imageStyle:alignRight", "imageStyle:alignCenter", "|", "linkImage", "|", "imageResize:original", "imageResize:25", "imageResize:50", "imageResize:75"],
-            "styles": ["full", "alignLeft", "alignRight", "alignCenter"]
+            "styles": ["block", "alignLeft", "alignRight", "alignCenter"]
         },
         "table": {"contentToolbar": ["tableColumn", "tableRow", "mergeTableCells"]},
         "alignment": ["left", "right", "center", "justify"],
@@ -112,7 +112,7 @@ const cke5profiles = {
         },
         "image": {
             "toolbar": ["imageTextAlternative", "|", "imageStyle:full", "imageStyle:alignLeft", "imageStyle:alignRight", "imageStyle:alignCenter", "|", "linkImage"],
-            "styles": ["full", "alignLeft", "alignRight", "alignCenter"]
+            "styles": ["block", "alignLeft", "alignRight", "alignCenter"]
         },
         "table": {
             "contentToolbar": ["tableColumn", "tableRow", "mergeTableCells", "tableProperties", "tableCellProperties"],

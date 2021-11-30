@@ -83,7 +83,7 @@ class Cke5ProfilesCreator
         'table_toolbar' => 'tableColumn,tableRow,mergeTableCells,tableProperties,tableCellProperties,toggleTableCaption',
         'heading' => 'paragraph,h1,h2,h3',
         'highlight' => 'yellowMarker,greenMarker,redPen,greenPen',
-        'image_toolbar' => 'imageTextAlternative,|,full,alignLeft,alignRight,linkImage',
+        'image_toolbar' => 'imageTextAlternative,|,block,alignLeft,alignRight,linkImage',
         'rexlink' => 'internal,media,email,phone',
         'fontsize' => 'tiny,small,default,big,huge',
         'min_height' => [0, 100, 200, 300, 400, 500, 600],
