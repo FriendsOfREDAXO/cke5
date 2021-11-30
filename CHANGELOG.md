@@ -11,6 +11,9 @@
 * add `inline`, `side`, `alignBlockLeft`, `alignBlockRight`, `toggleImageCaption` for images
 * add better profile editor structure
 * add option to group buttons in the image toolbar
+* fix name issue, disallow usage of minus `-` char
+* fix wrong translation key usage in profile editor
+* fix removePlugin issue by extra option usage 
 
 ### Breaking Change
 

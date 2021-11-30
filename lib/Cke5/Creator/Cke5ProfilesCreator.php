@@ -366,8 +366,6 @@ const cke5suboptions = $suboptions;
             $jsonProfile['mediaEmbed'] = ['removeProviders' => $provider];
         }
 
-//        dump($profile);
-
         if (in_array('rexImage', $toolbar)) {
             if (!empty($profile['mediatype'])) {
                 $jsonProfile['rexImage'] = ['media_type' => $profile['mediatype']];
@@ -377,7 +375,6 @@ const cke5suboptions = $suboptions;
             }
         }
 
-//        dump($jsonProfile);
         if (!is_null($profile['upload_default']) or !empty($profile['upload_default'])) {
             $ckFinderUrl = self::UPLOAD_URL;
 
@@ -439,10 +436,12 @@ const cke5suboptions = $suboptions;
         if (!empty($profile['extra'])) {
             $definition = json_decode($profile['extra_definition'], true);
             if (is_array($definition)) {
+                if (isset($definition['removePlugins'])) {
+                    $jsonProfile['removePlugins'] = array_values(array_unique(array_merge($jsonProfile['removePlugins'], $definition['removePlugins'])));
+                    unset($definition['removePlugins']);
+                }
                 $jsonProfile = array_merge($jsonProfile, $definition);
             }
-
-            $jsonProfile['removePlugins'] = array_unique($jsonProfile['removePlugins']);
         }
 
         return ['suboptions' => $jsonSuboption, 'profile' => $jsonProfile];
