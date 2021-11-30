@@ -377,6 +377,14 @@ Example:
     echo (is_string($create)) ? $create : 'successful profile created';
 ```
 
+## Autoformat deaktivieren
+
+Das Autoformat-Feature (mardown code replacement) kann man deaktivieren, indem man folgende Option in den Abschnitt Extra Options einfügt: 
+
+```json
+{"removePlugins": ["Autoformat"]}
+```
+
 ## Bugtracker
 
 If you have found a error or maybe you have an idea, You can create a [Issue](https://github.com/FriendsOfREDAXO/cke5/issues). 
