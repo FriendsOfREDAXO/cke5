@@ -19,6 +19,8 @@
 ### Breaking Change
 
 * The imageStyle property `full` was replaced by vendor with `block`
+* Supports only REDAXO >= 5.12
+* Older addons of mform < 6.1 and mblock < 3.4 are no longer supported
 
 ## Version 4.3.0
 
