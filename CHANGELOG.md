@@ -14,6 +14,7 @@
 * fix name issue, disallow usage of minus `-` char
 * fix wrong translation key usage in profile editor
 * fix removePlugin issue by extra option usage (for example add to extra options: `{"removePlugins": ["Autoformat"]}`)
+* fix profile recreation by update
 
 ### Breaking Change
 

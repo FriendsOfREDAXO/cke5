@@ -88,4 +88,17 @@ class Cke5ExtensionHandler
             print rex_view::error($e->getMessage());
         }
     }
+
+    /**
+     * @author Joachim Doerr
+     */
+    public static function updateProfile() : void
+    {
+        try {
+            Cke5ProfilesCreator::profilesCreate();
+        } catch (\rex_functional_exception $e) {
+            \rex_logger::logException($e);
+            print rex_view::error($e->getMessage());
+        }
+    }
 }
