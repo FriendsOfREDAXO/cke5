@@ -12,7 +12,7 @@
  */
 
 let ckedit = '.cke5_profile_edit',
-    cktypes, ckimgtypes, cktabletypes, imageDragDrop, cklinktypes;
+    cktypes, ckimgtypes, cktabletypes, imageDragDrop, cklinktypes, DEBUG = false;
 
 
 $(document).on('rex:ready', function (event, container) {
@@ -250,10 +250,10 @@ function cke5_addFromToFields(element) {
                 '</div>\n'),
             limit: 200,
             onElementAdd: function (el, plugin) {
-                // console.log(plugin.elementCount);
+                if (DEBUG) console.log(plugin.elementCount);
             },
             onElementRemove: function (el, plugin) {
-                // console.log(plugin.elementCount);
+                if (DEBUG) console.log(plugin.elementCount);
             }
         });
     }
@@ -306,7 +306,7 @@ function cke5_addColorFields(element) {
                 input_border.bootstrapToggle();
             },
             onElementRemove: function (el, plugin) {
-                // console.log(plugin.elementCount);
+                if (DEBUG) console.log(plugin.elementCount);
             }
         });
     }
@@ -332,10 +332,10 @@ function cke5_addyTableFields(element) {
                 '</div>\n'),
             limit: 20,
             onElementAdd: function (el, plugin) {
-                // console.log(plugin.elementCount);
+                if (DEBUG) console.log(plugin.elementCount);
             },
             onElementRemove: function (el, plugin) {
-                // console.log(plugin.elementCount);
+                if (DEBUG) console.log(plugin.elementCount);
             }
         });
     }
@@ -367,10 +367,10 @@ function cke5_addResizeOptionsFields(element) {
                 '</div>\n'),
             limit: 20,
             onElementAdd: function (el, plugin) {
-                // console.log(plugin.elementCount);
+                if (DEBUG) console.log(plugin.elementCount);
             },
             onElementRemove: function (el, plugin) {
-                // console.log(plugin.elementCount);
+                if (DEBUG) console.log(plugin.elementCount);
             }
         });
     }
@@ -391,7 +391,7 @@ function cke5_addFontFamiliesFields(element) {
                 // let input_font = el.find('input.family');
             },
             onElementRemove: function (el, plugin) {
-                // console.log(plugin.elementCount);
+                if (DEBUG) console.log(plugin.elementCount);
             }
         });
     }
@@ -423,12 +423,13 @@ function cke5_toolbar_create_tag(typename, tags) {
     });
     cktabletypes.forEach(function (type) {
         if ($.inArray(type, tags) !== -1 && typename === 'table_toolbar') {
-            console.log([typename, type]);
-            console.log(tags);
+            if (DEBUG) console.log([typename, type]);
+            if (DEBUG) console.log(tags);
+            if (DEBUG) console.log('#########');
             switch (type) {
                 case 'tableProperties':
                 case 'tableCellProperties':
-                    toggle_collapse('tableColor', 'show');
+                    toggle_collapse('tableColor', 'show', false, true);
                     break;
             }
         }
@@ -456,7 +457,7 @@ function cke5_toolbar_destroy_tag(typename, tags) {
                     case 'htmlEmbed':
                     case 'mediaEmbed':
                         embedhide++;
-                        console.log(embedhide + ' - ' + type);
+                        if (DEBUG) console.log(embedhide + ' - ' + type);
                         toggle_collapse(type, 'hide', (embedhide === 2));
                         break;
                     case 'fontSize':
@@ -528,21 +529,24 @@ function cke5_bootstrapToggle_collapse(element, invert = false) {
     }
 }
 
-function toggle_collapse(typename, direction, hideParent = false) { // direction => [show,hide]
+function toggle_collapse(typename, direction, hideParent = false, single = false) { // direction => [show,hide]
     let element = $('#cke5' + typename + '-collapse');
     let parent = element.parent().parent();
     if (element.length) {
+        if (DEBUG) console.log([typename, direction, hideParent]);
 
         if (hideParent) {
-
-            console.log(parent);
+            if (DEBUG) console.log(parent);
         }
 
-        if (parent.length && parent.hasClass('collapse')) {
+        if (single === false && parent.length && parent.hasClass('collapse')) {
             if (
                 (!parent.hasClass('in') && direction === 'show') ||
                 (hideParent && direction === 'hide')
             ) {
+                if (DEBUG) console.log([typename, direction, hideParent]);
+                if (DEBUG) console.log(element);
+                if (DEBUG) console.log(parent);
                 parent.collapse(direction);
             }
         }
