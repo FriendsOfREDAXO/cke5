@@ -124,6 +124,7 @@ CKE5 uses some own styles.
 
 The Styles are prefixed with `.ck-content`. You should add this class to your output element and load the included `cke5_content_styles.css` form the assets folder.  
 
+After installation of this AddOn you can use /assets/addons/cke5/cke5_content_styles.css or better make your own. 
 
 ## Keyboard support
 
