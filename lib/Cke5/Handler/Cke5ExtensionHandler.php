@@ -92,7 +92,7 @@ class Cke5ExtensionHandler
     /**
      * @author Joachim Doerr
      */
-    public static function updateProfile() : void
+    public static function updateProfiles() : void
     {
         try {
             Cke5ProfilesCreator::profilesCreate();

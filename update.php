@@ -23,5 +23,5 @@ try {
 }
 rex_extension::register('PACKAGES_INCLUDED', function () {
     // recreate profiles after update
-    \Cke5\Handler\Cke5ExtensionHandler::updateProfile();
+    \Cke5\Handler\Cke5ExtensionHandler::updateProfiles();
 });  
