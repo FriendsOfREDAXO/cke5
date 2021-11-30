@@ -21,6 +21,6 @@ page:
              { title: 'translate:help', subPath: README.md }
 
 requires:
-    redaxo: '^5.7'
+    redaxo: '^5.12'
     php:
-        version: '>=7.1, <9'
+        version: '>=7.2, <9'
