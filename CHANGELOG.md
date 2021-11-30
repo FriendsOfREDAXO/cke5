@@ -13,7 +13,7 @@
 * add option to group buttons in the image toolbar
 * fix name issue, disallow usage of minus `-` char
 * fix wrong translation key usage in profile editor
-* fix removePlugin issue by extra option usage 
+* fix removePlugin issue by extra option usage (for example add to extra options: `{"removePlugins": ["Autoformat"]}`)
 
 ### Breaking Change
 
