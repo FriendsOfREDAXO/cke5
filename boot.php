@@ -11,7 +11,6 @@
 // register permissions
 if (rex::isBackend() && is_object(rex::getUser())) {
     rex_perm::register('cke5_addon[]');
-    dump(rex::getProperty('theme'));
     // load assets
     \Cke5\Provider\Cke5AssetsProvider::provideCke5ProfileEditData();
     \Cke5\Provider\Cke5AssetsProvider::provideCke5PreviewData();
