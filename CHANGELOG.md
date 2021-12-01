@@ -47,6 +47,8 @@ The following code can be used for this:
     }
 ]
 ```
+**Known issues**
+It may be necessary to resave the profiles once. 
 
 ## Version 4.3.0
 
