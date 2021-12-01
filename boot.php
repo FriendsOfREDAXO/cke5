@@ -11,7 +11,7 @@
 // register permissions
 if (rex::isBackend() && is_object(rex::getUser())) {
     rex_perm::register('cke5_addon[]');
-
+    dump(rex::getProperty('theme'));
     // load assets
     \Cke5\Provider\Cke5AssetsProvider::provideCke5ProfileEditData();
     \Cke5\Provider\Cke5AssetsProvider::provideCke5PreviewData();
@@ -25,11 +25,19 @@ if (rex::isBackend() && is_object(rex::getUser())) {
             // get user settings for theme
             if ($theme_type = $user->getValue('theme')) {
                 $theme = $theme_type;
-            } else {
+           } else {
                 $theme = 'auto';
             }
+            
+            if (rex::getProperty('theme') && rex::getProperty('theme') =='light')
+            {
+                $theme = 'light';
+            }
+             if (rex::getProperty('theme') && rex::getProperty('theme') =='dark')
+            {
+                $theme = 'dark';
+            }
         }
-
 
         // set theme properties
         rex_view::setJsProperty('cke5theme', (string)$theme);
