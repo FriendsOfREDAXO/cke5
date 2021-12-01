@@ -23,6 +23,30 @@
 * Supports only REDAXO >= 5.12
 * Older addons of mform < 6.1 and mblock < 3.4 are no longer supported
 
+
+### Update Notice
+
+On update the profiles will be not changed. 
+The profiles are not changed during an update. 
+
+The following should be paid attention to when updating: 
+
+- If the option `full` was used in the image toolbars, it should be replaced by `block`. If necessary, the output CSS must be adjusted. 
+
+- The source code editing needs at least the instruction `HtmlSupport Allow` to work. 
+The following code can be used for this: 
+
+``json
+[
+    {
+        "name": "regex(/.*/)",
+        "attributes": true,
+        "classes": true,
+        "styles": true
+    }
+]
+```
+
 ## Version 4.3.0
 
 * vendor update to 27.0.0
