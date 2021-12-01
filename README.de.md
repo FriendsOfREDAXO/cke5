@@ -2,7 +2,7 @@
 
 Intergriert den [CKEditor5](https://ckeditor.com) in REDAXO CMS.
 
-![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/ck5.png)
+![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/cke5.png)
 
 ## Features
 
