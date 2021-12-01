@@ -24,7 +24,7 @@ if (rex::isBackend() && is_object(rex::getUser())) {
         }
         // set theme properties
         rex_view::setJsProperty('cke5theme', (string)$theme);
-        rex_view::setJsProperty('cke5darkcss', rex_url::addonAssets('cke5') . 'cke5_dark.css');
+        rex_view::setJsProperty('cke5darkcss', rex_url::addonAssets('cke5') . 'dark.css');
     } else {
         rex_view::setJsProperty('cke5theme', 'notheme');
     }
