@@ -12,8 +12,15 @@
 if (rex::isBackend() && is_object(rex::getUser())) {
     rex_perm::register('cke5_addon[]');
 
+    // load assets
+    \Cke5\Provider\Cke5AssetsProvider::provideCke5ProfileEditData();
+    \Cke5\Provider\Cke5AssetsProvider::provideCke5PreviewData();
+    \Cke5\Provider\Cke5AssetsProvider::provideCke5BaseData();
+    \Cke5\Provider\Cke5AssetsProvider::provideCke5CustomData();
+
     // Check REDAXO version
     if (rex_string::versionCompare(rex::getVersion(), '5.13.0-dev', '>=')) {
+        rex_view::addCssFile($this->getAssetsUrl('cke5_dark.css'));
         if ($user = rex::requireUser()) {
             // get user settings for theme
             if ($theme_type = $user->getValue('theme')) {
@@ -22,19 +29,14 @@ if (rex::isBackend() && is_object(rex::getUser())) {
                 $theme = 'auto';
             }
         }
+
+
         // set theme properties
         rex_view::setJsProperty('cke5theme', (string)$theme);
         rex_view::setJsProperty('cke5darkcss', rex_url::addonAssets('cke5') . 'dark.css');
     } else {
         rex_view::setJsProperty('cke5theme', 'notheme');
     }
-
-    // load assets
-    \Cke5\Provider\Cke5AssetsProvider::provideCke5ProfileEditData();
-    \Cke5\Provider\Cke5AssetsProvider::provideCke5PreviewData();
-    \Cke5\Provider\Cke5AssetsProvider::provideCke5BaseData();
-    \Cke5\Provider\Cke5AssetsProvider::provideCke5CustomData();
-    rex_view::addCssFile($this->getAssetsUrl('cke5_dark.css'));
 
     // upload image
     if (rex_request::request('cke5upload') == 1) {
