@@ -35,7 +35,7 @@ The following should be paid attention to when updating:
 - The source code editing needs at least the instruction `HtmlSupport Allow` to work. 
 The following code can be used for this: 
 
-``json
+```json
 [
     {
         "name": "regex(/.*/)",
