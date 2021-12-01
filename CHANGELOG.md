@@ -17,14 +17,14 @@
 * fix profile recreation by update
 * fix dark mode switching
 
-### Breaking Change
+### Breaking changes
 
 * The imageStyle property `full` was replaced by vendor with `block`
 * Supports only REDAXO >= 5.12
 * Older addons of mform < 6.1 and mblock < 3.4 are no longer supported
 
 
-### Update Notice
+### Upgrade notice
 
 The profiles are not changed during an update. 
 
