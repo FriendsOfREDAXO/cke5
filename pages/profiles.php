@@ -346,7 +346,6 @@ if ($func == '') {
                 $field->setAttribute('data-collapse-target', 'resizeOptions');
                 $field->setLabel(rex_i18n::msg('cke5_image_resize_options'));
                 $field->addOption(rex_i18n::msg('cke5_image_resize_options_description'), 'default_resize_options');
-                if ($default_value) $field->setValue('default_resize_options');
 
                 // custom image resize options
                 $form->addRawField('<div class="collapse" id="cke5resizeOptions-collapse">');

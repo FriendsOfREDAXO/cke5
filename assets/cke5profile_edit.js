@@ -180,7 +180,8 @@ function cke5_init_edit(element) {
 
     if (imageDragDrop.length) {
         if (imageDragDrop.prop('checked')) {
-            element.find('#cke5mediacat-collapse').addClass('in');
+            toggle_collapse('imagetoolbar', 'show');
+            toggle_collapse('mediacat', 'show');
         }
         imageDragDrop.change(function () {
             if ($(this).prop('checked')) {
@@ -539,7 +540,7 @@ function toggle_collapse(typename, direction, hideParent = false, single = false
             if (DEBUG) console.log(parent);
         }
 
-        if (single === false && parent.length && parent.hasClass('collapse')) {
+        if (single === false && parent.length && parent.hasClass('collapse') && parent.attr('id') != 'cke5profileEditor-collapse') {
             if (
                 (!parent.hasClass('in') && direction === 'show') ||
                 (hideParent && direction === 'hide')
