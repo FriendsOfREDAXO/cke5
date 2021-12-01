@@ -26,7 +26,6 @@
 
 ### Update Notice
 
-On update the profiles will be not changed. 
 The profiles are not changed during an update. 
 
 The following should be paid attention to when updating: 
