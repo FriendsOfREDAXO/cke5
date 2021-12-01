@@ -16,6 +16,8 @@
 * fix removePlugin issue by extra option usage (for example add to extra options: `{"removePlugins": ["Autoformat"]}`)
 * fix profile recreation by update
 * fix dark mode switching
+* change default profiles
+* remove profiles from assets and use creation by update and install 
 
 ### Breaking changes
 
