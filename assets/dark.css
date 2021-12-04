@@ -1,8 +1,8 @@
 :root {
     /* Overrides the border radius setting in the theme. */
     --ck-border-radius: 4px;
-	--ck-color-base-background: #000;
-	--ck-color-base-border: #333;
+    --ck-color-base-background: #000;
+    --ck-color-base-border: #333;
     /* Overrides the default font size in the theme. */
     --ck-font-size-base: 14px;
 
@@ -110,3 +110,13 @@ background: var(--ck-color-base-background);
 border-radius: 0;
 border-color: #999;
 }
+
+.ck-content .image > figcaption, .ck-content blockquote {
+    background-color: var( --ck-custom-background);
+    color: #ccc;
+}    
+
+body:not(.rex-theme-light) .ck-content blockquote {
+        border-left-color:#bbb;
+    }
+
