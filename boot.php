@@ -45,6 +45,12 @@ if (rex::isBackend() && is_object(rex::getUser())) {
         rex_view::setJsProperty('cke5theme', 'notheme');
     }
 
+    $addon = rex_addon::get('cke5');
+    if ($addon->getConfig('updated') && $addon->getConfig('updated') == true ) {
+      \Cke5\Handler\Cke5ExtensionHandler::updateOrCreateProfiles();
+      $addon->setConfig('updated', false);
+    }
+    
     // upload image
     if (rex_request::request('cke5upload') == 1) {
         \Cke5\Handler\Cke5UploadHandler::uploadCke5Img();
