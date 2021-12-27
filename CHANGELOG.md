@@ -1,6 +1,10 @@
 # Changelog
 
-## Version 5.0.0
+## Version 5.0.2
+
+update fix recreate profiles
+
+## Version 5.0.0 - 5.0.1
 
 * vendor update to v31
 * add `toggleTableCaption` feature
