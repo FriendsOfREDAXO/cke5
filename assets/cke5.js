@@ -16,8 +16,8 @@ $(document).on('rex:ready', function (e, container) {
                 $('head').append('<link id="ckedark" rel="stylesheet" type="text/css" href="' + rex.cke5darkcss + '">');
                 }
             }
-            if (rex.cke5theme == 'auto') {
-                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            if (rex.cke5theme == 'auto' && window.matchMedia) {
+                if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
                     $('head').append('<link id="ckedark" rel="stylesheet" type="text/css" href="' + rex.cke5darkcss + '">');
                 }
                 window.matchMedia('(prefers-color-scheme: dark)')
