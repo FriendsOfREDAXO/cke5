@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 5.0.3
+
+Js fix https://github.com/FriendsOfREDAXO/cke5/issues/155
+
 ## Version 5.0.2
 
 update fix recreate profiles
