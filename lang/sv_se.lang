@@ -27,6 +27,18 @@ cke5_profile_add = Skapa ny CKEditor 5 profil
 cke5_list_function = Funktion
 cke5_clone = Duplicera
 
+# fieldset
+cke5_toolbar = Toolbar
+cke5_base_text_styles = Base Text Styles
+cke5_embed_support = Media- & Html-Embed
+cke5_images = Images
+cke5_fonts = Fonts
+cke5_links = Links
+cke5_default_setup = Basic settings
+cke5_emoji = Emoji
+cke5_highlights = Highlight
+cke5_html_support = HtmlSupport
+
 # profiles columns names
 cke5_name = Profil-namn
 cke5_name_placeholder = profile_name
@@ -39,7 +51,7 @@ cke5_extra_definition_area = Optioner
 cke5_extra_definition_description = För att få ytterligare optioner
 cke5_description = Profil beskrivning
 cke5_description_placeholder = Syfte och omfattning av profilen
-cke5_toolbar = Toolbar element
+cke5_toolbar_elements = Toolbar element
 cke5_heading = Heading element
 cke5_alignment = Textjustering
 cke5_fontSize = Teckenstorlekar
@@ -101,7 +113,7 @@ cke5_auto_link_https = aktive (https Protokol)
 cke5_image_resize_options = Image Resize Buttons
 cke5_image_resize_options_description = Bildstorleksknappar visas i img-verktygsfältet
 cke5_image_resize_options_definition = definition	Image Resize Options
-cke5_name_placeholder = profile_name
+cke5_resize_option_placeholder = Name [25|50|75|original]
 cke5_value_placeholder = Value [25|50|75|null] (numeric or null)
 cke5_icon_placeholder = Icon [small|medium|large|original]
 cke5_image_resize_unit_percent = Prozent [%]
@@ -111,6 +123,11 @@ cke5_liststyle = List style
 cke5_liststyle_description = Skapa möjligheten att välja list-styles
 cke5_html_embed_default = Embed-HTML Preview
 cke5_html_embed_default_description = Visar embed-HTML i editorn som förhandsvisning
+cke5_empji = EmojiGroup
+cke5_html_support_allow = HtmlSupport Allow
+cke5_html_support_disallow = HtmlSupport Disallow
+cke5_image_resize_group_options = Group Resize Icons
+cke5_image_resize_group_options_description = to group the image resize icons in the image toolbar
 
 # profiles list & form actions
 rex_cke5_profiles_cloned = Profilen duplicerades

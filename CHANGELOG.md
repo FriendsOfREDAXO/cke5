@@ -1,8 +1,68 @@
 # Changelog
 
+## Version 5.0.3
+
+Js fix https://github.com/FriendsOfREDAXO/cke5/issues/155
+
+## Version 5.0.2
+
+update fix recreate profiles
+
+## Version 5.0.0 - 5.0.1
+
+* vendor update to v31
+* add `toggleTableCaption` feature
+* add `fullscreen` plugin and as well add `|` to table toolbar
+* extend emoji add `EmojiPeople`, `EmojiNature`, `EmojiPlaces`, `EmojiFood`, `EmojiActivity`, `EmojiObjects`, `EmojiSymbols`, `EmojiFlags` group
+* add `sourceEditing` and `htmlSupport`
+* fix some ugly profile editor javascript issues
+* add `inline`, `side`, `alignBlockLeft`, `alignBlockRight`, `toggleImageCaption` for images
+* add better profile editor structure
+* add option to group buttons in the image toolbar
+* fix name issue, disallow usage of minus `-` char
+* fix wrong translation key usage in profile editor
+* fix removePlugin issue by extra option usage (for example add to extra options: `{"removePlugins": ["Autoformat"]}`)
+* fix profile recreation by update
+* fix dark mode switching
+* change default profiles
+* remove profiles from assets and use creation by update and install 
+
+### Breaking changes
+
+* The imageStyle property `full` was replaced by vendor with `block`
+* Supports only REDAXO >= 5.12
+* Older addons of mform < 6.1 and mblock < 3.4 are no longer supported
+
+
+### Upgrade notice
+
+The profiles are not changed during an update. 
+
+The following should be paid attention to when updating: 
+
+- If the option `full` was used in the image toolbars, it should be replaced by `block`. If necessary, the output CSS must be adjusted. 
+
+- The source code editing needs at least the instruction `HtmlSupport Allow` to work. 
+The following code can be used for this: 
+
+```json
+[
+    {
+        "name": "regex(/.*/)",
+        "attributes": true,
+        "classes": true,
+        "styles": true
+    }
+]
+```
+**Known issues**
+It may be necessary to resave the profiles once. 
+
 ## Version 4.3.0
 
 * vendor update to 27.0.0
+* dark-mode
+* some small fixes
 
 ## Version 4.2.0
 

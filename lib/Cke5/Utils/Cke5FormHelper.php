@@ -5,7 +5,7 @@
  * @license MIT
  */
 
-namespace Sked\Utils;
+namespace Cke5\Utils;
 
 
 use rex_clang;

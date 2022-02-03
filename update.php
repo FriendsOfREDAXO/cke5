@@ -17,11 +17,9 @@ try {
             rex_file::copy($this->getPath('custom_data/custom-styles.css'), rex_path::assets('addons/cke5_custom_data/custom-style.css'));
         }
     }
-  
 } catch (rex_functional_exception $e) {
     rex_logger::logException($e);
 }
-rex_extension::register('PACKAGES_INCLUDED', function () {
-    // recreate profiles after update
-    \Cke5\Handler\Cke5ExtensionHandler::createProfiles(null);
-});  
+
+$addon = rex_addon::get('cke5');
+$addon->setConfig('updated', true);

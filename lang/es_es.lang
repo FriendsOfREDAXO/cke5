@@ -27,12 +27,24 @@ cke5_profile_add = Crear nuevos perfil de CKEditor 5
 cke5_list_function = Función
 cke5_clone = duplicar
 
+# fieldset
+cke5_toolbar = Toolbar
+cke5_base_text_styles = Base Text Styles
+cke5_embed_support = Media- & Html-Embed
+cke5_images = Images
+cke5_fonts = Fonts
+cke5_links = Links
+cke5_default_setup = Basic settings
+cke5_emoji = Emoji
+cke5_highlights = Highlight
+cke5_html_support = HtmlSupport
+
 # profiles columns names
 cke5_name = Nombre perfil
 cke5_name_placeholder = nombre_perfil
 cke5_description = Perfil-Descripción
 cke5_description_placeholder = Propósito y alcance del perfil
-cke5_toolbar = Elementos de la barra de herramientas
+cke5_toolbar_elements = Elementos de la barra de herramientas
 cke5_heading = Elementos de cabecera
 cke5_alignment = Alineacion
 cke5_fontSize = Tamaños de fuente
@@ -67,6 +79,11 @@ cke5_font_family_default_description = Utilice CKEditor5 FontFamilies predetermi
 cke5_family_name_placeholder = Ubuntu Mono, Courier New, Courier, monospace
 cke5_placeholder = Placeholder (opcional)
 cke5_placeholder_placeholder = Backend-language placeholder para
+cke5_empji = EmojiGroup
+cke5_html_support_allow = HtmlSupport Allow
+cke5_html_support_disallow = HtmlSupport Disallow
+cke5_image_resize_group_options = Group Resize Icons
+cke5_image_resize_group_options_description = to group the image resize icons in the image toolbar
 
 # profiles list & form actions
 rex_cke5_profiles_cloned = El perfil fue duplicado

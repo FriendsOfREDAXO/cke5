@@ -1,5 +1,5 @@
 /**
- * @author mail[at]doerr-softwaredevelopment[dot]com Joachim Doerr
+ * @author FriendsOfRedaxo: Joachim Doerr https://github.com/joachimdoerr
  * @package redaxo5
  * @license MIT
  */
@@ -10,6 +10,26 @@ let ckeditors = {},
 $(document).on('rex:ready', function (e, container) {
     container.find(ckareas).each(function () {
         cke5_init($(this));
+        if (rex.cke5theme != 'notheme') {
+            if (rex.cke5theme == 'dark') {
+                if(!$('#ckedark').length){
+                $('head').append('<link id="ckedark" rel="stylesheet" type="text/css" href="' + rex.cke5darkcss + '">');
+                }
+            }
+            if (rex.cke5theme == 'auto' && window.matchMedia) {
+                if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    $('head').append('<link id="ckedark" rel="stylesheet" type="text/css" href="' + rex.cke5darkcss + '">');
+                }
+                window.matchMedia('(prefers-color-scheme: dark)')
+                    .addEventListener('change', event => {
+                        if (event.matches) {
+                            $('head').append('<link id="ckedark" rel="stylesheet" type="text/css" href="' + rex.cke5darkcss + '">');
+                        } else {
+                            $('head').find("#ckedark").remove();
+                        }
+                    })
+            }
+        }
     });
 });
 
@@ -129,3 +149,4 @@ function cke5_pastinit(editor, sub_options) {
     //     { title: 'simple arrow down', character: '↓' }
     // ] );
 }
+

@@ -2,7 +2,7 @@
 
 Integrates the [CKEditor5](https://ckeditor.com) into REDAXO CMS.
 
-![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/ck5.png)
+![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/cke5.png)
 
 ## Features
 
@@ -14,6 +14,7 @@ Integrates the [CKEditor5](https://ckeditor.com) into REDAXO CMS.
 - Extra options allow you to customize the editor
 - The expert mode allows you to develop profiles in source code
 - Placeholders for all backend languages
+- Dark-mode support for REDAXO >= 5.13
 
 **Custom REDAXO Link-Widget**
 
@@ -123,6 +124,7 @@ CKE5 uses some own styles.
 
 The Styles are prefixed with `.ck-content`. You should add this class to your output element and load the included `cke5_content_styles.css` form the assets folder.  
 
+After installation of this AddOn you can use /assets/addons/cke5/cke5_content_styles.css or better make your own. 
 
 ## Keyboard support
 
@@ -371,6 +373,14 @@ Example:
         '[{"min-height": 100}, {"max-height": 280}]'
     );
     echo (is_string($create)) ? $create : 'successful profile created';
+```
+
+## Disable Autoformat
+
+You can disable the Autoformat-Feature (mardown code replacement) by adding the following option to the extra option section: 
+
+```json
+{"removePlugins": ["Autoformat"]}
 ```
 
 ## Bugtracker

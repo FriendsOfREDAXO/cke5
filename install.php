@@ -23,6 +23,8 @@ try {
     if (!file_exists(rex_path::assets('addons/cke5_custom_data/custom-style.css'))) {
         rex_file::copy($this->getPath('custom_data/custom-styles.css'), rex_path::assets('addons/cke5_custom_data/custom-style.css'));
     }
+    // final create profiles
+    \Cke5\Handler\Cke5ExtensionHandler::updateOrCreateProfiles();
 } catch (rex_sql_exception $e) {
     rex_logger::logException($e);
     print rex_view::error($e->getMessage());

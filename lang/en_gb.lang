@@ -27,6 +27,18 @@ cke5_profile_add = Create CKEditor 5 Profile
 cke5_list_function = function
 cke5_clone = duplicate
 
+# fieldset
+cke5_toolbar = Toolbar
+cke5_base_text_styles = Base Text Styles
+cke5_embed_support = Media- & Html-Embed
+cke5_images = Images
+cke5_fonts = Fonts
+cke5_links = Links
+cke5_default_setup = Basic settings
+cke5_emoji = Emoji
+cke5_highlights = Highlight
+cke5_html_support = HtmlSupport
+
 # profiles columns names
 cke5_name = Profile-namen
 cke5_name_placeholder = profile_name
@@ -39,7 +51,7 @@ cke5_extra_definition_area = Options
 cke5_extra_definition_description = To record additional options
 cke5_description = Profile-description
 cke5_description_placeholder = Purpose and scope of the profile
-cke5_toolbar = Toolbar-elements
+cke5_toolbar_elements = Toolbar-elements
 cke5_heading = Heading-elements
 cke5_alignment = Alignments
 cke5_fontSize = Fontsizes
@@ -101,7 +113,7 @@ cke5_auto_link_https = active (https protocol)
 cke5_image_resize_options = Image Resize buttons
 cke5_image_resize_options_description = Image Resize buttons will be shown within the img toolbar
 cke5_image_resize_options_definition = Imare Resize options
-cke5_name_placeholder = profile_name
+cke5_resize_option_placeholder = Name [25|50|75|original]
 cke5_value_placeholder = Value [25|50|75|null] (numeric or null)
 cke5_icon_placeholder = Icon [small|medium|large|original]
 cke5_image_resize_unit_percent = Percent [%]
@@ -111,6 +123,11 @@ cke5_liststyle = List style
 cke5_liststyle_description = Displays option to select list styles
 cke5_html_embed_default = Embed HTML preview
 cke5_html_embed_default_description = Display option to preview HTML embeds
+cke5_empji = EmojiGroup
+cke5_html_support_allow = HtmlSupport Allow
+cke5_html_support_disallow = HtmlSupport Disallow
+cke5_image_resize_group_options = Group Resize Icons
+cke5_image_resize_group_options_description = to group the image resize icons in the image toolbar
 
 # profiles list & form actions
 rex_cke5_profiles_cloned = Profile was duplicated

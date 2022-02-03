@@ -87,7 +87,7 @@ div.cke5InputTags-list input.cke5InputTags-field.is-edit {
 }
 div.cke5InputTags-list ul.cke5InputTags-autocomplete-list {
   position: absolute;
-  max-height: 212px;
+  max-height: 412px;
   margin: 0;
   padding: 0;
   list-style-type: none;

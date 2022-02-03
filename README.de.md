@@ -2,7 +2,7 @@
 
 Intergriert den [CKEditor5](https://ckeditor.com) in REDAXO CMS.
 
-![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/ck5.png)
+![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/cke5.png)
 
 ## Features
 
@@ -14,6 +14,7 @@ Intergriert den [CKEditor5](https://ckeditor.com) in REDAXO CMS.
 - Zusätzliche Optionen erlauben es den Editor anzupassen
 - Der Expertenmodus erlaubt es Profile frei im Quellcode zu entwickeln
 - Platzhalter für alle Backend-Sprachen
+- Dark-mode-support für REDAXO >= 5.13
 
 Übersetzt mit www.DeepL.com/Translator (kostenlose Version)
 
@@ -122,6 +123,9 @@ Die Darstellung des Editors kann per CSS an die Fronteid-Ausgabe angepasst werde
 [Link zum Styleguide](https://ckeditor.com/docs/ckeditor5/latest/builds/guides/integration/content-styles.html)
 
 Den Styles ist das Präfix `.ck-content` vorangestellt. Die Klasse sollte dem Ausgabeelement hinzugefügt werden und die mitgelieferte `cke5_content_styles.css` aus dem Asset-Ordner geladen werden.  
+
+Nach der Installation dieses AddOns kann die CSS-Datei /assets/addons/cke5/cke5_content_styles.css verwendet werden. Besser aber ist, sich eine eigene zu erstellen.  
+
 
 ## CKE im Frontend verwenden
 
@@ -356,7 +360,7 @@ Example:
            "link": {"rexlink": ["internal", "media"]},
            "image": {
              "toolbar": ["imageTextAlternative", "|", "imageStyle:full", "imageStyle:alignLeft", "imageStyle:alignRight", "imageStyle:alignCenter"],
-             "styles": ["full", "alignLeft", "alignRight", "alignCenter"]
+             "styles": ["block", "alignLeft", "alignRight", "alignCenter"]
            },
            "table": {"toolbar": ["tableColumn", "tableRow", "mergeTableCells", "tableProperties", "tableCellProperties"]},
            "rexImage": {"media_path": "\/media\/"},
@@ -374,6 +378,14 @@ Example:
         '[{"min-height": 100}, {"max-height": 280}]'
     );
     echo (is_string($create)) ? $create : 'successful profile created';
+```
+
+## Autoformat deaktivieren
+
+Das Autoformat-Feature (mardown code replacement) kann man deaktivieren, indem man folgende Option in den Abschnitt Extra Options einfügt: 
+
+```json
+{"removePlugins": ["Autoformat"]}
 ```
 
 ## Bugtracker
