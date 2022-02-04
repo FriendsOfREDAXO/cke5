@@ -114,7 +114,7 @@ The fonts should be defined in the usual CSS notation in the *FontFamily* sectio
 
 ## Customizing
 
-The display of the editor can be adapted to the frontend output via CSS. For this a CSS file is available in the folder 'assets/addons/cke5_custom_data
+The display of the editor can be adapted to the frontend output via CSS. For this a CSS file is available in the folder `assets/addons/cke5_custom_data`
 
 ## CSS Content-Styles 
 
