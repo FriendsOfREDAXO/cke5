@@ -116,7 +116,7 @@ Die Schriften werden in gewohnter CSS-Schreibweise im Abschnitt *FontFamily* des
 
 ## Individualisieren 
 
-Die Darstellung des Editors kann per CSS an die Fronteid-Ausgabe angepasst werden. Hierfür steht Im Ordner 'assets/addons/cke5_custom_data' eine CSS-Datei bereit
+Die Darstellung des Editors kann per CSS an die Fronteid-Ausgabe angepasst werden. Hierfür steht Im Ordner `assets/addons/cke5_custom_data` eine CSS-Datei bereit
 
 ## CSS Content-Styles CSS
 
