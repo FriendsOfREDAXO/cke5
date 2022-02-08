@@ -142,3 +142,13 @@ cke5_profiles_creation_exception = Profiles could not be generated
 cke5_mblock_not_available = MBlock is not installed or activated. This demo can only be viewed with MBlock
 cke5_description_empty_error = Pleas enter a profile description
 cke5_profile_name_empty_error = Please enter a profile name
+
+# profile export
+cke5_export_profiles = export
+cke5_profiles_export_title = Profile export
+cke5_profiles_import_title = Profile import
+cke5_profiles_export = Profile export
+cke5_profiles_import = Profile import
+cke5_profiles_import_file = upload JSON file
+cke5_profiles_select = Prfile
+cke5_profiles_import_msg = Attention: profiles with identical IDs will be completely overwritten!

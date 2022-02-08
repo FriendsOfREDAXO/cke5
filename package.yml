@@ -17,9 +17,16 @@ page:
                     title: 'translate:preview'
         profiles:
             title: 'translate:profiles'
+            subpages:
+                overview:
+                    title: 'translate:profiles'
+                export:
+                    title: 'translate:profiles_export'
+                import:
+                    title: 'translate:profiles_import'
         help:
-             { title: 'translate:help', subPath: README.md }
-
+             title: 'translate:help'
+             subPath: README.md
 requires:
     redaxo: '^5.12'
     php:
