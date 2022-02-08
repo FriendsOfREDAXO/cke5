@@ -462,7 +462,7 @@
 
                             self._autocomplete()._get('values').forEach(function (v, k) {
                                 var li = self.AUTOCOMPLETE_ITEM_CONTENT.replace('%s', v);
-                                if (v === '|') {
+                                if (v === '|' || v === '-') {
                                     var $item = $.inArray(v, self.tags) >= 0 ? $(li) : $(li);
                                 } else {
                                     var $item = $.inArray(v, self.tags) >= 0 ? $(li).addClass('is-disabled') : $(li);
@@ -596,7 +596,7 @@
                  * return true si value se trouve dans l'array self.tags, false sinon
                  */
                 self._exists = function (value) {
-                    if (value !== '|') {
+                    if (value !== '|' && value !== '-') {
                         return $.inArray(value, self.tags) >= 0;
                     }
                 }
