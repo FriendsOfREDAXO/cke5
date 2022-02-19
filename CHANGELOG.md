@@ -1,12 +1,19 @@
 # Changelog
 
+## Version 5.1.0
+
+* vendor update to v32
+* convert CRLF to LF check that out https://docs.github.com/en/get-started/getting-started-with-git/configuring-git-to-handle-line-endings
+* add profile export and import
+* 
+
 ## Version 5.0.3
 
-Js fix https://github.com/FriendsOfREDAXO/cke5/issues/155
+* Js fix https://github.com/FriendsOfREDAXO/cke5/issues/155
 
 ## Version 5.0.2
 
-update fix recreate profiles
+* update fix recreate profiles
 
 ## Version 5.0.0 - 5.0.1
 
