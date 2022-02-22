@@ -26,7 +26,17 @@ class Cke5DatabaseHandler
      */
     public static function profileExist($name = null)
     {
-        return (self::loadProfile($name) !== false) ? true : false;
+        try {
+            $sql = rex_sql::factory();
+            $sql->setTable(rex::getTable(Cke5DatabaseHandler::CKE5_PROFILES))
+                ->setWhere(['name' => $name])
+                ->select('name');
+
+            return $sql->getRows() != 0;
+        } catch (\rex_sql_exception $e) {
+            \rex_logger::logException($e);
+            return false;
+        }
     }
 
     /**
