@@ -55,7 +55,6 @@ class Cke5DatabaseHandler
             }
 
             // verify json syntax
-            $description = json_decode($description, true);
             $subOptions = json_decode($subOptions, true);
 
             $now = new \DateTime();
