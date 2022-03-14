@@ -16,8 +16,21 @@ $profileTable = rex::getTable(\Cke5\Handler\Cke5DatabaseHandler::CKE5_PROFILES);
 $csrfToken = rex_csrf_token::factory('cke5_profiles_import');
 
 // action
+if ($func == 'cke5import') {
+    if (!$csrfToken->isValid()) {
+        echo rex_view::error(rex_i18n::msg('csrf_token_invalid'));
+        $func = '';
+    } else {
+        $filename = $_FILES['FORM']['tmp_name']['importfile'];
+        $content = file_get_contents($filename);
+        $data = json_decode($content, true);
 
-// get success msg
+        foreach ($data as $profile) {
+            dump($profile);
+
+        }
+    }
+}
 
 // get form without action
 if ($func == '') {
@@ -40,7 +53,7 @@ if ($func == '') {
     $sectionFragment = new rex_fragment();
     $sectionFragment->setVar('class', 'edit', false);
     $sectionFragment->setVar('title', $this->i18n('profiles_import_title'), false);
-    $sectionFragment->setVar('body', '<fieldset><input type="hidden" name="function" value="cke5import" />' . $formFragment->parse('core/form/form.php') . '</fieldset>' . $msg, false); // add form as body to fragment
+    $sectionFragment->setVar('body', '<fieldset><input type="hidden" name="func" value="cke5import" />' . $formFragment->parse('core/form/form.php') . '</fieldset>' . $msg, false); // add form as body to fragment
     $sectionFragment->setVar('buttons', $buttonFragment->parse('core/form/submit.php'), false); // add buttons to fragment
 
     // add action area and print it out
