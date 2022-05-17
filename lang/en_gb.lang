@@ -142,6 +142,14 @@ cke5_profiles_creation_exception = Profiles could not be generated
 cke5_mblock_not_available = MBlock is not installed or activated. This demo can only be viewed with MBlock
 cke5_description_empty_error = Pleas enter a profile description
 cke5_profile_name_empty_error = Please enter a profile name
+cke5_profiles_export_missing_input_error = Please select a profile
+cke5_profiles_export_error = Something went wrong with the export!
+cke5_profiles_proceed_db_import = Import profiles now?
+cke5_profiles_import_file_missing_error = Please select a file
+cke5_profiles_import_error = Something went wrong with the import!
+cke5_profiles_import_validation_fail = The profile %s is invalid
+cke5_profiles_import_success = The profile %s [id=%s] has been successful imported
+cke5_profiles_import_fail = The profile %s [id=%s] imported was failed!
 
 # profile export
 cke5_export_profiles = export

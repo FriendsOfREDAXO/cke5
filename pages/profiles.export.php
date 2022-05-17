@@ -18,28 +18,37 @@ $profiles = \Cke5\Handler\Cke5DatabaseHandler::getAllProfiles();
 
 // action
 if (count($_POST) > 0) {
-    // get the export id's
-    $exportIds = array_shift($_POST);
-    $exportIds = (isset($exportIds['profiles'])) ? $exportIds['profiles'] : [];
-    $exportProfiles = [];
-    $exportNames = [];
-
-    // and use the loaded profiles
-    foreach ($exportIds as $id) {
-        if (!isset($profiles[$id])) continue;
-        $exportProfiles[] = $profiles[$id]; // to get the entire stuff
-        $exportNames[] = $profiles[$id]['name']; // and to get the file name
-    }
 
     try {
+        $exportIds = array_shift($_POST);
+
+        if (!isset($exportIds['profiles'])) {
+            throw new LengthException();
+        }
+
+        // get the export id's
+        $exportIds = (isset($exportIds['profiles'])) ? $exportIds['profiles'] : [];
+        $exportProfiles = [];
+        $exportNames = [];
+
+        // and use the loaded profiles
+        foreach ($profiles as $profile) {
+            if (in_array($profile['id'], $exportIds)) {
+                $exportProfiles[] = $profile; // to get the entire stuff
+                $exportNames[] = $profile['name']; // and to get the file name
+            }
+        }
+
         // create filename and export the data set
         $names = (strlen(implode('_', $exportNames)) > 100) ? implode('_', $exportNames) : substr(implode('_', $exportNames), 0, 100) . '_etc_';
         $fileName = 'cke5_profiles_' . $names . '_' . date('YmdHis') . '.json';
         header('Content-Disposition: attachment; filename="' . $fileName . '"; charset=utf-8'); // create header info
         rex_response::sendContent(json_encode($exportProfiles), 'application/octetstream'); // stream it out
         exit; // stop process
+    } catch (LengthException $e) {
+        $message = rex_view::error($this->i18n('profiles_export_missing_input_error', $e->getMessage()));
+        $func = 'error';
     } catch (Exception $e) {
-        // TODO check view
         $message = rex_view::error($this->i18n('profiles_export_error', $e->getMessage()));
         $func = 'error';
     }
@@ -48,6 +57,7 @@ if (count($_POST) > 0) {
 // get error msg
 if ($func == 'error') {
     echo $message;
+    $func = '';
 }
 
 // get form without action

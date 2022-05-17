@@ -24,9 +24,9 @@ class Cke5DatabaseHandler
      * @return bool
      * @author Joachim Doerr
      */
-    public static function profileExist($name = null)
+    public static function profileExist($name = null): bool
     {
-        return (self::loadProfile($name) !== false) ? true : false;
+        return self::loadProfile($name) !== false;
     }
 
     /**
@@ -74,11 +74,49 @@ class Cke5DatabaseHandler
     }
 
     /**
+     * @param array $profile
+     * @return bool
+     * @author Joachim Doerr
+     */
+    public static function importProfile(array $profile): bool
+    {
+        try {
+            $now = new \DateTime();
+            $sql = rex_sql::factory();
+            $sql->setTable(rex::getTable(Cke5DatabaseHandler::CKE5_PROFILES));
+
+            foreach ($profile as $key => $value) {
+                if ($key == 'id') continue;
+                $sql->setValue($key, $value);
+            }
+
+            $sql->setValue('createuser', rex::getUser()->getLogin())
+                ->setValue('updateuser', rex::getUser()->getLogin())
+                ->setValue('createdate', $now->format(\DateTime::ISO8601))
+                ->setValue('updatedate', $now->format(\DateTime::ISO8601));
+
+            if (is_array($loadedProfile = self::loadProfile($profile['name']))) {
+                $sql->setWhere('id=:id', ['id' => $loadedProfile['rex_cke5_profiles.id']]);
+                $sql->update();
+                rex_extension::registerPoint(new rex_extension_point('CKE5_PROFILE_UPDATE', '', $profile, true));
+            } else {
+                $sql->insert();
+                rex_extension::registerPoint(new rex_extension_point('CKE5_PROFILE_ADD', '', $profile, true));
+            }
+
+            return true;
+        } catch (\Exception $e) {
+            \rex_logger::logException($e);
+            return false;
+        }
+    }
+
+    /**
      * @param null $name
      * @return array|null
      * @author Joachim Doerr
      */
-    public static function loadProfile($name = null)
+    public static function loadProfile($name = null): ?array
     {
         try {
             $sql = rex_sql::factory();
@@ -96,7 +134,7 @@ class Cke5DatabaseHandler
      * @return array|null
      * @author Joachim Doerr
      */
-    public static function getAllProfiles()
+    public static function getAllProfiles(): ?array
     {
         try {
             $sql = rex_sql::factory();
@@ -115,7 +153,7 @@ class Cke5DatabaseHandler
      * @return null|string
      * @author Joachim Doerr
      */
-    private static function getSettings(array $settings, $name)
+    private static function getSettings(array $settings, $name): ?string
     {
         if (count($settings) > 0) {
             $array = Cke5ProfilesCreator::ALLOWED_FIELDS[$name];

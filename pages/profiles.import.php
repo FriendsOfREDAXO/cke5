@@ -14,22 +14,119 @@ $send = rex_request::request('send', 'boolean', false);
 
 $profileTable = rex::getTable(\Cke5\Handler\Cke5DatabaseHandler::CKE5_PROFILES);
 $csrfToken = rex_csrf_token::factory('cke5_profiles_import');
+$importResult = [];
+$importKeys = [
+    "id",
+    "name",
+    "description",
+    "toolbar",
+    "expert_definition",
+    "expert_suboption",
+    "expert",
+    "extra_definition",
+    "extra",
+    "code_block",
+    "special_characters",
+    "group_when_full",
+    "table_color_default",
+    "table_color",
+    "ytable",
+    "transformation",
+    "transformation_extra",
+    "transformation_remove",
+    "transformation_include",
+    "html_support_allow",
+    "html_support_disallow",
+    "blank_to_external",
+    "link_downloadable",
+    "link_decorators",
+    "link_decorators_definition",
+    "auto_link",
+    "heading",
+    "alignment",
+    "image_toolbar",
+    "image_resize_unit",
+    "image_resize_options",
+    "image_resize_group_options",
+    "image_resize_options_definition",
+    "fontsize",
+    "highlight",
+    "emoji",
+    "table_toolbar",
+    "rexlink",
+    "list_style",
+    "html_preview",
+    "height_default",
+    "min_height",
+    "max_height",
+    "lang",
+    "lang_content",
+    "font_color",
+    "font_color_default",
+    "font_background_color",
+    "font_background_color_default",
+    "font_families",
+    "font_family_default",
+    "mediaembed",
+    "mediatype",
+    "mediapath",
+    "mediacategory",
+    "upload_default"
+];
 
 // action
 if ($func == 'cke5import') {
-    if (!$csrfToken->isValid()) {
-        echo rex_view::error(rex_i18n::msg('csrf_token_invalid'));
-        $func = '';
-    } else {
+    try {
+        if (!$csrfToken->isValid()) {
+            throw new InvalidArgumentException('csrf_token');
+        }
         $filename = $_FILES['FORM']['tmp_name']['importfile'];
+        if (empty($filename)) {
+            throw new InvalidArgumentException($filename);
+        }
+
         $content = file_get_contents($filename);
         $data = json_decode($content, true);
 
-        foreach ($data as $profile) {
-            dump($profile);
-
+        foreach ($data as $i => $profile) {
+            $fail = false;
+            foreach ($importKeys as $key) {
+                if (!array_key_exists($key, $profile)) {
+                    $importResult[] = rex_view::error(sprintf($this->i18n('profiles_import_validation_fail'), "$i"));
+                    $fail = true;
+                    break;
+                }
+            }
+            if (!$fail) {
+                $result = \Cke5\Handler\Cke5DatabaseHandler::importProfile($profile);
+                $importResult[] = rex_view::info(sprintf($this->i18n('profiles_import_' . (($result == true) ? 'success' : 'fail')), $profile['name'], $profile['id']));
+            }
         }
+        $func = 'imported';
+    } catch (\InvalidArgumentException $e) {
+        if ($e->getMessage() == 'csrf_token') {
+            $message = rex_view::error(rex_i18n::msg('csrf_token_invalid'));
+            $func = 'error';
+        } else {
+            $message = rex_view::error($this->i18n('profiles_import_file_missing_error', $e->getMessage()));
+            $func = 'error';
+        }
+    } catch (\Exception $e) {
+        $message = rex_view::error($this->i18n('profiles_import_error', $e->getMessage()));
+        $func = 'error';
     }
+}
+
+// get error msg
+if ($func == 'error') {
+    echo $message;
+    $func = '';
+}
+
+// get success msg
+if ($func == 'imported') {
+    echo implode('', $importResult);
+    $func = '';
 }
 
 // get form without action
