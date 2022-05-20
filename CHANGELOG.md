@@ -2,7 +2,6 @@
 
 ## Version 5.1.0
 
-* vendor update to v32
 * convert CRLF to LF check that out https://docs.github.com/en/get-started/getting-started-with-git/configuring-git-to-handle-line-endings
 * add profile export and import
 
