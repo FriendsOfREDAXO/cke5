@@ -276,8 +276,6 @@ Use the following keystrokes for more efficient navigation in the CKEditor 5 use
 
 ### Example Extra Options
 
-## Beispiel Extra Oprtionen
-
 ```json
 {
     "removePlugins": ["Autoformat"],
