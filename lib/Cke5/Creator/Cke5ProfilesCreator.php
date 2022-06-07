@@ -37,7 +37,7 @@ class Cke5ProfilesCreator
     ];
 
     const ALLOWED_FIELDS = [
-        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll', 'specialCharacters', 'pastePlainText', 'htmlEmbed', 'fullScreen', 'sourceEditing'],
+        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll', 'specialCharacters', 'pastePlainText', 'htmlEmbed', 'fullScreen', 'sourceEditing', 'selectAll'],
         'alignment' => ['left', 'right', 'center', 'justify'],
         'table_toolbar' => ['|','tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties', 'toggleTableCaption'],
         'heading' => ['paragraph', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
@@ -265,12 +265,19 @@ const cke5suboptions = $suboptions;
             $jsonProfile['removePlugins'][] = 'Alignment';
         }
 
-        if (empty($profile['list_style'])) {
-            $jsonProfile['removePlugins'][] = 'ListStyle';
+        if (empty($profile['styleEditing'])) {
+            $jsonProfile['removePlugins'][] = 'StyleEditing';
         }
 
         if (!in_array('sourceEditing', $toolbar)) {
             $jsonProfile['removePlugins'][] = 'SourceEditing';
+        }
+
+        if (!in_array('style', $toolbar)) {
+            $jsonProfile['removePlugins'][] = 'Style';
+        }
+
+        if (!in_array('sourceEditing', $toolbar) && !in_array('style', $toolbar)) {
             $jsonProfile['removePlugins'][] = 'GeneralHtmlSupport';
         }
 
@@ -430,7 +437,9 @@ const cke5suboptions = $suboptions;
             $jsonProfile = array_merge($jsonProfile, $htmlSupport);
         } else {
             $jsonProfile['removePlugins'][] = 'SourceEditing';
-            $jsonProfile['removePlugins'][] = 'GeneralHtmlSupport';
+            if (!in_array('styleEditing', $toolbar)) {
+                $jsonProfile['removePlugins'][] = 'GeneralHtmlSupport';
+            }
         }
 
         if (!empty($profile['extra'])) {

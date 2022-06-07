@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 5.2.0
+
+* Update cke5 Vendor to v34.1.0
+* add `selectAll` plugin 
+
 ## Version 5.1.0
 
 * convert CRLF to LF check that out https://docs.github.com/en/get-started/getting-started-with-git/configuring-git-to-handle-line-endings
