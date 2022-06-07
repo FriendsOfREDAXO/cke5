@@ -281,6 +281,44 @@ Use the following keystrokes for more efficient navigation in the CKEditor 5 use
 
 ## Für Entwickler
 
+
+## Beispiel Extra Oprtionen
+
+```json
+{
+    "removePlugins": ["Autoformat"],
+    "heading": {
+        "options": [{
+                "model": "paragraph",
+                "title": "Paragraph",
+                "class": "ck-heading_paragraph"
+            },
+            {
+                "model": "paragrap1tl",
+                "view": {
+                    "name": "span",
+                    "classes": "uk-text-large"
+                    
+                },
+                "title": "Fließtext groß",
+                "class": "ck-heading_paragraph"
+            },
+            {
+                "model": "heading1",
+                "view": {
+                    "name": "h1",
+                    "classes": "uk-animation-fade uk-heading-large"   
+                },
+                "title": "Überschrift 1 sehr groß",
+                "class": "ck-heading_heading1"
+            },
+
+        ]
+    }
+}
+```
+
+
 ### Beispiel für benutzerdefinierte Link-Dekorator
 *Achtung, die Keys müssen in Kleinbuchstaben geschrieben werden*
 
