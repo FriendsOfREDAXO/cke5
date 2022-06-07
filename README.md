@@ -296,9 +296,7 @@ Use the following keystrokes for more efficient navigation in the CKEditor 5 use
         "mode": "manual",
         "label": "Link mit CSS Klasse",
         "defaultValue": "true",
-        "attributes": {
-            "class": "arrow"
-        }
+        "classes": "arrow"
     }
 }
 
