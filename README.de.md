@@ -282,7 +282,7 @@ Use the following keystrokes for more efficient navigation in the CKEditor 5 use
 ## Für Entwickler
 
 
-## Beispiel Extra Oprtionen
+### Beispiel Extra Oprtionen
 
 ```json
 {
