@@ -8,12 +8,15 @@
 namespace Cke5\Creator;
 
 use Cke5\Handler\Cke5DatabaseHandler;
+use rex_addon;
+use rex_addon_interface;
 use rex_file;
 use rex_i18n;
 use rex_sql;
 
 class Cke5ProfilesCreator
 {
+    /** @api string */
     const UPLOAD_URL = './index.php?cke5upload=1';
     const PROFILES_FILENAME = 'cke5profiles.js';
 
@@ -39,7 +42,7 @@ class Cke5ProfilesCreator
     const ALLOWED_FIELDS = [
         'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll', 'specialCharacters', 'pastePlainText', 'htmlEmbed', 'fullScreen', 'sourceEditing', 'selectAll'],
         'alignment' => ['left', 'right', 'center', 'justify'],
-        'table_toolbar' => ['|','tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties', 'toggleTableCaption'],
+        'table_toolbar' => ['|', 'tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties', 'toggleTableCaption'],
         'heading' => ['paragraph', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
         'emoji' => ['EmojiPeople', 'EmojiNature', 'EmojiPlaces', 'EmojiFood', 'EmojiActivity', 'EmojiObjects', 'EmojiSymbols', 'EmojiFlags'],
         'highlight' => ['yellowMarker', 'greenMarker', 'pinkMarker', 'blueMarker', 'redPen', 'greenPen'],
@@ -60,6 +63,7 @@ class Cke5ProfilesCreator
         'special_characters' => ['currency', 'mathematical', 'latin', 'arrows', 'text']
     ];
 
+    /** @api array<string,array<string,string>> */
     const CODE_BLOCK = [
         'plaintext' => ['label' => 'Plain Text', 'class' => 'block_plain_text'],
         'c' => ['label' => 'C', 'class' => 'block_c'],
@@ -76,6 +80,98 @@ class Cke5ProfilesCreator
         'typescript' => ['label' => 'TypeScript', 'css' => 'block_type_script'],
         'xml' => ['label' => 'XML', 'class' => 'block_xml']
     ];
+
+    /** @api array<string,array<string,string>> */
+    const HEADINGS = [
+        'paragraph' => [
+            'model' => 'paragraph',
+            'title' => 'Paragraph',
+            'class' => 'ck-heading_paragraph'
+        ],
+        'h1' => [
+            'model' => 'heading1',
+            'view' => 'h1',
+            'title' => 'Heading 1',
+            'class' => 'ck-heading_heading1'
+        ],
+        'h2' => [
+            'model' => 'heading2',
+            'view' => 'h2',
+            'title' => 'Heading 2',
+            'class' => 'ck-heading_heading2'
+        ],
+        'h3' => [
+            'model' => 'heading3',
+            'view' => 'h3',
+            'title' => 'Heading 3',
+            'class' => 'ck-heading_heading3'
+        ],
+        'h4' => [
+            'model' => 'heading4',
+            'view' => 'h4',
+            'title' => 'Heading 4',
+            'class' => 'ck-heading_heading4'
+        ],
+        'h5' => [
+            'model' => 'heading5',
+            'view' => 'h5',
+            'title' => 'Heading 5',
+            'class' => 'ck-heading_heading5'
+        ],
+        'h6' => [
+            'model' => 'heading6',
+            'view' => 'h6',
+            'title' => 'Heading 6',
+            'class' => 'ck-heading_heading6'
+        ],
+    ];
+
+    /** @api array<string,array<string,string>> */
+    const HIGHLIGHTS = [
+        'yellowMarker' => [
+            'model' => 'yellowMarker',
+            'class' => 'marker-yellow',
+            'title' => 'Yellow Marker',
+            'color' => 'var(--ck-highlight-marker-yellow)',
+            'type' => 'marker'
+        ],
+        'greenMarker' => [
+            'model' => 'greenMarker',
+            'class' => 'marker-green',
+            'title' => 'Green Marker',
+            'color' => 'var(--ck-highlight-marker-green)',
+            'type' => 'marker'
+        ],
+        'pinkMarker' => [
+            'model' => 'pinkMarker',
+            'class' => 'marker-pink',
+            'title' => 'Pink Marker',
+            'color' => 'var(--ck-highlight-marker-pink)',
+            'type' => 'marker'
+        ],
+        'blueMarker' => [
+            'model' => 'blueMarker',
+            'class' => 'marker-blue',
+            'title' => 'Blue Marker',
+            'color' => 'var(--ck-highlight-marker-blue)',
+            'type' => 'marker'
+        ],
+        'redPen' => [
+            'model' => 'redPen',
+            'class' => 'pen-red',
+            'title' => 'Red pen',
+            'color' => 'var(--ck-highlight-pen-red)',
+            'type' => 'pen'
+        ],
+        'greenPen' => [
+            'model' => 'greenPen',
+            'class' => 'pen-green',
+            'title' => 'Green pen',
+            'color' => 'var(--ck-highlight-pen-green)',
+            'type' => 'pen'
+        ],
+    ];
+
 
     const DEFAULTS = [
         'toolbar' => 'heading,|',
@@ -95,36 +191,36 @@ class Cke5ProfilesCreator
     ];
 
     /**
-     * @param null|array $profile
+     * @param array<string,string> $getProfile
      * @throws \rex_functional_exception
      * @author Joachim Doerr
      */
-    public static function profilesCreate($getProfile = null)
+    public static function profilesCreate(array $getProfile = null): void
     {
         $profiles = Cke5DatabaseHandler::getAllProfiles();
         $content = '';
 
-        if (sizeof($profiles) > 0) {
+        if (!is_null($profiles) && sizeof($profiles) > 0) {
             $jsonProfiles = [];
-            $jsonSuboptions = [];
+            $jsonSubOptions = [];
 
             foreach ($profiles as $profile) {
-                if (isset($getProfile['name']) && $profile['name'] == $getProfile['name']) {
+                if (!is_null($getProfile) && isset($getProfile['name']) && $profile['name'] === $getProfile['name']) {
                     $profile = $getProfile;
                 }
 
                 $result = self::mapProfile($profile);
-                $jsonSuboptions[$profile['name']] = $result['suboptions'];
+                $jsonSubOptions[$profile['name']] = $result['suboptions'];
                 $jsonProfiles[$profile['name']] = $result['profile'];
             }
 
-            $profiles = str_replace([":\/\/","null",'"regex(\/', '\/)"'], ["://",null,'/','/'], json_encode($jsonProfiles));
-            $suboptions = json_encode($jsonSuboptions);
+            $profiles = str_replace([":\/\/", "null", '"regex(\/', '\/)"'], ["://", null, '/', '/'], (string)json_encode($jsonProfiles));
+            $subOptions = json_encode($jsonSubOptions);
 
             $content =
                 "
 const cke5profiles = $profiles;
-const cke5suboptions = $suboptions;
+const cke5suboptions = $subOptions;
 ";
         }
 
@@ -134,22 +230,22 @@ const cke5suboptions = $suboptions;
     }
 
     /**
-     * @param array $profile
-     * @return array
+     * @param array<string,string> $profile
+     * @return array<string,mixed>
      * @author Joachim Doerr
      */
-    public static function mapProfile(array $profile)
+    public static function mapProfile(array $profile): array
     {
-        if (!empty($profile['expert'])) {
+        if (isset($profile['expert']) && $profile['expert'] !== '') {
             $jsonProfile = json_decode($profile['expert_definition'], true);
-            $jsonSuboption = json_decode($profile['expert_suboption'], true);
+            $jsonSubOption = json_decode($profile['expert_suboption'], true);
 
-            if (is_null($jsonSuboption)) {
-                $jsonSuboption = [];
+            if (is_null($jsonSubOption)) {
+                $jsonSubOption = [];
             }
 
             if (is_array($jsonProfile)) {
-                return ['suboptions' => $jsonSuboption, 'profile' => $jsonProfile];
+                return ['suboptions' => $jsonSubOption, 'profile' => $jsonProfile];
             } else {
                 return ['suboptions' => [], 'profile' => []];
             }
@@ -158,14 +254,14 @@ const cke5suboptions = $suboptions;
         $toolbar = self::toArray($profile['toolbar']);
         $linkToolbar = self::toArray($profile['rexlink']);
         $tableToolbar = self::toArray($profile['table_toolbar']);
-        $jsonProfile = ['toolbar' => ['items' => $toolbar, 'shouldNotGroupWhenFull' => (empty($profile['group_when_full']))]];
-        $jsonSuboption = [];
+        $jsonProfile = ['toolbar' => ['items' => $toolbar, 'shouldNotGroupWhenFull' => (isset($profile['group_when_full']) && $profile['group_when_full'] !== '')]];
+        $jsonSubOption = [];
         $jsonProfile['removePlugins'] = [];
 
-        if (in_array('link', $toolbar) && count($linkToolbar) > 0) {
+        if (in_array('link', $toolbar, true) && count($linkToolbar) > 0) {
             $jsonProfile['link'] = ['rexlink' => $linkToolbar];
 
-            if (in_array('ytable', $linkToolbar) && !empty($profile['ytable'])) {
+            if (in_array('ytable', $linkToolbar, true) && isset($profile['ytable']) && $profile['ytable'] !== '') {
                 $jsonProfile['link']['ytable'] = json_decode($profile['ytable'], true);
             }
         }
@@ -174,26 +270,29 @@ const cke5suboptions = $suboptions;
         $jsonProfile['image'] = [];
         $resizeOptions = null;
 
-        if (!empty($profile['image_resize_unit'])) {
+        if (isset($profile['image_resize_unit']) && $profile['image_resize_unit'] !== '') {
             $jsonProfile['image']['resizeUnit'] = $profile['image_resize_unit'];
         }
 
-        if (!empty($profile['image_resize_options_definition'])) {
-            $resizeOptions = array_filter(json_decode($profile['image_resize_options_definition'], true));
+        if (isset($profile['image_resize_options_definition']) && $profile['image_resize_options_definition'] !== '') {
+            /** @var array<string,array<string,string>> $resizeOptions */
+            $resizeOptions = array_filter((array)json_decode($profile['image_resize_options_definition'], true));
             foreach ($resizeOptions as $key => $option) {
-                $resizeOptions[$key]['name'] = 'imageResize:' . $option['name'];
+                if (isset($option['name']) && $option['name'] !== '') {
+                    $resizeOptions[$key]['name'] = 'imageResize:' . $option['name'];
+                }
             }
             $jsonProfile['image'] = ['resizeOptions' => $resizeOptions];
         }
 
-        if (!empty($profile['image_toolbar'])) {
+        if (isset($profile['image_toolbar']) && $profile['image_toolbar'] !== '') {
             $imageKeys = self::toArray($profile['image_toolbar']);
             $jsonProfile['image']['toolbar'] = self::getImageToolbar($imageKeys);
             $jsonProfile['image']['styles'] = self::getImageStyles($imageKeys);
 
             if (!is_null($resizeOptions) && sizeof($resizeOptions) > 0) {
                 // if toggle setting group sizes...
-                if (!empty($profile['image_resize_group_options'])) {
+                if (isset($profile['image_resize_group_options']) && $profile['image_resize_group_options'] !== '') {
                     if (sizeof($jsonProfile['image']['toolbar']) > 0) $jsonProfile['image']['toolbar'][] = '|';
                     $jsonProfile['image']['toolbar'][] = 'resizeImage';
                 } else {
@@ -205,12 +304,12 @@ const cke5suboptions = $suboptions;
             }
         }
 
-        if (in_array('insertTable', $toolbar) && !empty($profile['table_toolbar'])) {
+        if (in_array('insertTable', $toolbar, true) && isset($profile['table_toolbar']) && $profile['table_toolbar'] !== '') {
             $jsonProfile['table'] = ['contentToolbar' => $tableToolbar];
 
             foreach (self::EDITOR_SETTINGS['cktabletypes'] as $ckKey) {
-                if (in_array($ckKey, $tableToolbar) && !empty($profile['table_color']) &&
-                    (is_null($profile['table_color_default']) or empty($profile['table_color_default']))) {
+                if (in_array($ckKey, $tableToolbar, true) && isset($profile['table_color']) && $profile['table_color'] !== '' &&
+                    (isset($profile['table_color_default']) && $profile['table_color_default'] === '' or is_null($profile['table_color_default']))) {
                     $jsonProfile['table'][$ckKey] = [
                         'borderColors' => json_decode($profile['table_color'], true),
                         'backgroundColors' => json_decode($profile['table_color'], true)
@@ -219,7 +318,7 @@ const cke5suboptions = $suboptions;
             }
         }
 
-        if (!empty($profile['transformation']) && !empty($profile['transformation_extra'])) {
+        if (isset($profile['transformation']) && $profile['transformation'] !== '' && isset($profile['transformation_extra']) && $profile['transformation_extra'] !== '') {
             $definition = json_decode($profile['transformation_extra'], true);
             if (is_array($definition)) {
                 $jsonProfile['typing']['transformations'] = ['extra' => $definition];
@@ -241,15 +340,15 @@ const cke5suboptions = $suboptions;
         }
         */
 
-        if (!empty($profile['blank_to_external'])) {
+        if (isset($profile['blank_to_external']) && $profile['blank_to_external'] !== '') {
             $jsonProfile['link']['addTargetToExternalLinks'] = true;
         }
 
-        if (!empty($profile['link_downloadable'])) {
+        if (isset($profile['link_downloadable']) && $profile['link_downloadable'] !== '') {
             $jsonProfile['link']['decorators'] = ['downloadable' => ['mode' => 'manual', 'label' => 'Downloadable', 'attributes' => ['download' => '']]];
         }
 
-        if (!empty($profile['link_decorators']) && !empty($profile['link_decorators_definition'])) {
+        if (isset($profile['link_decorators']) && $profile['link_decorators'] !== '' && isset($profile['link_decorators_definition']) && $profile['link_decorators_definition'] !== '') {
             $definition = json_decode($profile['link_decorators_definition'], true);
             if (is_array($definition)) {
                 if (!isset($jsonProfile['link']['decorators']) || !is_array($jsonProfile['link']['decorators'])) {
@@ -259,36 +358,36 @@ const cke5suboptions = $suboptions;
             }
         }
 
-        if (in_array('alignment', $toolbar) && !empty($profile['alignment'])) {
+        if (in_array('alignment', $toolbar, true) && isset($profile['alignment']) && $profile['alignment'] !== '') {
             $jsonProfile['alignment'] = self::toArray($profile['alignment']);
         } else {
             $jsonProfile['removePlugins'][] = 'Alignment';
         }
 
-        if (empty($profile['styleEditing'])) {
+        if (isset($profile['styleEditing']) && $profile['styleEditing'] === '') {
             $jsonProfile['removePlugins'][] = 'StyleEditing';
         }
 
-        if (!in_array('sourceEditing', $toolbar)) {
+        if (!in_array('sourceEditing', $toolbar, true)) {
             $jsonProfile['removePlugins'][] = 'SourceEditing';
         }
 
-        if (!in_array('style', $toolbar)) {
+        if (!in_array('style', $toolbar, true)) {
             $jsonProfile['removePlugins'][] = 'Style';
         }
 
-        if (!in_array('sourceEditing', $toolbar) && !in_array('style', $toolbar)) {
+        if (!in_array('sourceEditing', $toolbar, true) && !in_array('style', $toolbar, true)) {
             $jsonProfile['removePlugins'][] = 'GeneralHtmlSupport';
         }
 
-        if (in_array('heading', $toolbar) && !empty($profile['heading'])) {
+        if (in_array('heading', $toolbar, true) && isset($profile['heading']) && $profile['heading'] !== '') {
             $jsonProfile['heading'] = ['options' => self::getHeadings(self::toArray($profile['heading']))];
         }
 
-        if (in_array('emoji', $toolbar) && !empty($profile['emoji'])) {
+        if (in_array('emoji', $toolbar, true) && isset($profile['emoji']) && $profile['emoji'] !== '') {
             $emojiGroups = self::toArray($profile['emoji']);
             foreach (self::ALLOWED_FIELDS['emoji'] as $emoji) {
-                if (!in_array($emoji, $emojiGroups)) {
+                if (!in_array($emoji, $emojiGroups, true)) {
                     $jsonProfile['removePlugins'][] = $emoji;
                 }
             }
@@ -296,61 +395,64 @@ const cke5suboptions = $suboptions;
             $jsonProfile['removePlugins'] = array_merge($jsonProfile['removePlugins'], self::ALLOWED_FIELDS['emoji']);
         }
 
-        if (in_array('highlight', $toolbar) && !empty($profile['highlight'])) {
+        if (in_array('highlight', $toolbar, true) && isset($profile['highlight']) && $profile['highlight'] !== '') {
             $jsonProfile['highlight'] = ['options' => self::getHighlight(self::toArray($profile['highlight']))];
         }
 
-        if (in_array('htmlEmbed', $toolbar)) {
-            if (!empty($profile['html_preview'])) $jsonProfile['htmlEmbed'] = ['showPreviews' => true];
+        if (in_array('htmlEmbed', $toolbar, true)) {
+            if (isset($profile['html_preview']) && $profile['html_preview'] !== '') $jsonProfile['htmlEmbed'] = ['showPreviews' => true];
         } else {
             $jsonProfile['removePlugins'][] = 'HtmlEmbed';
         }
 
         $noFontSize = true;
-        if (in_array('fontSize', $toolbar) && !empty($profile['fontsize'])) {
+        if (in_array('fontSize', $toolbar, true) && isset($profile['fontsize']) && $profile['fontsize'] !== '') {
             $jsonProfile['fontSize'] = ['options' => self::toArray($profile['fontsize'])];
             $noFontSize = false;
         }
 
         $noFontColor = true;
-        if (in_array('fontColor', $toolbar) && !empty($profile['font_color_default'])) {
+        if (in_array('fontColor', $toolbar, true) && isset($profile['font_color_default']) && $profile['font_color_default'] !== '') {
             $noFontColor = false;
         }
 
 
-        if (in_array('fontColor', $toolbar) && !empty($profile['font_color']) &&
-            (is_null($profile['font_color_default']) or empty($profile['font_color_default']))) {
+        if (in_array('fontColor', $toolbar, true) && isset($profile['font_color']) && $profile['font_color'] !== '' &&
+            (isset($profile['font_color_default']) && $profile['font_color_default'] === '' || is_null($profile['font_color_default']))) {
             $jsonProfile['fontColor'] = ['colors' => json_decode($profile['font_color'], true)];
             $noFontColor = false;
         }
-       
+
         $noFontBgColor = true;
-        if (in_array('fontBackgroundColor', $toolbar) && !empty($profile['font_background_color_default'])) {
+        if (in_array('fontBackgroundColor', $toolbar, true) && isset($profile['font_background_color_default']) && $profile['font_background_color_default'] !== '') {
             $noFontBgColor = false;
         }
 
-        if (in_array('fontBackgroundColor', $toolbar) && !empty($profile['font_background_color']) &&
-            (is_null($profile['font_background_color_default']) or empty($profile['font_background_color_default']))) {
+        if (in_array('fontBackgroundColor', $toolbar, true) && isset($profile['font_background_color']) && $profile['font_background_color'] !== '' &&
+            (isset($profile['font_background_color_default']) && $profile['font_background_color_default'] === '' || is_null($profile['font_background_color_default']))) {
             $jsonProfile['fontBackgroundColor'] = ['colors' => json_decode($profile['font_background_color'], true)];
             $noFontBgColor = false;
         }
-        
-        if (in_array('fontFamily', $toolbar) &&
-            (is_null($profile['font_family_default']) or empty($profile['font_family_default'])) &&
-            !empty($profile['font_families'])) {
-            $values = array_values(json_decode($profile['font_families'], true));
+
+        if (in_array('fontFamily', $toolbar, true) &&
+            (isset($profile['font_family_default']) && $profile['font_family_default'] === '' || is_null($profile['font_family_default'])) &&
+            isset($profile['font_families']) && $profile['font_families'] !== '') {
+            $values = array_values((array)json_decode($profile['font_families'], true));
             $options = [];
+            /** @var array<string,string> $value */
             foreach ($values as $value) {
-                $options[] = $value['family'];
+                if (isset($value['family']) && $value['family'] !== '') {
+                    $options[] = $value['family'];
+                }
             }
             $jsonProfile['fontFamily'] = ['options' => $options];
         }
 
-        if ($noFontSize && $noFontColor && $noFontBgColor && !in_array('fontFamily', $toolbar)) {
+        if ($noFontSize && $noFontColor && $noFontBgColor && !in_array('fontFamily', $toolbar, true)) {
             $jsonProfile['removePlugins'][] = 'Font';
         }
 
-        if (in_array('codeBlock', $toolbar) && !empty($profile['code_block'])) {
+        if (in_array('codeBlock', $toolbar, true) && isset($profile['code_block']) && $profile['code_block'] !== '') {
             $codeBlocks = self::toArray($profile['code_block']);
             if (sizeof($codeBlocks) > 0) {
                 $jsonProfile['codeBlock']['languages'] = [];
@@ -362,36 +464,36 @@ const cke5suboptions = $suboptions;
             }
         }
 
-        if (in_array('mediaEmbed', $toolbar) && !empty($profile['mediaembed'])) {
+        if (in_array('mediaEmbed', $toolbar, true) && isset($profile['mediaembed']) && $profile['mediaembed'] !== '') {
             $provider = [];
             $hold = self::toArray($profile['mediaembed']);
             foreach (self::ALLOWED_FIELDS['providers'] as $value) {
-                if (!in_array($value, $hold)) {
+                if (!in_array($value, $hold, true)) {
                     $provider[] = $value;
                 }
             }
             $jsonProfile['mediaEmbed'] = ['removeProviders' => $provider];
         }
 
-        if (in_array('rexImage', $toolbar)) {
-            if (!empty($profile['mediatype'])) {
+        if (in_array('rexImage', $toolbar, true)) {
+            if (isset($profile['mediatype']) && $profile['mediatype'] !== '') {
                 $jsonProfile['rexImage'] = ['media_type' => $profile['mediatype']];
             } else {
-                $path = (!empty($profile['mediapath'])) ? $profile['mediapath'] : 'media';
+                $path = (isset($profile['mediapath']) && $profile['mediapath'] !== '') ? $profile['mediapath'] : 'media';
                 $jsonProfile['rexImage'] = ['media_path' => '/' . $path . '/'];
             }
         }
 
-        if (!is_null($profile['upload_default']) or !empty($profile['upload_default'])) {
+        if (!is_null($profile['upload_default']) or isset($profile['upload_default']) && $profile['upload_default'] !== '') {
             $ckFinderUrl = self::UPLOAD_URL;
 
-            if (!empty($profile['mediatype'])) {
+            if (isset($profile['mediatype']) && $profile['mediatype'] !== '') {
                 $ckFinderUrl .= '&media_type=' . $profile['mediatype'];
             } else {
                 $ckFinderUrl .= '&media_path=' . $profile['mediapath'];
             }
 
-            if (!empty($profile['mediacategory'])) {
+            if (isset($profile['mediacategory']) && $profile['mediacategory'] !== '') {
                 $ckFinderUrl .= '&media_category=' . $profile['mediacategory'];
             }
 
@@ -399,242 +501,151 @@ const cke5suboptions = $suboptions;
         }
 
         foreach (rex_i18n::getLocales() as $locale) {
-            if (!empty($profile['placeholder_' . $locale])) {
+            if (isset($profile['placeholder_' . $locale]) && $profile['placeholder_' . $locale] !== '') {
                 $jsonProfile['placeholder_' . substr($locale, 0, 2)] = $profile['placeholder_' . $locale];
             }
         }
 
-        if (!empty($profile['lang_content']) || !empty($profile['lang'])) {
+        if (isset($profile['lang_content']) && $profile['lang_content'] !== '' || isset($profile['lang']) && $profile['lang'] !== '') {
             $jsonProfile['language'] = [];
-            if (!empty($profile['lang'])) {
+            if (isset($profile['lang']) && $profile['lang'] !== '') {
                 $jsonProfile['language']['ui'] = $profile['lang'];
             }
-            if (!empty($profile['lang_content'])) {
+            if (isset($profile['lang_content']) && $profile['lang_content'] !== '') {
                 $jsonProfile['language']['content'] = $profile['lang_content'];
             }
         }
 
-        if (is_null($profile['height_default']) or empty($profile['height_default'])) {
+        if (is_null($profile['height_default']) or isset($profile['height_default']) && $profile['height_default'] === '') {
             foreach (['min', 'max'] as $key) {
-                if (!empty($profile[$key . '_height'])) {
-                    if ((int)$profile[$key . '_height'] == 0) {
-                        $jsonSuboption[] = [$key . '-height' => 'none'];
+                if (isset($profile[$key . '_height']) && $profile[$key . '_height'] !== '') {
+                    if ((int)$profile[$key . '_height'] === 0) {
+                        $jsonSubOption[] = [$key . '-height' => 'none'];
                     } else {
-                        $jsonSuboption[] = [$key . '-height' => (int)$profile[$key . '_height']];
+                        $jsonSubOption[] = [$key . '-height' => (int)$profile[$key . '_height']];
                     }
                 }
             }
         }
 
-        if (!empty($profile['html_support_allow']) || !empty($profile['html_support_disallow'])) {
+        if (isset($profile['html_support_allow']) && $profile['html_support_allow'] !== '' ||
+            isset($profile['html_support_disallow']) && $profile['html_support_disallow'] !== '') {
             $htmlSupport = ['htmlSupport' => []];
-            if (!empty($profile['html_support_allow'])) {
+            if (isset($profile['html_support_allow']) && $profile['html_support_allow'] !== '') {
                 $htmlSupport['htmlSupport']['allow'] = json_decode($profile['html_support_allow'], true);
             }
-            if (!empty($profile['html_support_disallow'])) {
+            if (isset($profile['html_support_disallow']) && $profile['html_support_disallow'] !== '') {
                 $htmlSupport['htmlSupport']['disallow'] = json_decode($profile['html_support_disallow'], true);
             }
             $jsonProfile = array_merge($jsonProfile, $htmlSupport);
         } else {
             $jsonProfile['removePlugins'][] = 'SourceEditing';
-            if (!in_array('styleEditing', $toolbar)) {
+            if (!in_array('styleEditing', $toolbar, true)) {
                 $jsonProfile['removePlugins'][] = 'GeneralHtmlSupport';
             }
         }
 
-        if (!empty($profile['extra'])) {
+        if (isset($profile['extra']) && $profile['extra'] !== '') {
             $definition = json_decode($profile['extra_definition'], true);
             if (is_array($definition)) {
                 if (isset($definition['removePlugins'])) {
-                    $jsonProfile['removePlugins'] = array_values(array_unique(array_merge($jsonProfile['removePlugins'], $definition['removePlugins'])));
+                    $jsonProfile['removePlugins'] = array_values(array_unique(array_merge((array)$jsonProfile['removePlugins'], (array)$definition['removePlugins'])));
                     unset($definition['removePlugins']);
                 }
                 $jsonProfile = array_merge($jsonProfile, $definition);
             }
         }
 
-        return ['suboptions' => $jsonSuboption, 'profile' => $jsonProfile];
+        return ['suboptions' => $jsonSubOption, 'profile' => $jsonProfile];
     }
 
     /**
-     * @return \rex_addon
+     * @return rex_addon_interface|rex_addon
      * @author Joachim Doerr
      */
-    private static function getAddon()
+    private static function getAddon(): rex_addon_interface
     {
         return \rex_addon::get('cke5');
     }
 
     /**
-     * @param $keys
-     * @return array
+     * @param array<string> $keys
+     * @return array<int,string>
      * @author Joachim Doerr
      */
-    private static function getImageToolbar($keys)
+    private static function getImageToolbar(array $keys): array
     {
         $return = [];
-
         foreach ($keys as $key) {
-            if (in_array($key, ['block', 'inline', 'side', 'alignLeft', 'alignCenter', 'alignRight', 'alignBlockRight', 'alignBlockLeft'])) {
+            if (in_array($key, ['block', 'inline', 'side', 'alignLeft', 'alignCenter', 'alignRight', 'alignBlockRight', 'alignBlockLeft'], true)) {
                 $return[] = 'imageStyle:' . $key;
             } else {
                 $return[] = $key;
             }
         }
-
         return $return;
     }
 
     /**
-     * @param $keys
-     * @return array
+     * @param array<string> $keys
+     * @return array<int,string>
      * @author Joachim Doerr
      */
-    private static function getImageStyles($keys)
+    private static function getImageStyles(array $keys): array
     {
         $return = [];
-
         foreach ($keys as $key) {
-            if (in_array($key, ['block', 'inline', 'side', 'alignLeft', 'alignCenter', 'alignRight', 'alignBlockRight', 'alignBlockLeft'])) {
+            if (in_array($key, ['block', 'inline', 'side', 'alignLeft', 'alignCenter', 'alignRight', 'alignBlockRight', 'alignBlockLeft'], true)) {
                 $return[] = $key;
             }
         }
-
         return $return;
     }
 
     /**
-     * @param $string
-     * @return array
+     * @param string $string
+     * @return array<int,string>
      * @author Joachim Doerr
      */
-    private static function toArray($string)
+    private static function toArray(string $string): array
     {
         return array_filter(explode(',', $string));
     }
 
     /**
-     * @param $keys
-     * @return array
+     * @param array<string> $keys
+     * @return array<int,array<string,string>>
      * @author Joachim Doerr
      */
-    private static function getHeadings($keys)
+    private static function getHeadings(array $keys): array
     {
-        $headings = [
-            'paragraph' => [
-                'model' => 'paragraph',
-                'title' => 'Paragraph',
-                'class' => 'ck-heading_paragraph'
-            ],
-            'h1' => [
-                'model' => 'heading1',
-                'view' => 'h1',
-                'title' => 'Heading 1',
-                'class' => 'ck-heading_heading1'
-            ],
-            'h2' => [
-                'model' => 'heading2',
-                'view' => 'h2',
-                'title' => 'Heading 2',
-                'class' => 'ck-heading_heading2'
-            ],
-            'h3' => [
-                'model' => 'heading3',
-                'view' => 'h3',
-                'title' => 'Heading 3',
-                'class' => 'ck-heading_heading3'
-            ],
-            'h4' => [
-                'model' => 'heading4',
-                'view' => 'h4',
-                'title' => 'Heading 4',
-                'class' => 'ck-heading_heading4'
-            ],
-            'h5' => [
-                'model' => 'heading5',
-                'view' => 'h5',
-                'title' => 'Heading 5',
-                'class' => 'ck-heading_heading5'
-            ],
-            'h6' => [
-                'model' => 'heading6',
-                'view' => 'h6',
-                'title' => 'Heading 6',
-                'class' => 'ck-heading_heading6'
-            ],
-        ];
-
-        $return = [];
-
-        foreach ($keys as $key) {
-            if (key_exists($key, $headings)) {
-                $return[] = $headings[$key];
-            }
-        }
-
-        return $return;
+        return self::getReturnValues($keys,self::HEADINGS);
     }
 
     /**
-     * @param $keys
-     * @return array
+     * @param array<string> $keys
+     * @return array<int,array<string,string>>
      * @author Joachim Doerr
      */
-    private static function getHighlight($keys)
+    private static function getHighlight(array $keys): array
     {
-        $highlights = [
-            'yellowMarker' => [
-                'model' => 'yellowMarker',
-                'class' => 'marker-yellow',
-                'title' => 'Yellow Marker',
-                'color' => 'var(--ck-highlight-marker-yellow)',
-                'type' => 'marker'
-            ],
-            'greenMarker' => [
-                'model' => 'greenMarker',
-                'class' => 'marker-green',
-                'title' => 'Green Marker',
-                'color' => 'var(--ck-highlight-marker-green)',
-                'type' => 'marker'
-            ],
-            'pinkMarker' => [
-                'model' => 'pinkMarker',
-                'class' => 'marker-pink',
-                'title' => 'Pink Marker',
-                'color' => 'var(--ck-highlight-marker-pink)',
-                'type' => 'marker'
-            ],
-            'blueMarker' => [
-                'model' => 'blueMarker',
-                'class' => 'marker-blue',
-                'title' => 'Blue Marker',
-                'color' => 'var(--ck-highlight-marker-blue)',
-                'type' => 'marker'
-            ],
-            'redPen' => [
-                'model' => 'redPen',
-                'class' => 'pen-red',
-                'title' => 'Red pen',
-                'color' => 'var(--ck-highlight-pen-red)',
-                'type' => 'pen'
-            ],
-            'greenPen' => [
-                'model' => 'greenPen',
-                'class' => 'pen-green',
-                'title' => 'Green pen',
-                'color' => 'var(--ck-highlight-pen-green)',
-                'type' => 'pen'
-            ],
-        ];
+        return self::getReturnValues($keys,self::HIGHLIGHTS);
+    }
 
+    /**
+     * @param array<string> $keys
+     * @param array<string,array<string,string>> $values
+     * @return array<int,array<string,string>>
+     * @author Joachim Doerr
+     */
+    private static function getReturnValues(array $keys, array $values): array
+    {
         $return = [];
-
         foreach ($keys as $key) {
-            if (key_exists($key, $highlights)) {
-                $return[] = $highlights[$key];
+            if (key_exists($key, $values)) {
+                $return[] = $values[$key];
             }
         }
-
         return $return;
     }
 }

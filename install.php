@@ -5,7 +5,9 @@
  * @license MIT
  */
 
-include_once (__DIR__ . '/db.php');
+/** @var rex_addon $this */
+
+include_once(__DIR__ . '/db.php');
 
 // install default demo profiles
 try {

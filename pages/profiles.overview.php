@@ -9,31 +9,34 @@ use Cke5\Creator\Cke5ProfilesCreator;
 use Cke5\Handler\Cke5DatabaseHandler;
 use Cke5\Utils\Cke5FormHelper;
 use Cke5\Utils\CKE5ISO6391;
+use Cke5\Utils\Cke5ListHelper;
 use Cke5\Utils\Cke5PreviewHelper;
 
 /** @var rex_addon $this */
 
 $func = rex_request::request('func', 'string');
+/** @var int $id */
 $id = rex_request::request('id', 'int');
+/** @var int $start */
 $start = rex_request::request('start', 'int', NULL);
 $send = rex_request::request('send', 'boolean', false);
 
 $profileTable = rex::getTable(Cke5DatabaseHandler::CKE5_PROFILES);
 $message = '';
 
-if ($func == 'clone') {
-    $message = \Cke5\Utils\Cke5ListHelper::cloneData($profileTable, $id);
+if ($func === 'clone') {
+    $message = Cke5ListHelper::cloneData($profileTable, $id);
     rex_extension::registerPoint(new rex_extension_point('CKE5_PROFILE_CLONE', $id));
     $func = '';
 }
 
-if ($func == 'delete') {
-    $message = \Cke5\Utils\Cke5ListHelper::deleteData($profileTable, $id);
+if ($func === 'delete') {
+    $message = Cke5ListHelper::deleteData($profileTable, $id);
     rex_extension::registerPoint(new rex_extension_point('CKE5_PROFILE_DELETE', $id));
     $func = '';
 }
 
-if ($func == '') {
+if ($func === '') {
 
     // instance list
     $list = rex_list::factory("SELECT id, name, description FROM $profileTable ORDER BY id");
@@ -88,7 +91,7 @@ if ($func == '') {
     $fragment->setVar('content', $message . $content, false);
     echo $fragment->parse('core/page/section.php');
 
-} elseif ($func == 'edit' || $func == 'add') {
+} elseif ($func === 'edit' || $func === 'add') {
 
     $id = rex_request('id', 'int');
     $form = rex_form::factory($profileTable, '', 'id=' . $id, 'post');
@@ -98,24 +101,22 @@ if ($func == '') {
     $result = array();
     $prefix = '';
 
-    if ($func == 'edit') {
+    if ($func === 'edit') {
         $form->addParam('id', $id);
         $result = rex_request::post($form->getName(), 'array', 'null');
 
-        if (is_array($result)) {
-            $prefix = '';
-        } else {
+        if (!is_array($result)) {
             $result = $form->getSql()->getRow();
             $prefix = rex::getTable('cke5_profiles') . '.';
         }
     }
 
-    $default_value = ($func == 'add' && $send == false) ? true : false;
-    $min_height = (isset($result[$prefix . 'min_height'])) ? (int)$result[$prefix . 'min_height'] : 0;
-    $max_height = (isset($result[$prefix . 'max_height'])) ? (int)$result[$prefix . 'max_height'] : 0;
-    $profile = (isset($result[$prefix . 'name'])) ? $result[$prefix . 'name'] : '';
-    $mediaPath = (!isset($result[$prefix . 'mediapath']) || empty($result[$prefix . 'mediapath'])) ? str_replace(['../', '/'], '', rex_url::media()) : $result[$prefix . 'mediapath'];
-    $expert = (isset($result[$prefix . 'expert']) && !empty($result[$prefix . 'expert']));
+    $default_value = $func === 'add' && $send === false;
+    $min_height = (is_array($result) && isset($result[$prefix . 'min_height'])) ? intval($result[$prefix . 'min_height']) : 0;
+    $max_height = (is_array($result) && isset($result[$prefix . 'max_height'])) ? intval($result[$prefix . 'max_height']) : 0;
+    $profile = (is_array($result) && isset($result[$prefix . 'name'])) ? $result[$prefix . 'name'] : '';
+    $mediaPath = (is_array($result) && (isset($result[$prefix . 'mediapath']) && $result[$prefix . 'mediapath'] !== '')) ? $result[$prefix . 'mediapath'] : str_replace(['../', '/'], '', rex_url::media());
+    $expert = (is_array($result) && isset($result[$prefix . 'expert']) && $result[$prefix . 'expert'] !== '');
 
     // wrapper
     $form->addRawField('<div class="cke5_wrap_rex_profile_data">');
@@ -602,11 +603,13 @@ if ($func == '') {
             $lang = rex_i18n::getLocale();
             $langFiles = glob($this->getPath('assets/vendor/ckeditor5-classic/translations/*.js'));
 
-            foreach ($langFiles as $langFile) {
-                $key = substr(pathinfo($langFile, PATHINFO_FILENAME), 0, 2);
-                if (isset(CKE5ISO6391::$isolang[$key])) {
-                    $field->getSelect()->addOption(CKE5ISO6391::$isolang[$key] . ' [' . pathinfo($langFile, PATHINFO_FILENAME) . ']', pathinfo($langFile, PATHINFO_FILENAME));
-                    $fieldContentLang->getSelect()->addOption(CKE5ISO6391::$isolang[$key] . ' [' . pathinfo($langFile, PATHINFO_FILENAME) . ']', pathinfo($langFile, PATHINFO_FILENAME));
+            if (is_array($langFiles)) {
+                foreach ($langFiles as $langFile) {
+                    $key = substr(pathinfo($langFile, PATHINFO_FILENAME), 0, 2);
+                    if (isset(CKE5ISO6391::$isolang[$key])) {
+                        $field->getSelect()->addOption(CKE5ISO6391::$isolang[$key] . ' [' . pathinfo($langFile, PATHINFO_FILENAME) . ']', pathinfo($langFile, PATHINFO_FILENAME));
+                        $fieldContentLang->getSelect()->addOption(CKE5ISO6391::$isolang[$key] . ' [' . pathinfo($langFile, PATHINFO_FILENAME) . ']', pathinfo($langFile, PATHINFO_FILENAME));
+                    }
                 }
             }
             // set current lang again to fix lang problem with php 7.0 and php 5.x
@@ -677,10 +680,12 @@ if ($func == '') {
     // close form wrapper collapse
     $form->addRawField('</div>');
 
-    if ($func == 'edit') {
+    if ($func === 'edit') {
         $profileResult = array();
-        foreach ($result as $key => $value) {
-            $profileResult[str_replace($prefix, '', $key)] = $value;
+        if (is_array($result)) {
+            foreach ($result as $key => $value) {
+                $profileResult[str_replace($prefix, '', $key)] = $value;
+            }
         }
         $form->addRawField('
         <div class="cke5-preview-row">
@@ -706,7 +711,7 @@ if ($func == '') {
 
     $fragment = new rex_fragment();
     $fragment->setVar('class', 'edit', false);
-    $fragment->setVar('title', ($func == 'edit') ? rex_i18n::msg('cke5_profile_edit') : rex_i18n::msg('cke5_profile_add'));
+    $fragment->setVar('title', ($func === 'edit') ? rex_i18n::msg('cke5_profile_edit') : rex_i18n::msg('cke5_profile_add'));
     $fragment->setVar('body', $content, false);
     echo $fragment->parse('core/page/section.php');
 }

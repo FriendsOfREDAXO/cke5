@@ -9,9 +9,11 @@ namespace Cke5\Utils;
 
 
 use rex;
+use rex_clang;
 use rex_i18n;
 use rex_sql_column;
 use rex_sql_table;
+use rex_user;
 
 class Cke5Lang
 {
@@ -19,10 +21,13 @@ class Cke5Lang
      * @return string
      * @author Joachim Doerr
      */
-    public static function getUserLang()
+    public static function getUserLang(): string
     {
-        if (!empty(rex::getUser()->getLanguage())) {
-            $lang = rex::getUser()->getLanguage();
+        /** @var rex_user $user */
+        $user = rex::getUser();
+        $userLang = $user->getLanguage();
+        if ($userLang !== '') {
+            $lang = $userLang;
         } else {
             $lang = rex_i18n::getLocale();
         }
@@ -33,10 +38,10 @@ class Cke5Lang
      * @return string
      * @author Joachim Doerr
      */
-    public static function getOutputLang()
+    public static function getOutputLang(): string
     {
-        if (strlen(\rex_clang::getCurrent()->getCode()) == 2) {
-            return \rex_clang::getCurrent()->getCode();
+        if (strlen(rex_clang::getCurrent()->getCode()) === 2) {
+            return rex_clang::getCurrent()->getCode();
         } else {
             return 'en';
         }
@@ -45,7 +50,7 @@ class Cke5Lang
     /**
      * @author Joachim Doerr
      */
-    public static function addPlaceholderLangColumns()
+    public static function addPlaceholderLangColumns(): void
     {
         $sql = rex_sql_table::get(rex::getTable('cke5_profiles'));
         foreach (rex_i18n::getLocales() as $locale) {

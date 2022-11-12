@@ -10,19 +10,26 @@ namespace Cke5\Handler;
 
 use rex;
 use rex_addon;
+use rex_api_exception;
 use rex_extension;
 use rex_extension_point;
+use rex_media_service;
+use rex_mediapool;
+use rex_request;
 use rex_response;
 
 class Cke5UploadHandler
 {
+    /** @api string */
     const MEDIA_TYPE_PATH = '/index.php?rex_media_type=%s&rex_media_file=';
+    /** @api string */
     const MEDIA_PATH = '/media/';
 
     /**
+     * @throws rex_api_exception
      * @author Joachim Doerr
      */
-    public static function uploadCke5Img()
+    public static function uploadCke5Img(): void
     {
         if (!function_exists('rex_mediapool_saveMedia')) {
             if (rex_addon::exists('mediapool') && rex_addon::get('mediapool')->isAvailable()) {
@@ -30,19 +37,29 @@ class Cke5UploadHandler
             }
         }
 
-        if ($_FILES['upload']['name'] != '' && rex_mediapool_isAllowedMediaType($_FILES['upload']['name'])) {
+        /** @var array<string,string|array<string,string>> $file */
+        $file = rex_request::files('upload', 'array', []);
 
-            $mediaCategory = \rex_request::get('media_category', 'int', 0);
-            $return = rex_mediapool_saveMedia($_FILES['upload'], $mediaCategory, ['title'=>''], rex::getUser()->getValue('login'));
+        if (isset($file['name']) && $file['name'] !== '' && is_string($file['name']) && rex_mediapool::isAllowedExtension($file['name'])) {
 
-            if ($return['ok'] == 1) {
+            /** @var array{category_id: int, title: string, file: array{name: string, path?: string, tmp_name?: string, error?: int}} $data */
+            $data = [
+                'category_id' => intval(rex_request::get('media_category', 'int', 0)),
+                'title' => '',
+                'file' => $file
+            ];
+
+            $return = rex_media_service::addMedia($data);
+
+            if ($return['ok'] === 1) {
                 rex_extension::registerPoint(new rex_extension_point('MEDIA_ADDED', '', $return));
             }
 
-            $mediaType = \rex_request::get('media_type', 'string', '');
-            $mediaSrcPath = '/' . \rex_request::get('media_path', 'string', self::MEDIA_PATH) . '/';
+            /** @var string $mediaType */
+            $mediaType = rex_request::get('media_type', 'string', '');
+            $mediaSrcPath = '/' . rex_request::get('media_path', 'string', self::MEDIA_PATH) . '/';
 
-            if (!empty($mediaType)) {
+            if ($mediaType !== '') {
                 $mediaSrcPath = sprintf(self::MEDIA_TYPE_PATH, $mediaType);
             }
 
@@ -60,8 +77,8 @@ class Cke5UploadHandler
             $response = [
                 'fileName' => null,
                 'uploaded' => [
-                    'number'    => 500,
-                    'message'   => 'Internal server error. The uploaded file was failed',
+                    'number' => 500,
+                    'message' => 'Internal server error. The uploaded file was failed',
                 ],
                 'error' => null,
                 'url' => null,
@@ -69,10 +86,12 @@ class Cke5UploadHandler
 
         }
 
+        $response = json_encode($response);
+
         rex_response::cleanOutputBuffers();
         rex_response::sendContentType('application/json');
-        rex_response::setHeader('status', $statusCode);
-        rex_response::sendContent(json_encode($response));
+        rex_response::setHeader('status', (string) $statusCode);
+        rex_response::sendContent((is_string($response) ? $response : ''));
         exit;
 
     }

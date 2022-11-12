@@ -4,7 +4,10 @@ namespace Cke5\Utils;
 // https://snipplr.com/view.php?id=70237
 class CKE5ISO6391
 {
-    public static $isolang = array(
+    /**
+     * @var string[]
+     */
+    public static $isolang = [
         "ab" => "Abkhazian",
         "abk" => "Abkhazian",
         "aa" => "Afar",
@@ -371,5 +374,5 @@ class CKE5ISO6391
         "zha" => "Zhuang, Chuang",
         "zu" => "Zulu",
         "zul" => "Zulu"
-    );
+    ];
 }

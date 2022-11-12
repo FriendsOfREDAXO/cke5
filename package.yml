@@ -34,4 +34,4 @@ requires:
 conflicts:
     packages:
         mblock: '<3.4.0'
-        mbform: '<6.1.0'
+        mform: '<6.1.0'

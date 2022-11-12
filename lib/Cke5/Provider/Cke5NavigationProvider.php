@@ -10,20 +10,25 @@ namespace Cke5\Provider;
 
 use rex_be_controller;
 use rex_be_navigation;
+use rex_be_page;
 use rex_fragment;
 
 class Cke5NavigationProvider
 {
     /**
-     * @return null|\rex_be_page
+     * @return null|rex_be_page
      * @author Joachim Doerr
      */
-    public static function getMainSubPage()
+    public static function getMainSubPage(): ?rex_be_page
     {
+        /** @var rex_be_page $page */
         $page = rex_be_controller::getPageObject('cke5');
-        foreach ($page->getSubPages() as $subPage) {
-            if ($subPage->getKey() == 'main') {
-                return $subPage;
+        $subPages = $page->getSubpages();
+        if (count($subPages) > 0) {
+            foreach ($subPages as $subPage) {
+                if ($subPage->getKey() === 'main') {
+                    return $subPage;
+                }
             }
         }
         return null;
@@ -33,11 +38,11 @@ class Cke5NavigationProvider
      * @return string
      * @author Joachim Doerr
      */
-    public static function getSubNavigationHeader()
+    public static function getSubNavigationHeader(): string
     {
         $photoBy = sprintf(\rex_i18n::msg('cke5_subnavigation_header_photo'),
             '<a href="https://unsplash.com/photos/mMcqMYJfopo?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Patrick Fore</a>',
-        '<a href="https://unsplash.com/search/photos/stars?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a>'
+            '<a href="https://unsplash.com/search/photos/stars?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a>'
         );
         return '
             <header class="cke5-header">
@@ -45,9 +50,9 @@ class Cke5NavigationProvider
                     <img src="/assets/addons/cke5/images/header-patrick-fore-357913-unsplash.jpg">
                 </picture>
                 <div class="header-content">
-                    <h1>'.\rex_i18n::msg('cke5_subnavigation_header_title').'</h1>
+                    <h1>' . \rex_i18n::msg('cke5_subnavigation_header_title') . '</h1>
                 </div>
-                <div class="photoinfo"><span>'.$photoBy.'</span></div>
+                <div class="photoinfo"><span>' . $photoBy . '</span></div>
             </header>
         ';
     }
@@ -56,45 +61,39 @@ class Cke5NavigationProvider
      * @return string
      * @author Joachim Doerr
      */
-    public static function getSubNavigation()
+    public static function getSubNavigation(): string
     {
+        /** @var rex_be_page $subpage */
         $subpage = self::getMainSubPage();
+        $subPages = $subpage->getSubpages();
         $subtitle = '';
 
-        if (sizeof($subpage->getSubpages()) > 0) {
+        if (count($subPages) > 0) {
             $nav = rex_be_navigation::factory();
 
-            foreach ($subpage->getSubpages() as $sPage) {
+            foreach ($subPages as $sPage) {
                 $sPage->setHidden(false);
                 $nav->addPage($sPage);
             }
 
             $blocks = $nav->getNavigation();
             $navigation = [];
-            if (count($blocks) == 1) {
+            if (count($blocks) === 1) {
                 $navigation = current($blocks);
                 $navigation = $navigation['navigation'];
             }
 
-            if (!empty($navigation)) {
+            if ($navigation !== '') {
                 try {
                     $fragment = new rex_fragment();
                     $fragment->setVar('left', $navigation, false);
                     $subtitle = $fragment->parse('core/navigations/content.php');
 
-                    $subtitle = str_replace('/mblock_demo', '/mblock_demo&id=1&func=edit&list=300200', $subtitle);
-
                 } catch (\rex_exception $e) {
                     \rex_logger::logException($e);
                 }
-
-                $subtitle = str_replace(['nav nav-tabs', 'rex-page-nav'], ['nav nav-pills list-inline center-block text-center', 'cke5-mainnav'], $subtitle);
-
-            } else {
-                $subtitle = '';
             }
         }
-
         return $subtitle;
     }
 }

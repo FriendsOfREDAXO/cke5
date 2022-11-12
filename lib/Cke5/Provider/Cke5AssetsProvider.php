@@ -11,6 +11,8 @@ namespace Cke5\Provider;
 use Cke5\Creator\Cke5ProfilesCreator;
 use Cke5\Utils\Cke5Lang;
 use rex;
+use rex_addon;
+use rex_addon_interface;
 use rex_be_controller;
 use rex_exception;
 use rex_logger;
@@ -23,7 +25,7 @@ class Cke5AssetsProvider
     /**
      * @author Joachim Doerr
      */
-    public static function provideCke5CustomData()
+    public static function provideCke5CustomData(): void
     {
         if (file_exists(rex_path::assets('addons/cke5_custom_data/custom-style.css'))) {
             try {
@@ -37,7 +39,7 @@ class Cke5AssetsProvider
     /**
      * @author Joachim Doerr
      */
-    public static function provideCke5BaseData()
+    public static function provideCke5BaseData(): void
     {
         // add cke5 vendors
         try {
@@ -52,22 +54,22 @@ class Cke5AssetsProvider
 
             if (count($result) > 0) {
                 foreach ($result as $lang) {
-                    if (!empty($lang['ui']) && !in_array(self::getLang($lang['ui']), $langKit)) {
+                    if (isset($lang['ui']) && $lang['ui'] !== '' && !in_array(self::getLang($lang['ui']), $langKit, true)) {
                         rex_view::addJsFile(self::getAddon()->getAssetsUrl('vendor/ckeditor5-classic/translations/' . self::getLang($lang['ui']) . '.js'));
                         $langKit[] = self::getLang($lang['ui']);
                     }
-                    if (!empty($lang['content']) && !in_array(self::getLang($lang['content']), $langKit)) {
+                    if (isset($lang['content']) && $lang['content'] !== '' && !in_array(self::getLang($lang['content']), $langKit, true)) {
                         rex_view::addJsFile(self::getAddon()->getAssetsUrl('vendor/ckeditor5-classic/translations/' . self::getLang($lang['content']) . '.js'));
                         $langKit[] = self::getLang($lang['content']);
                     }
                 }
             }
 
-            if (!in_array(self::getLang(Cke5Lang::getUserLang()), $langKit)) {
+            if (!in_array(self::getLang(Cke5Lang::getUserLang()), $langKit, true)) {
                 rex_view::addJsFile(self::getAddon()->getAssetsUrl('vendor/ckeditor5-classic/translations/' . self::getLang(Cke5Lang::getUserLang()) . '.js'));
                 $langKit[] = self::getLang(Cke5Lang::getUserLang());
             }
-            if (!in_array(self::getLang(Cke5Lang::getOutputLang()), $langKit)) {
+            if (!in_array(self::getLang(Cke5Lang::getOutputLang()), $langKit, true)) {
                 rex_view::addJsFile(self::getAddon()->getAssetsUrl('vendor/ckeditor5-classic/translations/' . self::getLang(Cke5Lang::getOutputLang()) . '.js'));
                 $langKit[] = self::getLang(Cke5Lang::getOutputLang());
             }
@@ -80,24 +82,21 @@ class Cke5AssetsProvider
     }
 
     /**
-     * @param $lang
+     * @param string $lang
      * @return string
      * @author Joachim Doerr
      */
-    public static function getLang($lang)
+    public static function getLang(string $lang): string
     {
-        if ($lang == 'en') {
-            return 'en-gb';
-        }
-        return $lang;
+        return ($lang === 'en') ? 'en-gb' : $lang;
     }
 
     /**
      * @author Joachim Doerr
      */
-    public static function provideCke5ProfileEditData()
+    public static function provideCke5ProfileEditData(): void
     {
-        if (rex_be_controller::getCurrentPagePart(2) == 'profiles' && rex_be_controller::getCurrentPagePart(1) == 'cke5') {
+        if (rex_be_controller::getCurrentPagePart(2) === 'profiles' && rex_be_controller::getCurrentPagePart(1) === 'cke5') {
             // add js vendors
             self::addJS([
                 'cke5InputTags' => 'vendor/cke5InputTags/cke5InputTags.js',
@@ -122,9 +121,9 @@ class Cke5AssetsProvider
     /**
      * @author Joachim Doerr
      */
-    public static function provideCke5PreviewData()
+    public static function provideCke5PreviewData(): void
     {
-        if (rex_be_controller::getCurrentPagePart(3) == 'preview' && rex_be_controller::getCurrentPagePart(1) == 'cke5') {
+        if (rex_be_controller::getCurrentPagePart(3) === 'preview' && rex_be_controller::getCurrentPagePart(1) === 'cke5') {
             // add js vendors
             self::addJS([
                 'rainbowjson' => 'vendor/rainbow-json/rainbowjson.js',
@@ -137,10 +136,10 @@ class Cke5AssetsProvider
     }
 
     /**
-     * @param array $js
+     * @param array<string,string> $js
      * @author Joachim Doerr
      */
-    private static function addJS(array $js)
+    private static function addJS(array $js): void
     {
         foreach ($js as $name => $fullPathFile) {
             $add = true;
@@ -160,10 +159,10 @@ class Cke5AssetsProvider
     }
 
     /**
-     * @param array $css
+     * @param array<string,string> $css
      * @author Joachim Doerr
      */
-    private static function addCss(array $css)
+    private static function addCss(array $css): void
     {
         foreach ($css as $name => $fullPathFile) {
             $add = true;
@@ -185,11 +184,11 @@ class Cke5AssetsProvider
     }
 
     /**
-     * @return \rex_addon
+     * @return rex_addon_interface
      * @author Joachim Doerr
      */
-    private static function getAddon()
+    private static function getAddon(): rex_addon_interface
     {
-        return \rex_addon::get('cke5');
+        return rex_addon::get('cke5');
     }
 }

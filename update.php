@@ -5,10 +5,12 @@
  * @license MIT
  */
 
+/** @var rex_addon $this */
+
 include_once (__DIR__ . '/db.php');
 
 try {
-    if (rex_string::versionCompare($this->getVersion(), '3.3.0', '<')) {
+    if (rex_version::compare($this->getVersion(), '3.3.0', '<')) {
         // copy custom data to assets folder
         if (!file_exists(rex_path::assets('addons/cke5_custom_data'))) {
             mkdir(rex_path::assets('addons/cke5_custom_data'));
