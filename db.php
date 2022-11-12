@@ -73,14 +73,3 @@ foreach (rex_i18n::getLocales() as $locale) {
 }
 
 $sql->ensure();
-
-// install mblock demo database
-rex_sql_table::get(rex::getTable('cke5_mblock_demo'))
-    ->ensurePrimaryIdColumn()
-    ->ensureColumn(new rex_sql_column('name', 'varchar(40)', true))
-    ->ensureColumn(new rex_sql_column('mblock_field', 'text', true))
-    ->ensureColumn(new rex_sql_column('createdate', 'datetime', true))
-    ->ensureColumn(new rex_sql_column('updatedate', 'datetime', true))
-    ->ensureColumn(new rex_sql_column('createuser', 'varchar(255)', true))
-    ->ensureColumn(new rex_sql_column('updateuser', 'varchar(255)', true))
-    ->ensure();

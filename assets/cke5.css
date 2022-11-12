@@ -168,34 +168,13 @@
     display: inline-block !important;
 }
 
-.panel-cke5-mblockdemo .rex-form-group:not(.rex-form-group-vertical) > dd:first-child,
-.cke5-mblockdemo .rex-form-group:not(.rex-form-group-vertical) > dd:first-child {
-    padding-left: inherit !important;
-}
-
-.cke5-preview .cke5-preview-editor,
-.panel-cke5-mblockdemo .rex-form-group:not(.rex-form-group-vertical) > dd:first-child,
-.cke5-mblockdemo .rex-form-group:not(.rex-form-group-vertical) > dd:first-child {
+.cke5-preview .cke5-preview-editor {
     margin: 0 auto;
     max-width: 1030px;
     display: block;
 }
 
-.cke5-preview,
-.panel-cke5-mblockdemo .cke5-demo-info {
-    max-width: 1330px;
-    margin: 0 auto;
-}
-
-.panel-cke5-mblockdemo .cke5-demo-info {
-    padding: 2em;
-}
-
-.panel-cke5-mblockdemo .sortitem {
-    background: #f7f7f7;
-}
-
-.panel-cke5-mblockdemo form {
+.cke5-preview {
     max-width: 1330px;
     margin: 0 auto;
 }

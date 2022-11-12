@@ -7,7 +7,6 @@ cke5_help = Hjälpl
 cke5_config = Konfiguration
 cke5_main = Översikt & Demon
 cke5_demo = CKEditor 5 Demo
-cke5_mblock_demo = MBlock Demo
 cke5_features = Editor- & Addon-Features
 cke5_preview = Profile previews
 
@@ -138,7 +137,5 @@ cke5_add_profile = Skapa en ny profil
 cke5_profiles_created = Profiler genererades och var tillgängliga
 cke5_profiles_creation_exception = Profiler kunde inte genereras
 
-# demo mblock error
-cke5_mblock_not_available = MBlock är inte installerat eller aktiverat. Denna demo kan bara ses med MBlock addon installerat och aktiverat
 cke5_description_empty_error = Ange en profilbeskrivning
 cke5_profile_name_empty_error = Vänligen ange ett profilnamn

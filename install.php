@@ -7,13 +7,10 @@
 
 include_once (__DIR__ . '/db.php');
 
-// install default demo profile and mblock demo data
+// install default demo profiles
 try {
     $sql = rex_sql::factory();
-    if (
-        sizeof($sql->getArray("SELECT id FROM " . rex::getTable('cke5_profiles') . " WHERE id=1")) <= 0 &&
-        sizeof($sql->getArray("SELECT id FROM " . rex::getTable('cke5_mblock_demo') . " WHERE id=1")) <= 0
-    ) {
+    if (sizeof($sql->getArray("SELECT id FROM " . rex::getTable('cke5_profiles') . " WHERE id=1")) <= 0) {
         rex_sql_util::importDump($this->getPath('data.sql'));
     }
     // copy custom data to assets folder

@@ -17,6 +17,13 @@ try {
             rex_file::copy($this->getPath('custom_data/custom-styles.css'), rex_path::assets('addons/cke5_custom_data/custom-style.css'));
         }
     }
+    if (rex_version::compare($this->getVersion(), '5.2.0', '>')) {
+        try {
+            rex_sql::factory()->setQuery('DROP TABLE IF EXISTS ' . rex::getTablePrefix() . 'cke5_mblock_demo');
+        } catch (rex_sql_exception $e) {
+            rex_logger::logException($e);
+        }
+    }
 } catch (rex_functional_exception $e) {
     rex_logger::logException($e);
 }

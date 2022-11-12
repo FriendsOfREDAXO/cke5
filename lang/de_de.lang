@@ -7,7 +7,6 @@ cke5_help = Hilfe
 cke5_config = Konfiguration
 cke5_main = Überblick & Demos
 cke5_demo = CKEditor 5 Demo
-cke5_mblock_demo = MBlock Demo
 cke5_features = Editor- & Addon-Features
 cke5_preview = Profil-Previews
 
@@ -138,8 +137,6 @@ cke5_add_profile = Neues Profil erstellen
 cke5_profiles_created = Die Profile wurden generiert und stehen zur Verfügung
 cke5_profiles_creation_exception = Die Profile konnten nicht generiert werden
 
-# demo mblock error
-cke5_mblock_not_available = MBlock ist nicht installiert oder aktiviert. Diese Demo kann nur mit installiertem und aktivierten MBlock-Addon angezeigt werden
 cke5_description_empty_error = Bitte geben sie eine Profil-Beschreibung an
 cke5_profile_name_empty_error = Bitte geben sie einen Profilnamen an
 cke5_profiles_export_missing_input_error = Bitte ein Profil auswählen
