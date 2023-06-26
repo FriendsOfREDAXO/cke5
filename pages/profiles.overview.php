@@ -343,6 +343,11 @@ if ($func === '') {
                 $field->setLabel(rex_i18n::msg('cke5_image_toolbar'));
                 if ($default_value) $field->setValue(Cke5ProfilesCreator::DEFAULTS['image_toolbar']);
 
+                // media types
+                $field = $form->addTextField('mediatypes');
+                $field->setLabel(rex_i18n::msg('cke5_mediatypes'));
+                $field->setAttribute('placeholder', rex_i18n::msg('cke5_mediatypes_placeholder'));
+
                 // image resize unit
                 $field = $form->addSelectField('image_resize_unit');
                 $field->setAttribute('class', 'form-control selectpicker');
@@ -424,7 +429,7 @@ if ($func === '') {
                 $form->addRawField('<div class="collapse" id="cke5mediacat-collapse">');
                     $field = $form->addSelectField('mediacategory');
                     $field->setAttribute('class', 'form-control selectpicker');
-                    $field->setLabel(rex_i18n::msg('cke5_media_category'));
+                    $field->setLabel(rex_i18n::msg('cke5_media_category_upload'));
                     $cats_sel = new rex_media_category_select();
                     $cats_sel->setStyle('class="form-control selectpicker"');
                     $cats_sel->setName('mediacategory');
@@ -512,6 +517,7 @@ if ($func === '') {
         // close fieldset FONTS
         $form->addRawField('</fieldset></div>');
 
+/*
 // EMOJI
         $form->addRawField('<div class="collapse" id="cke5emoji-collapse"><fieldset><legend>'.rex_i18n::msg('cke5_emoji').'</legend>');
             $field = $form->addTextField('emoji');
@@ -521,7 +527,7 @@ if ($func === '') {
             $field->setLabel(rex_i18n::msg('cke5_empji'));
             if ($default_value) $field->setValue(Cke5ProfilesCreator::DEFAULTS['emoji']);
         $form->addRawField('</fieldset></div>');
-
+*/
 // LINKS
         $form->addRawField('<div class="collapse" id="cke5link-collapse"><fieldset><legend>'.rex_i18n::msg('cke5_links').'</legend>');
             $field = $form->addTextField('rexlink');
@@ -531,7 +537,42 @@ if ($func === '') {
             $field->setLabel(rex_i18n::msg('cke5_link'));
             if ($default_value) $field->setValue(Cke5ProfilesCreator::DEFAULTS['rexlink']);
 
-            // link stuff
+            // internal link stuff
+            $form->addRawField('<div class="collapse" id="cke5internal-collapse">');
+                // add select for article categories
+                if (rex_addon::exists('structure') && rex_addon::get('structure')->isAvailable()) {
+                    // structure category
+                    $field = $form->addSelectField('link_internalcategory');
+                    $field->setAttribute('class', 'form-control selectpicker');
+                    $field->setLabel(rex_i18n::msg('cke5_internal_category'));
+                    $cats_sel = new rex_category_select();
+                    $cats_sel->setStyle('class="form-control selectpicker"');
+                    $cats_sel->setName('link_internalcategory');
+                    $cats_sel->addOption(rex_i18n::msg('pool_kats_no'), '0');
+                    $field->setSelect($cats_sel);
+                }
+            $form->addRawField('</div>');
+
+            // media link stuff
+            $form->addRawField('<div class="collapse" id="cke5media-collapse">');
+                $field = $form->addTextField('link_mediatypes');
+                $field->setLabel(rex_i18n::msg('cke5_mediatypes'));
+                $field->setAttribute('placeholder', rex_i18n::msg('cke5_mediatypes_placeholder'));
+                // add select for media categories
+                if (rex_addon::exists('mediapool') && rex_addon::get('mediapool')->isAvailable()) {
+                    // mediacategory
+                    $field = $form->addSelectField('link_mediacategory');
+                    $field->setAttribute('class', 'form-control selectpicker');
+                    $field->setLabel(rex_i18n::msg('cke5_media_category'));
+                    $cats_sel = new rex_media_category_select();
+                    $cats_sel->setStyle('class="form-control selectpicker"');
+                    $cats_sel->setName('link_mediacategory');
+                    $cats_sel->addOption(rex_i18n::msg('pool_kats_no'), '0');
+                    $field->setSelect($cats_sel);
+                }
+            $form->addRawField('</div>');
+
+            // yform link stuff
             $form->addRawField('<div class="collapse" id="cke5ytable-collapse">');
                 $field = $form->addTextAreaField('ytable');
                 $field->setLabel(rex_i18n::msg('cke5_ytable'));
@@ -553,6 +594,12 @@ if ($func === '') {
             $auto_sel->addOption(rex_i18n::msg('cke5_auto_link_http'), 'http');
             $auto_sel->addOption(rex_i18n::msg('cke5_auto_link_disable'), '0');
             $field->setSelect($auto_sel);
+            $field = $form->addCheckboxField('auto_link');
+            $field->setAttribute('id', 'cke5auto_link-input');
+            $field->setAttribute('data-toggle', 'toggle');
+            $field->setLabel(rex_i18n::msg('cke5_auto_link'));
+            $field->addOption(rex_i18n::msg('cke5_auto_link_description'), 'auto_link');
+            if ($default_value) $field->setValue('auto_link');
             */
 
             // extern blank
