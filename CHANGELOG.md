@@ -1,5 +1,23 @@
 # Changelog
 
+## Version 6.0.0
+
+* update ckeditor 5 vendor to v38.0.1
+* make ckeditor5_rex_image and ckeditor5_rex_link modules ready for TypeScript
+* fix media path custom input will not display by profile edit
+* add new cke5_rex_link plugin options `rexlink_category, rexmedia_category, rexmedia_types` to profile editor
+* add new cke5_rex_image plugin options `rexmedia_category, rexmedia_types` to profile editor
+* profile name accept now 40 characters
+* fix img resize button cannot remove bug
+* bring list_style profile edit button to alive and add index and reverse option
+* add support for new cke5 vendor functions `textPartLanguage`, `findAndReplace`
+
+### Breaking changes
+
+* remove incompatible ckeditor5 plugins `emoji`, `fullscreen`, `pastePlainText`
+* after update from v5 to v6 the link and image setup is broken
+* autolink for http(s) and email is no longer activated by default
+
 ## Version 5.3.0
 
 * mblock demo stuff removed
