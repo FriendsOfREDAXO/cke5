@@ -87,7 +87,7 @@ function cke5_init_edit(element) {
             allowSpace: false,
             allowUpper: false,
             allowOtherCharSets: false,
-            maxLength: 18,
+            maxLength: 40,
             allow: '_',
             allowNumeric: true
         });
@@ -102,6 +102,9 @@ function cke5_init_edit(element) {
     }
 
     if (mediatype.length) {
+        if (mediatype.val() === '') {
+            toggle_collapse('insertMediapath', 'show');
+        }
         mediatype.on('change', function () {
             if ($(this).val() === '') {
                 toggle_collapse('insertMediapath', 'show');
