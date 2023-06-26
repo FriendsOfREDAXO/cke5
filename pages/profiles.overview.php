@@ -235,7 +235,10 @@ if ($func === '') {
                 $field->setLabel(rex_i18n::msg('cke5_liststyle'));
                 $field->addOption(rex_i18n::msg('cke5_liststyle_description'), 'liststyle');
                 if ($default_value) $field->setValue('liststyle');
+            $form->addRawField('</div>');
 
+            // number list
+            $form->addRawField('<div class="collapse" id="cke5numberedList-collapse">');
                 $field = $form->addCheckboxField('list_start_index');
                 $field->setAttribute('id', 'cke5liststartindex-input');
                 $field->setAttribute('data-toggle', 'toggle');

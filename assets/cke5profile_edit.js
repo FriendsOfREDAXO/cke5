@@ -409,6 +409,9 @@ function cke5_toolbar_create_tag(typename, tags) {
                 case 'bulletedList':
                 case 'numberedList':
                     toggle_collapse('liststyle', 'show');
+                    if (type === 'numberedList') {
+                        toggle_collapse('numberedList', 'show');
+                    }
                     break;
                 default:
                     toggle_collapse(type, 'show');
@@ -456,6 +459,9 @@ function cke5_toolbar_destroy_tag(typename, tags) {
                         liststylehide++;
                         if (liststylehide === 2) {
                             toggle_collapse('liststyle', 'hide');
+                        }
+                        if (type === 'numberedList') {
+                            toggle_collapse('numberedList', 'hide');
                         }
                         break;
                     case 'htmlEmbed':
