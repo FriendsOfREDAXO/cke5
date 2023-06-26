@@ -25,7 +25,7 @@ class Cke5ProfilesCreator
         /* todo: specialCharacters not work because : https://github.com/ckeditor/ckeditor5/issues/6160 */
         'cktypes' => ['heading', 'fontSize', 'mediaEmbed', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable', 'fontBackgroundColor', 'fontColor', 'codeBlock', 'bulletedList', 'numberedList', 'htmlEmbed'/*, 'emoji'*/, 'sourceEditing', 'textPartLanguage'/*, 'specialCharacters' */],
         'ckimgtypes' => ['rexImage', 'imageUpload'],
-        'cklinktypes' => ['ytable'],
+        'cklinktypes' => ['ytable', 'media', 'internal'],
         'cktabletypes' => ['tableProperties', 'tableCellProperties']
     ];
 
@@ -273,8 +273,20 @@ const cke5suboptions = $subOptions;
         $jsonProfile['image'] = [];
         $resizeOptions = null;
 
+        if (isset($profile['mediacategory']) && $profile['mediacategory'] !== '') {
+            $jsonProfile['image']['rexmedia_category'] = $profile['mediacategory'];
+        }
+
+        if (isset($profile['mediatypes']) && $profile['mediatypes'] !== '') {
+            $jsonProfile['image']['rexmedia_types'] = $profile['mediatypes'];
+        }
+
         if (isset($profile['image_resize_unit']) && $profile['image_resize_unit'] !== '') {
             $jsonProfile['image']['resizeUnit'] = $profile['image_resize_unit'];
+        }
+
+        if (isset($profile['image_resize_unit']) && $profile['image_resize_unit'] !== '') {
+            $jsonProfile['image']['rexmedia_types'] = $profile['image_resize_unit'];
         }
 
         if (isset($profile['image_resize_options_definition']) && $profile['image_resize_options_definition'] !== '') {
@@ -328,7 +340,23 @@ const cke5suboptions = $subOptions;
             }
         }
 
-//        $jsonProfile['removePlugins'][] = 'AutoLink';
+        if (isset($profile['blank_to_external']) && $profile['blank_to_external'] !== '') {
+            $jsonProfile['link']['addTargetToExternalLinks'] = true;
+        } else {
+            $jsonProfile['link']['addTargetToExternalLinks'] = false;
+        }
+
+        if (isset($profile['link_internalcategory']) && $profile['link_internalcategory'] !== '') {
+            $jsonProfile['link']['rexlink_category'] = $profile['link_internalcategory'];
+        }
+
+        if (isset($profile['link_mediacategory']) && $profile['link_mediacategory'] !== '') {
+            $jsonProfile['link']['rexmedia_category'] = $profile['link_mediacategory'];
+        }
+
+        if (isset($profile['link_mediatypes']) && $profile['link_mediatypes'] !== '') {
+            $jsonProfile['link']['rexmedia_types'] = $profile['link_mediatypes'];
+        }
 
         /*
         switch($profile['auto_link']) {
@@ -343,12 +371,8 @@ const cke5suboptions = $subOptions;
         }
         */
 
-        if (isset($profile['blank_to_external']) && $profile['blank_to_external'] !== '') {
-            $jsonProfile['link']['addTargetToExternalLinks'] = true;
-        }
-
         if (isset($profile['link_downloadable']) && $profile['link_downloadable'] !== '') {
-            $jsonProfile['link']['decorators'] = ['downloadable' => ['mode' => 'manual', 'label' => 'Downloadable', 'attributes' => ['download' => '']]];
+            $jsonProfile['link']['decorators'] = ['toggleDownloadable' => ['mode' => 'manual', 'label' => 'Downloadable', 'attributes' => ['download' => 'file']]];
         }
 
         if (isset($profile['link_decorators']) && $profile['link_decorators'] !== '' && isset($profile['link_decorators_definition']) && $profile['link_decorators_definition'] !== '') {
@@ -502,8 +526,8 @@ const cke5suboptions = $subOptions;
                 $ckFinderUrl .= '&media_path=' . $profile['mediapath'];
             }
 
-            if (isset($profile['mediacategory']) && $profile['mediacategory'] !== '') {
-                $ckFinderUrl .= '&media_category=' . $profile['mediacategory'];
+            if (isset($profile['upload_mediacategory']) && $profile['upload_mediacategory'] !== '') {
+                $ckFinderUrl .= '&media_category=' . $profile['upload_mediacategory'];
             }
 
             $jsonProfile['ckfinder'] = ['uploadUrl' => $ckFinderUrl];
