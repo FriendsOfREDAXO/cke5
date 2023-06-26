@@ -189,6 +189,20 @@ if ($func === '') {
             $field->setLabel(rex_i18n::msg('cke5_group_when_full_default'));
             $field->addOption(rex_i18n::msg('cke5_group_when_full_description'), 'group_when_full');
             if ($default_value) $field->setValue('group_when_full');
+
+            // text part lang
+            $form->addRawField('<div class="collapse" id="cke5textPartLanguage-collapse">');
+                $field = $form->addSelectField('text_part_language');
+                $field->setAttribute('class', 'form-control selectpicker');
+                $field->setAttribute('data-live-search', 'true');
+                $field->setAttribute('multiple', 'multiple');
+                $field->setLabel(rex_i18n::msg('cke5_textpartlanguage'));
+                $field->getSelect()->addOption('default', '');
+                foreach (CKE5ISO6391::$isolang as $key => $value) {
+                    $field->getSelect()->addOption($value . ' [' . $key . ']', $key);
+                }
+            $form->addRawField('</div>');
+
         $form->addRawField('</fieldset>');
 
 // BASIS TEXT STYLES

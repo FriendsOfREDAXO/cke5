@@ -8,6 +8,7 @@
 namespace Cke5\Creator;
 
 use Cke5\Handler\Cke5DatabaseHandler;
+use Cke5\Utils\CKE5ISO6391;
 use rex_addon;
 use rex_addon_interface;
 use rex_file;
@@ -22,11 +23,13 @@ class Cke5ProfilesCreator
 
     const EDITOR_SETTINGS = [
         /* todo: specialCharacters not work because : https://github.com/ckeditor/ckeditor5/issues/6160 */
-        'cktypes' => ['heading', 'fontSize', 'mediaEmbed', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable', 'fontBackgroundColor', 'fontColor', 'codeBlock', 'bulletedList', 'numberedList', 'htmlEmbed', 'emoji', 'sourceEditing'/*, 'specialCharacters' */],
+        'cktypes' => ['heading', 'fontSize', 'mediaEmbed', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable', 'fontBackgroundColor', 'fontColor', 'codeBlock', 'bulletedList', 'numberedList', 'htmlEmbed'/*, 'emoji'*/, 'sourceEditing', 'textPartLanguage'/*, 'specialCharacters' */],
         'ckimgtypes' => ['rexImage', 'imageUpload'],
         'cklinktypes' => ['ytable'],
         'cktabletypes' => ['tableProperties', 'tableCellProperties']
     ];
+
+    // const DEFAULT_LICENCE = 'dG9vZWFzZXRtcHNsaXVyb3JsbWlkYWRmZjQ0c2RhZHNhbGl1cm9ybG1pZG10b28yMzQyMzQyMzRzYXNkZmY0M2RtLU1qQTBOREEyTVRJPQ==';
 
     const DEFAULT_VALUES = [
         'html_support_allow' => '[
@@ -40,11 +43,11 @@ class Cke5ProfilesCreator
     ];
 
     const ALLOWED_FIELDS = [
-        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll', 'specialCharacters', 'pastePlainText', 'htmlEmbed', 'fullScreen', 'sourceEditing', 'selectAll'],
+        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight'/*, 'emoji'*/, 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll', 'specialCharacters', 'htmlEmbed', 'sourceEditing', 'selectAll', 'textPartLanguage'],
         'alignment' => ['left', 'right', 'center', 'justify'],
         'table_toolbar' => ['|', 'tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties', 'toggleTableCaption'],
         'heading' => ['paragraph', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
-        'emoji' => ['EmojiPeople', 'EmojiNature', 'EmojiPlaces', 'EmojiFood', 'EmojiActivity', 'EmojiObjects', 'EmojiSymbols', 'EmojiFlags'],
+        //'emoji' => ['EmojiPeople', 'EmojiNature', 'EmojiPlaces', 'EmojiFood', 'EmojiActivity', 'EmojiObjects', 'EmojiSymbols', 'EmojiFlags'],
         'highlight' => ['yellowMarker', 'greenMarker', 'pinkMarker', 'blueMarker', 'redPen', 'greenPen'],
         'image_toolbar' => ['|', 'imageTextAlternative', 'block', 'inline', 'side', 'alignLeft', 'alignCenter', 'alignRight', 'alignBlockLeft', 'alignBlockRight', 'linkImage', 'toggleImageCaption'],
         'rexlink' => ['internal', 'media', 'email', 'phone', 'ytable'],
@@ -187,7 +190,7 @@ class Cke5ProfilesCreator
         'mediaembed' => 'youtube,vimeo',
         'code_block' => 'plaintext,php,javascript,python',
         'special_characters' => 'currency,mathematical,latin,arrows,text',
-        'emoji' => 'EmojiPeople,EmojiSymbols,EmojiFlags',
+        //'emoji' => 'EmojiPeople,EmojiSymbols,EmojiFlags',
     ];
 
     /**
@@ -380,11 +383,18 @@ const cke5suboptions = $subOptions;
             $jsonProfile['removePlugins'][] = 'GeneralHtmlSupport';
         }
 
+        if (in_array('textPartLanguage', $toolbar, true) && isset($profile['text_part_language']) && $profile['text_part_language'] !== '') {
+            $textPartLang = array_filter(explode('|', $profile['text_part_language']));
+            foreach ($textPartLang as $key) {
+                $jsonProfile['language']['textPartLanguage'][] = ['title' => CKE5ISO6391::$isolang[$key], 'languageCode' => $key];
+            }
+        }
+
         if (in_array('heading', $toolbar, true) && isset($profile['heading']) && $profile['heading'] !== '') {
             $jsonProfile['heading'] = ['options' => self::getHeadings(self::toArray($profile['heading']))];
         }
 
-        if (in_array('emoji', $toolbar, true) && isset($profile['emoji']) && $profile['emoji'] !== '') {
+        /*if (in_array('emoji', $toolbar, true) && isset($profile['emoji']) && $profile['emoji'] !== '') {
             $emojiGroups = self::toArray($profile['emoji']);
             foreach (self::ALLOWED_FIELDS['emoji'] as $emoji) {
                 if (!in_array($emoji, $emojiGroups, true)) {
@@ -393,7 +403,7 @@ const cke5suboptions = $subOptions;
             }
         } else {
             $jsonProfile['removePlugins'] = array_merge($jsonProfile['removePlugins'], self::ALLOWED_FIELDS['emoji']);
-        }
+        }*/
 
         if (in_array('highlight', $toolbar, true) && isset($profile['highlight']) && $profile['highlight'] !== '') {
             $jsonProfile['highlight'] = ['options' => self::getHighlight(self::toArray($profile['highlight']))];
@@ -415,7 +425,6 @@ const cke5suboptions = $subOptions;
         if (in_array('fontColor', $toolbar, true) && isset($profile['font_color_default']) && $profile['font_color_default'] !== '') {
             $noFontColor = false;
         }
-
 
         if (in_array('fontColor', $toolbar, true) && isset($profile['font_color']) && $profile['font_color'] !== '' &&
             (isset($profile['font_color_default']) && $profile['font_color_default'] === '' || is_null($profile['font_color_default']))) {
@@ -555,6 +564,11 @@ const cke5suboptions = $subOptions;
                 $jsonProfile = array_merge($jsonProfile, $definition);
             }
         }
+
+        // licence
+//        $jsonProfile['licenseKey'] = self::DEFAULT_LICENCE;
+//        $jsonProfile['ui']['poweredBy']['forceVisible'] = false;
+
 
         return ['suboptions' => $jsonSubOption, 'profile' => $jsonProfile];
     }
