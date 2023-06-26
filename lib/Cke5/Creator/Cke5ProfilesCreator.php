@@ -34,7 +34,7 @@ class Cke5ProfilesCreator
     const DEFAULT_VALUES = [
         'html_support_allow' => '[
     {
-        "name": "regex(/.*/)",
+        "name": "regex(/^(div|section|article)$/)",
         "attributes": true,
         "classes": true,
         "styles": true
