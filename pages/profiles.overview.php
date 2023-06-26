@@ -235,6 +235,18 @@ if ($func === '') {
                 $field->setLabel(rex_i18n::msg('cke5_liststyle'));
                 $field->addOption(rex_i18n::msg('cke5_liststyle_description'), 'liststyle');
                 if ($default_value) $field->setValue('liststyle');
+
+                $field = $form->addCheckboxField('list_start_index');
+                $field->setAttribute('id', 'cke5liststartindex-input');
+                $field->setAttribute('data-toggle', 'toggle');
+                $field->setLabel(rex_i18n::msg('cke5_liststartindex'));
+                $field->addOption(rex_i18n::msg('cke5_liststartindex_description'), 'liststartindex');
+
+                $field = $form->addCheckboxField('list_reversed');
+                $field->setAttribute('id', 'cke5listreversed-input');
+                $field->setAttribute('data-toggle', 'toggle');
+                $field->setLabel(rex_i18n::msg('cke5_listreversed'));
+                $field->addOption(rex_i18n::msg('cke5_listreversed_description'), 'listreversed');
             $form->addRawField('</div>');
 
             // code block

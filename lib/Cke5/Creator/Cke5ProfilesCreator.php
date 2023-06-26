@@ -418,6 +418,14 @@ const cke5suboptions = $subOptions;
             $jsonProfile['heading'] = ['options' => self::getHeadings(self::toArray($profile['heading']))];
         }
 
+        if (in_array('bulletedList', $toolbar, true) || in_array('numberedList', $toolbar)) {
+            $jsonProfile['list']['properties'] = [
+                'styles' => (isset($profile['list_style']) && $profile['list_style'] !== ''),
+                'startIndex' => (isset($profile['list_start_index']) && $profile['list_start_index'] !== ''),
+                'reversed' => (isset($profile['list_reversed']) && $profile['list_reversed'] !== ''),
+            ];
+        }
+
         /*if (in_array('emoji', $toolbar, true) && isset($profile['emoji']) && $profile['emoji'] !== '') {
             $emojiGroups = self::toArray($profile['emoji']);
             foreach (self::ALLOWED_FIELDS['emoji'] as $emoji) {
