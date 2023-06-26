@@ -13,7 +13,7 @@ $(document).on('rex:ready', function (e, container) {
         if (rex.cke5theme != 'notheme') {
             if (rex.cke5theme == 'dark') {
                 if(!$('#ckedark').length){
-                $('head').append('<link id="ckedark" rel="stylesheet" type="text/css" href="' + rex.cke5darkcss + '">');
+                    $('head').append('<link id="ckedark" rel="stylesheet" type="text/css" href="' + rex.cke5darkcss + '">');
                 }
             }
             if (rex.cke5theme == 'auto' && window.matchMedia) {
@@ -61,7 +61,7 @@ function cke5_init(element) {
             profile_set = element.attr('data-profile'),
             min_height = element.attr('data-min-height'),
             max_height = element.attr('data-max-height'),
-            lang = {},
+            lang = {'ui': '', 'content': ''},
             ui_lang = element.attr('data-lang'),
             content_lang = element.attr('data-content-lang');
 
@@ -97,11 +97,12 @@ function cke5_init(element) {
         if (typeof content_lang === undefined || !content_lang) {} else {
             lang['content'] = content_lang;
         }
-        if (lang['ui'] !== undefined || lang['content'] !== undefined) {
-            if (lang['ui'] !== undefined) options['language']['ui'] = lang['ui'];
-            if (lang['content'] !== undefined) options['language']['content'] = lang['content'];
+        if (lang['ui'] !== '' || lang['content'] !== '') {
+            if (options['language'] === undefined) options['language'] = [];
+            if (lang['ui'] !== '') options['language']['ui'] = lang['ui'];
+            if (lang['content'] !== '') options['language']['content'] = lang['content'];
 
-            if (lang['ui'] !== undefined && options['placeholder_' + lang['ui']] !== undefined) {
+            if (lang['ui'] !== '' && options['placeholder_' + lang['ui']] !== undefined) {
                 options['placeholder'] = options['placeholder_' + lang['ui']];
             }
         }
