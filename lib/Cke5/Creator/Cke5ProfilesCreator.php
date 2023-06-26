@@ -289,7 +289,7 @@ const cke5suboptions = $subOptions;
             $jsonProfile['image']['rexmedia_types'] = $profile['image_resize_unit'];
         }
 
-        if (isset($profile['image_resize_options_definition']) && $profile['image_resize_options_definition'] !== '') {
+        if (isset($profile['image_resize_options']) && $profile['image_resize_options'] !== '' && isset($profile['image_resize_options_definition']) && $profile['image_resize_options_definition'] !== '') {
             /** @var array<string,array<string,string>> $resizeOptions */
             $resizeOptions = array_filter((array)json_decode($profile['image_resize_options_definition'], true));
             foreach ($resizeOptions as $key => $option) {
