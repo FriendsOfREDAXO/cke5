@@ -2,6 +2,8 @@ CKEDITOR
 Software License Agreement
 ==========================
 
+Link to current version: [LICENSE](https://github.com/ckeditor/ckeditor5/blob/master/LICENSE.md)
+
 **CKEditor 5** – https://github.com/ckeditor/ckeditor5 <br>
 Copyright (c) 2003-2023, [CKSource Holding sp. z o.o.](https://cksource.com) All rights reserved.
 
