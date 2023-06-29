@@ -1,4 +1,4 @@
-# Licenses
+# Vendor-Licenses
 
 ## CKEDITOR 5 
 [GPL LICENSE](https://github.com/ckeditor/ckeditor5/blob/master/LICENSE.md]
