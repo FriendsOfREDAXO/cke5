@@ -29,7 +29,7 @@ page:
              subPath: README.md
         licenses:
              title: 'translate:licenses'
-             subPath: LICENSE-LIST.md     
+             subPath: VENDOR-LICENSES.md     
 requires:
     redaxo: '^5.12'
     php:
