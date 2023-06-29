@@ -27,6 +27,9 @@ page:
         help:
              title: 'translate:help'
              subPath: README.md
+        licenses:
+             title: 'translate:licenses'
+             subPath: LICENSE-LIST.md     
 requires:
     redaxo: '^5.12'
     php:
