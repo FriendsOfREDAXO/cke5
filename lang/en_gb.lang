@@ -9,6 +9,7 @@ cke5_main = Overview & demos
 cke5_demo = CKEditor 5 demo
 cke5_features = Editor- & addon-features
 cke5_preview = Profile previews
+cke5_licenses = Licence
 
 # preview
 cke5_editor_preview = Editor preview
@@ -37,9 +38,10 @@ cke5_default_setup = Basic settings
 cke5_emoji = Emoji
 cke5_highlights = Highlight
 cke5_html_support = HtmlSupport
+cke5_mentions = Mention & Sprog Replacement
 
 # profiles columns names
-cke5_name = Profile-namen
+cke5_name = Profile-name
 cke5_name_placeholder = profile_name
 cke5_expert_definition = Expert mode
 cke5_expert_definition_description = Options are only registered in one input field
@@ -67,6 +69,10 @@ cke5_max_height = Textarea max-height
 cke5_highlight = Marker- and pen-colors
 cke5_media_manager_type = Media-Manager-Type
 cke5_media_category = Media-category
+cke5_media_category_upload = Upload media-category
+cke5_mediatypes = Allowed media-types
+cke5_mediatypes_placeholder = File extension [jpg,png,gif,pdf,...]
+cke5_internal_category = Link-category
 cke5_upload_default = Image-Drag&Drop-Upload
 cke5_upload_default_description = Pictures can be put into the textarea via drag + drop
 cke5_mediapath = Mediapath
@@ -105,10 +111,9 @@ cke5_ytable_table_placeholder = table [yTable DB-Table]
 cke5_ytable_title_placeholder = Title
 cke5_ytable_label_placeholder = Label [DB-Column]
 cke5_ytable = yTables
+cke5_textpartlanguage = Text part language
 cke5_auto_link = AutoLink
 cke5_auto_link_disable = inactive
-cke5_auto_link_http = active (http protocol)
-cke5_auto_link_https = active (https protocol)
 cke5_image_resize_options = Image Resize buttons
 cke5_image_resize_options_description = Image Resize buttons will be shown within the img toolbar
 cke5_image_resize_options_definition = Imare Resize options
@@ -120,6 +125,10 @@ cke5_image_resize_unit_px = Pixel [px]
 cke5_resize_unit = Image Resize unit
 cke5_liststyle = List style
 cke5_liststyle_description = Displays option to select list styles
+cke5_liststartindex = Number-list start-index
+cke5_liststartindex_description = Makes it possible to choose the start-index for number-lists
+cke5_listreversed = Number-list reverse
+cke5_listreversed_description = Number lists can optionally be numbered backwards
 cke5_html_embed_default = Embed HTML preview
 cke5_html_embed_default_description = Display option to preview HTML embeds
 cke5_empji = EmojiGroup
@@ -127,6 +136,12 @@ cke5_html_support_allow = HtmlSupport Allow
 cke5_html_support_disallow = HtmlSupport Disallow
 cke5_image_resize_group_options = Group Resize Icons
 cke5_image_resize_group_options_description = to group the image resize icons in the image toolbar
+cke5_mentions_definition = Mentions
+cke5_mentions_definition_area = Mention definition
+cke5_sprog_mention_definition = Sprog replacements
+cke5_sprog_mention_definition_area = Replacements
+cke5_image_resize_handles = Image resize handles
+cke5_image_resize_handles_description = Offers the possibility to dynamically adjust the size of images
 
 # profiles list & form actions
 rex_cke5_profiles_cloned = Profile was duplicated
