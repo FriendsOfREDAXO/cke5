@@ -375,6 +375,13 @@ if ($func === '') {
                 $field->setSelect($auto_sel);
 
                 // image resize options
+                $field = $form->addCheckboxField('image_resize_handles');
+                $field->setAttribute('id', 'cke5image-resize-handles-input');
+                $field->setAttribute('data-toggle', 'toggle');
+                $field->setLabel(rex_i18n::msg('cke5_image_resize_handles'));
+                $field->addOption(rex_i18n::msg('cke5_image_resize_handles_description'), 'default_resize_handles');
+
+                // image resize options
                 $field = $form->addCheckboxField('image_resize_options');
                 $field->setAttribute('id', 'cke5image-resize-option-input');
                 $field->setAttribute('data-toggle', 'toggle');

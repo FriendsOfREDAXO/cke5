@@ -399,6 +399,10 @@ const cke5suboptions = $subOptions;
             $jsonProfile['removePlugins'][] = 'SourceEditing';
         }
 
+        if ((isset($profile['image_resize_handles']) && $profile['image_resize_handles'] === '') || is_null($profile['image_resize_handles'])) {
+            $jsonProfile['removePlugins'][] = 'ImageResizeHandles';
+        }
+
         if (!in_array('style', $toolbar, true)) {
             $jsonProfile['removePlugins'][] = 'Style';
         }
