@@ -201,11 +201,12 @@ class Cke5ProfilesCreator
     public static function profilesCreate(array $getProfile = null): void
     {
         $profiles = Cke5DatabaseHandler::getAllProfiles();
-        $content = '';
+        $content = [];
 
         if (!is_null($profiles) && sizeof($profiles) > 0) {
             $jsonProfiles = [];
             $jsonSubOptions = [];
+            $sprogDefinition = [];
 
             foreach ($profiles as $profile) {
                 if (!is_null($getProfile) && isset($getProfile['name']) && $profile['name'] === $getProfile['name']) {
@@ -215,19 +216,46 @@ class Cke5ProfilesCreator
                 $result = self::mapProfile($profile);
                 $jsonSubOptions[$profile['name']] = $result['suboptions'];
                 $jsonProfiles[$profile['name']] = $result['profile'];
+                $sprogDefinition[$profile['name']] = $result['sprog_mention'];
             }
 
             $profiles = str_replace([":\/\/", "null", '"regex(\/', '\/)"'], ["://", null, '/', '/'], (string)json_encode($jsonProfiles));
             $subOptions = json_encode($jsonSubOptions);
 
-            $content =
-                "
-const cke5profiles = $profiles;
-const cke5suboptions = $subOptions;
-";
+            // sprog replacements
+            if (count($sprogDefinition) > 0) {
+                $printSprogMention = false;
+                $search = [];
+                $replace = [];
+                foreach ($sprogDefinition as $key => $items) {
+                    if (is_array($items) && count($items) > 0) {
+                        $printSprogMention = true;
+                        $search[] = "\"getSprogFeedItems".$key."\"";
+                        $replace[] = "getSprogFeedItems".$key;
+                        $content[] = "function getSprogFeedItems".$key."( queryText ) {return new Promise( resolve => {setTimeout(()=>{const itemsToDisplay = sprogItems".$key.".filter( isItemMatching ).slice( 0, 10 );resolve( itemsToDisplay );},100);});function isItemMatching( item ) {const searchString = queryText.toLowerCase();return (item.name.toLowerCase().includes( searchString ) ||item.id.toLowerCase().includes( searchString ));}}";
+                        $definition = [];
+                        foreach ($items as $item) {
+                            $definition[] = [
+                                'id' => $item['sprog_key'],
+                                'name' => $item['sprog_description']
+                            ];
+                        }
+                        $content[] = "const sprogItems".$key." = " . (string)json_encode($definition);
+                    }
+                }
+                if ($printSprogMention) {
+                    $search[] = "\"sprogItemRenderer\"";
+                    $replace[] = "sprogItemRenderer";
+                    $content[] = "function sprogItemRenderer( item ) {const itemElement = document.createElement( 'span' );itemElement.classList.add('ck');itemElement.classList.add('ck-button');itemElement.classList.add('ck-button_with-text');itemElement.textContent = `\${ item.name } `;const sprogElement = document.createElement( 'span' );sprogElement.setAttribute('style', 'margin-left:5px');sprogElement.textContent = item.id;itemElement.appendChild( sprogElement );return itemElement;}";
+                }
+                $profiles = str_replace($search, $replace, $profiles);
+            }
+
+            $content[] = "const cke5profiles = $profiles;";
+            $content[] = "const cke5suboptions = $subOptions;";
         }
 
-        if (!rex_file::put(self::getAddon()->getAssetsPath(self::PROFILES_FILENAME), $content)) {
+        if (!rex_file::put(self::getAddon()->getAssetsPath(self::PROFILES_FILENAME), implode("\n", $content))) {
             throw new \rex_functional_exception(\rex_i18n::msg('cke5_profiles_creation_exception'));
         }
     }
@@ -260,6 +288,7 @@ const cke5suboptions = $subOptions;
         $jsonProfile = ['toolbar' => ['items' => $toolbar, 'shouldNotGroupWhenFull' => (!(isset($profile['group_when_full']) && $profile['group_when_full'] !== ''))]];
         $jsonSubOption = [];
         $jsonProfile['removePlugins'] = [];
+        $sprogDefinition = [];
 
         if (in_array('link', $toolbar, true) && count($linkToolbar) > 0) {
             $jsonProfile['link'] = ['rexlink' => $linkToolbar];
@@ -601,12 +630,29 @@ const cke5suboptions = $subOptions;
             }
         }
 
+        if (isset($profile['sprog_mention']) && $profile['sprog_mention'] !== '' && isset($profile['sprog_mention_definition']) && $profile['sprog_mention_definition'] !== '') {
+            $definition = json_decode($profile['sprog_mention_definition'], true);
+            if (is_array($definition)) {
+                $sprogDefinition = $definition;
+                $jsonProfile['mention']['feeds'][] = ['marker' => '{', 'feed' => 'getSprogFeedItems' . $profile['name'], 'itemRenderer' => 'sprogItemRenderer', 'minimumCharacters' => 1];
+            }
+        }
+
+        if (isset($profile['mentions']) && $profile['mentions'] !== '' && isset($profile['mentions_definition']) && $profile['mentions_definition'] !== '') {
+            $definition = json_decode($profile['mentions_definition'], true);
+            if (is_array($definition)) {
+                if (!isset($jsonProfile['mention']['feeds']) || !is_array($jsonProfile['mention']['feeds'])) {
+                    $jsonProfile['mention']['feeds'] = [];
+                }
+                $jsonProfile['mention']['feeds'] = array_merge($jsonProfile['mention']['feeds'], $definition);
+            }
+        }
+
         // licence
 //        $jsonProfile['licenseKey'] = self::DEFAULT_LICENCE;
 //        $jsonProfile['ui']['poweredBy']['forceVisible'] = false;
 
-
-        return ['suboptions' => $jsonSubOption, 'profile' => $jsonProfile];
+        return ['suboptions' => $jsonSubOption, 'profile' => $jsonProfile, 'sprog_mention' => $sprogDefinition];
     }
 
     /**

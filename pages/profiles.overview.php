@@ -666,6 +666,46 @@ if ($func === '') {
             if ($default_value) $field->setValue(Cke5ProfilesCreator::DEFAULTS['highlight']);
         $form->addRawField('</fieldset></div>');
 
+// MENTIONS
+        $form->addRawField("<fieldset><legend>".rex_i18n::msg('cke5_mentions')."</legend>");
+
+            // mentions for experts
+            $field = $form->addCheckboxField('mentions');
+            $field->setAttribute('id', 'cke5mentions-definition-input');
+            $field->setAttribute('data-toggle', 'toggle');
+            $field->setAttribute('data-collapse-target', 'mentionsDefinition');
+            $field->setLabel(rex_i18n::msg('cke5_mentions_definition'));
+            $field->addOption(rex_i18n::msg('cke5_mentions_definition_description'), 'mentions_definition');
+
+            // mentions area
+            $form->addRawField('<div class="collapse" id="cke5mentionsDefinition-collapse">');
+            $field = $form->addTextAreaField('mentions_definition');
+            $field->setAttribute('id', 'cke5-mentions-area');
+            $field->setAttribute('rows', '2');
+            $field->setLabel(rex_i18n::msg('cke5_mentions_definition_area'));
+            $form->addRawField('</div>');
+
+            // sprog_mention for experts
+            $field = $form->addCheckboxField('sprog_mention');
+            $field->setAttribute('id', 'cke5sprog_mention-definition-input');
+            $field->setAttribute('data-toggle', 'toggle');
+            $field->setAttribute('data-collapse-target', 'sprog_mentionDefinition');
+            $field->setLabel(rex_i18n::msg('cke5_sprog_mention_definition'));
+            $field->addOption(rex_i18n::msg('cke5_sprog_mention_definition_description'), 'sprog_mention_definition');
+
+            // sprog_mention area
+            $form->addRawField('<div class="collapse" id="cke5sprog_mentionDefinition-collapse">');
+                $field = $form->addTextAreaField('sprog_mention_definition');
+                $field->setAttribute('id', 'cke5-sprog-mention-area');
+                $field->setAttribute('data-id-placeholder', rex_i18n::msg('cke5_sprog_mention_key'));
+                $field->setAttribute('data-name-placeholder', rex_i18n::msg('cke5_sprog_mention_description'));
+                $field->setLabel(rex_i18n::msg('cke5_sprog_mention_definition_area'));
+            $form->addRawField('</div>');
+
+        $form->addRawField('</fieldset>');
+
+
+
 // DEFAULT SETUP
         $form->addRawField("<fieldset><legend>".rex_i18n::msg('cke5_default_setup')."</legend>");
             // lang
