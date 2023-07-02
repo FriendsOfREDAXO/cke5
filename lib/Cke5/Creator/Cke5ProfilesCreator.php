@@ -257,7 +257,7 @@ const cke5suboptions = $subOptions;
         $toolbar = self::toArray($profile['toolbar']);
         $linkToolbar = self::toArray($profile['rexlink']);
         $tableToolbar = self::toArray($profile['table_toolbar']);
-        $jsonProfile = ['toolbar' => ['items' => $toolbar, 'shouldNotGroupWhenFull' => (isset($profile['group_when_full']) && $profile['group_when_full'] !== '')]];
+        $jsonProfile = ['toolbar' => ['items' => $toolbar, 'shouldNotGroupWhenFull' => (!(isset($profile['group_when_full']) && $profile['group_when_full'] !== ''))]];
         $jsonSubOption = [];
         $jsonProfile['removePlugins'] = [];
 
@@ -391,7 +391,7 @@ const cke5suboptions = $subOptions;
             $jsonProfile['removePlugins'][] = 'Alignment';
         }
 
-        if (isset($profile['styleEditing']) && $profile['styleEditing'] === '') {
+        if ((isset($profile['styleEditing']) && $profile['styleEditing'] === '') || is_null($profile['styleEditing'])) {
             $jsonProfile['removePlugins'][] = 'StyleEditing';
         }
 
@@ -590,7 +590,7 @@ const cke5suboptions = $subOptions;
             }
         }
 
-        if (isset($profile['extra']) && $profile['extra'] !== '') {
+        if (isset($profile['extra']) && $profile['extra'] !== '' && isset($profile['extra_definition']) && $profile['extra_definition'] !== '') {
             $definition = json_decode($profile['extra_definition'], true);
             if (is_array($definition)) {
                 if (isset($definition['removePlugins'])) {
