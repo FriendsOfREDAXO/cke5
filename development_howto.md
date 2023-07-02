@@ -12,11 +12,15 @@ To update the vendor we have to create a functional cke5 custom build with each 
   ```
 - clone the cke5 editor repository
   ```
-  git clone git@github.com:ckeditor/ckeditor5.git ckeditor
+  git clone git@github.com:ckeditor/ckeditor5.git ckeditor5_master
   ```
-- move into the classic build package and install npm modules
+- copy the `ckeditor5_master/packages/ckeditor5-build-classic/` to the working directory root
   ```
-  cd ckeditor/packages/ckeditor5-build-classic/
+  cp -r ckeditor5_master/packages/ckeditor5-build-classic/ ckeditor5-build-classic/
+  ```
+- move into the classic build package directory and install npm modules
+  ```
+  cd ckeditor5-build-classic/
   npm install
   ```
 - run the build process
@@ -38,27 +42,49 @@ To update the vendor you have to care about the rex_cke5 dependency packages. Th
 - add all the @cke5 modules there not by default added and add the cke5 rexlink and reximage module to the `dependencies` list
   ```json
   "dependencies": {
-    "@ckeditor/ckeditor5-typing": "^35.3.0",
-    "@ckeditor/ckeditor5-alignment": "^35.3.0",
-    "@ckeditor/ckeditor5-clipboard": "^35.3.0",
-    "@ckeditor/ckeditor5-code-block": "^35.3.0",
-    "@ckeditor/ckeditor5-find-and-replace": "^35.3.0",
-    "@ckeditor/ckeditor5-font": "^35.3.0",
-    "@ckeditor/ckeditor5-highlight": "^35.3.0",
-    "@ckeditor/ckeditor5-horizontal-line": "^35.3.0",
-    "@ckeditor/ckeditor5-html-embed": "^35.3.0",
-    "@ckeditor/ckeditor5-html-support": "^35.3.0",
-    "@ckeditor/ckeditor5-language": "^35.3.0",
-    "@ckeditor/ckeditor5-page-break": "^35.3.0",
-    "@ckeditor/ckeditor5-remove-format": "^35.3.0",
-    "@ckeditor/ckeditor5-select-all": "^35.3.0",
-    "@ckeditor/ckeditor5-source-editing": "^35.3.0",
-    "@ckeditor/ckeditor5-special-characters": "^35.3.0",
-    "@ckeditor/ckeditor5-style": "^35.3.0",
-    "ckeditor5-reximage": "^1.2.3",
-    "ckeditor5-rexlink": "^2.1.0",
-    "@phudak/ckeditor5-emoji": "^1.1.1"
-    ...
+    "@ckeditor/ckeditor5-adapter-ckfinder": "^38.0.1",
+    "@ckeditor/ckeditor5-alignment": "^38.0.1",
+    "@ckeditor/ckeditor5-autoformat": "^38.0.1",
+    "@ckeditor/ckeditor5-basic-styles": "^38.0.1",
+    "@ckeditor/ckeditor5-block-quote": "^38.0.1",
+    "@ckeditor/ckeditor5-ckbox": "^38.0.1",
+    "@ckeditor/ckeditor5-ckfinder": "^38.0.1",
+    "@ckeditor/ckeditor5-clipboard": "^38.0.1",
+    "@ckeditor/ckeditor5-cloud-services": "^38.0.1",
+    "@ckeditor/ckeditor5-code-block": "^38.0.1",
+    "@ckeditor/ckeditor5-document-outline": "^38.0.1",
+    "@ckeditor/ckeditor5-easy-image": "^38.0.1",
+    "@ckeditor/ckeditor5-editor-classic": "^38.0.1",
+    "@ckeditor/ckeditor5-essentials": "^38.0.1",
+    "@ckeditor/ckeditor5-find-and-replace": "^38.0.1",
+    "@ckeditor/ckeditor5-font": "^38.0.1",
+    "@ckeditor/ckeditor5-heading": "^38.0.1",
+    "@ckeditor/ckeditor5-highlight": "^38.0.1",
+    "@ckeditor/ckeditor5-horizontal-line": "^38.0.1",
+    "@ckeditor/ckeditor5-html-embed": "^38.0.1",
+    "@ckeditor/ckeditor5-html-support": "^38.0.1",
+    "@ckeditor/ckeditor5-image": "^38.0.1",
+    "@ckeditor/ckeditor5-indent": "^38.0.1",
+    "@ckeditor/ckeditor5-language": "^38.0.1",
+    "@ckeditor/ckeditor5-link": "^38.0.1",
+    "@ckeditor/ckeditor5-list": "^38.0.1",
+    "@ckeditor/ckeditor5-media-embed": "^38.0.1",
+    "@ckeditor/ckeditor5-mention": "^38.0.1",
+    "@ckeditor/ckeditor5-page-break": "^38.0.1",
+    "@ckeditor/ckeditor5-paragraph": "^38.0.1",
+    "@ckeditor/ckeditor5-paste-from-office": "^38.0.1",
+    "@ckeditor/ckeditor5-remove-format": "^38.0.1",
+    "@ckeditor/ckeditor5-select-all": "^38.0.1",
+    "@ckeditor/ckeditor5-source-editing": "^38.0.1",
+    "@ckeditor/ckeditor5-special-characters": "^38.0.1",
+    "@ckeditor/ckeditor5-style": "^38.0.1",
+    "@ckeditor/ckeditor5-table": "^38.0.1",
+    "@ckeditor/ckeditor5-template": "^38.0.1",
+    "@ckeditor/ckeditor5-typing": "^38.0.1",
+    "@phudak/ckeditor5-emoji": "^1.1.1",
+    "ckeditor5-paste-plaintext": "^1.0.1",
+    "ckeditor5-reximage": "^3.0.2",
+    "ckeditor5-rexlink": "^3.0.4"
   }
   ```
 - now we can install the npm dependencies 
@@ -68,63 +94,86 @@ To update the vendor you have to care about the rex_cke5 dependency packages. Th
   
 #### Add the dependencies to the ckeditor.js
 
-- open the `ckeditor.js` file from the classic build src path `/ckeditor5_working_directory/ckeditor/packages/ckeditor5-build-classic/src/`  
+- open the `ckeditor.ts` file from the classic build src path `/ckeditor5_working_directory/ckeditor/packages/ckeditor5-build-classic/src/`  
 - add all the rex cke5 addon imports from @cke5 to the import list
   ```javascript
-  import ImageResize from '@ckeditor/ckeditor5-image/src/imageresize';
-  import ImageInsert from '@ckeditor/ckeditor5-image/src/imageinsert';
-  import Alignment from '@ckeditor/ckeditor5-alignment/src/alignment';
-  import Highlight from '@ckeditor/ckeditor5-highlight/src/highlight';
-  import Font from '@ckeditor/ckeditor5-font/src/font';
-  import Strikethrough from '@ckeditor/ckeditor5-basic-styles/src/strikethrough';
-  import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline';
-  import Code from '@ckeditor/ckeditor5-basic-styles/src/code';
-  import Subscript from '@ckeditor/ckeditor5-basic-styles/src/subscript';
-  import Superscript from '@ckeditor/ckeditor5-basic-styles/src/superscript';
-  import TableProperties from '@ckeditor/ckeditor5-table/src/tableproperties';
-  import TableCellProperties from '@ckeditor/ckeditor5-table/src/tablecellproperties';
-  import TableCaption from '@ckeditor/ckeditor5-table/src/tablecaption';
-  import SpecialCharacters from '@ckeditor/ckeditor5-special-characters/src/specialcharacters';
-  import SpecialCharactersCurrency from '@ckeditor/ckeditor5-special-characters/src/specialcharacterscurrency';
-  import SpecialCharactersMathematical from '@ckeditor/ckeditor5-special-characters/src/specialcharactersmathematical';
-  import SpecialCharactersEssentials from '@ckeditor/ckeditor5-special-characters/src/specialcharactersessentials';
-  import SpecialCharactersLatin from '@ckeditor/ckeditor5-special-characters/src/specialcharacterslatin';
-  import SpecialCharactersArrows from '@ckeditor/ckeditor5-special-characters/src/specialcharactersarrows';
-  import SpecialCharactersText from '@ckeditor/ckeditor5-special-characters/src/specialcharacterstext';
-  import CodeBlock from '@ckeditor/ckeditor5-code-block/src/codeblock';
-  import RemoveFormat from '@ckeditor/ckeditor5-remove-format/src/removeformat';
-  import IndentBlock from '@ckeditor/ckeditor5-indent/src/indentblock';
-  import TodoList from '@ckeditor/ckeditor5-list/src/todolist';
-  import HorizontalLine from '@ckeditor/ckeditor5-horizontal-line/src/horizontalline';
-  import PageBreak from '@ckeditor/ckeditor5-page-break/src/pagebreak';
-  import LinkImage from '@ckeditor/ckeditor5-link/src/linkimage';
-  import Clipboard from '@ckeditor/ckeditor5-clipboard/src/clipboard';
-  import ListProperties from '@ckeditor/ckeditor5-list/src/listproperties';
-  import HtmlEmbed from '@ckeditor/ckeditor5-html-embed/src/htmlembed';
-  import HtmlComment from '@ckeditor/ckeditor5-html-support/src/htmlcomment';
-  import FindAndReplace from '@ckeditor/ckeditor5-find-and-replace/src/findandreplace';
-  import SourceEditing from '@ckeditor/ckeditor5-source-editing/src/sourceediting';
-  import GeneralHtmlSupport from '@ckeditor/ckeditor5-html-support/src/generalhtmlsupport';
-  import Style from '@ckeditor/ckeditor5-style/src/style';
-  import Rexlink from 'ckeditor5-rexlink/src/rexlink';
-  import Reximageui from 'ckeditor5-reximage/src/reximageui';
-  import Emoji from '@phudak/ckeditor5-emoji/src/emoji';
-  import EmojiPeople from '@phudak/ckeditor5-emoji/src/emoji-people';
-  import EmojiNature from '@phudak/ckeditor5-emoji/src/emoji-nature';
-  import EmojiFood from '@phudak/ckeditor5-emoji/src/emoji-food';
-  import EmojiActivity from '@phudak/ckeditor5-emoji/src/emoji-activity';
-  import EmojiObjects from '@phudak/ckeditor5-emoji/src/emoji-objects';
-  import EmojiPlaces from '@phudak/ckeditor5-emoji/src/emoji-places';
-  import EmojiSymbols from '@phudak/ckeditor5-emoji/src/emoji-symbols';
-  import EmojiFlags from '@phudak/ckeditor5-emoji/src/emoji-flags';
-  import PasteAsPlainText from 'ckeditor5-paste-plaintext/src/plaintext';
+    import ClassicEditorBase from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
+    import { Essentials } from '@ckeditor/ckeditor5-essentials';
+    import { UploadAdapter } from '@ckeditor/ckeditor5-adapter-ckfinder';
+    import { Autoformat } from '@ckeditor/ckeditor5-autoformat';
+    import { Bold, Italic, Strikethrough, Underline, Code, Subscript, Superscript } from '@ckeditor/ckeditor5-basic-styles';
+    import { BlockQuote } from '@ckeditor/ckeditor5-block-quote';
+    import { CKBox } from '@ckeditor/ckeditor5-ckbox';
+    import { CKFinder } from '@ckeditor/ckeditor5-ckfinder';
+    import { EasyImage } from '@ckeditor/ckeditor5-easy-image';
+    import { Heading } from '@ckeditor/ckeditor5-heading';
+    import { Image, ImageCaption, ImageStyle, ImageToolbar, ImageUpload, PictureEditing, ImageResizeEditing, ImageResizeButtons, ImageResizeHandles, ImageInsert } from '@ckeditor/ckeditor5-image';
+    import { Indent } from '@ckeditor/ckeditor5-indent';
+    import { Link, LinkImage } from '@ckeditor/ckeditor5-link';
+    import { List, ListProperties, TodoList } from '@ckeditor/ckeditor5-list';
+    import { MediaEmbed } from '@ckeditor/ckeditor5-media-embed';
+    import { Paragraph } from '@ckeditor/ckeditor5-paragraph';
+    import { PasteFromOffice } from '@ckeditor/ckeditor5-paste-from-office';
+    import { Table, TableToolbar, TableProperties, TableCellProperties, TableCaption } from '@ckeditor/ckeditor5-table';
+    import { TextTransformation } from '@ckeditor/ckeditor5-typing';
+    import { CloudServices } from '@ckeditor/ckeditor5-cloud-services';
+    import { Alignment } from '@ckeditor/ckeditor5-alignment';
+    import { Highlight } from '@ckeditor/ckeditor5-highlight';
+    import { Font } from '@ckeditor/ckeditor5-font';
+    import { SpecialCharacters, SpecialCharactersCurrency, SpecialCharactersMathematical, SpecialCharactersEssentials, SpecialCharactersLatin, SpecialCharactersArrows, SpecialCharactersText } from '@ckeditor/ckeditor5-special-characters';
+    import { CodeBlock } from '@ckeditor/ckeditor5-code-block';
+    import { RemoveFormat } from '@ckeditor/ckeditor5-remove-format';
+    import { IndentBlock } from '@ckeditor/ckeditor5-indent';
+    import { HorizontalLine } from '@ckeditor/ckeditor5-horizontal-line';
+    import { PageBreak } from '@ckeditor/ckeditor5-page-break';
+    import { Clipboard } from '@ckeditor/ckeditor5-clipboard';
+    import { HtmlEmbed } from '@ckeditor/ckeditor5-html-embed';
+    import { HtmlComment } from '@ckeditor/ckeditor5-html-support';
+    import { FindAndReplace } from '@ckeditor/ckeditor5-find-and-replace';
+    import { SourceEditing } from '@ckeditor/ckeditor5-source-editing';
+    import { GeneralHtmlSupport } from '@ckeditor/ckeditor5-html-support';
+    import { Style } from '@ckeditor/ckeditor5-style';
+    import { TextPartLanguage } from '@ckeditor/ckeditor5-language';
+    import { SelectAll } from '@ckeditor/ckeditor5-select-all';
+    import { RexLink } from 'ckeditor5-rexlink';
+    import { RexImage } from 'ckeditor5-reximage';
+    import { Mention } from '@ckeditor/ckeditor5-mention';
   ```
 - and add the imported plugins to the `builtinPlugins` list
   ```javascript
-  ClassicEditor.builtinPlugins = [
-    ...
+  public static override builtinPlugins = [
+    Essentials,
+    UploadAdapter,
+    Autoformat,
+    Bold,
+    Italic,
+    BlockQuote,
+    CKBox,
+    CKFinder,
+    CloudServices,
+    EasyImage,
+    Heading,
+    Image,
+    ImageCaption,
+    ImageStyle,
+    ImageToolbar,
+    ImageUpload,
+    Indent,
+    Link,
+    List,
+    ListProperties,
+    TodoList,
+    MediaEmbed,
+    Paragraph,
+    PasteFromOffice,
+    PictureEditing,
+    Table,
+    TableToolbar,
+    TextTransformation,
     ImageInsert,
-    ImageResize,
+    ImageResizeEditing,
+    ImageResizeButtons,
+    ImageResizeHandles,
     Alignment,
     Highlight,
     Font,
@@ -146,29 +195,21 @@ To update the vendor you have to care about the rex_cke5 dependency packages. Th
     CodeBlock,
     RemoveFormat,
     IndentBlock,
-    TodoList,
     HorizontalLine,
     PageBreak,
     LinkImage,
     Clipboard,
-    ListProperties,
     HtmlEmbed,
     HtmlComment,
     FindAndReplace,
     SourceEditing,
     GeneralHtmlSupport,
-    Rexlink,
-    Reximageui,
-    Emoji,
-    EmojiPeople,
-    EmojiNature,
-    EmojiPlaces,
-    EmojiFood,
-    EmojiActivity,
-    EmojiObjects,
-    EmojiSymbols,
-    EmojiFlags,
-    Style
+    Style,
+    TextPartLanguage,
+    SelectAll,
+    RexLink,
+    RexImage,
+    Mention
   ]
   ```
 - run the build process
