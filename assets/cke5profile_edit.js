@@ -26,8 +26,11 @@ function cke5_init_edit(element) {
     let taginputs = element.find('input[data-tag-init=1]'),
         expert = element.find('#cke5-expert-toggle-expert-definition'),
         extra = element.find('#cke5extra-definition-input-extra-definition'),
+        mentions = element.find('#cke5mentions-definition-input-mentions-definition'),
+        sprog_mention = element.find('#cke5sprog-mention-definition-input-sprog-mention-definition'),
         transformation = element.find('#cke5transformation-definition-input-transformation-definition'),
         transformation_extra_area = element.find('#cke5-transformation-extra-area'),
+        sprog_mention_area = element.find('#cke5-sprog-mention-area'),
         toolbar = element.find('#cke5toolbar-input'),
         table_toolbar = element.find('#cke5inserttable-input'),
         rexlink_toolbar = element.find('#cke5link-input'),
@@ -61,6 +64,7 @@ function cke5_init_edit(element) {
 
     autosize($('#cke5expertDefinition-collapse textarea'));
     autosize($('#cke5extraDefinition-collapse textarea'));
+    autosize($('#cke5mentionsDefinition-collapse textarea'));
     autosize($('#cke5linkDecoratorsDefinition-collapse textarea'));
     autosize($('#cke5transformationDefinition-collapse textarea'));
     autosize($('#cke5sourceEditing-collapse textarea'));
@@ -70,6 +74,7 @@ function cke5_init_edit(element) {
     cke5_addColorFields(fontbgcolor_area);
     cke5_addFromToFields(transformation_extra_area);
     cke5_addFontFamiliesFields(fontfamily_area);
+    cke5_addIdNameFields(sprog_mention_area);
     cke5_addyTableFields(ytable_area);
     cke5_addResizeOptionsFields(imgresizeoptions_area);
     cke5_bootstrapToggle_collapse(tablecolor_default);
@@ -78,6 +83,8 @@ function cke5_init_edit(element) {
     cke5_bootstrapToggle_collapse(fontfamily_default);
     cke5_bootstrapToggle_collapse(height);
     cke5_bootstrapToggle_collapse(extra, true);
+    cke5_bootstrapToggle_collapse(mentions, true);
+    cke5_bootstrapToggle_collapse(sprog_mention, true);
     cke5_bootstrapToggle_collapse(transformation, true);
     cke5_bootstrapToggle_collapse(link_decorators, true);
     cke5_bootstrapToggle_collapse(imgresizeoptions_input, true);
@@ -250,6 +257,31 @@ function cke5_addFromToFields(element) {
                 '</div>\n' +
                 '<div class="form-group col-xs-6">\n' +
                 '<input class="form-control" name="to" placeholder="' + to_name_placeholder + '" type="text">\n' +
+                '</div>\n' +
+                '</div>\n'),
+            limit: 200,
+            onElementAdd: function (el, plugin) {
+                if (DEBUG) console.log(plugin.elementCount);
+            },
+            onElementRemove: function (el, plugin) {
+                if (DEBUG) console.log(plugin.elementCount);
+            }
+        });
+    }
+}
+
+function cke5_addIdNameFields(element) {
+    if (element.length) {
+        let sprog_key_placeholder = element.data('sprog-key-placeholder'),
+            sprog_description_placeholder = element.data('sprog-description-placeholder');
+        element.multiInput({
+            json: true,
+            input: $('<div class="row inputElement">\n' +
+                '<div class="form-group col-xs-6">\n' +
+                '<input class="form-control" name="sprog_key" placeholder="' + sprog_key_placeholder + '" type="text">\n' +
+                '</div>\n' +
+                '<div class="form-group col-xs-6">\n' +
+                '<input class="form-control" name="sprog_description" placeholder="' + sprog_description_placeholder + '" type="text">\n' +
                 '</div>\n' +
                 '</div>\n'),
             limit: 200,
