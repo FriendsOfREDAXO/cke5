@@ -79,7 +79,7 @@ class Cke5ListHelper
     {
         $sql = rex_sql::factory();
         try {
-            $sql->setQuery("DELETE FROM :table WHERE id=:id", ['table' => $table, 'id' => $id]);
+            $sql->setQuery("DELETE FROM `$table` WHERE id=:id", ['id' => $id]);
         } catch (rex_sql_exception $e) {
             rex_logger::logException($e);
             return rex_view::error(rex_i18n::msg($table . '_delete_exception'));
