@@ -29,7 +29,7 @@ class Cke5ProfilesCreator
         'cktabletypes' => ['tableProperties', 'tableCellProperties']
     ];
 
-    // const DEFAULT_LICENCE = 'dG9vZWFzZXRtcHNsaXVyb3JsbWlkYWRmZjQ0c2RhZHNhbGl1cm9ybG1pZG10b28yMzQyMzQyMzRzYXNkZmY0M2RtLU1qQTBOREEyTVRJPQ==';
+//    const DEFAULT_LICENCE = 'dG9vZWFzZXRtcHNsaXVyb3JsbWlkYWRmZjQ0c2RhZHNhbGl1cm9ybG1pZG10b28yMzQyMzQyMzRzYXNkZmY0M2RtLU1qQTBOREEyTVRJPQ==';
 
     const DEFAULT_VALUES = [
         'html_support_allow' => '[
@@ -401,16 +401,18 @@ class Cke5ProfilesCreator
         */
 
         if (isset($profile['link_downloadable']) && $profile['link_downloadable'] !== '') {
-            $jsonProfile['link']['decorators'] = ['toggleDownloadable' => ['mode' => 'manual', 'label' => 'Downloadable', 'attributes' => ['download' => 'file']]];
+            $jsonProfile['link']['decorators']['toggleDownloadable'] = ['mode' => 'manual', 'label' => 'Downloadable', 'attributes' => ['download' => 'file']];
         }
 
         if (isset($profile['link_decorators']) && $profile['link_decorators'] !== '' && isset($profile['link_decorators_definition']) && $profile['link_decorators_definition'] !== '') {
             $definition = json_decode($profile['link_decorators_definition'], true);
-            if (is_array($definition)) {
-                if (!isset($jsonProfile['link']['decorators']) || !is_array($jsonProfile['link']['decorators'])) {
-                    $jsonProfile['link']['decorators'] = [];
+            if (!isset($jsonProfile['link']['decorators']) || !is_array($jsonProfile['link']['decorators'])) {
+                $jsonProfile['link']['decorators'] = [];
+            }
+            if (is_array($definition) && count($definition) > 0) {
+                foreach ($definition as $item) {
+                    $jsonProfile['link']['decorators'] = array_merge($jsonProfile['link']['decorators'], $item);
                 }
-                $jsonProfile['link']['decorators'] = array_merge($jsonProfile['link']['decorators'], $definition);
             }
         }
 

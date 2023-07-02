@@ -10,7 +10,12 @@
 * profile name accept now 40 characters
 * fix img resize button cannot remove bug
 * bring list_style profile edit button to alive and add index and reverse option
-* add support for new cke5 vendor functions `textPartLanguage`, `findAndReplace`
+* add support for new cke5 vendor functions `textPartLanguage`, `findAndReplace`, `mention`
+* add option to deactivate image resize handles
+* add option for custom and sprog `mentions`
+* fix limitation of link decorations 
+* fix syntax error by profile deletion
+* fix toolbar group will not set by selected checkbox
 
 ### Breaking changes
 
@@ -65,7 +70,6 @@
 * The imageStyle property `full` was replaced by vendor with `block`
 * Supports only REDAXO >= 5.12
 * Older addons of mform < 6.1 and mblock < 3.4 are no longer supported
-
 
 ### Upgrade notice
 
