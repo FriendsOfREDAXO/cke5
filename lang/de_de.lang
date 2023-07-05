@@ -39,6 +39,9 @@ cke5_emoji = Emoji
 cke5_highlights = Highlight
 cke5_html_support = HtmlSupport
 cke5_mentions = Mention & Sprog Ersetzungen
+cke5_mentions_definition_description = Hier können individuelle Einstellungen für das Mentions-Plugin hinterlegt werden
+cke5_sprog_mention_definition_description = Hier können Sprog-Ersetzungen hinterlegt werden. In Form von {{Key}} und Beschreibung
+
 
 # profiles columns names
 cke5_name = Profile-Namen
