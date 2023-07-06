@@ -2,7 +2,7 @@
 
 ## GPL
 
-Parts of this REDAXO AddOn are licensed under GPL.
+Parts of this REDAXO AddOn are licensed under GPL as like CKEDITOR.
 (Vendor-Scripts) 
 [GPL LICENSE](https://github.com/ckeditor/ckeditor5/blob/master/LICENSE.md)
 
@@ -20,7 +20,9 @@ Parts of this REDAXO AddOn are licensed under GPL.
 [GPL LICENSE](https://github.com/basecondition/ckeditor5-reximage/blob/master/LICENSE)
 
 
-## PHP-Code and REDAXO related Code: 
+## REDAXO cms related Code: 
+
+(outside from /assets/vendor/*)
 
 The MIT License (MIT)
 
