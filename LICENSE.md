@@ -4,19 +4,19 @@
 
 Parts of this REDAXO AddOn are licensed under GPL as like CKEDITOR.
 (Vendor-Scripts) 
-[GPL LICENSE](https://github.com/ckeditor/ckeditor5/blob/master/LICENSE.md)
 
 ### CKEDITOR 5 
 [Homepage](https://ckeditor.com)
+[GPL LICENSE](https://github.com/ckeditor/ckeditor5/blob/master/LICENSE.md)
 
 ### Custom PlugIns by Joachim Dörr
 
 [(c) Joachim Dörr](https://github.com/basecondition/ckeditor5-reximage/commits?author=joachimdoerr)
 
-### ckeditor5-rexlink
+#### ckeditor5-rexlink
 [GPL LICENSE](https://github.com/ckeditor/ckeditor5/blob/master/LICENSE.md)
 
-### ckeditor5-reximage
+#### ckeditor5-reximage
 [GPL LICENSE](https://github.com/basecondition/ckeditor5-reximage/blob/master/LICENSE)
 
 
