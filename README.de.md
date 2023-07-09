@@ -17,8 +17,6 @@ Intergriert den [CKEditor5](https://ckeditor.com) in REDAXO CMS.
 - Platzhalter für alle Backend-Sprachen
 - Dark-mode-support für REDAXO >= 5.13
 
-Übersetzt mit www.DeepL.com/Translator (kostenlose Version)
-
 **Custom REDAXO Link-Widget**
 
 ![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/writer.png)
