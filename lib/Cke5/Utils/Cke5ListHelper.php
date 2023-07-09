@@ -60,7 +60,7 @@ class Cke5ListHelper
                     }
                 }
             }
-            $sql->setQuery('INSERT INTO ' . $sql->escapeIdentifier($table) . ' (`:query_fields`) SELECT `:query_fields` FROM :table WHERE id =:id', ['query_fields' => implode('`, `', $queryFields), 'id' => $id]);
+            $sql->setQuery('INSERT INTO ' . $sql->escapeIdentifier($table) . ' (`'.implode('`, `', $queryFields).'`) SELECT `'.implode('`, `', $queryFields).'` FROM ' . $sql->escapeIdentifier($table) . ' WHERE id =:id', ['id' => $id]);
         } catch (rex_sql_exception $e) {
             rex_logger::logException($e);
             return rex_view::error(rex_i18n::msg($table . '_clone_exception'));
