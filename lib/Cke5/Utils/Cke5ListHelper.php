@@ -29,7 +29,7 @@ class Cke5ListHelper
         if (!is_null($column)) {
             $sql = rex_sql::factory();
             try {
-                $sql->setQuery("UPDATE $table SET :column=ABS(1-:column) WHERE id=:id", ['column' => $column, 'id' => $id]);
+                $sql->setQuery("UPDATE " . $sql->escapeIdentifier($table) . " SET :column=ABS(1-:column) WHERE id=:id", ['column' => $column, 'id' => $id]);
             } catch (rex_sql_exception $e) {
                 rex_logger::logException($e);
                 return rex_view::error(rex_i18n::msg($table . '_toggle_' . $column . '_exception'));
@@ -51,7 +51,7 @@ class Cke5ListHelper
     {
         try {
             $sql = rex_sql::factory();
-            $fields = $sql->getArray('DESCRIBE `:table`', ['table' => $table]);
+            $fields = $sql->getArray('DESCRIBE ' . $sql->escapeIdentifier($table));
             $queryFields = [];
             if (count($fields) > 0) {
                 foreach ($fields as $field) {
@@ -60,7 +60,7 @@ class Cke5ListHelper
                     }
                 }
             }
-            $sql->setQuery('INSERT INTO '.$table.' (`:query_fields`) SELECT `:query_fields` FROM :table WHERE id =:id', ['query_fields' => implode('`, `', $queryFields), 'id' => $id]);
+            $sql->setQuery('INSERT INTO ' . $sql->escapeIdentifier($table) . ' (`:query_fields`) SELECT `:query_fields` FROM :table WHERE id =:id', ['query_fields' => implode('`, `', $queryFields), 'id' => $id]);
         } catch (rex_sql_exception $e) {
             rex_logger::logException($e);
             return rex_view::error(rex_i18n::msg($table . '_clone_exception'));
@@ -79,7 +79,7 @@ class Cke5ListHelper
     {
         $sql = rex_sql::factory();
         try {
-            $sql->setQuery("DELETE FROM $table WHERE id=:id", ['id' => $id]);
+            $sql->setQuery("DELETE FROM " . $sql->escapeIdentifier($table) . " WHERE id=:id", ['id' => $id]);
         } catch (rex_sql_exception $e) {
             rex_logger::logException($e);
             return rex_view::error(rex_i18n::msg($table . '_delete_exception'));
