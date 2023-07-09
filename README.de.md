@@ -352,6 +352,28 @@ Use the following keystrokes for more efficient navigation in the CKEditor 5 use
 }
 ```
 
+Oder multiple: 
+```js
+[{
+    "openInNewTab": {
+        "mode": "manual",
+        "label": "Open in a new tab",
+        "defaultValue": true,
+        "attributes": {
+            "target": "_blank",
+            "rel": "noopener noreferrer"
+        }
+    }
+},
+{
+    "isGallery": {
+        "mode": "manual",
+        "label": "Gallery link",
+        "classes": "gallery"
+    }
+}]
+```
+
 ### Mentions
 
 Das AddOn liefert das [Mentions-Plugin](https://ckeditor.com/docs/ckeditor5/latest/features/mentions.html) mit. Dieses kann frei konfiguriert werden.
@@ -367,8 +389,6 @@ Hier ein Beispiel:
     "minimumCharacters": "0"
 }]
 ```
-
-
 
 
 ### YForm links
@@ -440,6 +460,24 @@ Example:
     );
     echo (is_string($create)) ? $create : 'successful profile created';
 ```
+
+
+## HTML-Support
+Source-Editing Plugin mach Update. 
+Nach einem Update einer sehr alten Version fehlt ggf. die Grundeinstellung für das PlugIn im Abschnistt HtmlSupport. 
+
+```JSON
+[
+    {
+        "name": "regex(/.*/)",
+        "attributes": true,
+        "classes": true,
+        "styles": true
+    }
+]
+```
+
+
 
 ## Autoformat deaktivieren
 
