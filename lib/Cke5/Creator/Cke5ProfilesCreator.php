@@ -216,7 +216,7 @@ class Cke5ProfilesCreator
                 $result = self::mapProfile($profile);
                 $jsonSubOptions[$profile['name']] = $result['suboptions'];
                 $jsonProfiles[$profile['name']] = $result['profile'];
-                $sprogDefinition[$profile['name']] = $result['sprog_mention'];
+                $sprogDefinition[$profile['name']] = (isset($result['sprog_mention'])) ? $result['sprog_mention'] : [];
             }
 
             $profiles = str_replace([":\/\/", "null", '"regex(\/', '\/)"'], ["://", null, '/', '/'], (string)json_encode($jsonProfiles));

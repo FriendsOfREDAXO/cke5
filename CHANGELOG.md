@@ -16,6 +16,8 @@
 * fix limitation of link decorations 
 * fix syntax error by profile deletion
 * fix toolbar group will not set by selected checkbox
+* fix sql action issues
+* extend import/export
 
 ### Breaking changes
 

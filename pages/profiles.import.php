@@ -40,23 +40,30 @@ $importKeys = [
     "html_support_allow",
     "html_support_disallow",
     "blank_to_external",
+    "link_internalcategory",
+    "link_mediatypes",
+    "link_mediacategory",
     "link_downloadable",
     "link_decorators",
     "link_decorators_definition",
     "auto_link",
+    "text_part_language",
     "heading",
     "alignment",
     "image_toolbar",
     "image_resize_unit",
+    "image_resize_handles",
     "image_resize_options",
     "image_resize_group_options",
     "image_resize_options_definition",
     "fontsize",
     "highlight",
-    "emoji",
+//    "emoji",
     "table_toolbar",
     "rexlink",
     "list_style",
+    "list_start_index",
+    "list_reversed",
     "html_preview",
     "height_default",
     "min_height",
@@ -70,9 +77,15 @@ $importKeys = [
     "font_families",
     "font_family_default",
     "mediaembed",
+    "mentions",
+    "mentions_definition",
+    "sprog_mention",
+    "sprog_mention_definition",
     "mediatype",
+    "mediatypes",
     "mediapath",
     "mediacategory",
+    "upload_mediacategory",
     "upload_default"
 ];
 
@@ -92,7 +105,7 @@ if ($func === 'cke5import') {
         }
 
         $content = file_get_contents($filename);
-        $data = json_decode((string) $content, true);
+        $data = json_decode((string)$content, true);
 
         if (is_array($data)) {
             foreach ($data as $i => $profile) {

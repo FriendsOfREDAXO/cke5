@@ -36,9 +36,11 @@ if (rex_request::post('_csrf_token', 'string', '') !== '') {
         // and use the loaded profiles
         if (!is_null($profiles)) {
             foreach ($profiles as $profile) {
-                if (in_array($profile['id'], $exportIds, true)) {
-                    $exportProfiles[] = $profile; // to get the entire stuff
-                    $exportNames[] = $profile['name']; // and to get the file name
+                foreach ($exportIds as $exportId) {
+                    if ($exportId == $profile['id']) {
+                        $exportProfiles[] = $profile; // to get the entire stuff
+                        $exportNames[] = $profile['name']; // and to get the file name
+                    }
                 }
             }
         }

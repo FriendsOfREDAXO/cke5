@@ -570,7 +570,6 @@ if ($func === '') {
                     $cats_sel = new rex_category_select();
                     $cats_sel->setStyle('class="form-control selectpicker"');
                     $cats_sel->setName('link_internalcategory');
-                    $cats_sel->addOption(rex_i18n::msg('pool_kats_no'), '0');
                     $field->setSelect($cats_sel);
                 }
             $form->addRawField('</div>');
