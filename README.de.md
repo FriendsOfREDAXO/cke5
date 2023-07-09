@@ -12,6 +12,7 @@ Intergriert den [CKEditor5](https://ckeditor.com) in REDAXO CMS.
 - Bild-Upload-Kategorie pro Profil einstellbar
 - Medienmanager-Typ je Profil einstellbar
 - Zusätzliche Optionen erlauben es den Editor anzupassen
+- Sprog-Ersetzungen per mentions Plugin
 - Der Expertenmodus erlaubt es Profile frei im Quellcode zu entwickeln
 - Platzhalter für alle Backend-Sprachen
 - Dark-mode-support für REDAXO >= 5.13
@@ -113,6 +114,12 @@ echo MBlock::show($id, $mform->show());
 Damit die angegebenen Fonts im Backend sichtbar werden, müssen diese als Assets im Backend geladen werden. 
 Dies kann z.B. in der boot.php Projekt-AddOn oder im backend.css des Theme-AddOn erfolgen. 
 Die Schriften werden in gewohnter CSS-Schreibweise im Abschnitt *FontFamily* des Profile-Editors hinterlegt. 
+
+## Sprog-Ersetzungen 
+
+Unter `Mention & Sprog Ersetzungen` > `Sprog Ersetzungen` > `Ersetzungen` können Sprog-Platzhalter mit Titel oder Beschreibung hinterlegt werden. 
+Schreibweise `{{key}}` und im nächsten Feld der Titel. 
+Im Editor gibt man nur '{{' ein um eine Liste der Platzhalter zu erhalten. 
 
 ## Individualisieren 
 
@@ -344,6 +351,24 @@ Use the following keystrokes for more efficient navigation in the CKEditor 5 use
     }
 }
 ```
+
+### Mentions
+
+Das AddOn liefert das [Mentions-Plugin](https://ckeditor.com/docs/ckeditor5/latest/features/mentions.html) mit. Dieses kann frei konfiguriert werden.
+Hier ein Beispiel:
+
+```json
+[{
+    "marker": "@",
+    "feed": [
+        "@test",
+        "@test2"
+    ],
+    "minimumCharacters": "0"
+}]
+```
+
+
 
 
 ### YForm links
