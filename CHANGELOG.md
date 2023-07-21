@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 6.0.1
+
+* add `pastePlainText` plugin
+* fix profile create process
+
 ## Version 6.0.0
 
 * update ckeditor 5 vendor to v38.0.1

@@ -43,7 +43,7 @@ class Cke5ProfilesCreator
     ];
 
     const ALLOWED_FIELDS = [
-        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight'/*, 'emoji'*/, 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll', 'specialCharacters', 'htmlEmbed', 'sourceEditing', 'textPartLanguage', 'findAndReplace'],
+        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight'/*, 'emoji'*/, 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll', 'specialCharacters', 'pastePlainText', 'htmlEmbed', 'sourceEditing', 'textPartLanguage', 'findAndReplace'],
         'alignment' => ['left', 'right', 'center', 'justify'],
         'table_toolbar' => ['|', 'tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties', 'toggleTableCaption'],
         'heading' => ['paragraph', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
@@ -314,9 +314,9 @@ class Cke5ProfilesCreator
             $jsonProfile['image']['resizeUnit'] = $profile['image_resize_unit'];
         }
 
-        if (isset($profile['image_resize_unit']) && $profile['image_resize_unit'] !== '') {
-            $jsonProfile['image']['rexmedia_types'] = $profile['image_resize_unit'];
-        }
+//        if (isset($profile['image_resize_unit']) && $profile['image_resize_unit'] !== '') {
+//            $jsonProfile['image']['rexmedia_types'] = $profile['image_resize_unit'];
+//        }
 
         if (isset($profile['image_resize_options']) && $profile['image_resize_options'] !== '' && isset($profile['image_resize_options_definition']) && $profile['image_resize_options_definition'] !== '') {
             /** @var array<string,array<string,string>> $resizeOptions */
@@ -326,7 +326,7 @@ class Cke5ProfilesCreator
                     $resizeOptions[$key]['name'] = 'imageResize:' . $option['name'];
                 }
             }
-            $jsonProfile['image'] = ['resizeOptions' => $resizeOptions];
+            $jsonProfile['image']['resizeOptions'] = $resizeOptions;
         }
 
         if (isset($profile['image_toolbar']) && $profile['image_toolbar'] !== '') {
@@ -422,9 +422,9 @@ class Cke5ProfilesCreator
             $jsonProfile['removePlugins'][] = 'Alignment';
         }
 
-        if ((isset($profile['styleEditing']) && $profile['styleEditing'] === '') || is_null($profile['styleEditing'])) {
-            $jsonProfile['removePlugins'][] = 'StyleEditing';
-        }
+//        if (isset($profile['styleEditing']) && ($profile['styleEditing'] === '')) {
+//            $jsonProfile['removePlugins'][] = 'StyleEditing';
+//        }
 
         if (!in_array('sourceEditing', $toolbar, true)) {
             $jsonProfile['removePlugins'][] = 'SourceEditing';
@@ -553,10 +553,13 @@ class Cke5ProfilesCreator
 
         if (in_array('rexImage', $toolbar, true)) {
             if (isset($profile['mediatype']) && $profile['mediatype'] !== '') {
-                $jsonProfile['rexImage'] = ['media_type' => $profile['mediatype']];
+                $jsonProfile['rexImage']['media_type'] = $profile['mediatype'];
             } else {
                 $path = (isset($profile['mediapath']) && $profile['mediapath'] !== '') ? $profile['mediapath'] : 'media';
-                $jsonProfile['rexImage'] = ['media_path' => '/' . $path . '/'];
+                $jsonProfile['rexImage']['media_path'] = '/' . $path . '/';
+            }
+            if (isset($profile['rexmedia_types']) && $profile['rexmedia_types'] !== '') {
+                $jsonProfile['rexImage']['rexmedia_types'] = $profile['rexmedia_types'];
             }
         }
 
