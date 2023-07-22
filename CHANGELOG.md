@@ -4,6 +4,7 @@
 
 * add `pastePlainText` plugin
 * fix profile create process
+* added `addProfile` method to `Cke5ProfilesApi`
 
 ## Version 6.0.0
 
