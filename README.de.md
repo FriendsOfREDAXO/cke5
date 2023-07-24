@@ -328,7 +328,7 @@ Use the following keystrokes for more efficient navigation in the CKEditor 5 use
 *Achtung, die Keys müssen in Kleinbuchstaben geschrieben werden*
 
 ```js
-{
+[{
     "newtab": {
         "mode": "manual",
         "label": "Open in a new tab",
@@ -337,17 +337,17 @@ Use the following keystrokes for more efficient navigation in the CKEditor 5 use
             "rel": "noopener noreferrer"
         }
     }
-}
+}]
 ```
 ```js
-{
+[{
     "arrowclass": {
         "mode": "manual",
         "label": "Link mit CSS Klasse",
         "defaultValue": "true",
         "classes": "arrow"
     }
-}
+}]
 ```
 
 Oder multiple: 
