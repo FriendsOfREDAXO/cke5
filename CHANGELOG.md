@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 6.0.2
+
+* fix text_part_language profile creator issue
+
 ## Version 6.0.1
 
 * add `pastePlainText` plugin

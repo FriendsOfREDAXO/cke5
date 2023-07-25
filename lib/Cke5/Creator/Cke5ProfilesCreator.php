@@ -299,7 +299,6 @@ class Cke5ProfilesCreator
         }
 
         // image unit
-        $jsonProfile['image'] = [];
         $resizeOptions = null;
 
         if (isset($profile['mediacategory']) && $profile['mediacategory'] !== '') {
@@ -313,10 +312,6 @@ class Cke5ProfilesCreator
         if (isset($profile['image_resize_unit']) && $profile['image_resize_unit'] !== '') {
             $jsonProfile['image']['resizeUnit'] = $profile['image_resize_unit'];
         }
-
-//        if (isset($profile['image_resize_unit']) && $profile['image_resize_unit'] !== '') {
-//            $jsonProfile['image']['rexmedia_types'] = $profile['image_resize_unit'];
-//        }
 
         if (isset($profile['image_resize_options']) && $profile['image_resize_options'] !== '' && isset($profile['image_resize_options_definition']) && $profile['image_resize_options_definition'] !== '') {
             /** @var array<string,array<string,string>> $resizeOptions */
@@ -586,7 +581,6 @@ class Cke5ProfilesCreator
         }
 
         if (isset($profile['lang_content']) && $profile['lang_content'] !== '' || isset($profile['lang']) && $profile['lang'] !== '') {
-            $jsonProfile['language'] = [];
             if (isset($profile['lang']) && $profile['lang'] !== '') {
                 $jsonProfile['language']['ui'] = $profile['lang'];
             }
