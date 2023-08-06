@@ -31,8 +31,8 @@ $(document).on('ready', function () {
 function cke5_init_all(elements) {
     elements.each(function () {
         cke5_init($(this));
+        cke5_set_theme();
     });
-    cke5_set_theme();
 }
 
 function cke5_init(element) {
@@ -43,18 +43,15 @@ function cke5_init(element) {
             profile_set = element.attr('data-profile'),
             min_height = element.attr('data-min-height'),
             max_height = element.attr('data-max-height'),
-            lang = {},
+            lang = {'ui': '', 'content': ''},
             ui_lang = element.attr('data-lang'),
             content_lang = element.attr('data-content-lang');
 
         element.attr('id', unique_id);
 
-        if (typeof profile_set === undefined || !profile_set) {
-        } else {
+        if (typeof profile_set === undefined || !profile_set) {} else {
             if (profile_set in cke5profiles) {
                 options = cke5profiles[profile_set];
-                console.log('cke5.js:74', '  ↴', '\n', options);
-
             }
             if (profile_set in cke5suboptions) {
                 if (cke5suboptions[profile_set].length > 0) {
@@ -70,26 +67,24 @@ function cke5_init(element) {
             }
         }
 
-        if (typeof min_height === undefined || !min_height) {
-        } else {
+        if (typeof min_height === undefined || !min_height) {} else {
             sub_options['min-height'] = min_height;
         }
-        if (typeof max_height === undefined || !max_height) {
-        } else {
+        if (typeof max_height === undefined || !max_height) {} else {
             sub_options['max-height'] = max_height;
         }
-        if (typeof ui_lang === undefined || !ui_lang) {
-        } else {
+        if (typeof ui_lang === undefined || !ui_lang) {} else {
             lang['ui'] = ui_lang;
         }
-        if (typeof content_lang === undefined || !content_lang) {
-        } else {
+        if (typeof content_lang === undefined || !content_lang) {} else {
             lang['content'] = content_lang;
         }
-        if (lang['ui'] !== undefined || lang['content'] !== undefined) {
-            options['language'] = lang;
+        if (lang['ui'] !== '' || lang['content'] !== '') {
+            if (options['language'] === undefined) options['language'] = [];
+            if (lang['ui'] !== '') options['language']['ui'] = lang['ui'];
+            if (lang['content'] !== '') options['language']['content'] = lang['content'];
 
-            if (lang['ui'] !== undefined && options['placeholder_' + lang['ui']] !== undefined) {
+            if (lang['ui'] !== '' && options['placeholder_' + lang['ui']] !== undefined) {
                 options['placeholder'] = options['placeholder_' + lang['ui']];
             }
         }
