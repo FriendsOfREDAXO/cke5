@@ -10,26 +10,7 @@ let ckeditors = {},
 $(document).on('rex:ready', function (e, container) {
     container.find(ckareas).each(function () {
         cke5_init($(this));
-        if (rex.cke5theme != 'notheme') {
-            if (rex.cke5theme == 'dark') {
-                if(!$('#ckedark').length){
-                    $('head').append('<link id="ckedark" rel="stylesheet" type="text/css" href="' + rex.cke5darkcss + '">');
-                }
-            }
-            if (rex.cke5theme == 'auto' && window.matchMedia) {
-                if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                    $('head').append('<link id="ckedark" rel="stylesheet" type="text/css" href="' + rex.cke5darkcss + '">');
-                }
-                window.matchMedia('(prefers-color-scheme: dark)')
-                    .addEventListener('change', event => {
-                        if (event.matches) {
-                            $('head').append('<link id="ckedark" rel="stylesheet" type="text/css" href="' + rex.cke5darkcss + '">');
-                        } else {
-                            $('head').find("#ckedark").remove();
-                        }
-                    })
-            }
-        }
+        cke5_set_theme();
     });
 });
 
@@ -50,6 +31,7 @@ $(document).on('ready', function () {
 function cke5_init_all(elements) {
     elements.each(function () {
         cke5_init($(this));
+        cke5_set_theme();
     });
 }
 
@@ -147,3 +129,25 @@ function cke5_pastinit(editor, sub_options) {
     // ] );
 }
 
+function cke5_set_theme() {
+    if (rex.cke5theme != 'notheme') {
+        if (rex.cke5theme == 'dark') {
+            if(!$('#ckedark').length){
+                $('head').append('<link id="ckedark" rel="stylesheet" type="text/css" href="' + rex.cke5darkcss + '">');
+            }
+        }
+        if (rex.cke5theme == 'auto' && window.matchMedia) {
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                $('head').append('<link id="ckedark" rel="stylesheet" type="text/css" href="' + rex.cke5darkcss + '">');
+            }
+            window.matchMedia('(prefers-color-scheme: dark)')
+              .addEventListener('change', event => {
+                  if (event.matches) {
+                      $('head').append('<link id="ckedark" rel="stylesheet" type="text/css" href="' + rex.cke5darkcss + '">');
+                  } else {
+                      $('head').find("#ckedark").remove();
+                  }
+              })
+        }
+    }
+}
