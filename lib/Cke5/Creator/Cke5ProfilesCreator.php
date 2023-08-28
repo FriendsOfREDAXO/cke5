@@ -548,13 +548,13 @@ class Cke5ProfilesCreator
 
         if (in_array('rexImage', $toolbar, true)) {
             if (isset($profile['mediatype']) && $profile['mediatype'] !== '') {
-                $jsonProfile['rexImage']['media_type'] = $profile['mediatype'];
+                $jsonProfile['image']['rexmedia_type'] = $profile['mediatype'];
             } else {
                 $path = (isset($profile['mediapath']) && $profile['mediapath'] !== '') ? $profile['mediapath'] : 'media';
-                $jsonProfile['rexImage']['media_path'] = '/' . $path . '/';
+                $jsonProfile['image']['rexmedia_path'] = '/' . $path . '/';
             }
             if (isset($profile['rexmedia_types']) && $profile['rexmedia_types'] !== '') {
-                $jsonProfile['rexImage']['rexmedia_types'] = $profile['rexmedia_types'];
+                $jsonProfile['image']['rexmedia_types'] = $profile['rexmedia_types'];
             }
         }
 
