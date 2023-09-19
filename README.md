@@ -435,7 +435,7 @@ Example:
 
 ## Disable Autoformat
 
-You can disable the Autoformat-Feature (mardown code replacement) by adding the following option to the extra option section: 
+You can disable the Autoformat-Feature (markdown code replacement) by adding the following option to the extra option section: 
 
 ```json
 {"removePlugins": ["Autoformat"]}

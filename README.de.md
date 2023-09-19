@@ -479,7 +479,7 @@ Nach einem Update einer sehr alten Version fehlt ggf. die Grundeinstellung für 
 
 ## Autoformat deaktivieren
 
-Das Autoformat-Feature (mardown code replacement) kann man deaktivieren, indem man folgende Option in den Abschnitt Extra Options einfügt: 
+Das Autoformat-Feature (markdown code replacement) kann man deaktivieren, indem man folgende Option in den Abschnitt Extra Options einfügt: 
 
 ```json
 {"removePlugins": ["Autoformat"]}
