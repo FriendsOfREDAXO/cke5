@@ -332,12 +332,36 @@ Use the following keystrokes for more efficient navigation in the CKEditor 5 use
         "mode": "manual",
         "label": "Link mit CSS Klasse",
         "defaultValue": "true",
-        "classes": "arrow"
+         "attributes": {
+            "class": "button light",
+        }
     }
 }]
 
 ```
 
+Multiple link decorators
+
+```js
+[
+    {
+        "buttonlink": {
+            "mode": "manual",
+            "label": "Als Button darstellen",
+            "attributes": {
+                "class": "uk-button uk-button-primary uk-margin-small-bottom"
+            }
+        },
+        "buttonlink_style": {
+            "mode": "manual",
+            "label": "Link mobil volle Breite",
+            "attributes": {
+                "class": "uk-width-1-1@s uk-width-auto@m"
+            }
+        }
+    }
+]
+``` 
 
 
 
