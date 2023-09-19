@@ -367,7 +367,9 @@ Oder multiple:
     "isGallery": {
         "mode": "manual",
         "label": "Gallery link",
-        "classes": "gallery"
+        "attributes": {
+            "class": "button light",
+        }
     }
 }]
 ```
