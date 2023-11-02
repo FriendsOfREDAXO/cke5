@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 6.0.3
+
+* add initialize editor event
+* ensure that no instance will be double initialized
+
 ## Version 6.0.2
 
 * fix text_part_language profile creator issue

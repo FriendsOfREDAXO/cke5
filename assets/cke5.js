@@ -8,10 +8,7 @@ let ckeditors = {},
     ckareas = '.cke5-editor';
 
 $(document).on('rex:ready', function (e, container) {
-    container.find(ckareas).each(function () {
-        cke5_init($(this));
-        cke5_set_theme();
-    });
+    cke5_init_ready(container.find(ckareas));
 });
 
 $(document).on('ready', function () {
@@ -28,15 +25,40 @@ $(document).on('ready', function () {
     }
 });
 
+function cke5_init_ready(cke_areas) {
+    $.each(cke_areas, function (key, editor) {
+        cke5_init($(editor));
+        if (rex.cke5theme != 'notheme') {
+            if (rex.cke5theme == 'dark') {
+                if(!$('#ckedark').length){
+                    $('head').append('<link id="ckedark" rel="stylesheet" type="text/css" href="' + rex.cke5darkcss + '">');
+                }
+            }
+            if (rex.cke5theme == 'auto' && window.matchMedia) {
+                if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    $('head').append('<link id="ckedark" rel="stylesheet" type="text/css" href="' + rex.cke5darkcss + '">');
+                }
+                window.matchMedia('(prefers-color-scheme: dark)')
+                    .addEventListener('change', event => {
+                        if (event.matches) {
+                            $('head').append('<link id="ckedark" rel="stylesheet" type="text/css" href="' + rex.cke5darkcss + '">');
+                        } else {
+                            $('head').find("#ckedark").remove();
+                        }
+                    })
+            }
+        }
+    });
+}
+
 function cke5_init_all(elements) {
     elements.each(function () {
         cke5_init($(this));
-        cke5_set_theme();
     });
 }
 
 function cke5_init(element) {
-    if (!element.next().hasClass('ck')) {
+    if (!element.next().length || !element.next().hasClass('ck')) {
         let unique_id = 'ck' + Math.random().toString(16).slice(2),
             options = {},
             sub_options = {},
@@ -45,9 +67,15 @@ function cke5_init(element) {
             max_height = element.attr('data-max-height'),
             lang = {'ui': '', 'content': ''},
             ui_lang = element.attr('data-lang'),
-            content_lang = element.attr('data-content-lang');
+            content_lang = element.attr('data-content-lang'),
+            repeater_cke = (element.attr('repeater_cke') === "1");
 
-        element.attr('id', unique_id);
+
+        if (!repeater_cke) {
+            element.attr('id', unique_id);
+        } else {
+            unique_id = element.attr('id');
+        }
 
         if (typeof profile_set === undefined || !profile_set) {} else {
             if (profile_set in cke5profiles) {
@@ -89,21 +117,31 @@ function cke5_init(element) {
             }
         }
 
-        // init editor
-        ClassicEditor.create(document.querySelector('#' + unique_id), options)
-            .then(editor => {
-                ckeditors[unique_id] = editor; // Save for later use.
-                cke5_pastinit(editor, sub_options);
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        if (ckeditors[unique_id] === undefined) {
+            // init editor
+            ClassicEditor.create(document.querySelector('#' + unique_id), options)
+                .then(editor => {
+                    ckeditors[unique_id] = editor; // Save for later use.
+                    cke5_pastinit(editor, sub_options);
+                    dispatchCke5Event(editor, unique_id);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        } else {
+            console.log('editor already exist: ' + unique_id);
+        }
     }
+}
+
+function cke5_get_editors() {
+    return ckeditors;
 }
 
 function cke5_destroy(elements) {
     elements.each(function () {
         let next = $(this).next();
+        delete ckeditors[$(this).attr('id')];
         if (next.length && (next.hasClass('ck-editor') || next.hasClass('ck'))) {
             next.remove();
         }
@@ -129,25 +167,8 @@ function cke5_pastinit(editor, sub_options) {
     // ] );
 }
 
-function cke5_set_theme() {
-    if (rex.cke5theme != 'notheme') {
-        if (rex.cke5theme == 'dark') {
-            if(!$('#ckedark').length){
-                $('head').append('<link id="ckedark" rel="stylesheet" type="text/css" href="' + rex.cke5darkcss + '">');
-            }
-        }
-        if (rex.cke5theme == 'auto' && window.matchMedia) {
-            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                $('head').append('<link id="ckedark" rel="stylesheet" type="text/css" href="' + rex.cke5darkcss + '">');
-            }
-            window.matchMedia('(prefers-color-scheme: dark)')
-              .addEventListener('change', event => {
-                  if (event.matches) {
-                      $('head').append('<link id="ckedark" rel="stylesheet" type="text/css" href="' + rex.cke5darkcss + '">');
-                  } else {
-                      $('head').find("#ckedark").remove();
-                  }
-              })
-        }
-    }
+function dispatchCke5Event(editor, unique_id) {
+    let event = jQuery.Event("rex:cke5IsInit");
+    jQuery(window).trigger(event, [editor, unique_id]);
 }
+
