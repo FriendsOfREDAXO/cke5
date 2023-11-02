@@ -1,9 +1,15 @@
 # Changelog
 
-## Version 6.0.3
+## Version 6.0.4
 
 * add initialize editor event
 * ensure that no instance will be double initialized
+
+## Version 6.0.3
+
+* adds set theme function by @eaCe 
+* RexImage: fix for mediamanager types by @skerbis
+
 
 ## Version 6.0.2
 
