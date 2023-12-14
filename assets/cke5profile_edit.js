@@ -352,7 +352,7 @@ function cke5_addyTableFields(element) {
     if (element.length) {
         let title_placeholder = element.data('ytable-title-placeholder'),
             table_placeholder = element.data('ytable-table-placeholder'),
-            label_placeholder = element.data('ytable-label-placeholder');
+            column_placeholder = element.data('ytable-column-placeholder');
         element.multiInput({
             json: true,
             input: $('<div class="row inputElement">\n' +
@@ -360,7 +360,7 @@ function cke5_addyTableFields(element) {
                 '<input class="form-control" name="table" placeholder="' + table_placeholder + '" type="text">\n' +
                 '</div>\n' +
                 '<div class="form-group col-xs-4">\n' +
-                '<input class="form-control" name="label" placeholder="' + label_placeholder + '" type="text">\n' +
+                '<input class="form-control" name="column" placeholder="' + column_placeholder + '" type="text">\n' +
                 '</div>\n' +
                 '<div class="form-group col-xs-4">\n' +
                 '<input class="form-control" name="title" placeholder="' + title_placeholder + '" type="text">\n' +

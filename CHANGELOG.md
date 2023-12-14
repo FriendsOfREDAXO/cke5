@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 6.1.0
+
+* fix yform link issue https://github.com/FriendsOfREDAXO/cke5/issues/185
+* update to cke5 vendor version 40.2.0
+
 ## Version 6.0.4
 
 * add initialize editor event

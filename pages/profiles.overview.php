@@ -599,7 +599,7 @@ if ($func === '') {
                 $field->setLabel(rex_i18n::msg('cke5_ytable'));
                 $field->setAttribute('id', 'cke5ytable-area');
                 $field->setAttribute('data-ytable-table-placeholder', rex_i18n::msg('cke5_ytable_table_placeholder'));
-                $field->setAttribute('data-ytable-label-placeholder', rex_i18n::msg('cke5_ytable_label_placeholder'));
+                $field->setAttribute('data-ytable-column-placeholder', rex_i18n::msg('cke5_ytable_column_placeholder'));
                 $field->setAttribute('data-ytable-title-placeholder', rex_i18n::msg('cke5_ytable_title_placeholder'));
             $form->addRawField('</div>');
 
