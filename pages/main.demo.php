@@ -6,9 +6,9 @@
  */
 
 /** @var rex_addon $this */
-
-$content = \Cke5\Provider\Cke5NavigationProvider::getSubNavigationHeader() .
-           \Cke5\Provider\Cke5NavigationProvider::getSubNavigation() . '
+$content = '<div class="document-outline-container-not-provided"></div>';
+$content .= \Cke5\Provider\Cke5NavigationProvider::getMainSubNavigationHeader() .
+           \Cke5\Provider\Cke5NavigationProvider::getSubNavigation('main') . '
 <div class="cke5-demo">
     <div name="content" id="editor" class="cke5-editor" data-profile="default" data-lang="' . \Cke5\Utils\Cke5Lang::getUserLang() . '">
         <h1>😀 Space Shuttle Programm</h1>

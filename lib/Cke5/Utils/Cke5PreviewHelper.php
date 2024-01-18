@@ -22,7 +22,6 @@ class Cke5PreviewHelper
     public static function getMFormCode(array $profile): string
     {
         return (rex_addon::exists('mform')) ? '<pre><span style="color: #aa0000">$mform</span>-&gt;<span style="color: #1e90ff">addTextAreaField</span>(<span style="color: #aa5500">&#39;1&#39;</span>, [<span style="color: #aa5500">&#39;class&#39;</span> =&gt; <span style="color: #aa5500">&#39;cke5-editor&#39;</span>, <span style="color: #aa5500">&#39;data-lang&#39;</span> =&gt; \Cke5\Utils\Cke5Lang::<span style="color: #1e90ff">getUserLang</span>(), <span style="color: #aa5500">&#39;data-content-lang&#39;</span> =&gt; \Cke5\Utils\Cke5Lang::<span style="color: #1e90ff">getOutputLang</span>(), <span style="color: #aa5500">&#39;data-profile&#39;</span> =&gt; <span style="color: #aa5500">&#39;' . $profile['name'] . '&#39;</span>]);</pre>' : '';
-
     }
 
     /**

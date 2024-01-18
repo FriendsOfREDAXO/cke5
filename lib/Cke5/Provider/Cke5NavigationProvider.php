@@ -16,29 +16,10 @@ use rex_fragment;
 class Cke5NavigationProvider
 {
     /**
-     * @return null|rex_be_page
-     * @author Joachim Doerr
-     */
-    public static function getMainSubPage(): ?rex_be_page
-    {
-        /** @var rex_be_page $page */
-        $page = rex_be_controller::getPageObject('cke5');
-        $subPages = $page->getSubpages();
-        if (count($subPages) > 0) {
-            foreach ($subPages as $subPage) {
-                if ($subPage->getKey() === 'main') {
-                    return $subPage;
-                }
-            }
-        }
-        return null;
-    }
-
-    /**
      * @return string
      * @author Joachim Doerr
      */
-    public static function getSubNavigationHeader(): string
+    public static function getMainSubNavigationHeader(): string
     {
         $photoBy = sprintf(\rex_i18n::msg('cke5_subnavigation_header_photo'),
             '<a href="https://unsplash.com/photos/mMcqMYJfopo?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Patrick Fore</a>',
@@ -57,17 +38,11 @@ class Cke5NavigationProvider
         ';
     }
 
-    /**
-     * @return string
-     * @author Joachim Doerr
-     */
-    public static function getSubNavigation(): string
+    public static function getSubNavigation(string $path): string
     {
-        /** @var rex_be_page $subpage */
-        $subpage = self::getMainSubPage();
-        $subPages = $subpage->getSubpages();
-        $subtitle = '';
-
+        $subPage = self::getSubpage($path);
+        $subPages = $subPage->getSubpages();
+        $output = '';
         if (count($subPages) > 0) {
             $nav = rex_be_navigation::factory();
 
@@ -87,13 +62,41 @@ class Cke5NavigationProvider
                 try {
                     $fragment = new rex_fragment();
                     $fragment->setVar('left', $navigation, false);
-                    $subtitle = $fragment->parse('core/navigations/content.php');
+                    $output = $fragment->parse('core/navigations/content.php');
 
                 } catch (\rex_exception $e) {
                     \rex_logger::logException($e);
                 }
             }
         }
-        return $subtitle;
+        return $output;
     }
-}
+
+    /**
+     * @return array<rex_be_page>
+     */
+    private static function findSubpageRecursive(rex_be_page $page, array $path): ?rex_be_page
+    {
+        if (count($path) === 0) {
+            return $page;
+        }
+
+        $key = array_shift($path);
+        $subPages = $page->getSubpages();
+
+        foreach ($subPages as $subPage) {
+            if ($subPage->getKey() === $key) {
+                return self::findSubpageRecursive($subPage, $path);
+            }
+        }
+
+        return null;
+    }
+
+    private static function getSubpage(string $path): ?rex_be_page
+    {
+        $path = array_filter(explode('.', $path));
+        $page = rex_be_controller::getPageObject('cke5');
+
+        return self::findSubpageRecursive($page, $path);
+    }}

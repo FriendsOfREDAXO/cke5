@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 6.1.2
+
+* Add Style Plugin
+
 ## Version 6.1.0
 
 * fix yform link issue https://github.com/FriendsOfREDAXO/cke5/issues/185
@@ -14,7 +18,6 @@
 
 * adds set theme function by @eaCe 
 * RexImage: fix for mediamanager types by @skerbis
-
 
 ## Version 6.0.2
 

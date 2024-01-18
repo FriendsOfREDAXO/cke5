@@ -68,6 +68,8 @@ $sql->ensurePrimaryIdColumn()
     ->ensureColumn(new rex_sql_column('mediaembed', 'varchar(255)', true))
     ->ensureColumn(new rex_sql_column('mentions', 'varchar(255)', true))
     ->ensureColumn(new rex_sql_column('mentions_definition', 'text', true))
+    ->ensureColumn(new rex_sql_column('styles', 'text', true))
+    ->ensureColumn(new rex_sql_column('templates', 'text', true))
     ->ensureColumn(new rex_sql_column('sprog_mention', 'varchar(255)', true))
     ->ensureColumn(new rex_sql_column('sprog_mention_definition', 'text', true))
     ->ensureColumn(new rex_sql_column('mediatype', 'varchar(255)', true))
@@ -86,3 +88,28 @@ foreach (rex_i18n::getLocales() as $locale) {
 }
 
 $sql->ensure();
+
+
+// install styles database
+$sql = rex_sql_table::get(rex::getTable('cke5_styles'));
+$sql->ensurePrimaryIdColumn()
+    ->ensureColumn(new rex_sql_column('name', 'varchar(40)', true))
+    ->ensureColumn(new rex_sql_column('element', 'varchar(40)', true))
+    ->ensureColumn(new rex_sql_column('classes', 'text', true))
+    ->ensureColumn(new rex_sql_column('css', 'varchar(255)', true))
+    ->ensureColumn(new rex_sql_column('css_definition', 'text', true))
+    ->ensureColumn(new rex_sql_column('css_path', 'varchar(255)', true))
+    ->ensure();
+
+
+// install templates database
+$sql = rex_sql_table::get(rex::getTable('cke5_templates'));
+$sql->ensurePrimaryIdColumn()
+    ->ensureColumn(new rex_sql_column('title', 'varchar(40)', true))
+    ->ensureColumn(new rex_sql_column('data', 'text', true))
+    ->ensureColumn(new rex_sql_column('icon', 'text', true))
+    ->ensureColumn(new rex_sql_column('description', 'varchar(255)', true))
+    ->ensureColumn(new rex_sql_column('css', 'varchar(255)', true))
+    ->ensureColumn(new rex_sql_column('css_definition', 'text', true))
+    ->ensureColumn(new rex_sql_column('css_path', 'varchar(255)', true))
+    ->ensure();

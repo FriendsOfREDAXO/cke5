@@ -1,5 +1,5 @@
 package: cke5
-version: '6.1.0'
+version: '6.1.1'
 author: Friends Of REDAXO
 supportpage: https://github.com/FriendsOfREDAXO/cke5/issues
 
@@ -18,12 +18,25 @@ page:
         profiles:
             title: 'translate:profiles'
             subpages:
-                overview:
+                profiles:
                     title: 'translate:profiles'
+                styles:
+                    title: 'translate:styles'
+                    subpages:
+                        styles:
+                            title: 'translate:styles'
+                        image_styles:
+                            title: 'translate:image_styles'
+#                templates:
+#                    title: 'translate:templates'
+#                slashes:
+#                    title: 'translate:slashes'
                 export:
                     title: 'translate:profiles_export'
                 import:
                     title: 'translate:profiles_import'
+        config:
+            title: 'translate:config'
         help:
              title: 'translate:help'
              subPath: README.md

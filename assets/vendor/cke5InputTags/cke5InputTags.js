@@ -9,7 +9,6 @@
                 instances: []
             };
         }
-        ;
 
         window.cke5InputTags.methods = {
             tags: function (element, callback) {
@@ -24,7 +23,6 @@
                                         return callback(str);
                                     }
                                     return str;
-                                    break;
                                 case '_toObject':
                                     var obj = _instance._toObject(_instance.tags);
 
@@ -32,7 +30,6 @@
                                         return callback(obj);
                                     }
                                     return obj;
-                                    break;
                                 case '_toJSON':
                                     var obj = _instance._toObject(_instance.tags);
                                     var json = JSON.stringify(obj);
@@ -41,13 +38,11 @@
                                         return callback(json);
                                     }
                                     return json;
-                                    break;
                                 case '_toArray':
                                     if (callback) {
                                         return callback(_instance.tags);
                                     }
                                     return _instance.tags;
-                                    break;
                             }
 
                             var partials = element.split(',');
@@ -72,7 +67,6 @@
                             break;
                         case 'function':
                             return element(_instance.tags);
-                            break;
                     }
 
                     _instance._clean();
@@ -115,10 +109,13 @@
         if ('object' === typeof options || !options) {
             var options = $.extend(true, {}, $.fn.cke5InputTags.defaults, options);
 
-            var obj = this.each(function () {
+            this.each(function () {
                 var self = $(this);
 
-                /* Constantes */
+                /* Constants */
+                self.KEY_ENTER = 'Enter';
+                self.KEY_COMMA = ',';
+                self.KEY_ESCAPE = 'Escape';
                 self.UNIQID = Math.round(Date.now() / (Math.random() * (548 - 54) - 54));
                 self.DEFAULT_CLASS = 'cke5InputTags';
                 self.ELEMENT_CLASS = self.DEFAULT_CLASS + '-' + self.UNIQID;
@@ -135,7 +132,7 @@
 
                 /* Variables */
                 self.options = options;
-                self.keys = [13, 188, 27];
+                self.keys = [self.KEY_ENTER, self.KEY_COMMA, self.KEY_ESCAPE];
                 self.tags = [];
 
                 if (self.options.keys.length > 0) {
@@ -154,12 +151,14 @@
                     self.save();
                     self.edit();
                     self.destroy();
-                    self._autocomplete()._init();
+                    self._autocomplete._init();
                     self._focus();
                 };
 
-                /*
-                 * COnstruit le squelette HTML du plugin
+                /**
+                 * Build plugin's HTML skeleton
+                 *
+                 * @returns {void}
                  */
                 self.build = function () {
                     self.$html = $('<div>').addClass(self.LIST_CLASS);
@@ -180,8 +179,10 @@
                     });
                 };
 
-                /*
-                 * Initialise la liste des tags si des tags ont été passé en option, return false sinon
+                /**
+                 * Init tags list if present in options, otherwise returns false
+                 *
+                 * @returns {void | boolean}
                  */
                 self.fill = function () {
                     self._getDefaultValues();
@@ -196,8 +197,10 @@
                     self._fill();
                 };
 
-                /*
-                 * Appelle la fonction _buildItem() si le tag est conforme
+                /**
+                 * Fills tag list
+                 *
+                 * @returns {void}
                  */
                 self._fill = function () {
                     self.tags.forEach(function (value, i) {
@@ -209,34 +212,42 @@
                     });
                 };
 
-                /*
-                 * Supprime tous les éléments HTML représentant un tag
+                /**
+                 * Clear HTML tags list
+                 *
+                 * @returns {void}
                  */
                 self._clean = function () {
                     $('.' + self.ITEM_CLASS, self.$list).remove();
                 };
 
-                /*
-                 * Ajoute ou édite un tag en fonction de la touche sur laquelle l'utilisateur appuie
+                /**
+                 * Add or edit tag depends on key pressed
+                 *
+                 * @returns {void}
                  */
                 self.save = function () {
                     self.$input.on('keyup', function (e) {
                         e.preventDefault();
 
-                        var key = e.keyCode || e.which;
+                        var key = e.key;
                         var value = self.$input.val().trim();
 
                         if ($.inArray(key, self.keys) < 0) {
+                            self._autocomplete._init(true);
+                            self._autocomplete._show();
+
                             return false;
                         }
 
-                        if (27 === key) {
+                        if (self.KEY_ESCAPE === key) {
                             self._cancel();
+                            self._autocomplete._hide();
 
                             return false;
                         }
 
-                        value = 188 === key ? value.slice(0, -1) : value;
+                        value = self.KEY_COMMA === key ? value.slice(0, -1) : value;
 
                         if (!self._validate(value, true)) {
                             return false;
@@ -260,9 +271,9 @@
                             self._clean();
                             self._fill();
                         } else {
-                            if (self._autocomplete()._isSet() && self._autocomplete()._get('only')) {
-                                if ($.inArray(value, self._autocomplete()._get('values')) < 0) {
-                                    self._autocomplete()._hide();
+                            if (self._autocomplete._isSet() && self._autocomplete._get('only')) {
+                                if ($.inArray(value, self._autocomplete._get('values')) < 0) {
+                                    self._autocomplete._hide();
                                     self._errors('autocomplete_only');
                                     return false;
                                 }
@@ -289,7 +300,7 @@
                         self._cancel();
                         self._updateValue();
                         self.destroy();
-                        self._autocomplete()._build();
+                        self._autocomplete._build();
 
                         self._setInstance(self);
 
@@ -299,12 +310,14 @@
                     });
                 };
 
-                /*
-                 * Initialise le champ d'édition lors du clic sur l'élément HTML représentant un tag
+                /**
+                 * Init edit input when a tag is focused
+                 *
+                 * @returns {void}
                  */
                 self.edit = function () {
                     self.$list.on('click', '.' + self.ITEM_CLASS, function (e) {
-                        if ($(e.target).hasClass('close-item') || false === self.options.editable || (self._autocomplete()._isSet() && self._autocomplete()._get('only'))) {
+                        if ($(e.target).hasClass('close-item') || false === self.options.editable || (self._autocomplete._isSet() && self._autocomplete._get('only'))) {
                             self._cancel();
                             return true;
                         }
@@ -323,8 +336,10 @@
                     });
                 };
 
-                /*
-                 * Supprime un tag lors du clic sur l'élément HTML représentant un tag
+                /**
+                 * Delete tag
+                 *
+                 * @returns {void}
                  */
                 self.destroy = function () {
                     $('.' + self.ITEM_CLASS, self.$list).off('click').on('click', '.close-item', function () {
@@ -339,7 +354,7 @@
                             self._updateValue();
                             $item.remove();
 
-                            self._autocomplete()._build();
+                            self._autocomplete._build();
 
                             self.$input.focus();
 
@@ -348,8 +363,10 @@
                     });
                 };
 
-                /*
-                 * Construit l'objet jQuery représentant un tag et l'injecte dans la liste HTML
+                /**
+                 * Build and inject tag into HTML list
+                 *
+                 * @returns {void}
                  */
                 self._buildItem = function (value) {
                     var $content = $(self.ITEM_CONTENT.replace('%s', value));
@@ -360,19 +377,22 @@
                     });
                 };
 
-                /*
-                 * Retourne l'index en fonction du tag si celui-ci est présent dans l'array self.tags, false sinon
+                /**
+                 * Returns tag index
+                 *
+                 * @returns {number}
                  */
                 self._getIndex = function (value) {
                     return self.tags.indexOf(value);
                 };
 
-                /*
-                 * Supprime les tags en trop si self.options.tags.length > self.options.max
-                 * Concatène les tags passés en paramètre par l'utilisateur.
+                /**
+                 * Remove extra tags only if > max option and concat user tags
+                 *
+                 * @returns {void}
                  */
                 self._concatenate = function () {
-                    if (!'boolean' === typeof self.options.max || self.options.max > 0) {
+                    if (self.options.max > 0) {
                         if (self.options.tags.length > self.options.max) {
                             self.options.tags.splice(-Math.abs(self.options.tags.length - self.options.max));
                         }
@@ -381,16 +401,25 @@
                     self.tags = self.tags.concat(self.options.tags);
                 };
 
+
+                /**
+                 * Get default values
+                 *
+                 * @returns {void}
+                 */
                 self._getDefaultValues = function () {
                     if (self.$element.val().length > 0) {
-                        self.tags = self.tags.concat(self.$element.val().split(','));
+                        self.tags = self.tags.concat(self.$element.val().split(self.KEY_COMMA));
                     } else {
-                        self.$element.attr('value', '');
+                        self.$element.prop('value', '');
                     }
                 };
 
-                /*
-                 * Insert item dans l'array self.tags
+                /**
+                 * Insert item
+                 *
+                 * @param {string} item
+                 * @returns {void}
                  */
                 self._insert = function (item) {
                     self.tags.push(item);
@@ -398,8 +427,12 @@
                     self._bindEvent(['change', 'create']);
                 };
 
-                /*
-                 * Remplace old_value par new_value dans l'array self.tags
+                /**
+                 * Swap tag value
+                 *
+                 * @param {string} old_value
+                 * @param {string} new_value
+                 * @returns {void}
                  */
                 self._update = function (old_value, new_value) {
                     var index = self._getIndex(old_value);
@@ -408,8 +441,11 @@
                     self._bindEvent(['change', 'update']);
                 };
 
-                /*
-                 * Supprime l'élément corrspondant à value dans l'array self.tags
+                /**
+                 * Delete item based on value parameter
+                 *
+                 * @param {string} value
+                 * @returns {void}
                  */
                 self._pop = function (value) {
                     var index = self._getIndex(value);
@@ -423,8 +459,10 @@
                     self._bindEvent(['change', 'destroy']);
                 };
 
-                /*
-                 * Réinitialise le champ de saisie
+                /**
+                 * Reset input field
+                 *
+                 * @returns {void}
                  */
                 self._cancel = function () {
                     $('.' + self.ITEM_CLASS).removeClass('is-edit');
@@ -436,114 +474,173 @@
                         .appendTo(self.$list);
                 };
 
-                /*
-                 * retourne un objet comprennant différentes méthodes pour l'autocompletion
+                /**
+                 * Autocomplete object
+                 *
+                 * @returns {object}
                  */
-                self._autocomplete = function () {
-                    var values = self.options.autocomplete.values;
+                self._autocomplete = {
 
-                    return {
-                        _isSet: function () {
-                            return values.length > 0;
-                        },
-                        _init: function () {
-                            if (!self._autocomplete()._isSet()) {
-                                return false;
-                            }
+                    /**
+                     * Is autocomplete list have values
+                     *
+                     * @returns {boolean}
+                     */
+                    _isSet: function () {
+                        return self.options.autocomplete.values.length > 0;
+                    },
 
-                            self._autocomplete()._build();
-                        },
-                        _build: function () {
-                            if (self._autocomplete()._exists()) {
-                                self.$autocomplete.remove();
-                            }
-
-                            self.$autocomplete = $('<ul>').addClass(self.AUTOCOMPLETE_LIST_CLASS);
-
-                            self._autocomplete()._get('values').forEach(function (v, k) {
-                                var li = self.AUTOCOMPLETE_ITEM_CONTENT.replace('%s', v);
-                                if (v === '|' || v === '-') {
-                                    var $item = $.inArray(v, self.tags) >= 0 ? $(li) : $(li);
-                                } else {
-                                    var $item = $.inArray(v, self.tags) >= 0 ? $(li).addClass('is-disabled') : $(li);
-                                }
-                                $item.appendTo(self.$autocomplete);
-                            });
-
-                            self._autocomplete()._bindClick();
-
-                            $(document)
-                                .not(self.$autocomplete)
-                                .on('click', function () {
-                                    self._autocomplete()._hide();
-                                });
-                        },
-                        _bindClick: function () {
-                            $(self.$autocomplete).off('click').on('click', '.' + self.AUTOCOMPLETE_ITEM_CLASS, function (e) {
-                                if ($(e.target).hasClass('is-disabled')) {
-                                    return false;
-                                }
-
-                                self.$input.addClass('is-autocomplete').val($(this).text());
-                                self._autocomplete()._hide();
-                                self._bindEvent('autocompleteTagSelect');
-
-                                var e = $.Event("keyup");
-                                e.which = 13;
-                                self.$input.trigger(e);
-                            });
-                        },
-                        _show: function () {
-                            if (!self._autocomplete()._isSet()) {
-                                return false;
-                            }
-
-                            self.$autocomplete
-                                .css({
-                                    'left': self.$input[0].offsetLeft,
-                                    'minWidth': self.$input.width()
-                                })
-                                .insertAfter(self.$input);
-
-                            setTimeout(function () {
-                                self._autocomplete()._bindClick();
-                                self.$autocomplete.addClass('is-active');
-                            }, 100);
-                        },
-                        _hide: function () {
-                            self.$autocomplete.removeClass('is-active');
-                        },
-                        _get: function (key) {
-                            return self.options.autocomplete[key];
-                        },
-                        _exists: function () {
-                            return undefined !== self.$autocomplete;
+                    /**
+                     * Init autocomplete
+                     *
+                     * @param {boolean | undefined} filter
+                     * @returns {boolean | void}
+                     */
+                    _init: function (filter) {
+                        if (!self._autocomplete._isSet()) {
+                            return false;
                         }
-                    };
+
+                        self._autocomplete._build(filter);
+                    },
+
+                    /**
+                     * Build autocomplete HTML list
+                     *
+                     * @param {boolean | undefined} filter
+                     * @returns {void}
+                     */
+                    _build: function (filter) {
+                        var value = self.$input.val().trim().toLowerCase();
+
+                        if (self._autocomplete._exists()) {
+                            self.$autocomplete.remove();
+                        }
+
+                        self.$autocomplete = $('<ul>').addClass(self.AUTOCOMPLETE_LIST_CLASS);
+
+                        self._autocomplete._get('values').forEach(function (v) {
+                            var li = self.AUTOCOMPLETE_ITEM_CONTENT.replace('%s', v);
+                            if (v === '|' || v === '-') {
+                                var $item = $.inArray(v, self.tags) >= 0 ? $(li) : $(li);
+                            } else {
+                                var $item = $.inArray(v, self.tags) >= 0 ? $(li).addClass('is-disabled') : $(li);
+                            }
+                            $item.appendTo(self.$autocomplete);
+                        });
+
+                        self._autocomplete._bindClick();
+
+                        $(document)
+                            .not(self.$autocomplete)
+                            .on('click', function () {
+                                self._autocomplete._hide();
+                            });
+                    },
+
+                    /**
+                     * Bind click event on list item
+                     *
+                     * @returns {void}
+                     */
+                    _bindClick: function () {
+                        $(self.$autocomplete).off('click').on('click', '.' + self.AUTOCOMPLETE_ITEM_CLASS, function (e) {
+                            if ($(e.target).hasClass('is-disabled')) {
+                                return false;
+                            }
+
+                            self.$input.addClass('is-autocomplete').val($(this).text());
+                            self._autocomplete._hide();
+                            self._bindEvent('autocompleteTagSelect');
+
+                            var e = $.Event("keyup");
+                            e.key = self.KEY_ENTER;
+                            self.$input.trigger(e);
+                        });
+                    },
+
+                    /**
+                     * Show autocomplete list
+                     *
+                     * @returns {boolean | void}
+                     */
+                    _show: function () {
+                        if (!self._autocomplete._isSet()) {
+                            return false;
+                        }
+
+                        self.$autocomplete
+                            .css({
+                                'left': self.$input[0].offsetLeft,
+                                'minWidth': self.$input.width()
+                            })
+                            .insertAfter(self.$input);
+
+                        setTimeout(function () {
+                            self._autocomplete._bindClick();
+                            self.$autocomplete.addClass('is-active');
+                        }, 100);
+                    },
+
+                    /**
+                     * Hide autocomplete list
+                     *
+                     * @returns {void}
+                     */
+                    _hide: function () {
+                        self.$autocomplete.removeClass('is-active');
+                    },
+
+                    /**
+                     * Get autocomplete item based on key parameter
+                     *
+                     * @param {string} key
+                     * @returns {boolean | void}
+                     */
+                    _get: function (key) {
+                        return self.options.autocomplete[key];
+                    },
+
+                    /**
+                     * Returns true if autocomplete is defined, false otherwise
+                     *
+                     * @returns {boolean}
+                     */
+                    _exists: function () {
+                        return undefined !== self.$autocomplete;
+                    }
                 };
 
-                /*
-                 * Met à jour l'attribut value de l'input sur lequel est bindé le plugin
+                /**
+                 * Update plugin binded input value
+                 *
+                 * @returns {void}
                  */
                 self._updateValue = function () {
-                    self.$element.attr('value', self.tags.join(','));
+                    self.$element.prop('value', self.tags.join(self.KEY_COMMA));
                 };
 
-                /*
-                 * Définit les events attaché au focus sur le champ de saisie d'un tag
+                /**
+                 * Define focus events on input
+                 *
+                 * @returns {void}
                  */
                 self._focus = function () {
                     self.$input.on('focus', function () {
                         self._bindEvent('focus');
 
-                        if (self._autocomplete()._isSet() && !self.$input.hasClass('is-autocomplete') && !self.$input.hasClass('is-edit')) {
-                            self._autocomplete()._show();
+                        if (self._autocomplete._isSet() && !self.$input.hasClass('is-autocomplete') && !self.$input.hasClass('is-edit')) {
+                            self._autocomplete._build();
+                            self._autocomplete._show();
                         }
                     });
                 };
 
-                /*
-                 * return arr converti en objet
+                /**
+                 * Convert array into object
+                 *
+                 * @param {string[]} arr
+                 * @returns {object}
                  */
                 self._toObject = function (arr) {
                     return arr.reduce(function (o, v, i) {
@@ -552,8 +649,12 @@
                     }, {});
                 };
 
-                /*
-                 * Valide la saisie de l'utilisateur en fonction de différents paramètres passés en option
+                /**
+                 * Input validation
+                 *
+                 * @param {string} value
+                 * @param {boolean} alert
+                 * @returns {boolean}
                  */
                 self._validate = function (value, alert) {
                     var type = '', re;
@@ -592,8 +693,11 @@
                     return true;
                 };
 
-                /*
-                 * return true si value se trouve dans l'array self.tags, false sinon
+                /**
+                 * Returns true if value is in tags list, false otherwise
+                 *
+                 * @param {string} value
+                 * @returns {boolean}
                  */
                 self._exists = function (value) {
                     if (value !== '|' && value !== '-') {
@@ -601,15 +705,18 @@
                     }
                 }
 
-                /*
-                 * Récupère le message en fonction du type passé en paramètres
+                /**
+                 * Get error message
+                 *
+                 * @param {string} type
+                 * @returns {boolean}
                  */
                 self._errors = function (type) {
                     if (0 === type.length) {
                         return false;
                     }
 
-                    if (self._autocomplete()._exists()) {
+                    if (self._autocomplete._exists()) {
                         self.$autocomplete.remove();
                     }
 
@@ -618,8 +725,12 @@
                     return false;
                 };
 
-                /*
-                 * Affiche la/les erreur(s) s'il y en a
+                /**
+                 * Display errors(s) if any
+                 *
+                 * @param {string} error
+                 * @param {string} type
+                 * @returns {void}
                  */
                 self._displayErrors = function (error, type) {
                     var $error = $(self.ERROR_CONTENT.replace('%s', error)).attr('data-error', type);
@@ -644,8 +755,11 @@
                     }, timeout);
                 };
 
-                /*
-                 * Efface la/les erreur(s) s'il y en a
+                /**
+                 * Clears error(s) if any
+                 *
+                 * @param {object} $elem
+                 * @returns {void}
                  */
                 self._collapseErrors = function ($elem) {
 
@@ -656,29 +770,39 @@
                     });
                 };
 
-                /*
-                 * Return une instance de cke5InputTags() en fonction de son ID
+                /**
+                 * Retrieve inputTags instance based on uniqid
+                 *
+                 * @returns {object}
                  */
                 self._getInstance = function () {
                     return window.cke5InputTags.instances[self.UNIQID];
                 };
 
-                /*
-                 * Push l'instance value dans l'array window.cke5InputTags.instances
+                /**
+                 * Store instance based on uniqid
+                 *
+                 * @returns {void}
                  */
-                self._setInstance = function (value) {
+                self._setInstance = function () {
                     window.cke5InputTags.instances[self.UNIQID] = self;
                 };
 
-                /*
-                 * Return true si elem est défini dans self.options, false sinon
+                /**
+                 * Returns true if elem exists on options object, false otherwise
+                 *
+                 * @returns {boolean}
                  */
                 self._isSet = function (elem) {
-                    return undefined === self.options[elem] || false === self.options[elem] || self.options[elem].length <= 0 ? false : true;
+                    return !(undefined === self.options[elem] || false === self.options[elem] || self.options[elem].length);
                 };
 
-                /*
-                 * Appelle la méthode method_name si celle-ci est définie dans self.options, return false sinon
+                /**
+                 * Call method based on method_name parameter if exists on options, returns false otherwise
+                 *
+                 * @param {string} method_name
+                 * @param {object} self
+                 * @returns {void}
                  */
                 self._callMethod = function (method_name, self) {
                     if (undefined === self.options[method_name] || 'function' !== typeof self.options[method_name]) {
@@ -688,6 +812,13 @@
                     self.options[method_name].apply(this, Array.prototype.slice.call(arguments, 1));
                 }
 
+                /**
+                 * Init an event
+                 *
+                 * @param {string | object} method
+                 * @param {function} callback
+                 * @returns {boolean}
+                 */
                 self._initEvent = function (method, callback) {
                     if (!method) {
                         return false;
@@ -707,14 +838,26 @@
                     return true;
                 };
 
+                /**
+                 * Bind an event
+                 *
+                 * @param {string | object} method
+                 * @returns {boolean}
+                 */
                 self._bindEvent = function (method) {
                     return self._initEvent(method, function (m, s) {
                         self._callMethod(m, s);
                     });
                 };
 
+                /**
+                 * Unbind an event
+                 *
+                 * @param {string | object} method
+                 * @returns {boolean}
+                 */
                 self._unbindEvent = function (method) {
-                    return self._initEvent(method, function (m, s) {
+                    return self._initEvent(method, function (m) {
                         self.options[m] = false;
                     });
                 };
@@ -737,7 +880,7 @@
             var _instance = window.cke5InputTags.instances[id];
 
             if (undefined === _instance) {
-                return $.error("[undefined instance] No cke5InputTags instance found.");
+                return $.error("[undefined instance] No inputTags instance found.");
             }
 
             return window.cke5InputTags.methods[options].apply(this, Array.prototype.slice.call(arguments, 1));
@@ -748,7 +891,7 @@
 
     $.fn.cke5InputTags.defaults = {
         tags: [],
-        keys: [13],
+        keys: [],
         minLength: 1,
         maxLength: 300,
         max: 60,

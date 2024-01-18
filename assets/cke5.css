@@ -519,3 +519,8 @@ dl + .cke5_clangtabs .nav.nav-tabs,
         background-color: #0a0e14 !important;
     }
 }
+
+
+.cke5_subpagenavigation .nav.rex-page-nav {
+    margin-bottom: 10px !important;
+}

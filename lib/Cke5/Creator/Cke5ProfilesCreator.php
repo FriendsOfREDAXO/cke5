@@ -9,6 +9,7 @@ namespace Cke5\Creator;
 
 use Cke5\Handler\Cke5DatabaseHandler;
 use Cke5\Utils\CKE5ISO6391;
+use rex;
 use rex_addon;
 use rex_addon_interface;
 use rex_file;
@@ -20,17 +21,126 @@ class Cke5ProfilesCreator
     /** @api string */
     const UPLOAD_URL = './index.php?cke5upload=1';
     const PROFILES_FILENAME = 'cke5profiles.js';
-
+    const HTML_ELEMENTS = [
+        'a',
+        'abbr',
+        'address',
+        'area',
+        'article',
+        'aside',
+        'audio',
+        'b',
+        'base',
+        'bdi',
+        'bdo',
+        'blockquote',
+        'body',
+        'br',
+        'button',
+        'canvas',
+        'caption',
+        'cite',
+        'code',
+        'col',
+        'colgroup',
+        'data',
+        'datalist',
+        'dd',
+        'del',
+        'details',
+        'dfn',
+        'dialog',
+        'div',
+        'dl',
+        'dt',
+        'em',
+        'embed',
+        'fieldset',
+        'figcaption',
+        'figure',
+        'footer',
+        'form',
+        'h1',
+        'h2',
+        'h3',
+        'h4',
+        'h5',
+        'h6',
+        'head',
+        'header',
+        'hgroup',
+        'hr',
+        'html',
+        'i',
+        'iframe',
+        'img',
+        'input',
+        'ins',
+        'kbd',
+        'label',
+        'legend',
+        'li',
+        'link',
+        'main',
+        'map',
+        'mark',
+        'meta',
+        'meter',
+        'nav',
+        'noscript',
+        'object',
+        'ol',
+        'optgroup',
+        'option',
+        'output',
+        'p',
+        'param',
+        'picture',
+        'pre',
+        'progress',
+        'q',
+        'rp',
+        'rt',
+        'ruby',
+        's',
+        'samp',
+        'script',
+        'section',
+        'select',
+        'small',
+        'source',
+        'span',
+        'strong',
+        'style',
+        'sub',
+        'summary',
+        'sup',
+        'svg',
+        'table',
+        'tbody',
+        'td',
+        'template',
+        'textarea',
+        'tfoot',
+        'th',
+        'thead',
+        'time',
+        'title',
+        'tr',
+        'track',
+        'u',
+        'ul',
+        'var',
+        'video',
+        'wbr'
+    ];
     const EDITOR_SETTINGS = [
         /* todo: specialCharacters not work because : https://github.com/ckeditor/ckeditor5/issues/6160 */
-        'cktypes' => ['heading', 'fontSize', 'mediaEmbed', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable', 'fontBackgroundColor', 'fontColor', 'codeBlock', 'bulletedList', 'numberedList', 'htmlEmbed'/*, 'emoji'*/, 'sourceEditing', 'textPartLanguage'/*, 'specialCharacters' */],
+        'cktypes' => ['heading', 'fontSize', 'mediaEmbed', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable', 'fontBackgroundColor', 'fontColor', 'codeBlock', 'bulletedList', 'numberedList', 'htmlEmbed'/*, 'emoji'*/, 'sourceEditing', 'textPartLanguage'/*, 'specialCharacters' */, 'style', 'insertTemplate'],
         'ckimgtypes' => ['rexImage', 'imageUpload'],
         'cklinktypes' => ['ytable', 'media', 'internal'],
         'cktabletypes' => ['tableProperties', 'tableCellProperties']
     ];
-
-//    const DEFAULT_LICENCE = 'dG9vZWFzZXRtcHNsaXVyb3JsbWlkYWRmZjQ0c2RhZHNhbGl1cm9ybG1pZG10b28yMzQyMzQyMzRzYXNkZmY0M2RtLU1qQTBOREEyTVRJPQ==';
-
     const DEFAULT_VALUES = [
         'html_support_allow' => '[
     {
@@ -41,9 +151,11 @@ class Cke5ProfilesCreator
     }
 ]',
     ];
-
+    const LICENSE_FIELDS = [
+        'toolbar' => ['insertTemplate', 'tableOfContents']
+    ];
     const ALLOWED_FIELDS = [
-        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight'/*, 'emoji'*/, 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll', 'specialCharacters', 'pastePlainText', 'htmlEmbed', 'sourceEditing', 'textPartLanguage', 'findAndReplace'],
+        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight'/*, 'emoji'*/, 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll', 'specialCharacters', 'pastePlainText', 'htmlEmbed', 'sourceEditing', 'textPartLanguage', 'findAndReplace', 'style', 'insertTemplate', 'tableOfContents'],
         'alignment' => ['left', 'right', 'center', 'justify'],
         'table_toolbar' => ['|', 'tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties', 'toggleTableCaption'],
         'heading' => ['paragraph', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
@@ -417,9 +529,56 @@ class Cke5ProfilesCreator
             $jsonProfile['removePlugins'][] = 'Alignment';
         }
 
-//        if (isset($profile['styleEditing']) && ($profile['styleEditing'] === '')) {
-//            $jsonProfile['removePlugins'][] = 'StyleEditing';
-//        }
+        if (isset($profile['document_outline']) && $profile['document_outline'] !== '') {
+            $jsonProfile['documentOutline']['container'] = "document.querySelector( '.document-outline-container' )";
+        } else {
+            $jsonProfile['removePlugins'][] = 'DocumentOutline';
+        }
+
+        if (!in_array('insertTable', $toolbar, true)) {
+            $jsonProfile['removePlugins'][] = 'TableOfContents';
+        }
+
+        if (isset($profile['styles']) && $profile['styles'] !== '') {
+            $styles = array_filter(explode('|', $profile['styles']));
+            $stylesTable = rex::getTable(Cke5DatabaseHandler::CKE5_STYLES);
+            $sql = rex_sql::factory();
+            $sqlResult = $sql->getArray("select * from $stylesTable where id in (".implode(', ', $styles).")");
+            if (count($sqlResult) > 0) {
+                foreach ($sqlResult as $result) {
+                    $classes = array_filter(explode(',', $result['classes']));
+                    $jsonProfile['style']['definitions'][] = [
+                        'name' => $result['name'],
+                        'element' => $result['element'],
+                        'classes' => $classes
+                    ];
+                }
+            }
+        }
+
+        if (isset($profile['templates']) && $profile['templates'] !== '') {
+            $templates = array_filter(explode('|', $profile['templates']));
+            $templateTable = rex::getTable(Cke5DatabaseHandler::CKE5_TEMPLATES);
+            $sql = rex_sql::factory();
+            $sqlResult = $sql->getArray("select * from $templateTable where id in (".implode(', ', $templates).")");
+            if (count($sqlResult) > 0) {
+                foreach ($sqlResult as $result) {
+                    if (!isset($result['data'])) continue;
+                    $data = $result['data'];
+                    $data = str_replace(["\r", "\n", "\t"], '', $data);
+                    $data = preg_replace('/>\s+</', '><', $data);
+                    $item = [
+                        'title' => $result['title'],
+                        'data' => $data,
+                    ];
+
+                    if (!empty($result['description'])) $item['description'] = $result['description'];
+                    if (!empty($result['icon'])) $item['icon'] = $result['icon'];
+
+                    $jsonProfile['template']['definitions'][] = $item;
+                }
+            }
+        }
 
         if (!in_array('sourceEditing', $toolbar, true)) {
             $jsonProfile['removePlugins'][] = 'SourceEditing';
@@ -431,6 +590,10 @@ class Cke5ProfilesCreator
 
         if (!in_array('style', $toolbar, true)) {
             $jsonProfile['removePlugins'][] = 'Style';
+        }
+
+        if (!in_array('insertTemplate', $toolbar, true)) {
+            $jsonProfile['removePlugins'][] = 'Template';
         }
 
         if (!in_array('sourceEditing', $toolbar, true) && !in_array('style', $toolbar, true)) {
@@ -648,8 +811,10 @@ class Cke5ProfilesCreator
         }
 
         // licence
-//        $jsonProfile['licenseKey'] = self::DEFAULT_LICENCE;
-//        $jsonProfile['ui']['poweredBy']['forceVisible'] = false;
+        if (!empty(self::getAddon()->getConfig('license_code'))) {
+            $jsonProfile['licenseKey'] = self::getAddon()->getConfig('license_code');
+            $jsonProfile['ui']['poweredBy']['forceVisible'] = false;
+        }
 
         return ['suboptions' => $jsonSubOption, 'profile' => $jsonProfile, 'sprog_mention' => $sprogDefinition];
     }
@@ -691,7 +856,7 @@ class Cke5ProfilesCreator
         $return = [];
         foreach ($keys as $key) {
             if (in_array($key, ['block', 'inline', 'side', 'alignLeft', 'alignCenter', 'alignRight', 'alignBlockRight', 'alignBlockLeft'], true)) {
-                $return[] = $key;
+                $return[] = ['name' => $key];
             }
         }
         return $return;

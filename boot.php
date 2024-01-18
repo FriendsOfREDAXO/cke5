@@ -10,6 +10,16 @@
 // register permissions
 if (rex::isBackend() && is_object(rex::getUser())) {
     rex_perm::register('cke5_addon[]');
+
+    // remove productivity components if no licence provided
+    $page = $this->getProperty('page');
+    if (empty($this->getConfig('license_code'))) {
+        unset($page['subpages']['profiles']['subpages']['templates']);
+        unset($page['subpages']['profiles']['subpages']['slashes']);
+    }
+    $this->setProperty('page', $page);
+
+
     // load assets
     \Cke5\Provider\Cke5AssetsProvider::provideCke5ProfileEditData();
     \Cke5\Provider\Cke5AssetsProvider::provideCke5PreviewData();
@@ -17,7 +27,6 @@ if (rex::isBackend() && is_object(rex::getUser())) {
     \Cke5\Provider\Cke5AssetsProvider::provideCke5CustomData();
 
     // Check REDAXO version
-//    if (rex_string::versionCompare(rex::getVersion(), '5.13.0-dev', '>=')) {
     if (rex_version::compare(rex::getVersion(), '5.13.0-dev', '>=')) {
         rex_view::addCssFile($this->getAssetsUrl('cke5_dark.css'));
         $user = rex::requireUser();
@@ -40,12 +49,10 @@ if (rex::isBackend() && is_object(rex::getUser())) {
         rex_view::setJsProperty('cke5theme', 'notheme');
     }
 
-    $addon = rex_addon::get('cke5');
-    if ($addon->getConfig('updated') === true) {
+    if ($this->getConfig('updated') === true) {
         \Cke5\Handler\Cke5ExtensionHandler::updateOrCreateProfiles();
-        $addon->setConfig('updated', false);
+        $this->setConfig('updated', false);
     }
-
 
     // upload image
     if (rex_request::request('cke5upload', 'bool') === true) {

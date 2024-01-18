@@ -12,7 +12,7 @@
  */
 
 let ckedit = '.cke5_profile_edit',
-    cktypes, ckimgtypes, cktabletypes, imageDragDrop, cklinktypes, DEBUG = false;
+    cktypes, ckimgtypes, cktabletypes, imageDragDrop, cklinktypes, CKEDIT_DEBUG = false;
 
 
 $(document).on('rex:ready', function (event, container) {
@@ -261,10 +261,10 @@ function cke5_addFromToFields(element) {
                 '</div>\n'),
             limit: 200,
             onElementAdd: function (el, plugin) {
-                if (DEBUG) console.log(plugin.elementCount);
+                if (CKEDIT_DEBUG) console.log(plugin.elementCount);
             },
             onElementRemove: function (el, plugin) {
-                if (DEBUG) console.log(plugin.elementCount);
+                if (CKEDIT_DEBUG) console.log(plugin.elementCount);
             }
         });
     }
@@ -286,10 +286,10 @@ function cke5_addIdNameFields(element) {
                 '</div>\n'),
             limit: 200,
             onElementAdd: function (el, plugin) {
-                if (DEBUG) console.log(plugin.elementCount);
+                if (CKEDIT_DEBUG) console.log(plugin.elementCount);
             },
             onElementRemove: function (el, plugin) {
-                if (DEBUG) console.log(plugin.elementCount);
+                if (CKEDIT_DEBUG) console.log(plugin.elementCount);
             }
         });
     }
@@ -342,7 +342,7 @@ function cke5_addColorFields(element) {
                 input_border.bootstrapToggle();
             },
             onElementRemove: function (el, plugin) {
-                if (DEBUG) console.log(plugin.elementCount);
+                if (CKEDIT_DEBUG) console.log(plugin.elementCount);
             }
         });
     }
@@ -368,10 +368,10 @@ function cke5_addyTableFields(element) {
                 '</div>\n'),
             limit: 20,
             onElementAdd: function (el, plugin) {
-                if (DEBUG) console.log(plugin.elementCount);
+                if (CKEDIT_DEBUG) console.log(plugin.elementCount);
             },
             onElementRemove: function (el, plugin) {
-                if (DEBUG) console.log(plugin.elementCount);
+                if (CKEDIT_DEBUG) console.log(plugin.elementCount);
             }
         });
     }
@@ -403,10 +403,10 @@ function cke5_addResizeOptionsFields(element) {
                 '</div>\n'),
             limit: 20,
             onElementAdd: function (el, plugin) {
-                if (DEBUG) console.log(plugin.elementCount);
+                if (CKEDIT_DEBUG) console.log(plugin.elementCount);
             },
             onElementRemove: function (el, plugin) {
-                if (DEBUG) console.log(plugin.elementCount);
+                if (CKEDIT_DEBUG) console.log(plugin.elementCount);
             }
         });
     }
@@ -427,14 +427,13 @@ function cke5_addFontFamiliesFields(element) {
                 // let input_font = el.find('input.family');
             },
             onElementRemove: function (el, plugin) {
-                if (DEBUG) console.log(plugin.elementCount);
+                if (CKEDIT_DEBUG) console.log(plugin.elementCount);
             }
         });
     }
 }
 
 function cke5_toolbar_create_tag(typename, tags) {
-
     cktypes.forEach(function (type) {
         if ($.inArray(type, tags) !== -1 && typename === 'toolbar') {
             switch (type) {
@@ -462,9 +461,9 @@ function cke5_toolbar_create_tag(typename, tags) {
     });
     cktabletypes.forEach(function (type) {
         if ($.inArray(type, tags) !== -1 && typename === 'table_toolbar') {
-            if (DEBUG) console.log([typename, type]);
-            if (DEBUG) console.log(tags);
-            if (DEBUG) console.log('#########');
+            if (CKEDIT_DEBUG) console.log([typename, type]);
+            if (CKEDIT_DEBUG) console.log(tags);
+            if (CKEDIT_DEBUG) console.log('#########');
             switch (type) {
                 case 'tableProperties':
                 case 'tableCellProperties':
@@ -499,7 +498,7 @@ function cke5_toolbar_destroy_tag(typename, tags) {
                     case 'htmlEmbed':
                     case 'mediaEmbed':
                         embedhide++;
-                        if (DEBUG) console.log(embedhide + ' - ' + type);
+                        if (CKEDIT_DEBUG) console.log(embedhide + ' - ' + type);
                         toggle_collapse(type, 'hide', (embedhide === 2));
                         break;
                     case 'fontSize':
@@ -575,10 +574,10 @@ function toggle_collapse(typename, direction, hideParent = false, single = false
     let element = $('#cke5' + typename + '-collapse');
     let parent = element.parent().parent();
     if (element.length) {
-        if (DEBUG) console.log([typename, direction, hideParent]);
+        if (CKEDIT_DEBUG) console.log([typename, direction, hideParent]);
 
         if (hideParent) {
-            if (DEBUG) console.log(parent);
+            if (CKEDIT_DEBUG) console.log(parent);
         }
 
         if (single === false && parent.length && parent.hasClass('collapse') && parent.attr('id') != 'cke5profileEditor-collapse') {
@@ -586,9 +585,9 @@ function toggle_collapse(typename, direction, hideParent = false, single = false
                 (!parent.hasClass('in') && direction === 'show') ||
                 (hideParent && direction === 'hide')
             ) {
-                if (DEBUG) console.log([typename, direction, hideParent]);
-                if (DEBUG) console.log(element);
-                if (DEBUG) console.log(parent);
+                if (CKEDIT_DEBUG) console.log([typename, direction, hideParent]);
+                if (CKEDIT_DEBUG) console.log(element);
+                if (CKEDIT_DEBUG) console.log(parent);
                 parent.collapse(direction);
             }
         }

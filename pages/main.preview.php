@@ -25,8 +25,8 @@ foreach ($profiles as $profile) {
 
 $content .= '</div>';
 
-$content = Cke5NavigationProvider::getSubNavigationHeader() .
-    Cke5NavigationProvider::getSubNavigation() .
+$content = Cke5NavigationProvider::getMainSubNavigationHeader() .
+    Cke5NavigationProvider::getSubNavigation('main') .
     $content;
 
 $fragment = new rex_fragment();

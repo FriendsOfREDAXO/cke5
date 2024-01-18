@@ -61,4 +61,16 @@ class Cke5FormHelper
             }
         }
     }
+
+    public static function potentialRemoveLicenseItems($items, $licenseItemsToRemove):array
+    {
+        if (empty(\rex_addon::get('cke5')->getConfig('license_code'))) {
+            foreach ($items as $key => $item) {
+                foreach ($licenseItemsToRemove as $lItem) {
+                    if ($item == $lItem) unset($items[$key]);
+                }
+            }
+        }
+        return $items;
+    }
 }

@@ -18,6 +18,9 @@ use rex_user;
 class Cke5DatabaseHandler
 {
     const CKE5_PROFILES = 'cke5_profiles';
+    const CKE5_STYLES = 'cke5_styles';
+    const CKE5_TEMPLATES = 'cke5_templates';
+    const CKE5_SLASHES = 'cke5_slashes';
 
     /**
      * @param string $name
