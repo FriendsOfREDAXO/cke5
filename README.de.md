@@ -316,7 +316,7 @@ Use the following keystrokes for more efficient navigation in the CKEditor 5 use
                 },
                 "title": "Überschrift 1 sehr groß",
                 "class": "ck-heading_heading1"
-            },
+            }
 
         ]
     }
