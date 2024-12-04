@@ -35,7 +35,7 @@ class Cke5AssetsProvider
         foreach ($files as $file) {
             if (file_exists(rex_path::base($file))) {
                 try {
-                    rex_view::addCssFile(rex_url::assets($file));
+                    rex_view::addCssFile(rex_url::base($file));
                 } catch (rex_exception $e) {
                     rex_logger::logException($e);
                 }
