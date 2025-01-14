@@ -223,3 +223,5 @@ cke5_css_definition_description = Eigenes CSS hinzufügen
 cke5_css_definition_area = CSS-Code
 cke5_css_path = CSS-Pfad
 cke5_css_path_placeholder = URL zur CSS-Datei
+cke5_classes_area = CSS-Bereichsklassen
+cke5_classes_area_empty_error = Bitte geben Sie mindestens eine CSS-Klasse an
