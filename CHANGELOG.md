@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 6.1.3
+
+* fix Link issue https://github.com/FriendsOfREDAXO/cke5/issues/189
+
 ## Version 6.1.2
 
 * Add Style Plugin
