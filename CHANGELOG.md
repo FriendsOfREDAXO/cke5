@@ -1,8 +1,12 @@
 # Changelog
 
-## Version 6.1.3
+## Version 6.2.1
 
 * fix Link issue https://github.com/FriendsOfREDAXO/cke5/issues/189
+
+## Version 6.2.0
+
+Intodrucing Style-Manager
 
 ## Version 6.1.2
 
