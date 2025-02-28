@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 6.2.2
+
+* fixes: https://github.com/FriendsOfREDAXO/cke5/issues/197, reported by: [fietstouring](https://github.com/fietstouring)
+* fixes also: https://github.com/FriendsOfREDAXO/cke5/issues/194, reported by: [olien](https://github.com/olien)
+
 ## Version 6.2.1
 
 * fix Link issue https://github.com/FriendsOfREDAXO/cke5/issues/189
