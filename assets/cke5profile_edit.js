@@ -222,11 +222,11 @@ function cke5_init_edit(element) {
                     _tags[i] = $(this).attr('data-tag');
                 });
 
-                tags = $.map(_tags, function (val) {
-                    return val;
-                }).join(",");
-                _inputtags.$element.attr('value', tags);
-                _inputtags.tags = _inputtags.$element.val().split(',');
+               tags = $.map(_tags, function (val) {
+               return val;
+               }).join(",");
+               _inputtags.$element.val(tags); // Changed from .attr('value', tags)
+               _inputtags.tags = _inputtags.$element.val().split(',');
             }
         });
     });
