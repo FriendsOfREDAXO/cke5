@@ -864,16 +864,17 @@ class Cke5ProfilesCreator
     }
 
     /**
-     * @param string $string
+     * @param string|null $string $string
      * @return array<int,string>
      * @author Joachim Doerr
      */
-    private static function toArray(string $string): array
+    private static function toArray(string $string = null): array
     {
+        if (!is_string($string)) return [];
         return array_filter(explode(',', $string));
     }
 
-    /**
+    /**s
      * @param array<string> $keys
      * @return array<int,array<string,string>>
      * @author Joachim Doerr

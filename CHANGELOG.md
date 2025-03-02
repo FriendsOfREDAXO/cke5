@@ -4,6 +4,7 @@
 
 * update cke5 vendor to v44.2.1
 * emoji, bookmarks, showBlocks as elements for the toolbar
+* fixes: https://github.com/FriendsOfREDAXO/cke5/issues/199, reported by: [alxndr-w](https://github.com/alxndr-w)  
 
 ## Version 6.2.2
 
