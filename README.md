@@ -4,17 +4,19 @@ Integrates the [CKEditor5](https://ckeditor.com) into REDAXO CMS.
 
 ![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/cke5.png)
 
-## Features
+## Features, what's it got?
 
-- WYSIWYG-Editor
-- Profile configurator with drag and drop support, profiles can be simply clicked together
-- Own fonts can be integrated and managed
-- Image upload category per profile adjustable
-- Media manager type adjustable per profile
-- Extra options allow you to customize the editor
-- The expert mode allows you to develop profiles in source code
+- A fancy WYSIWYG-Editor
+- Profile configurator with Drag&Drop. Easy to "click together" your profiles
+- Custom fonts? No problem, you can integrate and manage them
+- Custom styles can be maintained too
+- Image upload category can be set per profile
+- Media manager type settable per profile
+- Additional options to customize the editor to your liking
+- Sprog replacements via the mentions plugin
+- The expert mode allows you to develop profiles freely in the source code
 - Placeholders for all backend languages
-- Dark-mode support for REDAXO >= 5.13
+- Dark mode support for REDAXO >= 5.13
 
 **Custom REDAXO Link-Widget**
 
@@ -22,113 +24,120 @@ Integrates the [CKEditor5](https://ckeditor.com) into REDAXO CMS.
 
 - Linkmap-Support
 - YForm-Datasets
-- Tel: and Mailto: links 
-- Medialinks
-- Custom link decorators possible
-
+- Tel: and Mailto: links
+- Media links
+- Own link decorators
 
 **Editor Features**
 
-- All free vendor plugins integrated
-- only supported formats will be pasted
-- plaintext pasting
-- Transformations allow converting of e.g. shortcuts to speacial chars from (c) to ©
-- Special char selector
-- Image upload into the media pool via drag & drop into the text field
+- All free provider plugins are integrated
+- Only supported formats are inserted
+- Insert plain text
+- Transformations: e.g. converting (c) to ©
+- Selection for special characters
+- Image upload in the media pool via drag & drop directly into the text field
 
-
-## Demo
+## A little demo
 
 ![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/ckeditor5_demo.gif)
 
-## Profile Editor
+## The Profile Editor
 
-Configure your editor as you need it.
+Configure your editor just the way you need it.
 
 ![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/ckeditor_profile_editor_demo.gif)
 
-## Code Examples
+## Code examples to get you started
 
-### Use in general:
+### General Usage:
 
 ### Input Code
 
-```php 
+```php
  <textarea class="form-control cke5-editor" data-profile="default" data-lang="<?php echo \Cke5\Utils\Cke5Lang::getUserLang(); ?>" name="REX_INPUT_VALUE[1]">REX_VALUE[1]</textarea>
 ```
+
 ### Output Code
 
 ```html
 REX_VALUE[id="1" output="html"]
 ```
 
-Further data attributes can be used to control the minimum and maximum height as well as the language:
+You can control the minimum and maximum height as well as the language via further data attributes:
 
 - data-max-height
 - data-min-height
 - data-lang
 
-### Use in YForm
+### Usage in YForm
 
-- individual attribute field: ``` {"class":"cke5-editor","data-profile":"default","data-lang":"en"} ```
-- further attributes possible separated by commas
+- In the individual attribute field: ``` {"class":"cke5-editor","data-profile":"default","data-lang":"en"} ```
+- Further attributes possible, separated by commas
 
-### Use in MForm
+### Usage in MForm
 
 ```php
 $mform = new MForm();
-$mform->addTextAreaField(1, 
+$mform->addTextAreaField(1,
         array(
         'label'=>'Text',
-        'class'=>'cke5-editor', 
-        'data-lang'=>\Cke5\Utils\Cke5Lang::getUserLang(), 
+        'class'=>'cke5-editor',
+        'data-lang'=>\Cke5\Utils\Cke5Lang::getUserLang(),
         'data-profile'=>'default')
         );
 echo $mform->show();
 ```
 
-### Use in MBlock
+### Usage with MBlock
 
 ```php
 $id = 1;
 $mform = new MForm();
 $mform->addFieldset('Accordion');
-$mform->addTextField("$id.0.titel", array('label'=>'Titel'));
-$mform->addTextAreaField("$id.0.text", 
+$mform->addTextField("$id.0.titel", array('label'=>'Title'));
+$mform->addTextAreaField("$id.0.text",
         array(
         'label'=>'Text',
-        'class'=>'cke5-editor', 
-        'data-lang'=>\Cke5\Utils\Cke5Lang::getUserLang(), 
+        'class'=>'cke5-editor',
+        'data-lang'=>\Cke5\Utils\Cke5Lang::getUserLang(),
         'data-profile'=>'default')
         );
 echo MBlock::show($id, $mform->show());
 ```
 
-## Adding own fonts
+## Embedding Custom Fonts
 
 ![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/fonts.png)
 
-To make the specified fonts visible in the backend, they must be loaded as assets in the backend. 
-This can be done, for example, with the boot.php of Project AddOn or backend.css of Theme AddOn. 
-The fonts should be defined in the usual CSS notation in the *FontFamily* section of the Profile Editor. 
+To make the specified fonts visible in the backend, they must be loaded as assets in the backend.
+This can be done, for example, in the `boot.php` of the project AddOn or in the `backend.css` of the theme AddOn.
+The fonts are stored in the *FontFamily* section of the profile editor, in the usual CSS notation.
 
-## Customizing
+## Sprog Replacements – Quick & Dirty
 
-The display of the editor can be adapted to the frontend output via CSS. For this a CSS file is available in the folder `assets/addons/cke5_custom_data`
+Under `Mention & Sprog Replacements` > `Sprog Replacements` > `Replacements` you can store Sprog placeholders with title or description.
+Syntax: `{{key}}`. The title goes in the next field.
+Just type '{{' in the editor to get a list of placeholders.
 
-## CSS Content-Styles 
+## Customization – Make it your Editor
 
-CKE5 uses some own styles. 
+The appearance of the editor can be adapted to the frontend output via CSS. For this purpose, there is a CSS file in the `assets/addons/cke5_custom_data` folder.
 
-[Link to Styleguide](https://ckeditor.com/docs/ckeditor5/latest/builds/guides/integration/content-styles.html)
+## CSS Content-Styles
 
-The Styles are prefixed with `.ck-content`. You should add this class to your output element and load the included `cke5_content_styles.css` form the assets folder.  
+[Styleguide here](https://ckeditor.com/docs/ckeditor5/latest/builds/guides/integration/content-styles.html)
 
-After installation of this AddOn you can use /assets/addons/cke5/cke5_content_styles.css or better make your own. 
+The styles are prefixed with `.ck-content`. The class should be added to the output element and the included `cke5_content_styles.css` from the asset folder loaded.
 
-## Keyboard support
+After installing this AddOn, the CSS file /assets/addons/cke5/cke5_content_styles.css is immediately ready for use. But creating your own file might be the better choice.
 
-Below is a list of the most important keystrokes supported by CKEditor 5 and its features:
+## CKE in the Frontend
+
+[Check it out: REDAXO Tricks](https://friendsofredaxo.github.io/tricks/snippets/ckeditor_im_frontend)
+
+## Keyboard Shortcuts
+
+Here are the most important keyboard shortcuts for CKEditor 5 and its features:
 
 <table>
 	<thead>
@@ -229,7 +238,7 @@ Below is a list of the most important keystrokes supported by CKEditor 5 and its
 
 #### User interface and navigation
 
-Use the following keystrokes for more efficient navigation in the CKEditor 5 user interface:
+Use these keyboard shortcuts for more efficient navigation through the CKEditor 5 interface:
 
 <table>
 	<thead>
@@ -268,10 +277,6 @@ Use the following keystrokes for more efficient navigation in the CKEditor 5 use
 	</tbody>
 </table>
 
-
-
-
-
 ## For Developers
 
 ### Example Extra Options
@@ -290,7 +295,6 @@ Use the following keystrokes for more efficient navigation in the CKEditor 5 use
                 "view": {
                     "name": "span",
                     "classes": "uk-text-large"
-                    
                 },
                 "title": "Fließtext groß",
                 "class": "ck-heading_paragraph"
@@ -299,7 +303,7 @@ Use the following keystrokes for more efficient navigation in the CKEditor 5 use
                 "model": "heading1",
                 "view": {
                     "name": "h1",
-                    "classes": "uk-animation-fade uk-heading-large"   
+                    "classes": "uk-animation-fade uk-heading-large"
                 },
                 "title": "Überschrift 1 sehr groß",
                 "class": "ck-heading_heading1"
@@ -310,9 +314,8 @@ Use the following keystrokes for more efficient navigation in the CKEditor 5 use
 }
 ```
 
-### Example for a custom link decorator
-
-*Attention, keys should be lowercase*
+### Example for custom Link-Decorators
+*Important: Keys must be lowercase*
 
 ```js
 [{
@@ -330,45 +333,57 @@ Use the following keystrokes for more efficient navigation in the CKEditor 5 use
 [{
     "arrowclass": {
         "mode": "manual",
-        "label": "Link mit CSS Klasse",
+        "label": "Link with CSS Class",
         "defaultValue": "true",
-         "attributes": {
+        "classes": "arrow"
+    }
+}]
+```
+
+Or multiple:
+```js
+[{
+    "openInNewTab": {
+        "mode": "manual",
+        "label": "Open in a new tab",
+        "defaultValue": true,
+        "attributes": {
+            "target": "_blank",
+            "rel": "noopener noreferrer"
+        }
+    }
+},
+{
+    "isGallery": {
+        "mode": "manual",
+        "label": "Gallery link",
+        "attributes": {
             "class": "button light",
         }
     }
 }]
-
 ```
 
-Multiple link decorators
+### Mentions
 
-```js
-[
-    {
-        "buttonlink": {
-            "mode": "manual",
-            "label": "Als Button darstellen",
-            "attributes": {
-                "class": "uk-button uk-button-primary uk-margin-small-bottom"
-            }
-        },
-        "buttonlink_style": {
-            "mode": "manual",
-            "label": "Link mobil volle Breite",
-            "attributes": {
-                "class": "uk-width-1-1@s uk-width-auto@m"
-            }
-        }
-    }
-]
-``` 
+The AddOn provides the [Mentions plugin](https://ckeditor.com/docs/ckeditor5/latest/features/mentions.html). You can configure this freely.
+Here's an example:
 
-
+```json
+[{
+    "marker": "@",
+    "feed": [
+        "@test",
+        "@test2"
+    ],
+    "minimumCharacters": "0"
+}]
+```
 
 ### YForm links
 
-To replace the generated urls like `rex_news://1`, the following script must be added to the `boot.php` of the `project` AddOn.
-This would require the code for the urls to be modified. 
+To replace generated URLs like `rex_news://1`, add the following script to the `boot.php` of the `project` AddOn.
+The code for the URLs must be adjusted.
 
 ```php
 rex_extension::register('OUTPUT_FILTER', function(\rex_extension_point $ep) {
@@ -380,14 +395,14 @@ rex_extension::register('OUTPUT_FILTER', function(\rex_extension_point $ep) {
             $url = '';
             switch ($matches[1]) {
                 case 'news':
-                    // Example, if the Urls are generated via Url-AddOn  
+                    // Example if the URLs are generated via Url-AddOn
                     $id = $matches[3];
                     if ($id) {
-                       return rex_getUrl('', '', ['news' => $id]); 
+                       return rex_getUrl('', '', ['news' => $id]);
                     }
                     break;
                 case 'person':
-                    // ein anderes Beispiel 
+                    // Another Example
                     $url = '/index.php?person='.$matches[3];
                     break;
             }
@@ -399,9 +414,10 @@ rex_extension::register('OUTPUT_FILTER', function(\rex_extension_point $ep) {
 ```
 
 ### Profile API
-By using the API: `Cke5\Creator\Cke5ProfilesApi::addProfile`, it is possible to install own profiles beside of the profile editor. 
 
-Example: 
+Via the API you can create your own profiles apart from the profile editor: `Cke5\Creator\Cke5ProfilesApi::addProfile`
+
+Example:
 
 ```php
     $create = \Cke5\Creator\Cke5ProfilesApi::addProfile(
@@ -413,7 +429,7 @@ Example:
            "link": {"rexlink": ["internal", "media"]},
            "image": {
              "toolbar": ["imageTextAlternative", "|", "imageStyle:full", "imageStyle:alignLeft", "imageStyle:alignRight", "imageStyle:alignCenter"],
-             "styles": ["full", "alignLeft", "alignRight", "alignCenter"]
+             "styles": ["block", "alignLeft", "alignRight", "alignCenter"]
            },
            "table": {"toolbar": ["tableColumn", "tableRow", "mergeTableCells", "tableProperties", "tableCellProperties"]},
            "rexImage": {"media_path": "\/media\/"},
@@ -433,9 +449,25 @@ Example:
     echo (is_string($create)) ? $create : 'successful profile created';
 ```
 
-## Disable Autoformat
+### HTML-Support
 
-You can disable the Autoformat-Feature (markdown code replacement) by adding the following option to the extra option section: 
+Source-Editing Plugin has an update.
+After an update from a very old version, the basic setting for the plugin may be missing in the HtmlSupport section.
+
+```JSON
+[
+    {
+        "name": "regex(/.*/)",
+        "attributes": true,
+        "classes": true,
+        "styles": true
+    }
+]
+```
+
+### Disable Autoformat
+
+You can disable the autoformat feature (markdown code replacement) by adding this option to the Extra Options section:
 
 ```json
 {"removePlugins": ["Autoformat"]}
@@ -443,28 +475,26 @@ You can disable the Autoformat-Feature (markdown code replacement) by adding the
 
 ## Bugtracker
 
-If you have found a error or maybe you have an idea, You can create a [Issue](https://github.com/FriendsOfREDAXO/cke5/issues). 
-Before you create a new issue, please search if there already exists an issue with your request, and read the [Issue Guidelines (englisch)](https://github.com/necolas/issue-guidelines) from [Nicolas Gallagher](https://github.com/necolas/).
-
+Found an error or got an idea? Create an [Issue](https://github.com/FriendsOfREDAXO/cke5/issues).
+Before creating a new issue, please search if a similar one already exists. And read the [Issue Guidelines (english)](https://github.com/necolas/issue-guidelines) from [Nicolas Gallagher](https://github.com/necolas/).
 
 ## Changelog
 
-see [CHANGELOG.md](https://github.com/FriendsOfREDAXO/cke5/blob/master/CHANGELOG.md)
+See [CHANGELOG.md](https://github.com/FriendsOfREDAXO/cke5/blob/master/CHANGELOG.md).
 
 ## Licenses
 
 AddOn:[MIT LICENSE](https://github.com/FriendsOfREDAXO/cke5/blob/master/LICENSE)
 CKEDITOR [GPL LICENSE](https://github.com/ckeditor/ckeditor5/blob/master/LICENSE.md)
 
-
-## Author
+## Authors
 
 **Friends Of REDAXO**
 
 * http://www.redaxo.org
 * https://github.com/FriendsOfREDAXO
 
-**Projekt-Lead**
+**Project Lead**
 
 [Joachim Dörr](https://github.com/joachimdoerr)
 
