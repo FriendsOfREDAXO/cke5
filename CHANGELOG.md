@@ -3,7 +3,7 @@
 ## Version 6.3
 
 * update cke5 vendor to v44.2.1
-* emoji, bookmarks, menuBar and showBlocks as option in profile edit area
+* emoji, bookmarks, showBlocks as elements for the toolbar
 
 ## Version 6.2.2
 

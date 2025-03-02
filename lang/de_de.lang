@@ -225,6 +225,3 @@ cke5_css_path = CSS-Pfad
 cke5_css_path_placeholder = URL zur CSS-Datei
 cke5_classes_area = CSS-Bereichsklassen
 cke5_classes_area_empty_error = Bitte geben Sie mindestens eine CSS-Klasse an, bestätigen Sie mit Enter
-
-cke5_menu_bar = MenuBar
-cke5_menu_bar_description = MenuBar anzeigen (Datei, Bearbeiten, Ansicht, Format, etc.)

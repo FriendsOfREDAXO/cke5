@@ -193,14 +193,6 @@ if ($func === '') {
             $field->addOption(rex_i18n::msg('cke5_group_when_full_description'), 'group_when_full');
             if ($default_value) $field->setValue('group_when_full');
 
-            // menu bar
-            $field = $form->addCheckboxField('menu_bar');
-            $field->setAttribute('id', 'cke5menu-bar-input');
-            $field->setAttribute('data-toggle', 'toggle');
-            $field->setLabel(rex_i18n::msg('cke5_menu_bar'));
-            $field->addOption(rex_i18n::msg('cke5_menu_bar_description'), 'menu_bar');
-            if ($default_value) $field->setValue('menu_bar');
-
             // text part lang
             $form->addRawField('<div class="collapse" id="cke5textPartLanguage-collapse">');
                 $field = $form->addSelectField('text_part_language');

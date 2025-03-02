@@ -436,11 +436,8 @@ class Cke5ProfilesCreator
             $jsonProfile['image']['resizeOptions'] = $resizeOptions;
         }
 
-        if (isset($profile['menu_bar']) && $profile['menu_bar'] !== '') {
-            $jsonProfile['menuBar'] = ['isVisible' => true];
-        } else {
-            $jsonProfile['menuBar'] = ['isVisible' => false];
-        }
+        // disable menubar ever
+        $jsonProfile['menuBar'] = ['isVisible' => false];
 
         if (isset($profile['image_toolbar']) && $profile['image_toolbar'] !== '') {
             $imageKeys = self::toArray($profile['image_toolbar']);
