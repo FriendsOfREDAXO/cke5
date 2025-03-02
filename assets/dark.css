@@ -110,6 +110,9 @@ background: var(--ck-color-base-background);
 border-radius: 0;
 border-color: #999;
 }
+.ck-bookmark.ck-widget .ck-bookmark__icon .ck-icon__fill {
+fill: #333;
+}
 
 .ck-content .image > figcaption, .ck-content blockquote {
     background-color: var( --ck-custom-background);
