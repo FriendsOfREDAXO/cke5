@@ -155,7 +155,7 @@ class Cke5ProfilesCreator
         'toolbar' => ['insertTemplate', 'tableOfContents']
     ];
     const ALLOWED_FIELDS = [
-        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight'/*, 'emoji'*/, 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll', 'specialCharacters', 'pastePlainText', 'htmlEmbed', 'sourceEditing', 'textPartLanguage', 'findAndReplace', 'style', 'insertTemplate', 'tableOfContents'],
+        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll', 'specialCharacters', 'pastePlainText', 'htmlEmbed', 'sourceEditing', 'textPartLanguage', 'findAndReplace', 'style', /*'insertTemplate', 'tableOfContents'*/ 'showBlocks', 'bookmark'],
         'alignment' => ['left', 'right', 'center', 'justify'],
         'table_toolbar' => ['|', 'tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties', 'toggleTableCaption'],
         'heading' => ['paragraph', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
@@ -434,6 +434,12 @@ class Cke5ProfilesCreator
                 }
             }
             $jsonProfile['image']['resizeOptions'] = $resizeOptions;
+        }
+
+        if (isset($profile['menu_bar']) && $profile['menu_bar'] !== '') {
+            $jsonProfile['menuBar'] = ['isVisible' => true];
+        } else {
+            $jsonProfile['menuBar'] = ['isVisible' => false];
         }
 
         if (isset($profile['image_toolbar']) && $profile['image_toolbar'] !== '') {
@@ -811,10 +817,8 @@ class Cke5ProfilesCreator
         }
 
         // licence
-        if (!empty(self::getAddon()->getConfig('license_code'))) {
-            $jsonProfile['licenseKey'] = self::getAddon()->getConfig('license_code');
-            $jsonProfile['ui']['poweredBy']['forceVisible'] = false;
-        }
+        $jsonProfile['licenseKey'] = 'GPL';
+        $jsonProfile['ui']['poweredBy']['forceVisible'] = false;
 
         return ['suboptions' => $jsonSubOption, 'profile' => $jsonProfile, 'sprog_mention' => $sprogDefinition];
     }

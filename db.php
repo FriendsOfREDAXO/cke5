@@ -10,6 +10,7 @@ $sql = rex_sql_table::get(rex::getTable('cke5_profiles'));
 $sql->ensurePrimaryIdColumn()
     ->ensureColumn(new rex_sql_column('name', 'varchar(40)', true))
     ->ensureColumn(new rex_sql_column('description', 'varchar(255)', true))
+    ->ensureColumn(new rex_sql_column('menu_bar', 'varchar(255)', true))
     ->ensureColumn(new rex_sql_column('toolbar', 'text', true))
     ->ensureColumn(new rex_sql_column('expert_definition', 'text', true))
     ->ensureColumn(new rex_sql_column('expert_suboption', 'text', true))

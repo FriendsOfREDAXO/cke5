@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 6.3
+
+* update cke5 vendor to v44.2.1
+* emoji, bookmarks, menuBar and showBlocks as option in profile edit area
+
 ## Version 6.2.2
 
 * fixes: https://github.com/FriendsOfREDAXO/cke5/issues/197, reported by: [fietstouring](https://github.com/fietstouring)
