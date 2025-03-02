@@ -35,8 +35,8 @@ page:
                     title: 'translate:profiles_export'
                 import:
                     title: 'translate:profiles_import'
-        config:
-            title: 'translate:config'
+#        config:
+#            title: 'translate:config'
         help:
              title: 'translate:help'
              subPath: README.md
