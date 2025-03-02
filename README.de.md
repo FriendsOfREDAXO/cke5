@@ -1,21 +1,22 @@
-# CKEditor5 for REDAXO CMS
+# CKEditor5 für REDAXO CMS
 
-Intergriert den [CKEditor5](https://ckeditor.com) in REDAXO CMS.
+Hier kommt der [CKEditor5](https://ckeditor.com) für REDAXO CMS.
 
 ![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/cke5.png)
 
-## Features
+## Was das AddOn so drauf hat
 
-- WYSIWYG-Editor
-- Profilkonfigurator mit Drag&Drop-Unterstützung, Profile können einfach zusammengeklickt werden
-- Eigene Schriften können integriert und verwaltet werden
+- Ein fetter WYSIWYG-Editor
+- Profilkonfigurator mit Drag&Drop. Profile lassen sich easy zusammenklicken
+- Eigene Schriften? Kein Problem, die kann man integrieren und verwalten
+- Auch eigene Styles lassen sich pflegen
 - Bild-Upload-Kategorie pro Profil einstellbar
 - Medienmanager-Typ je Profil einstellbar
-- Zusätzliche Optionen erlauben es den Editor anzupassen
-- Sprog-Ersetzungen per mentions Plugin
-- Der Expertenmodus erlaubt es Profile frei im Quellcode zu entwickeln
+- Zusätzliche Optionen, um den Editor nach deinem Gusto anzupassen
+- Sprog-Ersetzungen per Mentions-Plugin
+- Der Expertenmodus: Entwickle Profile frei im Quellcode
 - Platzhalter für alle Backend-Sprachen
-- Dark-mode-support für REDAXO >= 5.13
+- Dark-Mode-Support für REDAXO >= 5.13
 
 **Custom REDAXO Link-Widget**
 
@@ -23,47 +24,46 @@ Intergriert den [CKEditor5](https://ckeditor.com) in REDAXO CMS.
 
 - Linkmap-Support
 - YForm-Datasets
-- Tel: and Mailto: links 
+- Tel: und Mailto: Links
 - Medienlinks
-- Eigene  Link-Decorators
+- Eigene Link-Decorators
 
+**Editor-Features**
 
-**Editor Features**
-
-- Alle kostenlosen Anbieter-Plugins integriert
-- nur unterstützte Formate werden eingefügt
+- Alle kostenlosen Anbieter-Plugins sind dabei
+- Nur unterstützte Formate werden eingefügt
 - Einfügen von Klartext
-- Transformationen erlauben die Umwandlung von z.B. Abkürzungen zu Sonderzeichen von (c) in ©
-- Selektor für Sonderzeichen
-- Bild-Upload in den Medienpool per Drag & Drop in das Textfeld
+- Transformationen: z.B. Umwandlung von (c) in ©
+- Auswahl für Sonderzeichen
+- Bild-Upload in den Medienpool per Drag & Drop direkt ins Textfeld
 
-
-## Demo
+## Eine kleine Demo
 
 ![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/ckeditor5_demo.gif)
 
-## Profil Editor
+## Der Profil-Editor
 
-Konfiguriere dir deinen Editor, so wie du ihn brauchst.
+Konfiguriere deinen Editor so, wie du ihn brauchst.
 
 ![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/ckeditor_profile_editor_demo.gif)
 
-## Codebeispiele
+## Code-Beispiele, damit's auch läuft
 
-### Verwendung allgemein:
+### Allgemeine Verwendung:
 
-### Eingabe Code
+### Eingabe-Code
 
-```php 
+```php
  <textarea class="form-control cke5-editor" data-profile="default" data-lang="<?php echo \Cke5\Utils\Cke5Lang::getUserLang(); ?>" name="REX_INPUT_VALUE[1]">REX_VALUE[1]</textarea>
 ```
-### Ausgabe Code
+
+### Ausgabe-Code
 
 ```html
 REX_VALUE[id="1" output="html"]
 ```
 
-Über weitere Data-Attribute können die Minimal- und Maximalhöhe sowie die Sprache gesteuert werden: 
+Über weitere Data-Attribute kannst du die Minimal- und Maximalhöhe sowie die Sprache steuern:
 
 - data-max-height
 - data-min-height
@@ -72,34 +72,34 @@ REX_VALUE[id="1" output="html"]
 ### Verwendung in YForm
 
 - Im individuellen Attribute-Feld: ``` {"class":"cke5-editor","data-profile":"default","data-lang":"de"} ```
-- Weitere Attribute kommagetrennt möglich
+- Weitere Attribute lassen sich durch Kommas trennen
 
 ### Verwendung in MForm
 
 ```php
 $mform = new MForm();
-$mform->addTextAreaField(1, 
+$mform->addTextAreaField(1,
         array(
         'label'=>'Text',
-        'class'=>'cke5-editor', 
-        'data-lang'=>\Cke5\Utils\Cke5Lang::getUserLang(), 
+        'class'=>'cke5-editor',
+        'data-lang'=>\Cke5\Utils\Cke5Lang::getUserLang(),
         'data-profile'=>'default')
         );
 echo $mform->show();
 ```
 
-### Verwendunng mit MBlock
+### Verwendung mit MBlock
 
 ```php
 $id = 1;
 $mform = new MForm();
 $mform->addFieldset('Accordion');
 $mform->addTextField("$id.0.titel", array('label'=>'Titel'));
-$mform->addTextAreaField("$id.0.text", 
+$mform->addTextAreaField("$id.0.text",
         array(
         'label'=>'Text',
-        'class'=>'cke5-editor', 
-        'data-lang'=>\Cke5\Utils\Cke5Lang::getUserLang(), 
+        'class'=>'cke5-editor',
+        'data-lang'=>\Cke5\Utils\Cke5Lang::getUserLang(),
         'data-profile'=>'default')
         );
 echo MBlock::show($id, $mform->show());
@@ -109,185 +109,177 @@ echo MBlock::show($id, $mform->show());
 
 ![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/fonts.png)
 
-Damit die angegebenen Fonts im Backend sichtbar werden, müssen diese als Assets im Backend geladen werden. 
-Dies kann z.B. in der boot.php Projekt-AddOn oder im backend.css des Theme-AddOn erfolgen. 
-Die Schriften werden in gewohnter CSS-Schreibweise im Abschnitt *FontFamily* des Profile-Editors hinterlegt. 
+Damit die Schriften im Backend angezeigt werden, musst du sie als Assets laden.
+Das kannst du z.B. in der `boot.php` des Projekt-AddOns oder in der `backend.css` des Theme-AddOns machen.
+Die Schriften kommen in den Abschnitt *FontFamily* des Profil-Editors, in der gewohnten CSS-Schreibweise.
 
-## Sprog-Ersetzungen 
+## Sprog-Ersetzungen – kurz und knackig
 
-Unter `Mention & Sprog Ersetzungen` > `Sprog Ersetzungen` > `Ersetzungen` können Sprog-Platzhalter mit Titel oder Beschreibung hinterlegt werden. 
-Schreibweise `{{key}}` und im nächsten Feld der Titel. 
-Im Editor gibt man nur '{{' ein um eine Liste der Platzhalter zu erhalten. 
+Unter `Mention & Sprog Ersetzungen` > `Sprog Ersetzungen` > `Ersetzungen` kannst du Sprog-Platzhalter mit Titel oder Beschreibung hinterlegen.
+Schreibweise: `{{key}}`. Im nächsten Feld kommt der Titel.
+Im Editor einfach '{{' eintippen, dann bekommst du eine Liste der Platzhalter.
 
-## Individualisieren 
+## Individualisierung – mach's zu deinem Editor
 
-Die Darstellung des Editors kann per CSS an die Fronteid-Ausgabe angepasst werden. Hierfür steht Im Ordner `assets/addons/cke5_custom_data` eine CSS-Datei bereit
+Die Optik des Editors kann per CSS an die Frontend-Ausgabe angepasst werden. Dafür gibt's im Ordner `assets/addons/cke5_custom_data` eine CSS-Datei.
 
-## CSS Content-Styles CSS
+## CSS Content-Styles
 
-[Link zum Styleguide](https://ckeditor.com/docs/ckeditor5/latest/builds/guides/integration/content-styles.html)
+[Styleguide hier](https://ckeditor.com/docs/ckeditor5/latest/builds/guides/integration/content-styles.html)
 
-Den Styles ist das Präfix `.ck-content` vorangestellt. Die Klasse sollte dem Ausgabeelement hinzugefügt werden und die mitgelieferte `cke5_content_styles.css` aus dem Asset-Ordner geladen werden.  
+Den Styles wird das Präfix `.ck-content` vorangestellt. Die Klasse sollte dem Ausgabeelement hinzugefügt werden und die mitgelieferte `cke5_content_styles.css` aus dem Asset-Ordner geladen werden.
 
-Nach der Installation dieses AddOns kann die CSS-Datei /assets/addons/cke5/cke5_content_styles.css verwendet werden. Besser aber ist, sich eine eigene zu erstellen.  
+Nach der Installation dieses AddOns ist die CSS-Datei /assets/addons/cke5/cke5_content_styles.css sofort einsatzbereit. Aber eine eigene Datei zu erstellen, ist vielleicht die bessere Wahl.
 
+## CKE im Frontend
 
-## CKE im Frontend verwenden
+[Schau mal hier: REDAXO Tricks](https://friendsofredaxo.github.io/tricks/snippets/ckeditor_im_frontend)
 
-[siehe: REDAXO Tricks](https://friendsofredaxo.github.io/tricks/snippets/ckeditor_im_frontend)
+## Tastenkürzel
 
-
-
-## Keyboard support
-
-Below is a list of the most important keystrokes supported by CKEditor 5 and its features:
+Hier die wichtigsten Tastenkürzel für CKEditor 5 und seine Features:
 
 <table>
 	<thead>
 		<tr>
-			<th>Action</th>
+			<th>Aktion</th>
 			<th>PC</th>
 			<th>Mac</th>
 		</tr>
 	</thead>
 	<tbody>
 		<tr>
-			<td>Copy</td>
-			<td><kbd>Ctrl</kbd> + <kbd>C</kbd></td>
+			<td>Kopieren</td>
+			<td><kbd>Strg</kbd> + <kbd>C</kbd></td>
 			<td><kbd>⌘</kbd> + <kbd>C</kbd></td>
 		</tr>
 		<tr>
-			<td>Paste</td>
-			<td><kbd>Ctrl</kbd> + <kbd>V</kbd></td>
+			<td>Einfügen</td>
+			<td><kbd>Strg</kbd> + <kbd>V</kbd></td>
 			<td><kbd>⌘</kbd> + <kbd>V</kbd></td>
 		</tr>
 		<tr>
-			<td>Undo</td>
-			<td><kbd>Ctrl</kbd> + <kbd>Z</kbd></td>
+			<td>Rückgängig</td>
+			<td><kbd>Strg</kbd> + <kbd>Z</kbd></td>
 			<td><kbd>⌘</kbd> + <kbd>Z</kbd></td>
 		</tr>
 		<tr>
-			<td>Redo</td>
-			<td><kbd>Ctrl</kbd> + <kbd>Y</kbd> <br> <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Z</kbd></td>
-			<td><kbd>⌘</kbd> + <kbd>Y</kbd> <br> <kbd>⌘</kbd> + <kbd>Shift</kbd> + <kbd>Z</kbd></td>
+			<td>Wiederherstellen</td>
+			<td><kbd>Strg</kbd> + <kbd>Y</kbd> <br> <kbd>Strg</kbd> + <kbd>Umschalt</kbd> + <kbd>Z</kbd></td>
+			<td><kbd>⌘</kbd> + <kbd>Y</kbd> <br> <kbd>⌘</kbd> + <kbd>Umschalt</kbd> + <kbd>Z</kbd></td>
 		</tr>
 		<tr>
-			<td>Bold</td>
-			<td><kbd>Ctrl</kbd> + <kbd>B</kbd></td>
+			<td>Fett</td>
+			<td><kbd>Strg</kbd> + <kbd>B</kbd></td>
 			<td><kbd>⌘</kbd> + <kbd>B</kbd></td>
 		</tr>
 		<tr>
-			<td>Italic</td>
-			<td><kbd>Ctrl</kbd> + <kbd>I</kbd></td>
+			<td>Kursiv</td>
+			<td><kbd>Strg</kbd> + <kbd>I</kbd></td>
 			<td><kbd>⌘</kbd> + <kbd>I</kbd></td>
 		</tr>
 		<tr>
 			<td>Link</td>
-			<td><kbd>Ctrl</kbd> + <kbd>K</kbd></td>
+			<td><kbd>Strg</kbd> + <kbd>K</kbd></td>
 			<td><kbd>⌘</kbd> + <kbd>K</kbd></td>
 		</tr>
 		<tr>
-			<td>Insert a hard break (e.g. a new paragraph)</td>
+			<td>Harter Zeilenumbruch (z.B. neuer Absatz)</td>
 			<td colspan="2"><kbd>Enter</kbd></td>
 		</tr>
 		<tr>
-			<td>Insert a soft break (i.e. a <code>&lt;br&gt;</code>)</td>
-			<td colspan="2"><kbd>Shift</kbd> + <kbd>Enter</kbd></td>
+			<td>Weicher Zeilenumbruch (<code>&lt;br&gt;</code>)</td>
+			<td colspan="2"><kbd>Umschalt</kbd> + <kbd>Enter</kbd></td>
 		</tr>
 		<tr>
-			<td>Nest the current list item (when in a list)</td>
+			<td>Aktuellen Listeneintrag einrücken (wenn man sich in einer Liste befindet)</td>
 			<td colspan="2"><kbd>Tab</kbd></td>
 		</tr>
 		<tr>
-			<th colspan="3">When a widget is selected (for example: image, table, horizontal line, etc.)</th>
+			<th colspan="3">Wenn ein Widget ausgewählt ist (z.B. Bild, Tabelle, horizontale Linie usw.)</th>
 		</tr>
 		<tr>
-			<td>Insert a new paragraph directly after a widget</td>
+			<td>Neuen Absatz direkt nach einem Widget einfügen</td>
 			<td colspan="2"><kbd>Enter</kbd></td>
 		</tr>
 		<tr>
-			<td>Insert a new paragraph directly before a widget</td>
-			<td colspan="2"><kbd>Shift</kbd> + <kbd>Enter</kbd></td>
+			<td>Neuen Absatz direkt vor einem Widget einfügen</td>
+			<td colspan="2"><kbd>Umschalt</kbd> + <kbd>Enter</kbd></td>
 		</tr>
 		<tr>
-			<td>Display the caret to allow typing directly before a widget</td>
+			<td>Den Cursor anzeigen, um direkt vor einem Widget schreiben zu können</td>
 			<td colspan="2"><kbd>↑</kbd> / <kbd>←</kbd></td>
 		</tr>
 		<tr>
-			<td>Display the caret to allow typing directly after a widget</td>
+			<td>Den Cursor anzeigen, um direkt nach einem Widget schreiben zu können</td>
 			<td colspan="2"><kbd>↓</kbd> / <kbd>→</kbd></td>
 		</tr>
 		<tr>
-			<th colspan="3">In a table cell</th>
+			<th colspan="3">In einer Tabellenzelle</th>
 		</tr>
 		<tr>
-			<td>Move the selection to the next cell</td>
+			<td>Die Auswahl zur nächsten Zelle verschieben</td>
 			<td colspan="2"><kbd>Tab</kbd></td>
 		</tr>
 		<tr>
-			<td>Move the selection to the previous cell</td>
-			<td colspan="2"><kbd>Shift</kbd> + <kbd>Tab</kbd></td>
+			<td>Die Auswahl zur vorherigen Zelle verschieben</td>
+			<td colspan="2"><kbd>Umschalt</kbd> + <kbd>Tab</kbd></td>
 		</tr>
 		<tr>
-			<td>Insert a new table row (when in the last cell of a table)</td>
+			<td>Neue Tabellenzeile einfügen (wenn man sich in der letzten Zelle einer Tabelle befindet)</td>
 			<td colspan="2"><kbd>Tab</kbd></td>
 		</tr>
         <tr>
-            <td>Navigate through the table</td>
+            <td>Durch die Tabelle navigieren</td>
             <td colspan="2"><kbd>↑</kbd> / <kbd>→</kbd> / <kbd>↓</kbd> / <kbd>←</kbd></td>
         </tr>
 	</tbody>
 </table>
 
-#### User interface and navigation
+#### Benutzeroberfläche und Navigation
 
-Use the following keystrokes for more efficient navigation in the CKEditor 5 user interface:
+Mit diesen Tastenkürzeln navigierst du effizienter durch die CKEditor 5 Oberfläche:
 
 <table>
 	<thead>
 		<tr>
-			<th>Action</th>
+			<th>Aktion</th>
 			<th>PC</th>
 			<th>Mac</th>
 		</tr>
 	</thead>
 	<tbody>
 		<tr>
-			<td>Close contextual balloons and UI components like dropdowns</td>
+			<td>Kontext-Ballons und UI-Komponenten wie Dropdowns schließen</td>
 			<td colspan="2"><kbd>Esc</kbd></td>
 		</tr>
 		<tr>
-			<td>Move focus to the visible contextual balloon</td>
+			<td>Fokus zum sichtbaren Kontext-Ballon verschieben</td>
 			<td colspan="2"><kbd>Tab</kbd></td>
 		</tr>
 		<tr>
-			<td>Move focus between fields (inputs and buttons) in contextual balloons</td>
+			<td>Fokus zwischen Feldern (Eingabefelder und Buttons) in Kontext-Ballons verschieben</td>
 			<td colspan="2"><kbd>Tab</kbd></td>
 		</tr>
 		<tr>
-			<td>Move focus to the toolbar</td>
+			<td>Fokus zur Toolbar verschieben</td>
 			<td><kbd>Alt</kbd> + <kbd>F10</kbd></td>
-			<td><kbd>Alt</kbd> + <kbd>F10</kbd> <br> (may require <kbd>Fn</kbd>)</td>
+			<td><kbd>Alt</kbd> + <kbd>F10</kbd> <br> (kann <kbd>Fn</kbd> erfordern)</td>
 		</tr>
 		<tr>
-			<td>Navigate through the toolbar</td>
+			<td>Durch die Toolbar navigieren</td>
 			<td colspan="2"><kbd>↑</kbd> / <kbd>→</kbd> / <kbd>↓</kbd> / <kbd>←</kbd></td>
 		</tr>
 		<tr>
-			<td>Execute the currently focused button</td>
+			<td>Die aktuell fokussierte Schaltfläche ausführen</td>
 			<td colspan="2"><kbd>Enter</kbd></td>
 		</tr>
 	</tbody>
 </table>
 
-
-
-
-
 ## Für Entwickler
 
-
-### Beispiel Extra Optionen
+### Beispiel für Extra-Optionen
 
 ```json
 {
@@ -303,7 +295,6 @@ Use the following keystrokes for more efficient navigation in the CKEditor 5 use
                 "view": {
                     "name": "span",
                     "classes": "uk-text-large"
-                    
                 },
                 "title": "Fließtext groß",
                 "class": "ck-heading_paragraph"
@@ -312,7 +303,7 @@ Use the following keystrokes for more efficient navigation in the CKEditor 5 use
                 "model": "heading1",
                 "view": {
                     "name": "h1",
-                    "classes": "uk-animation-fade uk-heading-large"   
+                    "classes": "uk-animation-fade uk-heading-large"
                 },
                 "title": "Überschrift 1 sehr groß",
                 "class": "ck-heading_heading1"
@@ -323,15 +314,14 @@ Use the following keystrokes for more efficient navigation in the CKEditor 5 use
 }
 ```
 
-
 ### Beispiel für benutzerdefinierte Link-Dekorator
-*Achtung, die Keys müssen in Kleinbuchstaben geschrieben werden*
+*Wichtig: Die Keys müssen klein geschrieben werden*
 
 ```js
 [{
     "newtab": {
         "mode": "manual",
-        "label": "Open in a new tab",
+        "label": "In neuem Tab öffnen",
         "attributes": {
             "target": "_blank",
             "rel": "noopener noreferrer"
@@ -350,12 +340,12 @@ Use the following keystrokes for more efficient navigation in the CKEditor 5 use
 }]
 ```
 
-Oder multiple: 
+Oder mehrere:
 ```js
 [{
     "openInNewTab": {
         "mode": "manual",
-        "label": "Open in a new tab",
+        "label": "In neuem Tab öffnen",
         "defaultValue": true,
         "attributes": {
             "target": "_blank",
@@ -376,7 +366,7 @@ Oder multiple:
 
 ### Mentions
 
-Das AddOn liefert das [Mentions-Plugin](https://ckeditor.com/docs/ckeditor5/latest/features/mentions.html) mit. Dieses kann frei konfiguriert werden.
+Das AddOn liefert das [Mentions-Plugin](https://ckeditor.com/docs/ckeditor5/latest/features/mentions.html) mit. Das kannst du frei konfigurieren.
 Hier ein Beispiel:
 
 ```json
@@ -390,11 +380,10 @@ Hier ein Beispiel:
 }]
 ```
 
+### YForm-Links
 
-### YForm links
-
-Um die  generierten Urls wie `rex_news://1` zu ersetzen, muss das folgende Skript in die `boot.php` des `project` AddOns eingefügt werden.
-Der Code für die Urls muss modifiziert werden. 
+Um generierte URLs wie `rex_news://1` zu ersetzen, füge das folgende Skript in die `boot.php` des `project` AddOns ein.
+Der Code für die URLs muss angepasst werden.
 
 ```php
 rex_extension::register('OUTPUT_FILTER', function(\rex_extension_point $ep) {
@@ -406,14 +395,14 @@ rex_extension::register('OUTPUT_FILTER', function(\rex_extension_point $ep) {
             $url = '';
             switch ($matches[1]) {
                 case 'news':
-                    // Example, if the Urls are generated via Url-AddOn  
+                    // Beispiel, wenn die URLs via Url-AddOn generiert werden
                     $id = $matches[3];
                     if ($id) {
-                       return rex_getUrl('', '', ['news' => $id]); 
+                       return rex_getUrl('', '', ['news' => $id]);
                     }
                     break;
                 case 'person':
-                    // ein anderes Beispiel 
+                    // Ein anderes Beispiel
                     $url = '/index.php?person='.$matches[3];
                     break;
             }
@@ -422,14 +411,13 @@ rex_extension::register('OUTPUT_FILTER', function(\rex_extension_point $ep) {
         $ep->getSubject()
     );
 }, rex_extension::NORMAL);
-
 ```
 
 ### Profile API
 
-Über die API ist es möglich eigene Profile abseites des Profileditors anzulegen: `Cke5\Creator\Cke5ProfilesApi::addProfile`
+Über die API kannst du eigene Profile abseits des Profileditors erstellen: `Cke5\Creator\Cke5ProfilesApi::addProfile`
 
-Example: 
+Beispiel:
 
 ```php
     $create = \Cke5\Creator\Cke5ProfilesApi::addProfile(
@@ -461,10 +449,10 @@ Example:
     echo (is_string($create)) ? $create : 'successful profile created';
 ```
 
+### HTML-Support
 
-## HTML-Support
-Source-Editing Plugin mach Update. 
-Nach einem Update einer sehr alten Version fehlt ggf. die Grundeinstellung für das PlugIn im Abschnistt HtmlSupport. 
+Source-Editing Plugin hat ein Update bekommen.
+Nach einem Update von einer sehr alten Version fehlt evtl. die Grundeinstellung für das PlugIn im Abschnitt HtmlSupport.
 
 ```JSON
 [
@@ -477,11 +465,9 @@ Nach einem Update einer sehr alten Version fehlt ggf. die Grundeinstellung für 
 ]
 ```
 
+### Autoformat deaktivieren
 
-
-## Autoformat deaktivieren
-
-Das Autoformat-Feature (markdown code replacement) kann man deaktivieren, indem man folgende Option in den Abschnitt Extra Options einfügt: 
+Du kannst das Autoformat-Feature (Markdown-Code-Ersatz) deaktivieren, indem du diese Option in den Abschnitt Extra Options einfügst:
 
 ```json
 {"removePlugins": ["Autoformat"]}
@@ -489,28 +475,26 @@ Das Autoformat-Feature (markdown code replacement) kann man deaktivieren, indem 
 
 ## Bugtracker
 
-If you have found a error or maybe you have an idea, You can create a [Issue](https://github.com/FriendsOfREDAXO/cke5/issues). 
-Before you create a new issue, please search if there already exists an issue with your request, and read the [Issue Guidelines (englisch)](https://github.com/necolas/issue-guidelines) from [Nicolas Gallagher](https://github.com/necolas/).
-
+Fehler gefunden oder eine Idee? Erstelle ein [Issue](https://github.com/FriendsOfREDAXO/cke5/issues).
+Bevor du ein neues Issue erstellst, such bitte, ob es schon ein ähnliches gibt. Und lies dir die [Issue Guidelines (englisch)](https://github.com/necolas/issue-guidelines) von [Nicolas Gallagher](https://github.com/necolas/) durch.
 
 ## Changelog
 
-see [CHANGELOG.md](https://github.com/FriendsOfREDAXO/cke5/blob/master/CHANGELOG.md)
+Schau mal im [CHANGELOG.md](https://github.com/FriendsOfREDAXO/cke5/blob/master/CHANGELOG.md) nach.
 
-## Licenses
+## Lizenzen
 
-AddOn:[MIT LICENSE](https://github.com/FriendsOfREDAXO/cke5/blob/master/LICENSE)
-CKEDITOR [GPL LICENSE](https://github.com/ckeditor/ckeditor5/blob/master/LICENSE.md)
+AddOn: [MIT LICENSE](https://github.com/FriendsOfREDAXO/cke5/blob/master/LICENSE)
+CKEDITOR: [GPL LICENSE](https://github.com/ckeditor/ckeditor5/blob/master/LICENSE.md)
 
-
-## Author
+## Wer's gemacht hat
 
 **Friends Of REDAXO**
 
 * http://www.redaxo.org
 * https://github.com/FriendsOfREDAXO
 
-**Projekt-Lead**
+**Projektleitung**
 
 [Joachim Dörr](https://github.com/joachimdoerr)
 
