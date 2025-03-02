@@ -1,9 +1,14 @@
 # Changelog
 
+## Version 6.3.1
+
+* add accessibilityHelp
+* add config page for licence key to get the ability to remove the powered by ckeditor banner 
+
 ## Version 6.3
 
 * update cke5 vendor to v44.2.1
-* accessibilityHelp, emoji, bookmarks, showBlocks as elements for the toolbar
+* emoji, bookmarks, showBlocks as elements for the toolbar
 * fixes: https://github.com/FriendsOfREDAXO/cke5/issues/199, reported by: [alxndr-w](https://github.com/alxndr-w)  
 
 ## Version 6.2.2

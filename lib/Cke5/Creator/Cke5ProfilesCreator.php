@@ -815,7 +815,11 @@ class Cke5ProfilesCreator
 
         // licence
         $jsonProfile['licenseKey'] = 'GPL';
-        $jsonProfile['ui']['poweredBy']['forceVisible'] = false;
+
+        if (!empty(self::getAddon()->getConfig('license_code'))) {
+            $jsonProfile['licenseKey'] = self::getAddon()->getConfig('license_code');
+            $jsonProfile['ui']['poweredBy']['forceVisible'] = false;
+        }
 
         return ['suboptions' => $jsonSubOption, 'profile' => $jsonProfile, 'sprog_mention' => $sprogDefinition];
     }

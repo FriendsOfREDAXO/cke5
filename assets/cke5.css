@@ -390,7 +390,7 @@ dl + .cke5_clangtabs .nav.nav-tabs,
     padding: 15px;
 }
 
-.ck.ck-powered-by {
+.ck-powered .ck.ck-powered-by {
     display: none !important;
     text-indent: -99999em;
 }

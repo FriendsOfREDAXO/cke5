@@ -223,3 +223,17 @@ cke5_css_path = CSS path
 cke5_css_path_placeholder = URL to CSS file
 cke5_classes_area = CSS classes
 cke5_classes_area_empty_error = Please enter at least one CSS class
+
+# config
+config_title = Configuration
+license_cke5_js_path = Custom path for CKEditor 5 JS
+license_cke5_js_path_info = A custom path to ckeditor.js can be specified here if a different build should be used. Leave empty to use the redaxo default build.
+license_cke5_js_path_placeholder = e.g. assets/addons/cke5/vendor/custom/ckeditor.js
+license_translations_path = Custom path for translations
+license_translations_path_info = A custom path to the translations folder can be specified here. Translation files must follow the naming pattern 'de.js', 'en-gb.js', etc.
+license_translations_path_placeholder = e.g. assets/addons/cke5/vendor/custom/translations/
+license_code = License key
+license_code_info = If a commercial license for CKEditor 5 has been purchased, the license key can be entered here. The "Powered by CKEditor 5" banner will be automatically removed after a profile has been saved again with a valid license key. Please note: The CKEditor 5 build included in this addon does not contain any pro features, and currently no pro features are supported within the addon.
+license_code_placeholder = CKEditor 5 license key
+cke5_config_header = CKEditor 5 Configuration
+cke5_config_info = Custom paths and license settings for CKEditor 5 can be configured here. These settings allow for the use of a different CKEditor 5 build and custom translations.
