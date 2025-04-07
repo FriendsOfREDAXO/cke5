@@ -7,14 +7,15 @@ div.cke5InputTags-list {
   width: 100%
 }
 
-div.cke5InputTags-list, div.cke5InputTags-list span.cke5InputTags-item {
+div.cke5InputTags-list,
+span.cke5InputTags-item {
   -moz-background-clip: padding;
   -webkit-background-clip: padding-box;
   background-clip: padding-box;
   display: inline-block
 }
 
-div.cke5InputTags-list span.cke5InputTags-item {
+span.cke5InputTags-item {
   background-color: #19bc9c;
   border-radius: 3px;
   color: #fff;
@@ -33,11 +34,11 @@ div.cke5InputTags-list span.cke5InputTags-item.is-hidden {
   display: none !important
 }
 
-div.cke5InputTags-list span.cke5InputTags-item.is-exists {
+span.cke5InputTags-item.is-exists {
   background-color: rgba(231, 76, 60, .7)
 }
 
-div.cke5InputTags-list span.cke5InputTags-item span.value {
+span.cke5InputTags-item span.value {
   cursor: pointer
 }
 
@@ -64,17 +65,18 @@ div.cke5InputTags-list span.cke5InputTags-item i {
   z-index: 10
 }
 
-div.cke5InputTags-list span.cke5InputTags-item i:hover {
+span.cke5InputTags-item i:hover {
   color: #e74c3c
 }
 
-div.cke5InputTags-list input.cke5InputTags-field {
+input.cke5InputTags-field {
   background-color: transparent;
   border: none;
   margin-left: 4px
 }
 
-div.cke5InputTags-list input.cke5InputTags-field:active, div.cke5InputTags-list input.cke5InputTags-field:focus {
+div.cke5InputTags-list input.cke5InputTags-field:active,
+div.cke5InputTags-list input.cke5InputTags-field:focus {
   outline: none
 }
 
@@ -159,7 +161,8 @@ div.cke5InputTags-list ul.cke5InputTags-autocomplete-list li:hover {
 div.cke5InputTags-list ul.cke5InputTags-autocomplete-list li.is-disabled {
   background-color: #f7f7f7;
   color: initial;
-  cursor: default
+  cursor: default;
+  display: none;
 }
 
 p.cke5InputTags-error {

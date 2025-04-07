@@ -1,5 +1,17 @@
 # Changelog
 
+## Version 6.3.2
+
+* Tag handling in profile editor improved
+  * better drag&drop expierience
+  * search filtering
+  * remove of used tags from the taglist-dropdown
+* Tag handling in style editor improved 
+  * add tags by space enter
+  * add the entered text as tag after 2 seconds of inactivity
+  * remove tags by backspace
+* remove unused files
+
 ## Version 6.3.1
 
 * add accessibilityHelp

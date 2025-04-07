@@ -8,6 +8,10 @@
 /** @var rex_addon $this */
 
 // register permissions
+use Cke5\Handler\Cke5ExtensionHandler;
+use Cke5\Handler\Cke5UploadHandler;
+use Cke5\Provider\Cke5AssetsProvider;
+
 if (rex::isBackend() && is_object(rex::getUser())) {
     rex_perm::register('cke5_addon[]');
 
@@ -15,16 +19,15 @@ if (rex::isBackend() && is_object(rex::getUser())) {
     $page = $this->getProperty('page');
     if (empty($this->getConfig('license_code'))) {
         unset($page['subpages']['profiles']['subpages']['templates']);
-        unset($page['subpages']['profiles']['subpages']['slashes']);
     }
     $this->setProperty('page', $page);
 
 
     // load assets
-    \Cke5\Provider\Cke5AssetsProvider::provideCke5ProfileEditData();
-    \Cke5\Provider\Cke5AssetsProvider::provideCke5PreviewData();
-    \Cke5\Provider\Cke5AssetsProvider::provideCke5BaseData();
-    \Cke5\Provider\Cke5AssetsProvider::provideCke5CustomData();
+    Cke5AssetsProvider::provideCke5ProfileEditData();
+    Cke5AssetsProvider::provideCke5PreviewData();
+    Cke5AssetsProvider::provideCke5BaseData();
+    Cke5AssetsProvider::provideCke5CustomData();
 
     // Check REDAXO version
     if (rex_version::compare(rex::getVersion(), '5.13.0-dev', '>=')) {
@@ -50,13 +53,13 @@ if (rex::isBackend() && is_object(rex::getUser())) {
     }
 
     if ($this->getConfig('updated') === true) {
-        \Cke5\Handler\Cke5ExtensionHandler::updateOrCreateProfiles();
+        Cke5ExtensionHandler::updateOrCreateProfiles();
         $this->setConfig('updated', false);
     }
 
     // upload image
     if (rex_request::request('cke5upload', 'bool') === true) {
-        \Cke5\Handler\Cke5UploadHandler::uploadCke5Img();
+        Cke5UploadHandler::uploadCke5Img();
     }
 
     // register extension point actions

@@ -221,10 +221,10 @@ function cke5_init_edit(element) {
     $(this).sortable({
       update: function () {
         let _input = $(this).prev(),
-          _inputid = _input.attr('data-uniqid'),
-          _inputtags = window.cke5InputTags.instances[_inputid],
-          _tags = {},
-          tags;
+            _inputid = _input.attr('data-uniqid'),
+            _inputtags = window.cke5InputTags.instances[_inputid],
+            _tags = {},
+            tags;
 
         $(this).find('span').each(function (i) {
           _tags[i] = $(this).attr('data-tag');
@@ -233,9 +233,13 @@ function cke5_init_edit(element) {
         tags = $.map(_tags, function (val) {
           return val;
         }).join(",");
-        _inputtags.$element.val(tags); // Changed from .attr('value', tags)
+        _inputtags.$element.val(tags);
         _inputtags.tags = _inputtags.$element.val().split(',');
-      }
+      },
+      appendTo: 'body',       // An body anhängen statt am parent
+      forceHelperSize: true,  // Erzwinge Helper-Größe basierend auf Original
+      forcePlaceholderSize: true,
+      cursorAt: { top: 5, left: 5 }
     });
   });
 

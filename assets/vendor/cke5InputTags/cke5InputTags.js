@@ -234,6 +234,7 @@
                         var value = self.$input.val().trim();
 
                         if ($.inArray(key, self.keys) < 0) {
+                            // Input changed, update autocomplete
                             self._autocomplete._init(true);
                             self._autocomplete._show();
 
@@ -307,6 +308,17 @@
                         self.$input.focus();
 
                         return false;
+                    });
+
+                    // Add input event to filter on each keystroke
+                    self.$input.on('input', function(e) {
+                        var value = self.$input.val().trim();
+                        self._autocomplete._init(true);
+                        if (value.length > 0) {
+                            self._autocomplete._show();
+                        } else {
+                            self._autocomplete._show(); // Show all when empty
+                        }
                     });
                 };
 
@@ -519,7 +531,27 @@
 
                         self.$autocomplete = $('<ul>').addClass(self.AUTOCOMPLETE_LIST_CLASS);
 
-                        self._autocomplete._get('values').forEach(function (v) {
+                        // Filter für Autocomplete-Werte
+                        var filteredValues = self._autocomplete._get('values').filter(function(v) {
+                            // Bei leerer Eingabe alle anzeigen
+                            if (value.length === 0) {
+                                return true;
+                            }
+
+                            // Nur Werte anzeigen, die mit dem Eingabetext beginnen
+                            if (v.toLowerCase().indexOf(value) === 0) {
+                                return true;
+                            }
+
+                            return false;
+                        });
+
+                        // Keine Ergebnisse - keine Liste anzeigen
+                        if (filteredValues.length === 0 && value.length > 0) {
+                            return;
+                        }
+
+                        filteredValues.forEach(function (v) {
                             var li = self.AUTOCOMPLETE_ITEM_CONTENT.replace('%s', v);
                             if (v === '|' || v === '-') {
                                 var $item = $.inArray(v, self.tags) >= 0 ? $(li) : $(li);
@@ -569,6 +601,12 @@
                             return false;
                         }
 
+                        // Wenn die Liste leer ist (kein Match), nicht anzeigen
+                        if (self.$autocomplete && self.$autocomplete.children().length === 0) {
+                            self._autocomplete._hide();
+                            return false;
+                        }
+
                         self.$autocomplete
                             .css({
                                 'left': self.$input[0].offsetLeft,
@@ -588,7 +626,9 @@
                      * @returns {void}
                      */
                     _hide: function () {
-                        self.$autocomplete.removeClass('is-active');
+                        if (self.$autocomplete) {
+                            self.$autocomplete.removeClass('is-active');
+                        }
                     },
 
                     /**

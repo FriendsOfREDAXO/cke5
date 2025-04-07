@@ -7,6 +7,7 @@
 
 use Cke5\Creator\Cke5ProfilesCreator;
 use Cke5\Handler\Cke5DatabaseHandler;
+use Cke5\Provider\Cke5NavigationProvider;
 use Cke5\Utils\Cke5FormHelper;
 use Cke5\Utils\CKE5ISO6391;
 use Cke5\Utils\Cke5ListHelper;
@@ -22,7 +23,7 @@ $start = rex_request::request('start', 'int', NULL);
 $send = rex_request::request('send', 'boolean', false);
 
 $stylesTable = rex::getTable(Cke5DatabaseHandler::CKE5_STYLES);
-$navigation = '<div class="cke5_subpagenavigation">' . \Cke5\Provider\Cke5NavigationProvider::getSubNavigation('profiles.styles') . '</div>';
+$navigation = '<div class="cke5_subpagenavigation">' . Cke5NavigationProvider::getSubNavigation('profiles.styles') . '</div>';
 $message = '';
 
 if ($func === 'delete') {
@@ -148,33 +149,6 @@ if ($func === '') {
         $field->setAttribute('placeholder', rex_i18n::msg('cke5_css_path_placeholder'));
     // end collapse
     $form->addRawField('</div>');
-
-
-//    if ($func === 'edit') {
-//        $profileResult = array();
-//        if (is_array($result)) {
-//            foreach ($result as $key => $value) {
-//                $profileResult[str_replace($prefix, '', $key)] = $value;
-//            }
-//        }
-//        $form->addRawField('
-//        <div class="cke5-preview-row">
-//            <dl class="rex-form-group form-group">
-//                <dt>
-//                    <label class="control-label">' . rex_i18n::msg('cke5_editor_preview') . '</label>
-//                </dt>
-//                <dd>
-//                    <div class="cke5-editor" data-profile="' . $profile . '" data-lang="' . \Cke5\Utils\Cke5Lang::getUserLang() . '"></div>
-//                    <div class="cke5-editor-info"><p>' . rex_i18n::msg('cke5_editor_preview_info') . '</p></div>
-//                    <div class="cke5-preview-code">
-//                        ' . Cke5PreviewHelper::getHtmlCode($profileResult) . '
-//                        ' . Cke5PreviewHelper::getMFormCode($profileResult) . '
-//                    </div>
-//                </dd>
-//            </dl>
-//        </div>
-//        ');
-//    }
 
     // show
     $fragment = new rex_fragment();
