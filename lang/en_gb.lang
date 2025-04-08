@@ -39,6 +39,8 @@ cke5_emoji = Emoji
 cke5_highlights = Highlight
 cke5_html_support = HtmlSupport
 cke5_mentions = Mention & Sprog Replacement
+cke5_mentions_definition_description = Here individual settings for the Mentions plugin can be stored
+cke5_sprog_mention_definition_description = Here Sprog replacements can be stored. In the form of {{Key}} and description
 
 # profiles columns names
 cke5_name = Profile-name
@@ -152,7 +154,7 @@ cke5_add_profile = Create a new profile
 cke5_profiles_created = Profiles were generated and available
 cke5_profiles_creation_exception = Profiles could not be generated
 
-cke5_description_empty_error = Pleas enter a profile description
+cke5_description_empty_error = Please enter a profile description
 cke5_profile_name_empty_error = Please enter a profile name
 cke5_profiles_export_missing_input_error = Please select a profile
 cke5_profiles_export_error = Something went wrong with the export!
@@ -170,13 +172,12 @@ cke5_profiles_import_title = Profile import
 cke5_profiles_export = Profile export
 cke5_profiles_import = Profile import
 cke5_profiles_import_file = upload JSON file
-cke5_profiles_select = Prfile
+cke5_profiles_select = Profile
 cke5_profiles_import_msg = Attention: profiles with identical IDs will be completely overwritten!
 
 # style editor
-
 cke5_style_element = Element
-cke5_style_element_placeholder = Elementtyp [div, section, aside...]
+cke5_style_element_placeholder = Element type [div, section, aside...]
 cke5_style_element_empty_error = Please enter a HTML element type
 cke5_style_classes = Classes
 cke5_style_edit = Edit style
@@ -198,6 +199,7 @@ cke5_title_slashes_placeholder = Slash title
 cke5_title_slashes_empty_error = Please enter a slash title
 cke5_styles = Styles
 cke5_style = Style
+cke5_style_groups = Style Groups
 cke5_name_style = Style name
 cke5_name_style_placeholder = Style name
 cke5_name_style_empty_error = Please enter a style name 
@@ -237,3 +239,16 @@ license_code_info = If a commercial license for CKEditor 5 has been purchased, t
 license_code_placeholder = CKEditor 5 license key
 cke5_config_header = CKEditor 5 Configuration
 cke5_config_info = Custom paths and license settings for CKEditor 5 can be configured here. These settings allow for the use of a different CKEditor 5 build and custom translations.
+
+# Style Groups
+cke5_style_group_name = Group name
+cke5_style_group_name_error = Please enter a group name
+cke5_style_group_description = Group description
+cke5_style_group_json_configuration = JSON configuration
+cke5_style_group_edit = Edit style group
+cke5_style_group_add = Add style group
+cke5_style_groups = Style groups
+
+# Templates
+cke5_add_templates = Create new template
+cke5_icon_templates = Icon

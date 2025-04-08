@@ -42,7 +42,6 @@ cke5_mentions = Mention & Sprog Ersetzungen
 cke5_mentions_definition_description = Hier können individuelle Einstellungen für das Mentions-Plugin hinterlegt werden
 cke5_sprog_mention_definition_description = Hier können Sprog-Ersetzungen hinterlegt werden. In Form von {{Key}} und Beschreibung
 
-
 # profiles columns names
 cke5_name = Profile-Namen
 cke5_name_placeholder = profile_name
@@ -200,6 +199,7 @@ cke5_title_slashes_placeholder = Slash-Titel
 cke5_title_slashes_empty_error = Bitte geben Sie einen Slash-Titel an
 cke5_styles = Styles
 cke5_style = Style
+cke5_style_groups = Styles Gruppen
 cke5_name_style = Style-Name
 cke5_name_style_placeholder = Style-Name
 cke5_name_style_empty_error = Bitte geben Sie einen Style-Namen an
@@ -239,3 +239,16 @@ license_code_info = Bei Erwerb einer kommerziellen Lizenz für CKEditor 5 kann h
 license_code_placeholder = CKEditor 5 Lizenzschlüssel
 cke5_config_header = CKEditor 5 Konfiguration
 cke5_config_info = An dieser Stelle können benutzerdefinierte Pfade und Lizenz-Einstellungen für CKEditor 5 vorgenommen werden. Diese Einstellungen ermöglichen die Verwendung einer eigenen CKEditor 5 Build und eigener Übersetzungen.
+
+# Style Groups
+cke5_style_group_name = Gruppen-Name
+cke5_style_group_name_error = Bitte geben Sie einen Gruppen-Namen an
+cke5_style_group_description = Gruppen-Beschreibung
+cke5_style_group_json_configuration = JSON-Konfiguration
+cke5_style_group_edit = Style-Gruppe bearbeiten
+cke5_style_group_add = Style-Gruppe hinzufügen
+cke5_style_groups = Style-Gruppen
+
+# Templates
+cke5_add_templates = Neues Template erstellen
+cke5_icon_templates = Icon

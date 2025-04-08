@@ -9,6 +9,7 @@ use Cke5\Creator\Cke5ProfilesCreator;
 use Cke5\Handler\Cke5DatabaseHandler;
 use Cke5\Utils\Cke5FormHelper;
 use Cke5\Utils\CKE5ISO6391;
+use Cke5\Utils\Cke5Lang;
 use Cke5\Utils\Cke5ListHelper;
 use Cke5\Utils\Cke5PreviewHelper;
 
@@ -211,6 +212,22 @@ if ($func === '') {
 // STYLES
     $form->addRawField('<div class="collapse" id="cke5style-collapse">');
         $form->addRawField('<fieldset><legend>'.rex_i18n::msg('cke5_style').'</legend>');
+
+                $field = $form->addSelectField('group_styles');
+                $field->setAttribute('class', 'form-control selectpicker');
+                $field->setAttribute('data-live-search', 'true');
+                $field->setAttribute('multiple', 'multiple');
+                $field->setLabel(rex_i18n::msg('cke5_style_groups'));
+
+                // Laden der Style Groups aus der Datenbank
+                $stylesGroupTable = rex::getTable(Cke5DatabaseHandler::CKE5_STYLE_GROUPS);
+                $sql = rex_sql::factory();
+                $sqlResult = $sql->getArray("select id, name from $stylesGroupTable");
+
+                foreach ($sqlResult as $group) {
+                    $field->getSelect()->addOption($group['name'] . ' [' . $group['id'] . ']', $group['id']);
+                }
+
                 $field = $form->addSelectField('styles');
                 $field->setAttribute('class', 'form-control selectpicker');
                 $field->setAttribute('data-live-search', 'true');
@@ -861,7 +878,7 @@ if ($func === '') {
                     <label class="control-label">' . rex_i18n::msg('cke5_editor_preview') . '</label>
                 </dt>
                 <dd>
-                    <div class="cke5-editor" data-profile="' . $profile . '" data-lang="' . \Cke5\Utils\Cke5Lang::getUserLang() . '"></div>           
+                    <div class="cke5-editor" data-profile="' . $profile . '" data-lang="' . Cke5Lang::getUserLang() . '"></div>           
                     <div class="cke5-editor-info"><p>' . rex_i18n::msg('cke5_editor_preview_info') . '</p></div>
                     <div class="cke5-preview-code">
                         ' . Cke5PreviewHelper::getHtmlCode($profileResult) . '

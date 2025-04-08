@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 6.3.3
+
+* Style groups added for quick capture of styles as json array
+
 ## Version 6.3.2
 
 * Tag handling in profile editor improved

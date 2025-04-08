@@ -69,6 +69,7 @@ $sql->ensurePrimaryIdColumn()
     ->ensureColumn(new rex_sql_column('mentions', 'varchar(255)', true))
     ->ensureColumn(new rex_sql_column('mentions_definition', 'text', true))
     ->ensureColumn(new rex_sql_column('styles', 'text', true))
+    ->ensureColumn(new rex_sql_column('group_styles', 'text', true))
     ->ensureColumn(new rex_sql_column('templates', 'text', true))
     ->ensureColumn(new rex_sql_column('sprog_mention', 'varchar(255)', true))
     ->ensureColumn(new rex_sql_column('sprog_mention_definition', 'text', true))
@@ -99,6 +100,14 @@ $sql->ensurePrimaryIdColumn()
     ->ensureColumn(new rex_sql_column('css', 'varchar(255)', true))
     ->ensureColumn(new rex_sql_column('css_definition', 'text', true))
     ->ensureColumn(new rex_sql_column('css_path', 'varchar(255)', true))
+    ->ensure();
+
+// install style_groups database
+$sql = rex_sql_table::get(rex::getTable('cke5_style_groups'));
+$sql->ensurePrimaryIdColumn()
+    ->ensureColumn(new rex_sql_column('name', 'varchar(100)', true))
+    ->ensureColumn(new rex_sql_column('description', 'varchar(255)', true))
+    ->ensureColumn(new rex_sql_column('json_config', 'text', true))
     ->ensure();
 
 

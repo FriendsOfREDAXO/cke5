@@ -9,11 +9,14 @@ namespace Cke5\Creator;
 
 use Cke5\Handler\Cke5DatabaseHandler;
 use Cke5\Utils\CKE5ISO6391;
+use Exception;
 use rex;
 use rex_addon;
 use rex_addon_interface;
 use rex_file;
+use rex_functional_exception;
 use rex_i18n;
+use rex_logger;
 use rex_sql;
 
 class Cke5ProfilesCreator
@@ -307,7 +310,7 @@ class Cke5ProfilesCreator
 
     /**
      * @param array<string,string> $getProfile
-     * @throws \rex_functional_exception
+     * @throws rex_functional_exception
      * @author Joachim Doerr
      */
     public static function profilesCreate(array $getProfile = null): void
@@ -368,7 +371,7 @@ class Cke5ProfilesCreator
         }
 
         if (!rex_file::put(self::getAddon()->getAssetsPath(self::PROFILES_FILENAME), implode("\n", $content))) {
-            throw new \rex_functional_exception(\rex_i18n::msg('cke5_profiles_creation_exception'));
+            throw new rex_functional_exception(rex_i18n::msg('cke5_profiles_creation_exception'));
         }
     }
 
@@ -542,6 +545,35 @@ class Cke5ProfilesCreator
             $jsonProfile['removePlugins'][] = 'TableOfContents';
         }
 
+        if (isset($profile['group_styles']) && $profile['group_styles'] !== '') {
+            $styleGroups = array_filter(explode('|', $profile['group_styles']));
+            $stylesGroupTable = rex::getTable(Cke5DatabaseHandler::CKE5_STYLE_GROUPS);
+            $sql = rex_sql::factory();
+            $sqlResult = $sql->getArray("select * from $stylesGroupTable where id in (".implode(', ', $styleGroups).")");
+            if (count($sqlResult) > 0) {
+                foreach ($sqlResult as $result) {
+                    if (!empty($result['json_config'])) {
+                        try {
+                            $jsonConfig = json_decode($result['json_config'], true);
+                        } catch (Exception $e) {
+                            rex_logger::logException($e);
+                            throw $e;
+                        }
+                        // Parsen der JSON-Konfiguration
+                        if (count($jsonConfig) > 0) {
+                            foreach ($jsonConfig as $value) {
+                                $jsonProfile['style']['definitions'][] = [
+                                    'name' => $value['name'],
+                                    'element' => $value['element'],
+                                    'classes' => $value['classes']
+                                ];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         if (isset($profile['styles']) && $profile['styles'] !== '') {
             $styles = array_filter(explode('|', $profile['styles']));
             $stylesTable = rex::getTable(Cke5DatabaseHandler::CKE5_STYLES);
@@ -557,6 +589,10 @@ class Cke5ProfilesCreator
                     ];
                 }
             }
+        }
+
+        if (!empty($jsonProfile['style']['definitions'])) {
+            $jsonProfile['style']['definitions'] = self::getUniqueStylesByName($jsonProfile['style']['definitions']);
         }
 
         if (isset($profile['templates']) && $profile['templates'] !== '') {
@@ -830,7 +866,7 @@ class Cke5ProfilesCreator
      */
     private static function getAddon(): rex_addon_interface
     {
-        return \rex_addon::get('cke5');
+        return rex_addon::get('cke5');
     }
 
     /**
@@ -913,5 +949,34 @@ class Cke5ProfilesCreator
             }
         }
         return $return;
+    }
+
+    /**
+     * Entfernt Duplikate aus einem Array basierend auf dem 'name'-Attribut
+     * und dem 'element'-Attribut
+     *
+     * @param array $stylesArray Array mit Stil-Definitionen
+     * @return array Bereinigtes Array ohne Duplikate
+     */
+    public static function getUniqueStylesByName(array $stylesArray): array
+    {
+        $uniqueStyles = [];
+        $usedCombinations = []; // Speichert Kombinationen aus Name und Element
+
+        foreach ($stylesArray as $style) {
+            if (isset($style['name'])) {
+                $key = $style['name'];
+                if (isset($style['element'])) {
+                    $key .= '|' . $style['element']; // Kombinierter Schlüssel aus Name und Element
+                }
+
+                if (!in_array($key, $usedCombinations)) {
+                    $usedCombinations[] = $key;
+                    $uniqueStyles[] = $style;
+                }
+            }
+        }
+
+        return $uniqueStyles;
     }
 }

@@ -1,5 +1,5 @@
 package: cke5
-version: '6.3.2'
+version: '6.3.3'
 author: Friends Of REDAXO
 supportpage: https://github.com/FriendsOfREDAXO/cke5/issues
 
@@ -23,10 +23,10 @@ page:
                 styles:
                     title: 'translate:styles'
                     subpages:
-                        styles:
-                            title: 'translate:styles'
                         groups:
                             title: 'translate:style_groups'
+                        styles:
+                            title: 'translate:styles'
 #                templates:
 #                    title: 'translate:templates'
                 export:

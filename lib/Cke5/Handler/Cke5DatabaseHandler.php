@@ -8,11 +8,15 @@
 namespace Cke5\Handler;
 
 
+use DateTime;
 use DateTimeInterface;
+use Exception;
 use rex;
 use rex_extension;
 use rex_extension_point;
+use rex_logger;
 use rex_sql;
+use rex_sql_exception;
 use rex_user;
 
 class Cke5DatabaseHandler
@@ -20,7 +24,7 @@ class Cke5DatabaseHandler
     const CKE5_PROFILES = 'cke5_profiles';
     const CKE5_STYLES = 'cke5_styles';
     const CKE5_TEMPLATES = 'cke5_templates';
-    const CKE5_SLASHES = 'cke5_slashes';
+    const CKE5_STYLE_GROUPS = 'cke5_style_groups';
 
     /**
      * @param string $name
@@ -40,7 +44,7 @@ class Cke5DatabaseHandler
     public static function importProfile(array $profile): bool
     {
         try {
-            $now = new \DateTime();
+            $now = new DateTime();
             $sql = rex_sql::factory();
             $sql->setTable(rex::getTable(Cke5DatabaseHandler::CKE5_PROFILES));
 
@@ -63,8 +67,8 @@ class Cke5DatabaseHandler
                 rex_extension::registerPoint(new rex_extension_point('CKE5_PROFILE_ADD', '', $profile, true));
             }
             return true;
-        } catch (\Exception $e) {
-            \rex_logger::logException($e);
+        } catch (Exception $e) {
+            rex_logger::logException($e);
             return false;
         }
     }
@@ -85,8 +89,8 @@ class Cke5DatabaseHandler
             $result = $sql->getRow();
             if (is_null($result)) return null;
             return $result;
-        } catch (\rex_sql_exception $e) {
-            \rex_logger::logException($e);
+        } catch (rex_sql_exception $e) {
+            rex_logger::logException($e);
             return null;
         }
     }
@@ -105,8 +109,8 @@ class Cke5DatabaseHandler
             $result = $sql->getArray();
             if (is_null($result)) return null;
             return $result;
-        } catch (\rex_sql_exception $e) {
-            \rex_logger::logException($e);
+        } catch (rex_sql_exception $e) {
+            rex_logger::logException($e);
             return null;
         }
     }
