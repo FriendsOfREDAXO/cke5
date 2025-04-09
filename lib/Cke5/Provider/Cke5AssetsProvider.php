@@ -12,6 +12,7 @@ use rex_be_controller;
 use rex_exception;
 use rex_logger;
 use rex_path;
+use rex_sql;
 use rex_url;
 use rex_view;
 
@@ -48,7 +49,7 @@ class Cke5AssetsProvider
             rex_view::addCssFile(self::getAddon()->getAssetsUrl('cke5.css'));
             rex_view::addJsFile($editorFile);
 
-            $sql = \rex_sql::factory();
+            $sql = rex_sql::factory();
             $result = $sql->getArray('select lang as ui, lang_content as content from ' . rex::getTable('cke5_profiles') . ' where lang != \'\' or lang_content != \'\'');
 
             $langKit = [];
@@ -112,7 +113,7 @@ class Cke5AssetsProvider
         }
         // style edit
         if (
-            (rex_be_controller::getCurrentPagePart(3) === 'styles' && rex_be_controller::getCurrentPagePart(1) === 'cke5') ||
+            (rex_be_controller::getCurrentPagePart(4) === 'styles' && rex_be_controller::getCurrentPagePart(1) === 'cke5') ||
             (rex_be_controller::getCurrentPagePart(3) === 'templates' && rex_be_controller::getCurrentPagePart(1) === 'cke5')
         ) {
             // add js vendors
