@@ -1,9 +1,4 @@
 <?php
-/**
- * @author mail[at]doerr-softwaredevelopment[dot]com Joachim Doerr
- * @package redaxo5
- * @license MIT
- */
 
 namespace Cke5\Provider;
 
@@ -22,9 +17,6 @@ use rex_view;
 
 class Cke5AssetsProvider
 {
-    /**
-     * @author Joachim Doerr
-     */
     public static function provideCke5CustomData(): void
     {
         $files = [
@@ -43,9 +35,6 @@ class Cke5AssetsProvider
         }
     }
 
-    /**
-     * @author Joachim Doerr
-     */
     public static function provideCke5BaseData(): void
     {
         // add cke5 vendors
@@ -93,19 +82,11 @@ class Cke5AssetsProvider
         }
     }
 
-    /**
-     * @param string $lang
-     * @return string
-     * @author Joachim Doerr
-     */
     public static function getLang(string $lang): string
     {
         return ($lang === 'en') ? 'en-gb' : $lang;
     }
 
-    /**
-     * @author Joachim Doerr
-     */
     public static function provideCke5ProfileEditData(): void
     {
         // profile edit
@@ -141,9 +122,6 @@ class Cke5AssetsProvider
         }
     }
 
-    /**
-     * @author Joachim Doerr
-     */
     public static function provideCke5PreviewData(): void
     {
         if (rex_be_controller::getCurrentPagePart(3) === 'preview' && rex_be_controller::getCurrentPagePart(1) === 'cke5') {
@@ -160,7 +138,6 @@ class Cke5AssetsProvider
 
     /**
      * @param array<string,string> $js
-     * @author Joachim Doerr
      */
     private static function addJS(array $js): void
     {
@@ -183,7 +160,6 @@ class Cke5AssetsProvider
 
     /**
      * @param array<string,string> $css
-     * @author Joachim Doerr
      */
     private static function addCss(array $css): void
     {
@@ -206,10 +182,6 @@ class Cke5AssetsProvider
         }
     }
 
-    /**
-     * @return rex_addon_interface
-     * @author Joachim Doerr
-     */
     private static function getAddon(): rex_addon_interface
     {
         return rex_addon::get('cke5');

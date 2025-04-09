@@ -1,10 +1,4 @@
 <?php
-/**
- * @author FriendsOfRedaxo: Joachim Doerr https://github.com/joachimdoerr
- * @package redaxo5
- * @license MIT
- */
-
 /** @var rex_addon $this */
 
 // register permissions

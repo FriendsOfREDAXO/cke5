@@ -1,9 +1,4 @@
 <?php
-/**
- * @author mail[at]doerr-softwaredevelopment[dot]com Joachim Doerr
- * @package redaxo5
- * @license MIT
- */
 
 namespace Cke5\Provider;
 
@@ -11,17 +6,16 @@ namespace Cke5\Provider;
 use rex_be_controller;
 use rex_be_navigation;
 use rex_be_page;
+use rex_exception;
 use rex_fragment;
+use rex_i18n;
+use rex_logger;
 
 class Cke5NavigationProvider
 {
-    /**
-     * @return string
-     * @author Joachim Doerr
-     */
     public static function getMainSubNavigationHeader(): string
     {
-        $photoBy = sprintf(\rex_i18n::msg('cke5_subnavigation_header_photo'),
+        $photoBy = sprintf(rex_i18n::msg('cke5_subnavigation_header_photo'),
             '<a href="https://unsplash.com/photos/mMcqMYJfopo?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Patrick Fore</a>',
             '<a href="https://unsplash.com/search/photos/stars?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a>'
         );
@@ -31,7 +25,7 @@ class Cke5NavigationProvider
                     <img src="/assets/addons/cke5/images/header-patrick-fore-357913-unsplash.jpg">
                 </picture>
                 <div class="header-content">
-                    <h1>' . \rex_i18n::msg('cke5_subnavigation_header_title') . '</h1>
+                    <h1>' . rex_i18n::msg('cke5_subnavigation_header_title') . '</h1>
                 </div>
                 <div class="photoinfo"><span>' . $photoBy . '</span></div>
             </header>
@@ -64,8 +58,8 @@ class Cke5NavigationProvider
                     $fragment->setVar('left', $navigation, false);
                     $output = $fragment->parse('core/navigations/content.php');
 
-                } catch (\rex_exception $e) {
-                    \rex_logger::logException($e);
+                } catch (rex_exception $e) {
+                    rex_logger::logException($e);
                 }
             }
         }

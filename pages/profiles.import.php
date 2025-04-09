@@ -1,10 +1,4 @@
 <?php
-/**
- * @author mail[at]doerr-softwaredevelopment[dot]com Joachim Doerr
- * @package redaxo5
- * @license MIT
- */
-
 /** @var rex_addon $this */
 
 use Cke5\Handler\Cke5DatabaseHandler;
@@ -14,7 +8,7 @@ $id = rex_request::request('id', 'int');
 $start = rex_request::request('start', 'int', NULL);
 $send = rex_request::request('send', 'boolean', false);
 $message = '';
-$profileTable = rex::getTable(\Cke5\Handler\Cke5DatabaseHandler::CKE5_PROFILES);
+$profileTable = rex::getTable(Cke5DatabaseHandler::CKE5_PROFILES);
 $csrfToken = rex_csrf_token::factory('cke5_profiles_import');
 $importResult = [];
 $importKeys = [
@@ -125,7 +119,7 @@ if ($func === 'cke5import') {
             }
         }
         $func = 'imported';
-    } catch (\InvalidArgumentException $e) {
+    } catch (InvalidArgumentException $e) {
         if ($e->getMessage() === 'csrf_token') {
             $message = rex_view::error(rex_i18n::msg('csrf_token_invalid'));
             $func = 'error';
@@ -133,7 +127,7 @@ if ($func === 'cke5import') {
             $message = rex_view::error($this->i18n('profiles_import_file_missing_error', $e->getMessage()));
             $func = 'error';
         }
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
         $message = rex_view::error($this->i18n('profiles_import_error', $e->getMessage()));
         $func = 'error';
     }

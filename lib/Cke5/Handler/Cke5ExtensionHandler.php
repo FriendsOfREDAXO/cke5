@@ -1,9 +1,4 @@
 <?php
-/**
- * @author mail[at]doerr-softwaredevelopment[dot]com Joachim Doerr
- * @package redaxo5
- * @license MIT
- */
 
 namespace Cke5\Handler;
 
@@ -18,20 +13,11 @@ use rex_view;
 
 class Cke5ExtensionHandler
 {
-    /**
-     * @param rex_extension_point<string> $ep
-     * @return string
-     * @author Joachim Doerr
-     */
     public static function addIcon(rex_extension_point $ep): string
     {
         return (rex_be_controller::getCurrentPagePart(1) === 'cke5') ? '<i class="cke5-icon-logo"></i> ' . $ep->getSubject() : '';
     }
 
-    /**
-     * @param rex_extension_point<string> $ep
-     * @author Joachim Doerr
-     */
     public static function hiddenMain(rex_extension_point $ep): void
     {
         if (rex_be_controller::getCurrentPagePart(1) === 'cke5') {
@@ -54,11 +40,6 @@ class Cke5ExtensionHandler
         }
     }
 
-    /**
-     * @param rex_extension_point<string> $ep
-     * @return void
-     * @author Joachim Doerr
-     */
     public static function createProfiles(rex_extension_point $ep)
     {
         try {
@@ -73,9 +54,6 @@ class Cke5ExtensionHandler
         }
     }
 
-    /**
-     * @author Joachim Doerr
-     */
     public static function updateOrCreateProfiles(): void
     {
         try {

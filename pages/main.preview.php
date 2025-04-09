@@ -1,10 +1,4 @@
 <?php
-/**
- * @author mail[at]doerr-softwaredevelopment[dot]com Joachim Doerr
- * @package redaxo5
- * @license MIT
- */
-
 /** @var rex_addon $this */
 
 use Cke5\Handler\Cke5DatabaseHandler;

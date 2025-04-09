@@ -1,26 +1,15 @@
 <?php
-/**
- * @author mail[at]doerr-softwaredevelopment[dot]com Joachim Doerr
- * @package redaxo5
- * @license MIT
- */
 
 namespace Cke5\Utils;
 
 
+use rex_addon;
 use rex_clang;
 use rex_form;
 use rex_i18n;
 
 class Cke5FormHelper
 {
-    /**
-     * @param rex_form $form
-     * @param string $type
-     * @param string|null $key
-     * @param string|null $curClang
-     * @author Joachim Doerr
-     */
     public static function addRexLangTabs(rex_form $form, string $type, string $key = NULL, string $curClang = NULL): void
     {
         $locales = rex_i18n::getLocales();
@@ -64,7 +53,7 @@ class Cke5FormHelper
 
     public static function potentialRemoveLicenseItems($items, $licenseItemsToRemove):array
     {
-        if (empty(\rex_addon::get('cke5')->getConfig('license_code'))) {
+        if (empty(rex_addon::get('cke5')->getConfig('license_code'))) {
             foreach ($items as $key => $item) {
                 foreach ($licenseItemsToRemove as $lItem) {
                     if ($item == $lItem) unset($items[$key]);

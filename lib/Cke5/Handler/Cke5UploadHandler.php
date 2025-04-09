@@ -1,9 +1,4 @@
 <?php
-/**
- * @author mail[at]doerr-softwaredevelopment[dot]com Joachim Doerr
- * @package redaxo5
- * @license MIT
- */
 
 namespace Cke5\Handler;
 
@@ -27,7 +22,6 @@ class Cke5UploadHandler
 
     /**
      * @throws rex_api_exception
-     * @author Joachim Doerr
      */
     public static function uploadCke5Img(): void
     {

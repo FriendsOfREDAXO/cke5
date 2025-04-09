@@ -1,9 +1,4 @@
 <?php
-/**
- * @author mail[at]doerr-softwaredevelopment[dot]com Joachim Doerr
- * @package redaxo5
- * @license MIT
- */
 
 namespace Cke5\Utils;
 
@@ -18,11 +13,6 @@ class Cke5ListHelper
 {
     /**
      * togglet bool data column
-     * @param string $table
-     * @param int $id
-     * @param string|null $column
-     * @return string
-     * @author Joachim Doerr
      */
     public static function toggleBoolData(string $table, int $id, string $column = NULL): string
     {
@@ -42,10 +32,6 @@ class Cke5ListHelper
 
     /**
      * clone data
-     * @param string $table
-     * @param int $id
-     * @return string
-     * @author Joachim Doerr
      */
     static public function cloneData(string $table, int $id): string
     {
@@ -70,10 +56,6 @@ class Cke5ListHelper
 
     /**
      * delete data
-     * @param string $table
-     * @param int $id
-     * @return string
-     * @author Joachim Doerr
      */
     static public function deleteData(string $table, int $id): string
     {

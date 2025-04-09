@@ -1,9 +1,4 @@
 <?php
-/**
- * @author mail[at]doerr-softwaredevelopment[dot]com Joachim Doerr
- * @package redaxo5
- * @license MIT
- */
 
 namespace Cke5\Creator;
 
@@ -12,8 +7,10 @@ use Cke5\Handler\Cke5DatabaseHandler;
 use DateTime;
 use DateTimeInterface;
 use rex;
+use rex_exception;
 use rex_extension;
 use rex_extension_point;
+use rex_logger;
 use rex_sql;
 
 class Cke5ProfilesApi extends Cke5DatabaseHandler
@@ -30,7 +27,7 @@ class Cke5ProfilesApi extends Cke5DatabaseHandler
     {
         try {
             if (self::profileExist($name)) {
-                throw new \rex_exception("Profile with name $name already exist");
+                throw new rex_exception("Profile with name $name already exist");
             }
 
             $now = new DateTime();
@@ -46,8 +43,8 @@ class Cke5ProfilesApi extends Cke5DatabaseHandler
                 ->setValue('createdate', $now->format(DateTimeInterface::ATOM))
                 ->setValue('updatedate', $now->format(DateTimeInterface::ATOM))
                 ->insert();
-        } catch (\rex_exception $e) {
-            \rex_logger::logException($e);
+        } catch (rex_exception $e) {
+            rex_logger::logException($e);
         }
 
         if (is_array($profile = self::loadProfile($name))) {

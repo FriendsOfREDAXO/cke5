@@ -1,9 +1,4 @@
 <?php
-/**
- * @author mail[at]doerr-softwaredevelopment[dot]com Joachim Doerr
- * @package redaxo5
- * @license MIT
- */
 
 namespace Cke5\Utils;
 
@@ -16,8 +11,6 @@ class Cke5PreviewHelper
 {
     /**
      * @param array<string,mixed> $profile
-     * @return string
-     * @author Joachim Doerr
      */
     public static function getMFormCode(array $profile): string
     {
@@ -26,8 +19,6 @@ class Cke5PreviewHelper
 
     /**
      * @param array<string,mixed> $profile
-     * @return string
-     * @author Joachim Doerr
      */
     public static function getHtmlCode(array $profile): string
     {
@@ -36,8 +27,6 @@ class Cke5PreviewHelper
 
     /**
      * @param array<string,int|string|null> $profile
-     * @return string
-     * @author Joachim Doerr
      */
     public static function getProfileDetails(array $profile): string
     {
@@ -58,11 +47,6 @@ class Cke5PreviewHelper
 
     /**
      * @param array<string,int|string|null> $profile
-     * @param bool $html
-     * @param bool $mform
-     * @param bool $details
-     * @return string
-     * @author Joachim Doerr
      */
     public static function getProfilePreview(array $profile, bool $html = true, bool $mform = true, bool $details = true): string
     {

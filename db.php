@@ -1,10 +1,4 @@
 <?php
-/**
- * @author mail[at]doerr-softwaredevelopment[dot]com Joachim Doerr
- * @package redaxo5
- * @license MIT
- */
-
 // install profiles database
 $sql = rex_sql_table::get(rex::getTable('cke5_profiles'));
 $sql->ensurePrimaryIdColumn()

@@ -1,9 +1,3 @@
-/**
- * @author FriendsOfRedaxo: Joachim Doerr https://github.com/joachimdoerr
- * @package redaxo5
- * @license MIT
- */
-
 let ckeditors = {},
     ckareas = '.cke5-editor';
 

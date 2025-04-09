@@ -1,9 +1,4 @@
 <?php
-/**
- * @author mail[at]doerr-softwaredevelopment[dot]com Joachim Doerr
- * @package redaxo5
- * @license MIT
- */
 
 namespace Cke5\Handler;
 
@@ -26,21 +21,11 @@ class Cke5DatabaseHandler
     const CKE5_TEMPLATES = 'cke5_templates';
     const CKE5_STYLE_GROUPS = 'cke5_style_groups';
 
-    /**
-     * @param string $name
-     * @return bool
-     * @author Joachim Doerr
-     */
     public static function profileExist(string $name): bool
     {
         return is_array(self::loadProfile($name));
     }
 
-    /**
-     * @param array<string,string> $profile
-     * @return bool
-     * @author Joachim Doerr
-     */
     public static function importProfile(array $profile): bool
     {
         try {
@@ -74,9 +59,7 @@ class Cke5DatabaseHandler
     }
 
     /**
-     * @param string $name
      * @return array<string,string>|null
-     * @author Joachim Doerr
      */
     public static function loadProfile(string $name): ?array
     {
@@ -97,7 +80,6 @@ class Cke5DatabaseHandler
 
     /**
      * @return array<string,array<string,string>>|null
-     * @author Joachim Doerr
      */
     public static function getAllProfiles(): ?array
     {
@@ -115,10 +97,6 @@ class Cke5DatabaseHandler
         }
     }
 
-    /**
-     * @return string
-     * @author Joachim Doerr
-     */
     protected static function getLogin(): string
     {
         $user = rex::getUser();

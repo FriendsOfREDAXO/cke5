@@ -1,9 +1,4 @@
 <?php
-/**
- * @author mail[at]doerr-softwaredevelopment[dot]com Joachim Doerr
- * @package redaxo5
- * @license MIT
- */
 
 namespace Cke5\Utils;
 
@@ -17,10 +12,6 @@ use rex_user;
 
 class Cke5Lang
 {
-    /**
-     * @return string
-     * @author Joachim Doerr
-     */
     public static function getUserLang(): string
     {
         /** @var rex_user $user */
@@ -34,10 +25,6 @@ class Cke5Lang
         return strtolower(substr($lang, 0, 2));
     }
 
-    /**
-     * @return string
-     * @author Joachim Doerr
-     */
     public static function getOutputLang(): string
     {
         if (strlen(rex_clang::getCurrent()->getCode()) === 2) {
@@ -47,9 +34,6 @@ class Cke5Lang
         }
     }
 
-    /**
-     * @author Joachim Doerr
-     */
     public static function addPlaceholderLangColumns(): void
     {
         $sql = rex_sql_table::get(rex::getTable('cke5_profiles'));

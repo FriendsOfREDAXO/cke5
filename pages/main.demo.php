@@ -1,16 +1,14 @@
 <?php
-/**
- * @author mail[at]doerr-softwaredevelopment[dot]com Joachim Doerr
- * @package redaxo5
- * @license MIT
- */
-
 /** @var rex_addon $this */
+
+use Cke5\Provider\Cke5NavigationProvider;
+use Cke5\Utils\Cke5Lang;
+
 $content = '<div class="document-outline-container-not-provided"></div>';
-$content .= \Cke5\Provider\Cke5NavigationProvider::getMainSubNavigationHeader() .
-           \Cke5\Provider\Cke5NavigationProvider::getSubNavigation('main') . '
+$content .= Cke5NavigationProvider::getMainSubNavigationHeader() .
+           Cke5NavigationProvider::getSubNavigation('main') . '
 <div class="cke5-demo">
-    <div name="content" id="editor" class="cke5-editor" data-profile="default" data-lang="' . \Cke5\Utils\Cke5Lang::getUserLang() . '">
+    <div name="content" id="editor" class="cke5-editor" data-profile="default" data-lang="' . Cke5Lang::getUserLang() . '">
         <h1>😀 Space Shuttle Programm</h1>
 
         <figure class="media"><oembed url="https://vimeo.com/5080397"></oembed></figure>

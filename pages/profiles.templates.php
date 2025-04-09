@@ -1,9 +1,5 @@
 <?php
-/**
- * @author mail[at]doerr-softwaredevelopment[dot]com Joachim Doerr
- * @package redaxo5
- * @license MIT
- */
+/** @var rex_addon $this */
 
 use Cke5\Creator\Cke5ProfilesCreator;
 use Cke5\Handler\Cke5DatabaseHandler;
@@ -12,7 +8,6 @@ use Cke5\Utils\CKE5ISO6391;
 use Cke5\Utils\Cke5ListHelper;
 use Cke5\Utils\Cke5PreviewHelper;
 
-/** @var rex_addon $this */
 
 $func = rex_request::request('func', 'string');
 /** @var int $id */
