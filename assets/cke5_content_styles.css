@@ -1,471 +1,389 @@
-/**
- * @license Copyright (c) 2003-2025, CKSource Holding sp. z o.o. All rights reserved.
- * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
- */
-
 :root {
-  --ck-color-image-caption-background: hsl(0, 0%, 97%);
-  --ck-color-image-caption-text: hsl(0, 0%, 20%);
-  --ck-color-mention-background: hsla(341, 100%, 30%, 0.1);
-  --ck-color-mention-text: hsl(341, 100%, 30%);
-  --ck-color-table-caption-background: hsl(0, 0%, 97%);
-  --ck-color-table-caption-text: hsl(0, 0%, 20%);
-  --ck-highlight-marker-blue: hsl(201, 97%, 72%);
-  --ck-highlight-marker-green: hsl(120, 93%, 68%);
-  --ck-highlight-marker-pink: hsl(345, 96%, 73%);
-  --ck-highlight-marker-yellow: hsl(60, 97%, 73%);
-  --ck-highlight-pen-green: hsl(112, 100%, 27%);
-  --ck-highlight-pen-red: hsl(0, 85%, 49%);
+
+  /* Code Blocks */
+  --ck-color-code-block-label-background: #757575;
+  --ck-color-code-background: hsla(0, 0%, 78%, 0.3);
+
+  /* Markierungen */
+  --ck-highlight-marker-yellow: #fdfd77;
+  --ck-highlight-marker-green: #62f962;
+  --ck-highlight-marker-pink: #fc7899;
+  --ck-highlight-marker-blue: #72ccfd;
+
+  /*Stift Farben*/
+  --ck-highlight-pen-red: #e71313;
+  --ck-highlight-pen-green: #128a00;
+
+  /* Mentions */
+  --ck-mention-background: rgba(153, 0, 48, 0.1);
+  --ck-mention-text: #990030;
+
+  /*Image Layout*/
   --ck-image-style-spacing: 1.5em;
-  --ck-inline-image-style-spacing: calc(var(--ck-image-style-spacing) / 2);
+  --ck-inline-image-style-spacing: calc(var(--ck-image-style-spacing)/2);
+  --ck-image-max-width: 50%; /*Used for the side style*/
+
+  /*Table Styling*/
+  --ck-color-table-border: hsl(0, 0%, 75%);
+  --ck-table-border-width: 1px;
+  --ck-color-table-header-background: hsla(0, 0%, 0%, 5%);
+
+  /*Image-Caption*/
+  --ck-color-selector-caption-background: #f7f7f7;
+  --ck-color-selector-caption-text: #333;
+  --ck-color-selector-caption-highlighted-background: #fd0;
+
+  /*ToDo Listen*/
   --ck-todo-list-checkmark-size: 16px;
+
+  /*Blockquote*/
+   --ck-blockquote-border-width: 5px;
+
+    /*Horizontal Line*/
+    --ck-color-horizontal-line: hsl(0, 0%, 77%);
+    --ck-spacing-horizontal-line: 15px;
+     --ck-horizontal-line-height: 4px;
+     --ck-todo-list-checkmark-border: hsl(0, 0%, 20%);
 }
 
-/* ckeditor5-image/theme/imagecaption.css */
-.ck-content .image > figcaption {
-  display: table-caption;
-  caption-side: bottom;
-  word-break: break-word;
-  color: var(--ck-color-image-caption-text);
-  background-color: var(--ck-color-image-caption-background);
-  padding: .6em;
-  font-size: .75em;
-  outline-offset: -1px;
-}
-
-/* ckeditor5-image/theme/imagestyle.css */
-.ck-content .image-style-block-align-left,
-.ck-content .image-style-block-align-right {
-  max-width: calc(100% - var(--ck-image-style-spacing));
-}
-
-/* ckeditor5-image/theme/imagestyle.css */
-.ck-content .image-style-align-left,
-.ck-content .image-style-align-right {
-  clear: none;
-}
-
-/* ckeditor5-image/theme/imagestyle.css */
-.ck-content .image-style-side {
-  float: right;
-  margin-left: var(--ck-image-style-spacing);
-  max-width: 50%;
-}
-
-/* ckeditor5-image/theme/imagestyle.css */
-.ck-content .image-style-align-left {
-  float: left;
-  margin-right: var(--ck-image-style-spacing);
-}
-
-/* ckeditor5-image/theme/imagestyle.css */
-.ck-content .image-style-align-center {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* ckeditor5-image/theme/imagestyle.css */
-.ck-content .image-style-align-right {
-  float: right;
-  margin-left: var(--ck-image-style-spacing);
-}
-
-/* ckeditor5-image/theme/imagestyle.css */
-.ck-content .image-style-block-align-right {
-  margin-right: 0;
-  margin-left: auto;
-}
-
-/* ckeditor5-image/theme/imagestyle.css */
-.ck-content .image-style-block-align-left {
-  margin-left: 0;
-  margin-right: auto;
-}
-
-/* ckeditor5-image/theme/imagestyle.css */
-.ck-content p + .image-style-align-left,
-.ck-content p + .image-style-align-right,
-.ck-content p + .image-style-side {
-  margin-top: 0;
-}
-
-/* ckeditor5-image/theme/imagestyle.css */
-.ck-content .image-inline.image-style-align-left,
-.ck-content .image-inline.image-style-align-right {
-  margin-top: var(--ck-inline-image-style-spacing);
-  margin-bottom: var(--ck-inline-image-style-spacing);
-}
-
-/* ckeditor5-image/theme/imagestyle.css */
-.ck-content .image-inline.image-style-align-left {
-  margin-right: var(--ck-inline-image-style-spacing);
-}
-
-/* ckeditor5-image/theme/imagestyle.css */
-.ck-content .image-inline.image-style-align-right {
-  margin-left: var(--ck-inline-image-style-spacing);
-}
-
-/* ckeditor5-font/theme/fontsize.css */
-.ck-content .text-tiny {
-  font-size: .7em;
-}
-
-/* ckeditor5-font/theme/fontsize.css */
-.ck-content .text-small {
-  font-size: .85em;
-}
-
-/* ckeditor5-font/theme/fontsize.css */
-.ck-content .text-big {
-  font-size: 1.4em;
-}
-
-/* ckeditor5-font/theme/fontsize.css */
-.ck-content .text-huge {
-  font-size: 1.8em;
-}
-
-/* ckeditor5-highlight/theme/highlight.css */
-.ck-content .marker-yellow {
-  background-color: var(--ck-highlight-marker-yellow);
-}
-
-/* ckeditor5-highlight/theme/highlight.css */
-.ck-content .marker-green {
-  background-color: var(--ck-highlight-marker-green);
-}
-
-/* ckeditor5-highlight/theme/highlight.css */
-.ck-content .marker-pink {
-  background-color: var(--ck-highlight-marker-pink);
-}
-
-/* ckeditor5-highlight/theme/highlight.css */
-.ck-content .marker-blue {
-  background-color: var(--ck-highlight-marker-blue);
-}
-
-/* ckeditor5-highlight/theme/highlight.css */
-.ck-content .pen-red {
-  color: var(--ck-highlight-pen-red);
-  background-color: transparent;
-}
-
-/* ckeditor5-highlight/theme/highlight.css */
-.ck-content .pen-green {
-  color: var(--ck-highlight-pen-green);
-  background-color: transparent;
-}
-
-/* ckeditor5-horizontal-line/theme/horizontalline.css */
-.ck-content hr {
-  margin: 15px 0;
-  height: 4px;
-  background: hsl(0, 0%, 87%);
-  border: 0;
-}
-
-/* ckeditor5-image/theme/image.css */
-.ck-content .image {
-  display: table;
-  clear: both;
-  text-align: center;
-  margin: 0.9em auto;
-  min-width: 50px;
-}
-
-/* ckeditor5-image/theme/image.css */
-.ck-content .image img {
-  display: block;
-  margin: 0 auto;
-  max-width: 100%;
-  min-width: 100%;
-}
-
-/* ckeditor5-image/theme/image.css */
-.ck-content .image-inline {
-  /*
-   * Normally, the .image-inline would have "display: inline-block" and "img { width: 100% }" (to follow the wrapper while resizing).;
-   * Unfortunately, together with "srcset", it gets automatically stretched up to the width of the editing root.
-   * This strange behavior does not happen with inline-flex.
-   */
-  display: inline-flex;
-  max-width: 100%;
-  align-items: flex-start;
-}
-
-/* ckeditor5-image/theme/image.css */
-.ck-content .image-inline picture {
-  display: flex;
-}
-
-/* ckeditor5-image/theme/image.css */
-.ck-content .image-inline picture,
-.ck-content .image-inline img {
-  flex-grow: 1;
-  flex-shrink: 1;
-  max-width: 100%;
-}
-
-/* ckeditor5-image/theme/imageresize.css */
-.ck-content .image.image_resized {
-  max-width: 100%;
-  display: block;
-  box-sizing: border-box;
-}
-
-/* ckeditor5-image/theme/imageresize.css */
-.ck-content .image.image_resized img {
-  width: 100%;
-}
-
-/* ckeditor5-image/theme/imageresize.css */
-.ck-content .image.image_resized > figcaption {
-  display: block;
-}
-
-/* ckeditor5-block-quote/theme/blockquote.css */
-.ck-content blockquote {
-  overflow: hidden;
-  padding-right: 1.5em;
-  padding-left: 1.5em;
-  margin-left: 0;
-  margin-right: 0;
-  font-style: italic;
-  border-left: solid 5px hsl(0, 0%, 80%);
-}
-
-/* ckeditor5-block-quote/theme/blockquote.css */
-.ck-content[dir="rtl"] blockquote {
-  border-left: 0;
-  border-right: solid 5px hsl(0, 0%, 80%);
-}
-
-/* ckeditor5-basic-styles/theme/code.css */
+/* Allg. Textauszeichnungen */
 .ck-content code {
-  background-color: hsla(0, 0%, 78%, 0.3);
-  padding: .15em;
+  background-color: var(--ck-color-code-background);
   border-radius: 2px;
+  padding: .15em
 }
 
-/* ckeditor5-table/theme/tablecaption.css */
-.ck-content .table > figcaption {
-  display: table-caption;
-  caption-side: top;
-  word-break: break-word;
-  text-align: center;
-  color: var(--ck-color-table-caption-text);
-  background-color: var(--ck-color-table-caption-background);
-  padding: .6em;
-  font-size: .75em;
-  outline-offset: -1px;
+/* Zitate */
+.ck-content blockquote {
+  border-left: solid var(--ck-blockquote-border-width) hsl(0, 0%, 80%);
+  font-style: italic;
+  margin-left: 0;
+  margin-right: 0;
+  overflow: hidden;
+  padding-left: var(--ck-spacing-small-blockquote);
+  padding-right: var(--ck-spacing-small-blockquote)
 }
 
-/* ckeditor5-table/theme/table.css */
-.ck-content .table {
-  margin: 0.9em auto;
-  display: table;
+.ck-content[dir=rtl] blockquote {
+  border-left: 0;
+  border-right: solid var(--ck-blockquote-border-width) hsl(0, 0%, 80%);
 }
 
-/* ckeditor5-table/theme/table.css */
-.ck-content .table table {
-  border-collapse: collapse;
-  border-spacing: 0;
-  width: 100%;
-  height: 100%;
-  border: 1px double hsl(0, 0%, 70%);
+/* Horizontale Linie */
+.ck-content hr {
+  background: var(--ck-color-horizontal-line);
+  border: 0;
+  height: var(--ck-horizontal-line-height);
+  margin: var(--ck-spacing-horizontal-line) 0
 }
 
-/* ckeditor5-table/theme/table.css */
-.ck-content .table table td,
-.ck-content .table table th {
-  min-width: 2em;
-  padding: .4em;
-  border: 1px solid hsl(0, 0%, 75%);
+/* Markierungen/Highlight*/
+.ck-content .marker-yellow {
+  background-color: var(--ck-highlight-marker-yellow)
 }
 
-/* ckeditor5-table/theme/table.css */
-.ck-content .table table th {
-  font-weight: bold;
-  background: hsla(0, 0%, 0%, 5%);
+.ck-content .marker-green {
+  background-color: var(--ck-highlight-marker-green)
 }
 
-/* ckeditor5-table/theme/table.css */
-.ck-content[dir="rtl"] .table th {
-  text-align: right;
+.ck-content .marker-pink {
+  background-color: var(--ck-highlight-marker-pink)
 }
 
-/* ckeditor5-table/theme/table.css */
-.ck-content[dir="ltr"] .table th {
-  text-align: left;
+.ck-content .marker-blue {
+  background-color: var(--ck-highlight-marker-blue)
 }
 
-/* ckeditor5-page-break/theme/pagebreak.css */
-.ck-content .page-break {
-  position: relative;
-  clear: both;
-  padding: 5px 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/*Textmarker*/
+.ck-content .pen-red {
+  background-color: transparent;
+  color: var(--ck-highlight-pen-red)
 }
 
-/* ckeditor5-page-break/theme/pagebreak.css */
-.ck-content .page-break::after {
-  content: '';
-  position: absolute;
-  border-bottom: 2px dashed hsl(0, 0%, 77%);
-  width: 100%;
+.ck-content .pen-green {
+  background-color: transparent;
+  color: var(--ck-highlight-pen-green)
 }
 
-/* ckeditor5-page-break/theme/pagebreak.css */
-.ck-content .page-break__label {
-  position: relative;
-  z-index: 1;
-  padding: .3em .6em;
-  display: block;
-  text-transform: uppercase;
-  border: 1px solid hsl(0, 0%, 77%);
-  border-radius: 2px;
-  font-family: Helvetica, Arial, Tahoma, Verdana, Sans-Serif;
-  font-size: 0.75em;
-  font-weight: bold;
-  color: hsl(0, 0%, 20%);
-  background: hsl(0, 0%, 100%);
-  box-shadow: 2px 2px 1px hsla(0, 0%, 0%, 0.15);
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+/* Geordnete Liste (Nummeriert) */
+.ck-content ol {
+  list-style-type: decimal
 }
 
-/* ckeditor5-media-embed/theme/mediaembed.css */
-.ck-content .media {
-  clear: both;
-  margin: 0.9em 0;
-  display: block;
-  min-width: 15em;
+.ck-content ol ol {
+  list-style-type: lower-latin
 }
 
-/* ckeditor5-list/theme/todolist.css */
+.ck-content ol ol ol {
+  list-style-type: lower-roman
+}
+
+.ck-content ol ol ol ol {
+  list-style-type: upper-latin
+}
+
+.ck-content ol ol ol ol ol {
+  list-style-type: upper-roman
+}
+
+/* Ungeordnete Liste*/
+.ck-content ul {
+  list-style-type: disc
+}
+
+.ck-content ul ul {
+  list-style-type: circle
+}
+
+.ck-content ul ul ul,
+.ck-content ul ul ul ul {
+  list-style-type: square
+}
+
+/*ToDo Listen*/
 .ck-content .todo-list {
-  list-style: none;
+  list-style: none
 }
 
-/* ckeditor5-list/theme/todolist.css */
 .ck-content .todo-list li {
   margin-bottom: 5px;
+  position: relative
 }
 
-/* ckeditor5-list/theme/todolist.css */
 .ck-content .todo-list li .todo-list {
-  margin-top: 5px;
+  margin-top: 5px
 }
 
-/* ckeditor5-list/theme/todolist.css */
 .ck-content .todo-list .todo-list__label>input {
   -webkit-appearance: none;
-  display: inline-block;
-  position: relative;
-  width: var(--ck-todo-list-checkmark-size);
-  height: var(--ck-todo-list-checkmark-size);
-  vertical-align: middle;
   border: 0;
+  display: inline-block;
+  height: var(--ck-todo-list-checkmark-size);
   left: -25px;
-  margin-right: -15px;
-  right: 0;
   margin-left: 0;
-}
-
-/* ckeditor5-list/theme/todolist.css */
-.ck-content .todo-list .todo-list__label>input::before {
-  display: block;
-  position: absolute;
-  box-sizing: border-box;
-  content: '';
-  width: 100%;
-  height: 100%;
-  border: 1px solid hsl(0, 0%, 20%);
-  border-radius: 2px;
-  transition: 250ms ease-in-out box-shadow, 250ms ease-in-out background, 250ms ease-in-out border;
-}
-
-/* ckeditor5-list/theme/todolist.css */
-.ck-content .todo-list .todo-list__label>input::after {
-  display: block;
-  position: absolute;
-  box-sizing: content-box;
-  pointer-events: none;
-  content: '';
-  left: calc( var(--ck-todo-list-checkmark-size) / 3 );
-  top: calc( var(--ck-todo-list-checkmark-size) / 5.3 );
-  width: calc( var(--ck-todo-list-checkmark-size) / 5.3 );
-  height: calc( var(--ck-todo-list-checkmark-size) / 2.6 );
-  border-style: solid;
-  border-color: transparent;
-  border-width: 0 calc( var(--ck-todo-list-checkmark-size) / 8 ) calc( var(--ck-todo-list-checkmark-size) / 8 ) 0;
-  transform: rotate(45deg);
-}
-
-/* ckeditor5-list/theme/todolist.css */
-.ck-content .todo-list .todo-list__label>input[checked]::before {
-  background: hsl(126, 64%, 41%);
-  border-color: hsl(126, 64%, 41%);
-}
-
-/* ckeditor5-list/theme/todolist.css */
-.ck-content .todo-list .todo-list__label>input[checked]::after {
-  border-color: hsl(0, 0%, 100%);
-}
-
-/* ckeditor5-list/theme/todolist.css */
-.ck-content .todo-list .todo-list__label .todo-list__label__description {
+  margin-right: -15px;
+  position: relative;
+  right: 0;
   vertical-align: middle;
+  width: var(--ck-todo-list-checkmark-size)
 }
 
-/* ckeditor5-language/theme/language.css */
-.ck-content span[lang] {
-  font-style: italic;
+.ck-content[dir=rtl] .todo-list .todo-list__label>input {
+  left: 0;
+  margin-left: -15px;
+  margin-right: 0;
+  right: -25px
 }
 
-/* ckeditor5-code-block/theme/codeblock.css */
-.ck-content pre {
-  padding: 1em;
-  color: hsl(0, 0%, 20.8%);
-  background: hsla(0, 0%, 78%, 0.3);
-  border: 1px solid hsl(0, 0%, 77%);
+.ck-content .todo-list .todo-list__label>input:before {
+  border: 1px solid  var(--ck-todo-list-checkmark-border);
   border-radius: 2px;
-  text-align: left;
-  direction: ltr;
-  tab-size: 4;
-  white-space: pre-wrap;
-  font-style: normal;
-  min-width: 200px;
+  box-sizing: border-box;
+  content: "";
+  display: block;
+  height: 100%;
+  position: absolute;
+  transition: box-shadow .25s ease-in-out;
+  width: 100%
 }
 
-/* ckeditor5-code-block/theme/codeblock.css */
-.ck-content pre code {
-  background: unset;
-  padding: 0;
-  border-radius: 0;
+@media (prefers-reduced-motion:reduce) {
+  .ck-content .todo-list .todo-list__label>input:before {
+    transition: none
+  }
 }
 
-/* ckeditor5-mention/theme/mention.css */
-.ck-content .mention {
-  background: var(--ck-color-mention-background);
-  color: var(--ck-color-mention-text);
+.ck-content .todo-list .todo-list__label>input:after {
+  border-color: transparent;
+  border-style: solid;
+  border-width: 0 calc(var(--ck-todo-list-checkmark-size)/8) calc(var(--ck-todo-list-checkmark-size)/8) 0;
+  box-sizing: content-box;
+  content: "";
+  display: block;
+  height: calc(var(--ck-todo-list-checkmark-size)/2.6);
+  left: calc(var(--ck-todo-list-checkmark-size)/3);
+  pointer-events: none;
+  position: absolute;
+  top: calc(var(--ck-todo-list-checkmark-size)/5.3);
+  transform: rotate(45deg);
+  width: calc(var(--ck-todo-list-checkmark-size)/5.3)
+}
+
+.ck-content .todo-list .todo-list__label>input[checked]:before {
+  background: #26ab33;
+  border-color: #26ab33
+}
+
+.ck-content .todo-list .todo-list__label>input[checked]:after {
+  border-color: #fff
+}
+
+.ck-content .todo-list .todo-list__label .todo-list__label__description {
+  vertical-align: middle
+}
+
+.ck-content .todo-list .todo-list__label.todo-list__label_without-description input[type=checkbox] {
+  position: absolute
+}
+
+/*Medien*/
+.ck-content .media {
+  clear: both;
+  display: block;
+  margin: .9em 0;
+  min-width: 15em
+}
+
+/*Image captions*/
+.ck-content .image>figcaption {
+  background-color: var(--ck-color-selector-caption-background);
+  caption-side: top;
+  color: var(--ck-color-selector-caption-text);
+  display: table-caption;
+  font-size:  var(--ck-font-size-small-caption);
+  outline-offset: -1px;
+  padding: .6em;
+  text-align: center;
+  word-break: break-word
+}
+
+@media (forced-colors:active) {
+  .ck-content .image>figcaption {
+    background-color: unset;
+    color: unset
+  }
+}
+
+/* Tables */
+.ck-content[dir=rtl] .table th {
+  text-align: right
+}
+
+.ck-content[dir=ltr] .table th {
+  text-align: left
+}
+
+.ck-content figure.table:not(.layout-table) {
+  display: table
+}
+
+.ck-content figure.table:not(.layout-table)>table {
+  height: 100%;
+  width: 100%
+}
+
+.ck-content figure.table:not(.layout-table),
+.ck-content table.table:not(.layout-table) {
+  margin: .9em auto
+}
+
+.ck-content figure.table:not(.layout-table)>table,
+.ck-content table.table:not(.layout-table) {
+  border:  var(--ck-table-border-width) double hsl(0, 0%, 70%);
+  border-collapse: collapse;
+  border-spacing: 0
+}
+
+.ck-content figure.table:not(.layout-table)>table>tbody>tr>th,
+.ck-content figure.table:not(.layout-table)>table>thead>tr>th,
+.ck-content table.table:not(.layout-table)>tbody>tr>th,
+.ck-content table.table:not(.layout-table)>thead>tr>th {
+  background: var(--ck-color-table-header-background);
+  font-weight: 700
+}
+
+.ck-content figure.table:not(.layout-table)>table>tbody>tr>td,
+.ck-content figure.table:not(.layout-table)>table>tbody>tr>th,
+.ck-content figure.table:not(.layout-table)>table>thead>tr>td,
+.ck-content figure.table:not(.layout-table)>table>thead>tr>th,
+.ck-content table.table:not(.layout-table)>tbody>tr>td,
+.ck-content table.table:not(.layout-table)>tbody>tr>th,
+.ck-content table.table:not(.layout-table)>thead>tr>td,
+.ck-content table.table:not(.layout-table)>thead>tr>th {
+  border: 1px solid  var(--ck-color-table-border);
+  min-width: 2em;
+  padding: .4em
 }
 
 @media print {
-
-  /* ckeditor5-page-break/theme/pagebreak.css */
-  .ck-content .page-break {
-    padding: 0;
+  .ck-content figure.table>table {
+    height: auto
   }
+}
 
-  /* ckeditor5-page-break/theme/pagebreak.css */
-  .ck-content .page-break::after {
-    display: none;
-  }
+/*Image Layout */
+.ck-content .image.image-style-block-align-left,
+.ck-content .image.image-style-block-align-right {
+  max-width: calc(100% - var(--ck-image-style-spacing))
+}
+
+.ck-content .image.image-style-align-left,
+.ck-content .image.image-style-align-right {
+  clear: none
+}
+
+.ck-content .image.image-style-side {
+  float: right;
+  margin-left: var(--ck-image-style-spacing);
+  max-width:  var(--ck-image-max-width);
+}
+
+.ck-content .image.image-style-align-left {
+  float: left;
+  margin-right: var(--ck-image-style-spacing)
+}
+
+.ck-content .image.image-style-align-right {
+  float: right;
+  margin-left: var(--ck-image-style-spacing)
+}
+
+.ck-content .image.image-style-block-align-right {
+  margin-left: auto;
+  margin-right: 0
+}
+
+.ck-content .image.image-style-block-align-left {
+  margin-left: 0;
+  margin-right: auto
+}
+
+.ck-content .image-style-align-center {
+  margin-left: auto;
+  margin-right: auto
+}
+
+.ck-content .image-style-align-left {
+  float: left;
+  margin-right: var(--ck-image-style-spacing)
+}
+
+.ck-content .image-style-align-right {
+  float: right;
+  margin-left: var(--ck-image-style-spacing)
+}
+
+.ck-content p+.image.image-style-align-left,
+.ck-content p+.image.image-style-align-right,
+.ck-content p+.image.image-style-side {
+  margin-top: 0
+}
+
+.ck-content .image-inline.image-style-align-left,
+.ck-content .image-inline.image-style-align-right {
+  margin-bottom: var(--ck-inline-image-style-spacing);
+  margin-top: var(--ck-inline-image-style-spacing)
+}
+
+.ck-content .image-inline.image-style-align-left {
+  margin-right: var(--ck-inline-image-style-spacing)
+}
+
+.ck-content .image-inline.image-style-align-right {
+  margin-left: var(--ck-inline-image-style-spacing)
+}
+
+.ck-content .mention {
+  background: var(--ck-mention-background);
+  color: var(--ck-mention-text)
 }
