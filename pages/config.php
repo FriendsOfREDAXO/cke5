@@ -28,6 +28,10 @@ $field->setNotice($this->i18n('license_translations_path_info'));
 $field = $form->addInputField('text', 'license_code', null, ['class' => 'form-control', 'placeholder' => $this->i18n('license_code_placeholder')]);
 $field->setLabel($this->i18n('license_code'));
 $field->setNotice($this->i18n('license_code_info'));
+// Setze GPL als Standardwert, falls kein Wert vorhanden ist
+if ($this->getConfig('license_code') === null) {
+    $field->setValue('GPL');
+}
 
 // Ausgabe des Formulars
 $fragment = new rex_fragment();

@@ -4,6 +4,7 @@
 
 * Style groups added for quick capture of styles as json array
 * Css definitions from each styles will be add to the backend
+* GPL is set as default if no other license key is available 
 
 ## Version 6.3.2
 

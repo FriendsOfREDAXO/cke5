@@ -3,6 +3,11 @@
 
 include_once (__DIR__ . '/db.php');
 
+// Setze den Standard-Lizenzschlüssel auf "GPL", falls er noch nicht existiert
+if ($this->getConfig('license_code') === null || $this->getConfig('license_code') === '') {
+    $this->setConfig('license_code', 'GPL');
+}
+
 try {
     if (rex_version::compare($this->getVersion(), '3.3.0', '<')) {
         // copy custom data to assets folder

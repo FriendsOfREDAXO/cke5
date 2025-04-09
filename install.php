@@ -5,6 +5,11 @@ use Cke5\Handler\Cke5ExtensionHandler;
 
 include_once(__DIR__ . '/db.php');
 
+// Setze den Standard-Lizenzschlüssel auf "GPL"
+if ($this->getConfig('license_code') === null) {
+    $this->setConfig('license_code', 'GPL');
+}
+
 // install default demo profiles
 try {
     $sql = rex_sql::factory();
