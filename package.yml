@@ -20,8 +20,8 @@ page:
             subpages:
                 profiles:
                     title: 'translate:profiles'
-                styles:
-                    title: 'translate:styles'
+                customise:
+                    title: 'translate:customise'
                     subpages:
                         groups:
                             title: 'translate:style_groups'

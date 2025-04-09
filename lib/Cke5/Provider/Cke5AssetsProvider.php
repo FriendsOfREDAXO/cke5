@@ -4,6 +4,7 @@ namespace Cke5\Provider;
 
 
 use Cke5\Creator\Cke5ProfilesCreator;
+use Cke5\Utils\Cke5CssHandler;
 use Cke5\Utils\Cke5Lang;
 use rex;
 use rex_addon;
@@ -32,6 +33,16 @@ class Cke5AssetsProvider
                 } catch (rex_exception $e) {
                     rex_logger::logException($e);
                 }
+            }
+        }
+
+        // Lade externe CSS-Dateien
+        $externalFiles = Cke5CssHandler::getExternalCssFiles();
+        foreach ($externalFiles as $file) {
+            try {
+                rex_view::addCssFile($file);
+            } catch (rex_exception $e) {
+                rex_logger::logException($e);
             }
         }
     }

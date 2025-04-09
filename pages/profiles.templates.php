@@ -22,6 +22,8 @@ $message = '';
 if ($func === 'delete') {
     $message = Cke5ListHelper::deleteData($templatesTable, $id);
     rex_extension::registerPoint(new rex_extension_point('CKE5_PROFILE_TEMPLATE_DELETE', $id));
+    // Regeneriere CSS-Datei nach dem Löschen
+    Cke5\Utils\Cke5CssHandler::regenerateCssFile();
     $func = '';
 }
 

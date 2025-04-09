@@ -3,6 +3,7 @@
 ## Version 6.3.3
 
 * Style groups added for quick capture of styles as json array
+* Css definitions from each styles will be add to the backend
 
 ## Version 6.3.2
 

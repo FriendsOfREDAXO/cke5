@@ -61,5 +61,19 @@ if (rex::isBackend() && is_object(rex::getUser())) {
         rex_extension::register('PAGE_TITLE', ['\Cke5\Handler\Cke5ExtensionHandler', 'addIcon'], rex_extension::EARLY);
         rex_extension::register('PAGES_PREPARED', ['\Cke5\Handler\Cke5ExtensionHandler', 'hiddenMain'], rex_extension::EARLY);
         rex_extension::register(['REX_FORM_SAVED', 'REX_FORM_DELETED', 'CKE5_PROFILE_CLONE', 'CKE5_PROFILE_DELETE', 'CKE5_PROFILE_ADD', 'CKE5_PROFILE_UPDATED'], ['\Cke5\Handler\Cke5ExtensionHandler', 'createProfiles']);
+
+        rex_extension::register('REX_FORM_SAVED', function(rex_extension_point $ep) {
+            $params = $ep->getParams();
+            $savedId = $params['id'] ?? null;
+            $tableName = $params['table'] ?? '';
+
+            // Prüfen, ob es sich um eine der relevanten Tabellen handelt
+            if ($tableName === rex::getTable('cke5_styles') ||
+                $tableName === rex::getTable('cke5_style_groups') ||
+                $tableName === rex::getTable('cke5_templates')) {
+
+                Cke5\Utils\Cke5CssHandler::regenerateCssFile();
+            }
+        });
     }
 }

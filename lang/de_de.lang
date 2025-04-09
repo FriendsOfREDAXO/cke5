@@ -204,7 +204,7 @@ cke5_name_style = Style-Name
 cke5_name_style_placeholder = Style-Name
 cke5_name_style_empty_error = Bitte geben Sie einen Style-Namen an
 cke5_productivity = Produktivität
-cke5_list_styles = Styles auflisten
+cke5_list_styles = Styles
 cke5_list_templates = Templates auflisten
 cke5_list_slashes = Slashes auflisten
 cke5_data_area = HTML-Bereich
@@ -239,6 +239,8 @@ license_code_info = Bei Erwerb einer kommerziellen Lizenz für CKEditor 5 kann h
 license_code_placeholder = CKEditor 5 Lizenzschlüssel
 cke5_config_header = CKEditor 5 Konfiguration
 cke5_config_info = An dieser Stelle können benutzerdefinierte Pfade und Lizenz-Einstellungen für CKEditor 5 vorgenommen werden. Diese Einstellungen ermöglichen die Verwendung einer eigenen CKEditor 5 Build und eigener Übersetzungen.
+
+cke5_customise = Customise
 
 # Style Groups
 cke5_style_group_name = Gruppen-Name

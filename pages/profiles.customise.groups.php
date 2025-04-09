@@ -22,6 +22,8 @@ $message = '';
 if ($func === 'delete') {
     $message = Cke5ListHelper::deleteData($groupsTable, $id);
     rex_extension::registerPoint(new rex_extension_point('CKE5_STYLE_GROUP_DELETE', $id));
+    // Regeneriere CSS-Datei nach dem Löschen
+    Cke5\Utils\Cke5CssHandler::regenerateCssFile();
     $func = '';
 }
 
