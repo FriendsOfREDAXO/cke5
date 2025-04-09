@@ -18,7 +18,7 @@ $start = rex_request::request('start', 'int', NULL);
 $send = rex_request::request('send', 'boolean', false);
 
 $stylesTable = rex::getTable(Cke5DatabaseHandler::CKE5_STYLES);
-$navigation = '<div class="cke5_subpagenavigation">' . Cke5NavigationProvider::getSubNavigation('profiles.styles') . '</div>';
+$navigation = '<div class="cke5_subpagenavigation">' . Cke5NavigationProvider::getSubNavigation('profiles.customise') . '</div>';
 $message = '';
 
 if ($func === 'delete') {

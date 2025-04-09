@@ -15,7 +15,7 @@ $send = rex_request::request('send', 'boolean', false);
 $groupsTable = rex::getTable(Cke5DatabaseHandler::CKE5_STYLE_GROUPS);
 $stylesTable = rex::getTable(Cke5DatabaseHandler::CKE5_STYLES);
 $navigation = '<div class="cke5_subpagenavigation">' .
-    Cke5NavigationProvider::getSubNavigation('profiles.styles') .
+    Cke5NavigationProvider::getSubNavigation('profiles.customise') .
     '</div>';
 $message = '';
 
@@ -129,6 +129,29 @@ if ($func === '') {
     }
 ]</code></pre>
 </div>');
+
+    // custom area for css
+    $field = $form->addCheckboxField('css');
+    $field->setLabel(rex_i18n::msg('cke5_css_definition'));
+    $field->setAttribute('data-toggle', 'toggle');
+    $field->setAttribute('data-collapse-target', 'cssDefinition');
+    $field->addOption(rex_i18n::msg('cke5_css_definition_description'), 'css_definition');
+
+    // css area
+    $form->addRawField('<div class="collapse '.(($css) ? 'in' : '').'" id="cke5cssDefinition-collapse">');
+        // css definition
+        $field = $form->addTextAreaField('css_definition');
+        $field->setLabel(rex_i18n::msg('cke5_css_definition_area'));
+        $field->setAttribute('id', 'cke5-css-definition-area');
+        $field->setAttribute('class', 'rex-code');
+        $field->setAttribute('data-codemirror-mode', 'text/css');
+
+        // css path
+        $field = $form->addTextField('css_path');
+        $field->setLabel(rex_i18n::msg('cke5_css_path'));
+        $field->setAttribute('placeholder', rex_i18n::msg('cke5_css_path_placeholder'));
+    // end collapse
+    $form->addRawField('</div>');
 
     $fragment = new rex_fragment();
     $fragment->setVar('class', 'edit', false);

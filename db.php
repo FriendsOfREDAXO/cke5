@@ -102,6 +102,9 @@ $sql->ensurePrimaryIdColumn()
     ->ensureColumn(new rex_sql_column('name', 'varchar(100)', true))
     ->ensureColumn(new rex_sql_column('description', 'varchar(255)', true))
     ->ensureColumn(new rex_sql_column('json_config', 'text', true))
+    ->ensureColumn(new rex_sql_column('css', 'varchar(255)', true))
+    ->ensureColumn(new rex_sql_column('css_definition', 'text', true))
+    ->ensureColumn(new rex_sql_column('css_path', 'varchar(255)', true))
     ->ensure();
 
 
