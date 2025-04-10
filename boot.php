@@ -25,7 +25,7 @@ if (rex::isBackend() && is_object(rex::getUser())) {
 
     // Check REDAXO version
     if (rex_version::compare(rex::getVersion(), '5.13.0-dev', '>=')) {
-        rex_view::addCssFile($this->getAssetsUrl('cke5_dark.css'));
+        rex_view::addCssFile($this->getAssetsUrl('css/cke5_dark.css'));
         $user = rex::requireUser();
 
         // get user settings for theme
@@ -41,7 +41,7 @@ if (rex::isBackend() && is_object(rex::getUser())) {
 
         // set theme properties
         rex_view::setJsProperty('cke5theme', $theme);
-        rex_view::setJsProperty('cke5darkcss', rex_url::addonAssets('cke5') . 'dark.css');
+        rex_view::setJsProperty('cke5darkcss', rex_url::addonAssets('cke5') . 'css/dark.css');
     } else {
         rex_view::setJsProperty('cke5theme', 'notheme');
     }

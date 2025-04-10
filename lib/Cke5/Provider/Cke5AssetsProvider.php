@@ -2,7 +2,6 @@
 
 namespace Cke5\Provider;
 
-
 use Cke5\Creator\Cke5ProfilesCreator;
 use Cke5\Utils\Cke5CssHandler;
 use Cke5\Utils\Cke5Lang;
@@ -49,15 +48,19 @@ class Cke5AssetsProvider
 
     public static function provideCke5BaseData(): void
     {
-        // add cke5 vendors
         try {
-            $editorPath = rex_addon::get('cke5')->getConfig('license_cke5_js_path');
-            $translationsPath = rex_addon::get('cke5')->getConfig('license_translations_path', 'assets/addons/cke5/vendor/ckeditor5-classic/translations/');
-            $editorFile = rex_url::base((($editorPath != '') ? $editorPath : 'assets/addons/cke5/vendor/ckeditor5-classic/') . 'ckeditor.js');
-            $translationsPath = rex_url::base(($translationsPath != '') ? $translationsPath : 'assets/addons/cke5/vendor/ckeditor5-classic/translations/');
+            $addon = self::getAddon();
+
+            // Bestimme den Editor-Pfad
+            $editorPath = $addon->getConfig('license_cke5_js_path');
+            $editorFile = rex_url::base((($editorPath != '') ? $editorPath : 'assets/addons/cke5/vendor/ckeditor5-classic/ckeditor.js'));
+
+            // Bestimme den Übersetzungspfad
+            $translationsPath = $addon->getConfig('license_translations_path', 'assets/addons/cke5/vendor/ckeditor5-classic/translations/');
+            $translationsUrl = rex_url::base(($translationsPath != '') ? $translationsPath : 'assets/addons/cke5/vendor/ckeditor5-classic/translations/');
 
             // add cke5 editor and translation
-            rex_view::addCssFile(self::getAddon()->getAssetsUrl('cke5.css'));
+            rex_view::addCssFile(self::getAddon()->getAssetsUrl('css/cke5.css'));
             rex_view::addJsFile($editorFile);
 
             $sql = rex_sql::factory();
@@ -68,22 +71,22 @@ class Cke5AssetsProvider
             if (count($result) > 0) {
                 foreach ($result as $lang) {
                     if (isset($lang['ui']) && $lang['ui'] !== '' && !in_array(self::getLang($lang['ui']), $langKit, true)) {
-                        rex_view::addJsFile($translationsPath . self::getLang($lang['ui']) . '.js');
+                        rex_view::addJsFile($translationsUrl . self::getLang($lang['ui']) . '.js');
                         $langKit[] = self::getLang($lang['ui']);
                     }
                     if (isset($lang['content']) && $lang['content'] !== '' && !in_array(self::getLang($lang['content']), $langKit, true)) {
-                        rex_view::addJsFile($translationsPath . self::getLang($lang['content']) . '.js');
+                        rex_view::addJsFile($translationsUrl . self::getLang($lang['content']) . '.js');
                         $langKit[] = self::getLang($lang['content']);
                     }
                 }
             }
 
             if (!in_array(self::getLang(Cke5Lang::getUserLang()), $langKit, true)) {
-                rex_view::addJsFile($translationsPath . self::getLang(Cke5Lang::getUserLang()) . '.js');
+                rex_view::addJsFile($translationsUrl . self::getLang(Cke5Lang::getUserLang()) . '.js');
                 $langKit[] = self::getLang(Cke5Lang::getUserLang());
             }
             if (!in_array(self::getLang(Cke5Lang::getOutputLang()), $langKit, true)) {
-                rex_view::addJsFile($translationsPath . self::getLang(Cke5Lang::getOutputLang()) . '.js');
+                rex_view::addJsFile($translationsUrl . self::getLang(Cke5Lang::getOutputLang()) . '.js');
                 $langKit[] = self::getLang(Cke5Lang::getOutputLang());
             }
 
