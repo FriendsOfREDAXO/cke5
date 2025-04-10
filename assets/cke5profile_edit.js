@@ -456,6 +456,9 @@ function cke5_toolbar_create_tag(typename, tags) {
             toggle_collapse('numberedList', 'show');
           }
           break;
+        case 'insertTemplate':
+          toggle_collapse('insertTemplate', 'show');
+        break;
         default:
           toggle_collapse(type, 'show');
       }
