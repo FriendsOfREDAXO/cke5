@@ -3,6 +3,7 @@
 
 // register permissions
 use Cke5\Handler\Cke5ExtensionHandler;
+use Cke5\Handler\Cke5FileUploadHandler;
 use Cke5\Handler\Cke5UploadHandler;
 use Cke5\Provider\Cke5AssetsProvider;
 
@@ -55,6 +56,14 @@ if (rex::isBackend() && is_object(rex::getUser())) {
     if (rex_request::request('cke5upload', 'bool') === true) {
         Cke5UploadHandler::uploadCke5Img();
     }
+
+    // handle file uploads and file operations for CKEditor and translations
+    Cke5FileUploadHandler::handleFileUpload();
+    Cke5FileUploadHandler::checkFileExists();
+    Cke5FileUploadHandler::checkFilesExist();
+    Cke5FileUploadHandler::getTranslationFiles();
+    Cke5FileUploadHandler::handleFileDelete();
+    Cke5FileUploadHandler::getEditorFiles();
 
     // register extension point actions
     if (rex_be_controller::getCurrentPagePart(1) === 'cke5') {

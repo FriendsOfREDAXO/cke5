@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 6.4.0
+
+* Drag & Drop uplaode for ckeditor vendor files see config.php
+* css files moved to assets/css
+Ü
+
 ## Version 6.3.3
 
 * Style groups added for quick capture of styles as json array
@@ -11,7 +17,7 @@
 * Tag handling in profile editor improved
   * better drag&drop expierience
   * search filtering
-  * remove of used tags from the taglist-dropdown
+  * remove of used tags from the taglist-dropdown1
 * Tag handling in style editor improved 
   * add tags by space enter
   * add the entered text as tag after 2 seconds of inactivity

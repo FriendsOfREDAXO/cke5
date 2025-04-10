@@ -186,6 +186,7 @@ cke5_styles = Styles
 cke5_styles_definition_description = Styles definieren
 cke5_image_styles = Bildstyles
 cke5_templates = Templates
+cke5_template = Template
 cke5_templates_edit = Template bearbeiten
 cke5_templates_add = Template hinzufügen
 cke5_editor_html = Editor HTML
@@ -254,3 +255,49 @@ cke5_style_groups = Style-Gruppen
 # Templates
 cke5_add_templates = Neues Template erstellen
 cke5_icon_templates = Icon
+
+cke5_editor_upload_title = CKEditor-Datei hochladen
+cke5_editor_upload_dropzone = Datei hier ablegen oder klicken zum Auswählen
+cke5_editor_upload_button = Datei auswählen
+
+cke5_translations_upload_title = Übersetzungsdateien hochladen
+cke5_translations_upload_dropzone = Dateien hier ablegen oder klicken zum Auswählen
+cke5_translations_upload_button = Dateien auswählen
+
+cke5_upload_js_only = Es sind nur JavaScript-Dateien (.js) erlaubt!
+cke5_file_already_exists = Die Datei existiert bereits. Möchten Sie sie überschreiben?
+cke5_files_already_exist = Folgende Dateien existieren bereits und werden überschrieben:
+cke5_upload_success = Dateien erfolgreich hochgeladen
+cke5_upload_error = Fehler beim Hochladen der Dateien
+cke5_editor_current_file = Aktuelle Datei
+cke5_translations_uploaded_files = Hochgeladene Übersetzungsdateien
+cke5_no_files_uploaded = Keine Dateien hochgeladen
+cke5_translation_files_error = Fehler beim Laden der Dateien
+
+cke5_files_management_title = Dateiverwaltung
+cke5_files_upload_info = Die hochgeladenen Dateien überschreiben die Standarddateien in dem öffentlichen Assets-Ordner.
+cke5_files_delete_info = Beim Löschen werden die hochgeladenen Dateien entfernt und es werden wieder die Standarddatei verwendet.
+cke5_delete_all_translations = Alle Übersetzungsdateien löschen
+cke5_confirm_delete_all_translations = Möchtest du wirklich alle Übersetzungsdateien löschen?
+cke5_delete_all_success = Alle Übersetzungsdateien wurden erfolgreich gelöscht.
+cke5_loading_files = Dateien werden geladen...
+
+cke5_editor_current_files = Hochgeladene Editor-Dateien
+cke5_delete_all_editor = Alle Editor-Dateien löschen
+cke5_confirm_delete_all_editor = Sind Sie sicher, dass Sie alle Editor-Dateien löschen möchten? Die Standarddateien werden wiederhergestellt.
+cke5_editor_files_error = Fehler beim Laden der Editor-Dateien
+cke5_confirm_delete_file = Möchten Sie diese Datei wirklich löschen?
+cke5_delete_success = Datei erfolgreich gelöscht
+cke5_delete_error = Fehler beim Löschen der Datei
+
+# Template Groups
+cke5_template_group_name = Gruppen-Name
+cke5_template_group_name_error = Bitte geben Sie einen Gruppen-Namen an
+cke5_template_group_description = Gruppen-Beschreibung
+cke5_template_group_json_configuration = JSON-Konfiguration
+cke5_template_group_edit = Template-Gruppe bearbeiten
+cke5_template_group_add = Template-Gruppe hinzufügen
+cke5_template_groups = Template-Gruppen
+cke5_add_template_group = Neue Template-Gruppe erstellen
+cke5_group_templates = Template-Gruppen
+cke5_no_group = Keine Gruppe
