@@ -3,6 +3,7 @@
 
 // register permissions
 use Cke5\Handler\Cke5ExtensionHandler;
+use Cke5\Handler\Cke5FileRestoreHandler;
 use Cke5\Handler\Cke5FileUploadHandler;
 use Cke5\Handler\Cke5UploadHandler;
 use Cke5\Provider\Cke5AssetsProvider;
@@ -10,13 +11,11 @@ use Cke5\Provider\Cke5AssetsProvider;
 if (rex::isBackend() && is_object(rex::getUser())) {
     rex_perm::register('cke5_addon[]');
 
-    // remove productivity components if no licence provided
-//    $page = $this->getProperty('page');
-//    if (empty($this->getConfig('license_code'))) {
-//        unset($page['subpages']['profiles']['subpages']['templates']);
-//    }
-//    $this->setProperty('page', $page);
-
+    // restore config editor files
+    if ($this->getConfig('restore_files', false) === true) {
+        Cke5FileRestoreHandler::restoreEditorFiles($this);
+        $this->removeConfig('restore_files');
+    }
 
     // load assets
     Cke5AssetsProvider::provideCke5ProfileEditData();

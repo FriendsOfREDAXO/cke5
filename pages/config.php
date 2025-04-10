@@ -7,7 +7,6 @@ $form = rex_config_form::factory('cke5');
 // fieldset
 $form->addFieldset($this->i18n('cke5_config_header'));
 
-
 // Informationstext zur Dateiverwaltung hinzufügen
 $file_management_info = '<p><strong>' . $this->i18n('cke5_files_management_title') . '</strong></p>
     <p>' . $this->i18n('cke5_config_info') . '</p>

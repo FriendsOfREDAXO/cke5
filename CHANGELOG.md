@@ -4,7 +4,6 @@
 
 * Drag & Drop uplaode for ckeditor vendor files see config.php
 * css files moved to assets/css
-Ü
 
 ## Version 6.3.3
 

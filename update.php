@@ -8,6 +8,8 @@ if ($this->getConfig('license_code') === null || $this->getConfig('license_code'
     $this->setConfig('license_code', 'GPL');
 }
 
+$this->setConfig('restore_files', true);
+
 try {
     if (rex_version::compare($this->getVersion(), '3.3.0', '<')) {
         // copy custom data to assets folder

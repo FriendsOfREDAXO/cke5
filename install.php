@@ -10,6 +10,8 @@ if ($this->getConfig('license_code') === null) {
     $this->setConfig('license_code', 'GPL');
 }
 
+$this->setConfig('restore_files', true);
+
 // install default demo profiles
 try {
     $sql = rex_sql::factory();

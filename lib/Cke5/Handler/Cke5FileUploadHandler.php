@@ -266,6 +266,28 @@ class Cke5FileUploadHandler
             $message = 'Invalid upload type';
         }
 
+        // Nach erfolgreichem Upload in den assets-Ordner, kopiere in den data-Ordner
+        if ($success) {
+            $dataDir = rex_path::addonData('cke5', $type === 'editor' ? 'editor' : 'translations');
+
+            // Stelle sicher, dass das Verzeichnis existiert
+            if (!is_dir($dataDir)) {
+                mkdir($dataDir, 0775, true);
+            }
+
+            // Kopiere die Datei(en) in den data-Ordner
+            if ($type === 'editor') {
+                $dataFilePath = $dataDir . '/' . $file['name'];
+                rex_file::copy($assetsFilePath, $dataFilePath);
+            } else if ($type === 'translations') {
+                foreach ($uploadedFiles as $fileName) {
+                    $assetFilePath = $assetsDir . $fileName;
+                    $dataFilePath = $dataDir . '/' . $fileName;
+                    rex_file::copy($assetFilePath, $dataFilePath);
+                }
+            }
+        }
+
         self::sendResponse([
             'success' => $success,
             'message' => $message
@@ -513,6 +535,51 @@ class Cke5FileUploadHandler
             $message = 'Invalid file type';
         }
 
+        // Nach erfolgreicher Löschung aus dem assets-Ordner, lösche aus dem data-Ordner
+        if ($success) {
+            $dataDir = rex_path::addonData('cke5', $type === 'editor' || $type === 'all_editor' ? 'editor' : 'translations');
+
+            if ($type === 'editor') {
+                $dataFilePath = $dataDir . '/' . $filename;
+                if (file_exists($dataFilePath)) {
+                    unlink($dataFilePath);
+                }
+            } else if ($type === 'all_editor') {
+                // Lösche alle Editor-Dateien aus dem data-Ordner
+                $editorFile = $addon->getConfig('editor_file', '');
+                $editorFiles = $addon->getConfig('editor_files', []);
+
+                if (!empty($editorFile)) {
+                    $dataFilePath = $dataDir . '/' . $editorFile;
+                    if (file_exists($dataFilePath)) {
+                        unlink($dataFilePath);
+                    }
+                }
+
+                foreach ($editorFiles as $file) {
+                    $dataFilePath = $dataDir . '/' . $file;
+                    if (file_exists($dataFilePath)) {
+                        unlink($dataFilePath);
+                    }
+                }
+            } else if ($type === 'translations') {
+                $dataFilePath = $dataDir . '/' . $filename;
+                if (file_exists($dataFilePath)) {
+                    unlink($dataFilePath);
+                }
+            } else if ($type === 'all_translations') {
+                // Lösche alle Übersetzungsdateien aus dem data-Ordner
+                $translationFiles = $addon->getConfig('translation_files', []);
+
+                foreach ($translationFiles as $file) {
+                    $dataFilePath = $dataDir . '/' . $file;
+                    if (file_exists($dataFilePath)) {
+                        unlink($dataFilePath);
+                    }
+                }
+            }
+        }
+
         self::sendResponse([
             'success' => $success,
             'message' => $message
@@ -658,7 +725,7 @@ class Cke5FileUploadHandler
         if (!empty($mainFile)) {
             $files[] = $mainFile;
         }
-        $files = array_merge($files, $additionalFiles);
+        $files = array_unique(array_merge($files, $additionalFiles));
 
         self::sendResponse([
             'success' => true,
