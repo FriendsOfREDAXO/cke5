@@ -514,7 +514,121 @@ dl + .cke5_clangtabs .nav.nav-tabs,
     }
 }
 
-
 .cke5_subpagenavigation .nav.rex-page-nav {
     margin-bottom: 10px !important;
+}
+
+.cke5-uplaod-wrapper {
+    border: 1px solid #ccc;
+    background-color: rgba(0, 0, 0, 0.02);
+    padding: 10px;
+}
+
+.cke5-upload-dropzone {
+    border: 2px dashed #ccc;
+    border-radius: 5px;
+    padding: 25px;
+    text-align: center;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.cke5-upload-dropzone.active {
+    border-color: #2b7dc0;
+    background-color: #f7f7f7;
+}
+
+.cke5-upload-dropzone i {
+    font-size: 40px;
+    margin-bottom: 10px;
+    color: #666;
+}
+
+.cke5-upload-status {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #f7f7f7;
+    border-radius: 5px;
+}
+
+.cke5-upload-status .filename {
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+.cke5-upload-status .files-list {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.cke5-upload-status .no-files {
+    font-style: italic;
+    color: #666;
+    padding: 5px;
+}
+
+.cke5-upload-status .file-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #ddd;
+}
+
+.cke5-upload-status .file-item:last-child {
+    border-bottom: none;
+}
+
+.cke5-upload-status .file-item:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+.cke5-upload-status .btn-delete {
+    color: #d9534f;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+.cke5-upload-status .btn-delete:hover {
+    color: #c9302c;
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    body.rex-has-theme:not(.rex-theme-light) .cke5-uplaod-wrapper {
+        border-color: #444;
+        background-color: rgba(0, 0, 0, 0.025);
+    }
+
+    body.rex-has-theme:not(.rex-theme-light) .cke5-upload-dropzone {
+        border-color: #444;
+    }
+
+    body.rex-has-theme:not(.rex-theme-light) .cke5-upload-dropzone.active {
+        border-color: #3c7dbe;
+        background-color: #33373f;
+    }
+
+    body.rex-has-theme:not(.rex-theme-light) .cke5-upload-dropzone i {
+        color: #aaa;
+    }
+
+    body.rex-has-theme:not(.rex-theme-light) .cke5-upload-status {
+        background-color: #33373f;
+    }
+
+    body.rex-has-theme:not(.rex-theme-light) .cke5-upload-status .no-files {
+        color: #aaa;
+    }
+
+    body.rex-has-theme:not(.rex-theme-light) .cke5-upload-status .file-item {
+        border-bottom-color: #444;
+    }
+
+    body.rex-has-theme:not(.rex-theme-light) .cke5-upload-status .file-item:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+    }
 }

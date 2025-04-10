@@ -112,7 +112,7 @@ class Cke5AssetsProvider
                 'bootstrap-slider' => 'vendor/bootstrap-slider/bootstrap-slider.min.js',
                 'bootstrap-toggle' => 'vendor/bootstrap-toggle/bootstrap-toggle.min.js',
                 'jquery.alphanum' => 'vendor/alphanum/jquery.alphanum.js',
-                'cke5profile_edit' => 'cke5profile_edit.js',
+                'cke5profile_edit' => 'js/cke5profile_edit.js',
                 'jq.multiinput' => 'vendor/multiinput/dist/js/jq.multiinput.min.js',
                 'colpick' => 'vendor/colpick/js/colpick.js',
             ]);
@@ -126,13 +126,10 @@ class Cke5AssetsProvider
             ]);
         }
         // style edit
-        if (
-            (rex_be_controller::getCurrentPagePart(4) === 'styles' && rex_be_controller::getCurrentPagePart(1) === 'cke5') ||
-            (rex_be_controller::getCurrentPagePart(3) === 'templates' && rex_be_controller::getCurrentPagePart(1) === 'cke5')
-        ) {
+        if (rex_be_controller::getCurrentPagePart(3) === 'customise' && rex_be_controller::getCurrentPagePart(1) === 'cke5') {
             // add js vendors
             self::addJS([
-                'cke5style_edit' => 'cke5style_edit.js',
+                'cke5style_edit' => 'js/cke5style_edit.js',
             ]);
         }
     }

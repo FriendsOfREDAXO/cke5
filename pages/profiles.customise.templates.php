@@ -158,6 +158,7 @@ if ($func === '') {
     // show
     $fragment = new rex_fragment();
     $fragment->setVar('class', 'edit', false);
+    $fragment->setVar('before', $navigation, false);
     $fragment->setVar('title', ($func === 'edit') ? rex_i18n::msg('cke5_templates_edit') : rex_i18n::msg('cke5_templates_add'));
     $fragment->setVar('body', '<div class="cke5_style_edit">' . $form->get() . '</div>', false);
     echo $fragment->parse('core/page/section.php');
