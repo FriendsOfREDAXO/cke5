@@ -11,11 +11,11 @@ if (rex::isBackend() && is_object(rex::getUser())) {
     rex_perm::register('cke5_addon[]');
 
     // remove productivity components if no licence provided
-    $page = $this->getProperty('page');
-    if (empty($this->getConfig('license_code'))) {
-        unset($page['subpages']['profiles']['subpages']['templates']);
-    }
-    $this->setProperty('page', $page);
+//    $page = $this->getProperty('page');
+//    if (empty($this->getConfig('license_code'))) {
+//        unset($page['subpages']['profiles']['subpages']['templates']);
+//    }
+//    $this->setProperty('page', $page);
 
 
     // load assets
