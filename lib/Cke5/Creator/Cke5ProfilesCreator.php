@@ -153,7 +153,7 @@ class Cke5ProfilesCreator
         'toolbar' => ['insertTemplate', 'tableOfContents']
     ];
     const ALLOWED_FIELDS = [
-        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll', 'specialCharacters', 'pastePlainText', 'htmlEmbed', 'sourceEditing', 'textPartLanguage', 'findAndReplace', 'style', /*'insertTemplate', 'tableOfContents'*/ 'showBlocks', 'bookmark', 'accessibilityHelp'],
+        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll', 'specialCharacters', 'pastePlainText', 'htmlEmbed', 'sourceEditing', 'textPartLanguage', 'findAndReplace', 'style', 'insertTemplate', /*'tableOfContents'*/ 'showBlocks', 'bookmark', 'accessibilityHelp'],
         'alignment' => ['left', 'right', 'center', 'justify'],
         'table_toolbar' => ['|', 'tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties', 'toggleTableCaption'],
         'heading' => ['paragraph', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
@@ -590,6 +590,36 @@ class Cke5ProfilesCreator
             $jsonProfile['style']['definitions'] = self::getUniqueStylesByName($jsonProfile['style']['definitions']);
         }
 
+        if (isset($profile['group_templates']) && $profile['group_templates'] !== '') {
+            $templateGroups = array_filter(explode('|', $profile['group_templates']));
+            $templateGroupTable = rex::getTable(Cke5DatabaseHandler::CKE5_TEMPLATE_GROUPS);
+            $sql = rex_sql::factory();
+            $sqlResult = $sql->getArray("select * from $templateGroupTable where id in (" . implode(', ', $templateGroups) . ")");
+
+            if (count($sqlResult) > 0) {
+                foreach ($sqlResult as $result) {
+                    if (!empty($result['json_config'])) {
+                        try {
+                            $jsonConfig = json_decode($result['json_config'], true);
+                        } catch (Exception $e) {
+                            rex_logger::logException($e);
+                            throw $e;
+                        }
+
+                        // JSON-Konfiguration parsen
+                        if (is_array($jsonConfig) && count($jsonConfig) > 0) {
+                            if (!isset($jsonProfile['template']['definitions'])) {
+                                $jsonProfile['template']['definitions'] = [];
+                            }
+                            foreach ($jsonConfig as $value) {
+                                $jsonProfile['template']['definitions'][] = $value;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         if (isset($profile['templates']) && $profile['templates'] !== '') {
             $templates = array_filter(explode('|', $profile['templates']));
             $templateTable = rex::getTable(Cke5DatabaseHandler::CKE5_TEMPLATES);
@@ -612,6 +642,10 @@ class Cke5ProfilesCreator
                     $jsonProfile['template']['definitions'][] = $item;
                 }
             }
+        }
+
+        if (!empty($jsonProfile['template']['definitions'])) {
+            $jsonProfile['template']['definitions'] = self::getUniqueTemplatesByTitle($jsonProfile['template']['definitions']);
         }
 
         if (!in_array('sourceEditing', $toolbar, true)) {
@@ -973,5 +1007,30 @@ class Cke5ProfilesCreator
         }
 
         return $uniqueStyles;
+    }
+
+    /**
+     * Entfernt Duplikate aus einem Array basierend auf dem 'title'-Attribut
+     *
+     * @param array $templatesArray Array mit Template-Definitionen
+     * @return array Bereinigtes Array ohne Duplikate
+     */
+    public static function getUniqueTemplatesByTitle(array $templatesArray): array
+    {
+        $uniqueTemplates = [];
+        $usedTitles = []; // Speichert bereits verwendete Titel
+
+        foreach ($templatesArray as $template) {
+            if (isset($template['title'])) {
+                $title = $template['title'];
+
+                if (!in_array($title, $usedTitles)) {
+                    $usedTitles[] = $title;
+                    $uniqueTemplates[] = $template;
+                }
+            }
+        }
+
+        return $uniqueTemplates;
     }
 }

@@ -3,6 +3,7 @@
 
 use Cke5\Creator\Cke5ProfilesCreator;
 use Cke5\Handler\Cke5DatabaseHandler;
+use Cke5\Provider\Cke5NavigationProvider;
 use Cke5\Utils\Cke5FormHelper;
 use Cke5\Utils\CKE5ISO6391;
 use Cke5\Utils\Cke5ListHelper;
@@ -17,6 +18,9 @@ $start = rex_request::request('start', 'int', NULL);
 $send = rex_request::request('send', 'boolean', false);
 
 $templatesTable = rex::getTable(Cke5DatabaseHandler::CKE5_TEMPLATES);
+$navigation = '<div class="cke5_subpagenavigation">' .
+    Cke5NavigationProvider::getSubNavigation('profiles.customise') .
+    '</div>';
 $message = '';
 
 if ($func === 'delete') {
@@ -78,6 +82,7 @@ if ($func === '') {
     $fragment = new rex_fragment();
     $fragment->setVar('title', rex_i18n::msg('cke5_list_templates'));
     $fragment->setVar('content', $message . $content, false);
+    $fragment->setVar('before', $navigation, false);
     echo $fragment->parse('core/page/section.php');
 
 } elseif ($func === 'edit' || $func === 'add') {

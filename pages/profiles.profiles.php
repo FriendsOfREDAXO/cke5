@@ -235,31 +235,37 @@ if ($func === '') {
         $form->addRawField('</fieldset>');
     $form->addRawField('</div>');
 
-// PRODUCTIVITY
-    if (!empty($this->getAddon()->getConfig('license_code'))) {
-        $form->addRawField('<fieldset><legend>' . rex_i18n::msg('cke5_productivity') . '</legend>');
-// OUTLINE
-
-// SLASHES
-
 // TEMPLATES
-        $form->addRawField('<div class="collapse" id="cke5insertTemplate-collapse">');
-            $form->addRawField('<fieldset><legend>' . rex_i18n::msg('cke5_templates') . '</legend>');
-                $field = $form->addSelectField('templates');
-                $field->setAttribute('class', 'form-control selectpicker');
-                $field->setAttribute('data-live-search', 'true');
-                $field->setAttribute('multiple', 'multiple');
-                $field->setLabel(rex_i18n::msg('cke5_templates'));
-                $sql = rex_sql::factory();
-                $sqlResult = $sql->getArray('select id, title from ' . $templatesTable);
-                foreach ($sqlResult as $key => $value) {
-                    $field->getSelect()->addOption($value['title'] . ' [' . $value['id'] . ']', $value['id']);
-                }
-            $form->addRawField('</fieldset>');
-        $form->addRawField('</div>');
+    $form->addRawField('<div class="collapse" id="cke5insertTemplate-collapse">');
+        $form->addRawField('<fieldset><legend>' . rex_i18n::msg('cke5_template') . '</legend>');
+            // Template-Gruppen-Auswahl
+            $field = $form->addSelectField('group_templates');
+            $field->setAttribute('class', 'form-control selectpicker');
+            $field->setAttribute('data-live-search', 'true');
+            $field->setAttribute('multiple', 'multiple');
+            $field->setLabel(rex_i18n::msg('cke5_group_templates'));
+
+            // Laden der Template Groups aus der Datenbank
+            $templateGroupTable = rex::getTable(Cke5DatabaseHandler::CKE5_TEMPLATE_GROUPS);
+            $sql = rex_sql::factory();
+            $sqlResult = $sql->getArray("select id, name from $templateGroupTable");
+
+            foreach ($sqlResult as $group) {
+                $field->getSelect()->addOption($group['name'] . ' [' . $group['id'] . ']', $group['id']);
+            }
+
+            $field = $form->addSelectField('templates');
+            $field->setAttribute('class', 'form-control selectpicker');
+            $field->setAttribute('data-live-search', 'true');
+            $field->setAttribute('multiple', 'multiple');
+            $field->setLabel(rex_i18n::msg('cke5_template'));
+            $sql = rex_sql::factory();
+            $sqlResult = $sql->getArray('select id, title from ' . $templatesTable);
+            foreach ($sqlResult as $key => $value) {
+                $field->getSelect()->addOption($value['title'] . ' [' . $value['id'] . ']', $value['id']);
+            }
         $form->addRawField('</fieldset>');
-    }
-// END PRODUCTIVITY
+    $form->addRawField('</div>');
 
 // BASIS TEXT STYLES
         $form->addRawField('<fieldset><legend>'.rex_i18n::msg('cke5_base_text_styles').'</legend>');

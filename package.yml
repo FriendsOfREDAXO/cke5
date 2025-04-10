@@ -25,10 +25,12 @@ page:
                     subpages:
                         groups:
                             title: 'translate:style_groups'
+                        template_groups:
+                            title: 'translate:template_groups'
                         styles:
                             title: 'translate:styles'
-#                templates:
-#                    title: 'translate:templates'
+                        templates:
+                            title: 'translate:templates'
                 export:
                     title: 'translate:profiles_export'
                 import:
