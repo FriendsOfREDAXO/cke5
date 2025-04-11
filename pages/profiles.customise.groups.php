@@ -103,11 +103,13 @@ if ($func === '') {
     // Name
     $field = $form->addTextField('name');
     $field->setLabel(rex_i18n::msg('cke5_style_group_name'));
+    $field->setAttribute('placeholder', rex_i18n::msg('cke5_style_group_name_placeholder'));
     $field->getValidator()->add('notEmpty', rex_i18n::msg('cke5_style_group_name_error'));
 
     // Beschreibung
     $field = $form->addTextField('description');
     $field->setLabel(rex_i18n::msg('cke5_style_group_description'));
+    $field->setAttribute('placeholder', rex_i18n::msg('cke5_style_group_description_placeholder'));
 
     // JSON Konfiguration
     $field = $form->addTextAreaField('json_config');
