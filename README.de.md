@@ -54,6 +54,79 @@ Hier kommt der [CKEditor5](https://ckeditor.com) für REDAXO CMS.
 - Datensicherung vor Updates
 - Konsistente Style-Übertragung zwischen Installationen
 
+## Style-Gruppen verwenden
+
+Style-Gruppen ermöglichen es, mehrere CSS-Stile als JSON-Array zu definieren und sie gemeinsam zu verwalten. Diese Funktion wurde in Version 6.3.3 eingeführt und vereinfacht die konsistente Gestaltung deiner Inhalte.
+
+### Beispiel einer Style-Gruppe
+
+Unter "CKEditor5" > "Profiles" > "Customise" > "Style Groups" kannst du Style-Gruppen erstellen:
+
+```json
+[
+    {
+        "name": "Blue Box",
+        "element": "div",
+        "classes": ["blue-box", "rounded", "shadow"]
+    },
+    {
+        "name": "Highlighted Text",
+        "element": "span",
+        "classes": ["highlight", "bold"]
+    },
+    {
+        "name": "Info Panel",
+        "element": "section",
+        "classes": ["info-panel"],
+        "attributes": {
+            "data-type": "info",
+            "role": "note"
+        }
+    }
+]
+```
+
+### So verwendest du Style-Gruppen:
+
+1. Erstelle eine Style-Gruppe mit der JSON-Konfiguration
+2. Optional: Füge direkt CSS-Definitionen hinzu, die automatisch im Backend geladen werden
+3. Aktiviere das "Style"-Tool in deinem Editor-Profil
+4. Wähle deine erstellte Style-Gruppe im Profileditor aus
+
+### Vorteile:
+- Konsistente Gestaltung über verschiedene Profile hinweg
+- Zentrale Verwaltung von zusammengehörigen Stilen
+- Automatische CSS-Integration im Backend
+- Einfacher Export/Import zwischen REDAXO-Instanzen
+
+### CSS-Definitionen für Style-Gruppen
+
+Du kannst direkt CSS zu deinen Style-Gruppen hinzufügen:
+
+```css
+.blue-box {
+    background-color: #e7f5ff;
+    border: 1px solid #4dabf7;
+    padding: 15px;
+}
+
+.blue-box.rounded {
+    border-radius: 8px;
+}
+
+.highlight {
+    background-color: #fff9db;
+    padding: 2px 4px;
+}
+
+.info-panel {
+    border-left: 4px solid #1c7ed6;
+    background: #f8f9fa;
+    padding: 10px 15px;
+    margin: 15px 0;
+}
+```
+
 ## Eine kleine Demo
 
 ![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/ckeditor5_demo.gif)
