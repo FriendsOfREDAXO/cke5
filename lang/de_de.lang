@@ -236,12 +236,14 @@ license_translations_path = Benutzerdefinierter Pfad für Übersetzungen
 license_translations_path_info = Hier kann ein benutzerdefinierter Pfad zum Übersetzungsordner angegeben werden. Die Übersetzungsdateien müssen nach dem Schema 'de.js', 'en-gb.js' usw. benannt sein.
 license_translations_path_placeholder = z.B. assets/addons/cke5/vendor/custom/translations/
 license_code = Lizenzschlüssel
-license_code_info = Bei Erwerb einer kommerziellen Lizenz für CKEditor 5 kann hier der Lizenzschlüssel eingetragen werden. Der "Powered by CKEditor 5"-Banner entfällt bei Eintrag eines gültigen Lizenzschlüssels automatisch nach dem ein Profile erneut gespeichern wurde. Bitte beachten: Der im AddOn enthaltene CKEditor 5 Build beinhaltet keine Pro-Funktionen und aktuell werden noch keine Pro-Funktionen im AddOn unterstützt.
+license_code_info = Bei Erwerb einer kommerziellen Lizenz für CKEditor 5 kann hier der Lizenzschlüssel eingetragen werden. Der "Powered by CKEditor 5"-Banner entfällt bei Eintrag eines gültigen Lizenzschlüssels automatisch nach dem ein Profile erneut gespeichern wurde. Bitte beachten: Der im AddOn enthaltene CKEditor 5 Build beinhaltet keine Pro-Funktionen.
 license_code_placeholder = CKEditor 5 Lizenzschlüssel
 cke5_config_header = CKEditor 5 Konfiguration
 cke5_config_info = An dieser Stelle können benutzerdefinierte Pfade und Lizenz-Einstellungen für CKEditor 5 vorgenommen werden. Diese Einstellungen ermöglichen die Verwendung einer eigenen CKEditor 5 Build und eigener Übersetzungen.
 
 cke5_customise = Customise
+
+cke5_pro_feature_info = Pro-Features funktionieren nur mit eigenen Editor-Builds welche die lizenzsierten Pro-Features Module beinhalten.
 
 # Style Groups
 cke5_style_group_name = Gruppen-Name

@@ -23,6 +23,13 @@ $navigation = '<div class="cke5_subpagenavigation">' .
     '</div>';
 $message = '';
 
+// info area
+$fragment = new rex_fragment();
+$fragment->setVar('class', 'info" style="padding-bottom:0;margin-bottom:10px', false);
+$fragment->setVar('title', '', false);
+$fragment->setVar('body', '<strong><i class="fa fa-star-o" aria-hidden="true"></i> ' . $this->i18n('cke5_pro_feature_info') . '</strong>', false);
+$info = $fragment->parse('core/page/section.php');
+
 if ($func === 'delete') {
     $message = Cke5ListHelper::deleteData($templatesTable, $id);
     rex_extension::registerPoint(new rex_extension_point('CKE5_PROFILE_TEMPLATE_DELETE', $id));
@@ -82,7 +89,7 @@ if ($func === '') {
     $fragment = new rex_fragment();
     $fragment->setVar('title', rex_i18n::msg('cke5_list_templates'));
     $fragment->setVar('content', $message . $content, false);
-    $fragment->setVar('before', $navigation, false);
+    $fragment->setVar('before', $navigation . $info, false);
     echo $fragment->parse('core/page/section.php');
 
 } elseif ($func === 'edit' || $func === 'add') {
