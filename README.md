@@ -4,38 +4,112 @@ Integrates the [CKEditor5](https://ckeditor.com) into REDAXO CMS.
 
 ![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/cke5.png)
 
-## Features, what's it got?
+## Features by Functional Groups
 
-- A fancy WYSIWYG-Editor
-- Profile configurator with Drag&Drop. Easy to "click together" your profiles
-- Custom fonts? No problem, you can integrate and manage them
-- Custom styles can be maintained too
-- Image upload category can be set per profile
-- Media manager type settable per profile
-- Additional options to customize the editor to your liking
-- Sprog replacements via the mentions plugin
-- The expert mode allows you to develop profiles freely in the source code
-- Placeholders for all backend languages
+### Core Features
+- A powerful WYSIWYG editor with modern interface
 - Dark mode support for REDAXO >= 5.13
+- Placeholders for all backend languages
+- Only supported formats are inserted
 
-**Custom REDAXO Link-Widget**
+### Configuration and Customization
+- Profile configurator with Drag&Drop for easy profile creation
+- Expert mode for free source code profile development
+- Additional options to customize the editor to your needs
+- Configuration page for license key to remove the "Powered by CKEditor" banner
+- API for programmatic profile generation
 
-![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/writer.png)
+### Style Management
+- Style-Manager for easy style administration
+- Style groups for quick capture of styles as JSON array
+- CSS definitions from each style are automatically added to the backend
+- Custom fonts can be integrated and managed
+- Improved tag handling in profile and style editor
 
+### Media Integration
+- Image upload to the media pool via drag & drop directly into the text field
+- Image upload category configurable per profile
+- Media manager type settable per profile 
+- Drag & Drop upload for CKEditor vendor files (configurable in config.php)
+
+### Link Features
+- Comprehensive REDAXO Link-Widget
 - Linkmap-Support
-- YForm-Datasets
+- YForm-Datasets integration
 - Tel: and Mailto: links
 - Media links
-- Own link decorators
+- Custom link decorators for custom attributes and classes
 
-**Editor Features**
-
+### Extensions and Plugins
 - All free provider plugins are integrated
-- Only supported formats are inserted
+- Sprog replacements via the mentions plugin
+- AccessibilityHelper for better accessibility
 - Insert plain text
 - Transformations: e.g. converting (c) to ©
 - Selection for special characters
-- Image upload in the media pool via drag & drop directly into the text field
+- New toolbar elements: Emoji, Bookmarks, ShowBlocks
+
+### Import and Export
+- Profile export and import for easy migration
+- Data backup before updates
+- Consistent style transfer between installations
+
+## Tips for Backup and Migration
+
+### Exporting and Importing Profiles
+
+To transfer your CKEditor5 profiles between REDAXO installations:
+
+1. Go to "CKEditor5" > "Profiles" > "Export"
+2. Select the profiles you want to export
+3. Click "Export" to download the JSON file
+4. In the target instance: Go to "CKEditor5" > "Profiles" > "Import"
+5. Select the JSON file and import it
+
+This ensures your carefully created profiles won't be lost when upgrading or migrating to a new installation.
+
+### Best Practices for Backup
+
+- Always export your profiles before updating the addon
+- Store backups of your custom styles in a separate JSON file
+- Document special configurations in your project documentation
+- Note that CSS files in `custom_data` won't be overwritten during updates
+
+## Usage Examples with Code Snippets
+
+### Basic Integration with Custom Height 
+
+```php
+<textarea class="form-control cke5-editor" 
+          data-profile="default" 
+          data-min-height="200" 
+          data-max-height="600"
+          data-lang="<?php echo \Cke5\Utils\Cke5Lang::getUserLang(); ?>" 
+          name="REX_INPUT_VALUE[1]">REX_VALUE[1]</textarea>
+```
+
+### Multi-language Support
+
+```php
+// Show placeholders according to the current language
+$cke5Lang = rex_i18n::getLocale();
+echo '<textarea class="cke5-editor" data-profile="default" data-lang="'.$cke5Lang.'" name="content"></textarea>';
+```
+
+### Using Style Groups
+
+Style groups allow for quick assignment of multiple CSS properties at once:
+
+```json
+{
+    "name": "Highlight-Box",
+    "element": "div",
+    "classes": ["highlight-box", "padding-20"],
+    "attributes": {
+        "data-info": "custom-highlight"
+    }
+}
+```
 
 ## A little demo
 
