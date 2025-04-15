@@ -111,6 +111,79 @@ Style groups allow for quick assignment of multiple CSS properties at once:
 }
 ```
 
+## Using Style Groups
+
+Style groups allow you to define multiple CSS styles as a JSON array and manage them together. This feature was introduced in version 6.3.3 and simplifies the consistent design of your content.
+
+### Example of a Style Group
+
+Under "CKEditor5" > "Profiles" > "Customise" > "Style Groups" you can create style groups:
+
+```json
+[
+    {
+        "name": "Blue Box",
+        "element": "div",
+        "classes": ["blue-box", "rounded", "shadow"]
+    },
+    {
+        "name": "Highlighted Text",
+        "element": "span",
+        "classes": ["highlight", "bold"]
+    },
+    {
+        "name": "Info Panel",
+        "element": "section",
+        "classes": ["info-panel"],
+        "attributes": {
+            "data-type": "info",
+            "role": "note"
+        }
+    }
+]
+```
+
+### How to use Style Groups:
+
+1. Create a style group with the JSON configuration
+2. Optional: Add CSS definitions directly, which will be automatically loaded in the backend
+3. Enable the "Style" tool in your editor profile
+4. Select your created style group in the profile editor
+
+### Benefits:
+- Consistent design across different profiles
+- Central management of related styles
+- Automatic CSS integration in the backend
+- Easy export/import between REDAXO instances
+
+### CSS Definitions for Style Groups
+
+You can add CSS directly to your style groups:
+
+```css
+.blue-box {
+    background-color: #e7f5ff;
+    border: 1px solid #4dabf7;
+    padding: 15px;
+}
+
+.blue-box.rounded {
+    border-radius: 8px;
+}
+
+.highlight {
+    background-color: #fff9db;
+    padding: 2px 4px;
+}
+
+.info-panel {
+    border-left: 4px solid #1c7ed6;
+    background: #f8f9fa;
+    padding: 10px 15px;
+    margin: 15px 0;
+}
+```
+
 ## A little demo
 
 ![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/ckeditor5_demo.gif)
