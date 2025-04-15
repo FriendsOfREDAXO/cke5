@@ -4,38 +4,55 @@ Hier kommt der [CKEditor5](https://ckeditor.com) für REDAXO CMS.
 
 ![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/cke5.png)
 
-## Was das AddOn so drauf hat
+## Features nach Funktionsgruppen
 
-- Ein fetter WYSIWYG-Editor
-- Profilkonfigurator mit Drag&Drop. Profile lassen sich easy zusammenklicken
-- Eigene Schriften? Kein Problem, die kann man integrieren und verwalten
-- Auch eigene Styles lassen sich pflegen
+### Basis-Features
+- Ein leistungsstarker WYSIWYG-Editor mit moderner Oberfläche
+- Dark-Mode-Support für REDAXO >= 5.13
+- Platzhalter für alle Backend-Sprachen
+- Nur unterstützte Formate werden eingefügt
+
+### Konfiguration und Anpassung
+- Profilkonfigurator mit Drag&Drop für einfaches Zusammenklicken von Profilen
+- Expertenmodus: Entwickle Profile frei im Quellcode
+- Zusätzliche Optionen zur individuellen Anpassung des Editors
+- Konfigurationsseite für Lizenzschlüssel zum Entfernen des "Powered by CKEditor" Banner
+- API für programmatische Profilgenerierung
+
+### Style-Management
+- Style-Manager zur einfachen Verwaltung von CSS-Stilen
+- Style-Gruppen für schnelles Erfassen von Stilen als JSON-Array
+- CSS-Definitionen aus jedem Stil werden im Backend automatisch hinzugefügt
+- Eigene Schriften können integriert und verwaltet werden
+- Verbessertes Tag-Handling im Profil- und Style-Editor
+
+### Medienintegration
+- Bild-Upload in den Medienpool per Drag & Drop direkt ins Textfeld
 - Bild-Upload-Kategorie pro Profil einstellbar
 - Medienmanager-Typ je Profil einstellbar
-- Zusätzliche Optionen, um den Editor nach deinem Gusto anzupassen
-- Sprog-Ersetzungen per Mentions-Plugin
-- Der Expertenmodus: Entwickle Profile frei im Quellcode
-- Platzhalter für alle Backend-Sprachen
-- Dark-Mode-Support für REDAXO >= 5.13
+- Drag & Drop Upload für CKEditor Vendor-Dateien (konfigurierbar in config.php)
 
-**Custom REDAXO Link-Widget**
-
-![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/writer.png)
-
+### Link-Features
+- Umfassendes REDAXO Link-Widget
 - Linkmap-Support
-- YForm-Datasets
+- YForm-Datasets Integration
 - Tel: und Mailto: Links
 - Medienlinks
-- Eigene Link-Decorators
+- Eigene Link-Decorators für benutzerdefinierte Attribute und Klassen
 
-**Editor-Features**
-
-- Alle kostenlosen Anbieter-Plugins sind dabei
-- Nur unterstützte Formate werden eingefügt
+### Erweiterungen und Plugins
+- Alle kostenlosen Anbieter-Plugins sind integriert
+- Sprog-Ersetzungen via Mentions-Plugin
+- AccessibilityHelper für verbesserte Barrierefreiheit
 - Einfügen von Klartext
 - Transformationen: z.B. Umwandlung von (c) in ©
 - Auswahl für Sonderzeichen
-- Bild-Upload in den Medienpool per Drag & Drop direkt ins Textfeld
+- Neue Toolbar-Elemente: Emoji, Bookmarks, ShowBlocks
+
+### Import und Export
+- Profil-Export und -Import für einfache Migration
+- Datensicherung vor Updates
+- Konsistente Style-Übertragung zwischen Installationen
 
 ## Eine kleine Demo
 
