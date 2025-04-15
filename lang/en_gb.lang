@@ -261,12 +261,10 @@ cke5_icon_templates = Icon
 cke5_editor_upload_title = Upload CKEditor file
 cke5_editor_upload_dropzone = Drop file here or click to select
 cke5_editor_upload_button = Select file
-cke5_editor_current_path = Current path
 
 cke5_translations_upload_title = Upload translation files
 cke5_translations_upload_dropzone = Drop files here or click to select
 cke5_translations_upload_button = Select files
-cke5_translations_current_path = Current path
 
 cke5_upload_js_only = Only JavaScript files (.js) are allowed!
 cke5_file_already_exists = The file already exists. Do you want to overwrite it?
@@ -305,3 +303,9 @@ cke5_template_groups = Template groups
 cke5_add_template_group = Create new template group
 cke5_group_templates = Template groups
 cke5_no_group = No group
+
+cke5_style_group_name_placeholder = Style-Groups
+cke5_style_group_description_placeholder = Description
+
+cke5_template_group_name_placeholder = Template-Groups
+cke5_template_group_description_placeholder = Description

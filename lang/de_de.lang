@@ -309,12 +309,3 @@ cke5_style_group_description_placeholder = Beschreibung
 
 cke5_template_group_name_placeholder = Template-Gruppen
 cke5_template_group_description_placeholder = Beschriebung
-
-# Filter
-cke5_filter_by_category = Nach Kategorie filtern
-cke5_filter_all = Alle
-cke5_search_options = Einstellungen durchsuchen...
-cke5_search_results_for = Ergebnisse für
-cke5_no_search_results = Keine Einstellungen gefunden.
-cke5_advanced = Erweiterte Einstellungen
-cke5_tables = Tabellen
