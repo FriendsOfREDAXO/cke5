@@ -632,3 +632,15 @@ dl + .cke5_clangtabs .nav.nav-tabs,
         background-color: rgba(255, 255, 255, 0.05);
     }
 }
+
+/* Fix for the top REX-navbar covering / hiding the CK sticky toolbar-panel at the top of the viewport in certain conditions.
+Note: CK only uses the sticky panel at the top, when editor has focus and the top has scrolled past the viewport. */
+.rex-page:has(#rex-js-nav-top:not(.rex-nav-top-is-hidden)) .ck.ck-sticky-panel .ck-sticky-panel__content_sticky{
+    margin-top: 60px;
+    transition: margin-top 300ms cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+@media (max-width: 991px) {
+    .rex-page:has(#rex-js-nav-top:not(.rex-nav-top-is-hidden)) .ck.ck-sticky-panel .ck-sticky-panel__content_sticky{
+        margin-top: 50px;
+    }
+}
