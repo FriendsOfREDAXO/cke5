@@ -385,11 +385,23 @@ class Cke5ProfilesCreator
                 $jsonSubOption = [];
             }
 
-            if (is_array($jsonProfile)) {
-                return ['suboptions' => $jsonSubOption, 'profile' => $jsonProfile];
-            } else {
-                return ['suboptions' => [], 'profile' => []];
+            if (!is_array($jsonProfile)) {
+                $jsonProfile = [];
             }
+
+            $jsonProfile['licenseKey'] = 'GPL';
+            if (!empty(self::getAddon()->getConfig('license_code'))) {
+                $jsonProfile['licenseKey'] = self::getAddon()->getConfig('license_code');
+                if (!isset($jsonProfile['ui'])) {
+                    $jsonProfile['ui'] = [];
+                }
+                if (!isset($jsonProfile['ui']['poweredBy'])) {
+                    $jsonProfile['ui']['poweredBy'] = [];
+                }
+                $jsonProfile['ui']['poweredBy']['forceVisible'] = false;
+            }
+
+            return ['suboptions' => $jsonSubOption, 'profile' => $jsonProfile];
         }
 
         $toolbar = self::toArray($profile['toolbar']);
