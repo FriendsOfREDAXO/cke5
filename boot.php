@@ -66,9 +66,9 @@ if (rex::isBackend() && is_object(rex::getUser())) {
     Cke5FileUploadHandler::getEditorFiles();
 
     // register content filter for removing br tags
+    // This should run early to filter POST data before forms process it
     if ($this->getConfig('filter_br_tags', false)) {
-        rex_extension::register('REX_FORM_CONTROL_FIELDS', ['\Cke5\Handler\Cke5ContentFilter', 'filterPostData'], rex_extension::EARLY);
-        rex_extension::register('YFORM_DATA_UPDATE', ['\Cke5\Handler\Cke5ContentFilter', 'filterPostData'], rex_extension::EARLY);
+        Cke5ContentFilter::filterPostData();
     }
 
     // register extension point actions

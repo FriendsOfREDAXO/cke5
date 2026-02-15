@@ -2,8 +2,6 @@
 
 namespace Cke5\Handler;
 
-use rex_extension_point;
-
 /**
  * Class Cke5ContentFilter
  * Filters and cleans CKEditor content before saving
@@ -16,10 +14,9 @@ class Cke5ContentFilter
      * Filter CKEditor content from POST data
      * Removes unwanted <br> tags that are often inserted by Shift+Enter
      * 
-     * @param rex_extension_point $ep
      * @return void
      */
-    public static function filterPostData(rex_extension_point $ep): void
+    public static function filterPostData(): void
     {
         // Check if filtering is enabled
         $addon = \rex_addon::get('cke5');
@@ -27,8 +24,10 @@ class Cke5ContentFilter
             return;
         }
 
-        // Get POST data
-        $post = \rex_post::factory();
+        // Only filter if there's POST data
+        if (empty($_POST)) {
+            return;
+        }
         
         // Iterate through all POST values
         foreach ($_POST as $key => $value) {
