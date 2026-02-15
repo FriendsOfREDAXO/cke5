@@ -309,3 +309,11 @@ cke5_style_group_description_placeholder = Description
 
 cke5_template_group_name_placeholder = Template-Groups
 cke5_template_group_description_placeholder = Description
+
+# Import/Export
+profiles_import_select_entities = What do you want to import?
+profiles_import_count_profiles = %d profiles
+profiles_import_count_styles = %d styles
+profiles_import_count_style_groups = %d style groups
+profiles_import_count_templates = %d templates
+profiles_import_count_template_groups = %d template groups
