@@ -1,5 +1,15 @@
 # Changelog
 
+## Version 6.4.2
+
+* Fix: Regenerate CSS file on style/template save and delete (Issue #207)
+
+## Version 6.4.1
+
+* Fix: SQL REPLACE INTO in data.sql for better reinstall experience
+* Fix: Namespace usage in customize pages
+* Cleanup: Removed unnecessary use statements
+
 ## Version 6.4.0
 
 * Drag & Drop uplaode for ckeditor vendor files see config.php

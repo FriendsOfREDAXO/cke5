@@ -5,6 +5,7 @@ use Cke5\Creator\Cke5ProfilesCreator;
 use Cke5\Handler\Cke5DatabaseHandler;
 use Cke5\Provider\Cke5NavigationProvider;
 use Cke5\Utils\Cke5FormHelper;
+use Cke5\Utils\Cke5CssHandler;
 use Cke5\Utils\CKE5ISO6391;
 use Cke5\Utils\Cke5ListHelper;
 use Cke5\Utils\Cke5PreviewHelper;
@@ -25,7 +26,7 @@ if ($func === 'delete') {
     $message = Cke5ListHelper::deleteData($stylesTable, $id);
     rex_extension::registerPoint(new rex_extension_point('CKE5_PROFILE_STYLE_DELETE', $id));
     // Regeneriere CSS-Datei nach dem Löschen
-    Cke5\Utils\Cke5CssHandler::regenerateCssFile();
+    Cke5CssHandler::regenerateCssFile();
     $func = '';
 }
 
@@ -154,5 +155,10 @@ if ($func === '') {
     $fragment->setVar('body', '<div class="cke5_style_edit">' . $form->get() . '</div>', false);
     $fragment->setVar('before', $navigation, false);
     echo $fragment->parse('core/page/section.php');
+
+    // Regeneriere CSS-Datei nach dem Speichern
+    if ($send === true) {
+        Cke5CssHandler::regenerateCssFile();
+    }
 }
 

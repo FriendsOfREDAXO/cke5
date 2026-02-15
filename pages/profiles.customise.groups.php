@@ -4,6 +4,7 @@
 use Cke5\Handler\Cke5DatabaseHandler;
 use Cke5\Provider\Cke5NavigationProvider;
 use Cke5\Utils\Cke5ListHelper;
+use Cke5\Utils\Cke5CssHandler;
 
 $func = rex_request::request('func', 'string');
 /** @var int $id */
@@ -23,7 +24,7 @@ if ($func === 'delete') {
     $message = Cke5ListHelper::deleteData($groupsTable, $id);
     rex_extension::registerPoint(new rex_extension_point('CKE5_STYLE_GROUP_DELETE', $id));
     // Regeneriere CSS-Datei nach dem Löschen
-    Cke5\Utils\Cke5CssHandler::regenerateCssFile();
+    Cke5CssHandler::regenerateCssFile();
     $func = '';
 }
 
@@ -163,5 +164,10 @@ if ($func === '') {
     $fragment->setVar('body', '<div class="cke5_style_edit">' . $form->get() . '</div>', false);
     $fragment->setVar('before', $navigation, false);
     echo $fragment->parse('core/page/section.php');
+
+    // Regeneriere CSS-Datei nach dem Speichern
+    if ($send === true) {
+        Cke5CssHandler::regenerateCssFile();
+    }
 }
 
