@@ -18,12 +18,6 @@ class Cke5ContentFilter
      */
     public static function filterPostData(): void
     {
-        // Check if filtering is enabled
-        $addon = \rex_addon::get('cke5');
-        if (!$addon->getConfig('filter_br_tags', false)) {
-            return;
-        }
-
         // Only filter if there's POST data
         if (empty($_POST)) {
             return;
@@ -54,7 +48,7 @@ class Cke5ContentFilter
         // - <br/>
         // - <br class="...">
         // - <BR> (case insensitive)
-        $content = preg_replace('/<br\s*\/?>/i', '', $content);
+        $content = preg_replace('/<br\b[^>]*\/?>/i', '', $content);
         
         return $content;
     }
@@ -67,8 +61,8 @@ class Cke5ContentFilter
      */
     private static function containsCke5Content(string $value): bool
     {
-        // Simple heuristic: contains HTML tags
-        return (strip_tags($value) !== $value);
+        // Lightweight check: contains HTML tags
+        return strpos($value, '<') !== false && strpos($value, '>') !== false;
     }
 
     /**
