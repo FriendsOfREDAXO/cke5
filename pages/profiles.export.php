@@ -2,9 +2,6 @@
 /** @var rex_addon $this */
 
 use Cke5\Handler\Cke5DatabaseHandler;
-use Exception;
-use rex_logger;
-use rex_sql;
 
 $func = rex_request::request('func', 'string');
 $id = rex_request::request('id', 'int');

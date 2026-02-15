@@ -2,8 +2,6 @@
 /** @var rex_addon $this */
 
 use Cke5\Handler\Cke5DatabaseHandler;
-use DateTime;
-use DateTimeInterface;
 
 $func = rex_request::request('func', 'string');
 $id = rex_request::request('id', 'int');
