@@ -125,12 +125,12 @@ function cke5_init(element) {
                         
                         // Clean up empty filler content
                         if (
-                            // Matches <p><br data-cke-filler="true"></p>
-                            /^<p>\s*<br\s+data-cke-filler="true"\s*\/?\s*>\s*<\/p>$/i.test(data) ||
-                            // Matches <p>&nbsp;</p>
-                            /^<p>\s*&nbsp;\s*<\/p>$/i.test(data) ||
-                             // Matches <p><br></p> or <p><br/></p>
-                            /^<p>\s*<br\s*\/?\s*>\s*<\/p>$/i.test(data)
+                            // Matches <p ...><br data-cke-filler="true"></p>
+                            /^<p[^>]*>\s*<br\s+data-cke-filler="true"\s*\/?\s*>\s*<\/p>$/i.test(data) ||
+                            // Matches <p ...>&nbsp;</p>
+                            /^<p[^>]*>\s*&nbsp;\s*<\/p>$/i.test(data) ||
+                             // Matches <p ...><br></p> or <p ...><br/></p>
+                            /^<p[^>]*>\s*<br\s*\/?\s*>\s*<\/p>$/i.test(data)
                         ) {
                             return '';
                         }
