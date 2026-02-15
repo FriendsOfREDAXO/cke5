@@ -1,5 +1,16 @@
 # Changelog
 
+## Version 6.4.2
+
+* **Fix**: CSS regeneration after saving styles (#207)
+  * CSS files are now properly generated when saving custom styles
+  * `Cke5CssHandler::regenerateCssFile()` is called after form save
+* **Enhancement**: Extended export/import functionality (#201)
+  * Export now includes Styles, Style-Groups, Templates, and Template-Groups
+  * New export format includes version field for future compatibility
+  * Full backward compatibility: old exports (profiles only) can still be imported
+  * Import automatically detects format and handles both old and new structure
+
 ## Version 6.4.0
 
 * Drag & Drop uplaode for ckeditor vendor files see config.php

@@ -25,6 +25,8 @@ Integrates the [CKEditor5](https://ckeditor.com) into REDAXO CMS.
 - CSS definitions from each style are automatically added to the backend
 - Custom fonts can be integrated and managed
 - Improved tag handling in profile and style editor
+- Export/Import of profiles with related styles, style-groups, templates and template-groups
+- Full backward compatibility with legacy exports
 
 ### Media Integration
 - Image upload to the media pool via drag & drop directly into the text field

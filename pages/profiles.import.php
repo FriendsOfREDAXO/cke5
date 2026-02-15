@@ -2,6 +2,8 @@
 /** @var rex_addon $this */
 
 use Cke5\Handler\Cke5DatabaseHandler;
+use DateTime;
+use DateTimeInterface;
 
 $func = rex_request::request('func', 'string');
 $id = rex_request::request('id', 'int');
@@ -102,7 +104,27 @@ if ($func === 'cke5import') {
         $data = json_decode((string)$content, true);
 
         if (is_array($data)) {
-            foreach ($data as $i => $profile) {
+            // Detect format: old format is array of profiles, new format is object with 'profiles' key
+            $isNewFormat = isset($data['version']) && isset($data['profiles']);
+            
+            if ($isNewFormat) {
+                // New format with version 2.0
+                $profilesToImport = $data['profiles'] ?? [];
+                $stylesToImport = $data['styles'] ?? [];
+                $styleGroupsToImport = $data['style_groups'] ?? [];
+                $templatesToImport = $data['templates'] ?? [];
+                $templateGroupsToImport = $data['template_groups'] ?? [];
+            } else {
+                // Old format - array of profiles only
+                $profilesToImport = $data;
+                $stylesToImport = [];
+                $styleGroupsToImport = [];
+                $templatesToImport = [];
+                $templateGroupsToImport = [];
+            }
+
+            // Import profiles
+            foreach ($profilesToImport as $i => $profile) {
                 $fail = false;
                 foreach ($importKeys as $key) {
                     if (is_array($profile) && !array_key_exists($key, $profile)) {
@@ -115,6 +137,134 @@ if ($func === 'cke5import') {
                     /** @var array<string,string> $profile */
                     $result = Cke5DatabaseHandler::importProfile($profile);
                     $importResult[] = rex_view::info(sprintf($this->i18n('profiles_import_' . (($result === true) ? 'success' : 'fail')), $profile['name'], $profile['id']));
+                }
+            }
+
+            // Import styles
+            foreach ($stylesToImport as $i => $style) {
+                try {
+                    if (!is_array($style)) {
+                        continue;
+                    }
+                    $now = new DateTime();
+                    $sql = rex_sql::factory();
+                    $sql->setTable(rex::getTable(Cke5DatabaseHandler::CKE5_STYLES));
+
+                    foreach ($style as $key => $value) {
+                        if ($key === 'id') continue;
+                        $sql->setValue($key, $value);
+                    }
+
+                    $sql->setValue('createuser', Cke5DatabaseHandler::getLogin())
+                        ->setValue('updateuser', Cke5DatabaseHandler::getLogin())
+                        ->setValue('createdate', $now->format(DateTimeInterface::ATOM))
+                        ->setValue('updatedate', $now->format(DateTimeInterface::ATOM));
+
+                    if (isset($style['id']) && $style['id'] > 0) {
+                        $sql->setWhere('id=:id', ['id' => $style['id']]);
+                        $sql->update();
+                    } else {
+                        $sql->insert();
+                    }
+                    $importResult[] = rex_view::info('✓ Style "' . ($style['name'] ?? 'N/A') . '" importiert');
+                } catch (Exception $e) {
+                    $importResult[] = rex_view::error('✗ Style konnte nicht importiert werden: ' . $e->getMessage());
+                }
+            }
+
+            // Import style groups
+            foreach ($styleGroupsToImport as $i => $styleGroup) {
+                try {
+                    if (!is_array($styleGroup)) {
+                        continue;
+                    }
+                    $now = new DateTime();
+                    $sql = rex_sql::factory();
+                    $sql->setTable(rex::getTable(Cke5DatabaseHandler::CKE5_STYLE_GROUPS));
+
+                    foreach ($styleGroup as $key => $value) {
+                        if ($key === 'id') continue;
+                        $sql->setValue($key, $value);
+                    }
+
+                    $sql->setValue('createuser', Cke5DatabaseHandler::getLogin())
+                        ->setValue('updateuser', Cke5DatabaseHandler::getLogin())
+                        ->setValue('createdate', $now->format(DateTimeInterface::ATOM))
+                        ->setValue('updatedate', $now->format(DateTimeInterface::ATOM));
+
+                    if (isset($styleGroup['id']) && $styleGroup['id'] > 0) {
+                        $sql->setWhere('id=:id', ['id' => $styleGroup['id']]);
+                        $sql->update();
+                    } else {
+                        $sql->insert();
+                    }
+                    $importResult[] = rex_view::info('✓ Style-Gruppe "' . ($styleGroup['name'] ?? 'N/A') . '" importiert');
+                } catch (Exception $e) {
+                    $importResult[] = rex_view::error('✗ Style-Gruppe konnte nicht importiert werden: ' . $e->getMessage());
+                }
+            }
+
+            // Import templates
+            foreach ($templatesToImport as $i => $template) {
+                try {
+                    if (!is_array($template)) {
+                        continue;
+                    }
+                    $now = new DateTime();
+                    $sql = rex_sql::factory();
+                    $sql->setTable(rex::getTable(Cke5DatabaseHandler::CKE5_TEMPLATES));
+
+                    foreach ($template as $key => $value) {
+                        if ($key === 'id') continue;
+                        $sql->setValue($key, $value);
+                    }
+
+                    $sql->setValue('createuser', Cke5DatabaseHandler::getLogin())
+                        ->setValue('updateuser', Cke5DatabaseHandler::getLogin())
+                        ->setValue('createdate', $now->format(DateTimeInterface::ATOM))
+                        ->setValue('updatedate', $now->format(DateTimeInterface::ATOM));
+
+                    if (isset($template['id']) && $template['id'] > 0) {
+                        $sql->setWhere('id=:id', ['id' => $template['id']]);
+                        $sql->update();
+                    } else {
+                        $sql->insert();
+                    }
+                    $importResult[] = rex_view::info('✓ Template "' . ($template['title'] ?? 'N/A') . '" importiert');
+                } catch (Exception $e) {
+                    $importResult[] = rex_view::error('✗ Template konnte nicht importiert werden: ' . $e->getMessage());
+                }
+            }
+
+            // Import template groups
+            foreach ($templateGroupsToImport as $i => $templateGroup) {
+                try {
+                    if (!is_array($templateGroup)) {
+                        continue;
+                    }
+                    $now = new DateTime();
+                    $sql = rex_sql::factory();
+                    $sql->setTable(rex::getTable(Cke5DatabaseHandler::CKE5_TEMPLATE_GROUPS));
+
+                    foreach ($templateGroup as $key => $value) {
+                        if ($key === 'id') continue;
+                        $sql->setValue($key, $value);
+                    }
+
+                    $sql->setValue('createuser', Cke5DatabaseHandler::getLogin())
+                        ->setValue('updateuser', Cke5DatabaseHandler::getLogin())
+                        ->setValue('createdate', $now->format(DateTimeInterface::ATOM))
+                        ->setValue('updatedate', $now->format(DateTimeInterface::ATOM));
+
+                    if (isset($templateGroup['id']) && $templateGroup['id'] > 0) {
+                        $sql->setWhere('id=:id', ['id' => $templateGroup['id']]);
+                        $sql->update();
+                    } else {
+                        $sql->insert();
+                    }
+                    $importResult[] = rex_view::info('✓ Template-Gruppe "' . ($templateGroup['name'] ?? 'N/A') . '" importiert');
+                } catch (Exception $e) {
+                    $importResult[] = rex_view::error('✗ Template-Gruppe konnte nicht importiert werden: ' . $e->getMessage());
                 }
             }
         }

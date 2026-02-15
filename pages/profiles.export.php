@@ -2,6 +2,9 @@
 /** @var rex_addon $this */
 
 use Cke5\Handler\Cke5DatabaseHandler;
+use Exception;
+use rex_logger;
+use rex_sql;
 
 $func = rex_request::request('func', 'string');
 $id = rex_request::request('id', 'int');
@@ -26,6 +29,7 @@ if (rex_request::post('_csrf_token', 'string', '') !== '') {
         $exportIds = $exportIds['profiles'];
         $exportProfiles = [];
         $exportNames = [];
+        $profileIds = [];
 
         // and use the loaded profiles
         if (!is_null($profiles)) {
@@ -34,16 +38,72 @@ if (rex_request::post('_csrf_token', 'string', '') !== '') {
                     if ($exportId == $profile['id']) {
                         $exportProfiles[] = $profile; // to get the entire stuff
                         $exportNames[] = $profile['name']; // and to get the file name
+                        $profileIds[] = $profile['id'];
                     }
                 }
             }
+        }
+
+        // Build new export structure with related data
+        $exportData = [
+            'version' => '2.0',
+            'profiles' => $exportProfiles,
+            'styles' => [],
+            'style_groups' => [],
+            'templates' => [],
+            'template_groups' => []
+        ];
+
+        // Get all related styles for exported profiles
+        try {
+            $sqlStyles = rex_sql::factory();
+            $stylesResults = $sqlStyles->getArray(
+                "SELECT * FROM " . rex::getTable(Cke5DatabaseHandler::CKE5_STYLES) .
+                " ORDER BY id"
+            );
+            if (is_array($stylesResults)) {
+                $exportData['styles'] = $stylesResults;
+            }
+
+            // Get all style groups
+            $sqlStyleGroups = rex_sql::factory();
+            $styleGroupsResults = $sqlStyleGroups->getArray(
+                "SELECT * FROM " . rex::getTable(Cke5DatabaseHandler::CKE5_STYLE_GROUPS) .
+                " ORDER BY id"
+            );
+            if (is_array($styleGroupsResults)) {
+                $exportData['style_groups'] = $styleGroupsResults;
+            }
+
+            // Get all templates
+            $sqlTemplates = rex_sql::factory();
+            $templatesResults = $sqlTemplates->getArray(
+                "SELECT * FROM " . rex::getTable(Cke5DatabaseHandler::CKE5_TEMPLATES) .
+                " ORDER BY id"
+            );
+            if (is_array($templatesResults)) {
+                $exportData['templates'] = $templatesResults;
+            }
+
+            // Get all template groups
+            $sqlTemplateGroups = rex_sql::factory();
+            $templateGroupsResults = $sqlTemplateGroups->getArray(
+                "SELECT * FROM " . rex::getTable(Cke5DatabaseHandler::CKE5_TEMPLATE_GROUPS) .
+                " ORDER BY id"
+            );
+            if (is_array($templateGroupsResults)) {
+                $exportData['template_groups'] = $templateGroupsResults;
+            }
+        } catch (Exception $e) {
+            rex_logger::logException($e);
+            // Continue with profiles only if styles/templates cannot be fetched
         }
 
         // create filename and export the data set
         $names = (strlen(implode('_', $exportNames)) > 100) ? implode('_', $exportNames) : substr(implode('_', $exportNames), 0, 100) . '_etc_';
         $fileName = 'cke5_profiles_' . $names . '_' . date('YmdHis') . '.json';
         header('Content-Disposition: attachment; filename="' . $fileName . '"; charset=utf-8'); // create header info
-        rex_response::sendContent((string)json_encode($exportProfiles), 'application/octetstream'); // stream it out
+        rex_response::sendContent((string)json_encode($exportData), 'application/octetstream'); // stream it out
         exit; // stop process
     } catch (LengthException $e) {
         $message = rex_view::error($this->i18n('profiles_export_missing_input_error', $e->getMessage()));

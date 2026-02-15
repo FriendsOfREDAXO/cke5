@@ -98,7 +98,7 @@ class Cke5DatabaseHandler
         }
     }
 
-    protected static function getLogin(): string
+    public static function getLogin(): string
     {
         $user = rex::getUser();
         return ($user instanceof rex_user) ? $user->getLogin() : '';
