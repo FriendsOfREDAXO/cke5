@@ -75,6 +75,23 @@ This ensures your carefully created profiles won't be lost when upgrading or mig
 - Document special configurations in your project documentation
 - Note that CSS files in `custom_data` won't be overwritten during updates
 
+## Configuration Options
+
+### Automatic `<br>` Tag Removal
+
+By default, pressing **Shift+Enter** in CKEditor creates a soft break (`<br>` tag) instead of a new paragraph. If you want to automatically remove these tags when saving content:
+
+1. Go to **CKEditor5 > Configuration**
+2. Enable the checkbox **"Automatically remove `<br>` tags when saving"**
+3. Save the configuration
+
+Once enabled, all `<br>` tags will be automatically removed from CKEditor fields before saving to the database. This applies to:
+- REX_FORM inputs
+- YForm fields  
+- Any content submitted through POST requests
+
+**Note:** This is an opt-in feature. Existing content in the database is not affected, only new saves will have `<br>` tags filtered out.
+
 ## Usage Examples with Code Snippets
 
 ### Basic Integration with Custom Height 

@@ -127,6 +127,23 @@ Du kannst direkt CSS zu deinen Style-Gruppen hinzufügen:
 }
 ```
 
+## Konfigurationsoptionen
+
+### Automatisches Entfernen von `<br>`-Tags
+
+Standardmäßig erzeugt die Tastenkombination **Shift+Enter** in CKEditor einen weichen Umbruch (`<br>`-Tag) anstatt eines neuen Absatzes. Wenn du diese Tags beim Speichern automatisch entfernen möchtest:
+
+1. Gehe zu **CKEditor5 > Konfiguration**
+2. Aktiviere die Checkbox **"<br>-Tags beim Speichern automatisch entfernen"**
+3. Speichere die Konfiguration
+
+Sobald aktiviert, werden alle `<br>`-Tags automatisch aus CKEditor-Feldern entfernt, bevor sie in der Datenbank gespeichert werden. Dies gilt für:
+- REX_FORM-Eingaben
+- YForm-Felder  
+- Alle Inhalte, die über POST-Requests übermittelt werden
+
+**Hinweis:** Dies ist ein Opt-in-Feature. Bereits vorhandene Inhalte in der Datenbank werden nicht beeinflusst, nur neue Speichervorgänge filtern `<br>`-Tags heraus.
+
 ## Eine kleine Demo
 
 ![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/ckeditor5_demo.gif)
