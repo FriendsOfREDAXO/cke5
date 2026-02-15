@@ -121,8 +121,11 @@ function cke5_init(element) {
                     const originalGetData = editor.getData;
                     editor.getData = function(options) {
                         let data = originalGetData.call(this, options);
+                        return cleanData(data);
+                    };
+
+                    const cleanData = (data) => {
                         if (!data) return '';
-                        
                         // Clean up empty filler content
                         if (
                             // Matches <p ...><br data-cke-filler="true"></p>
@@ -135,12 +138,12 @@ function cke5_init(element) {
                             return '';
                         }
                         return data;
-                    };
+                    }
 
                     editor.model.document.on('change:data', () => {
                          const element = $('#' + unique_id);
                          if(element.length) {
-                             element.val(editor.getData());
+                             element.val(cleanData(editor.getData()));
                          }
                     });
 
