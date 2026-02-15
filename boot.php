@@ -2,6 +2,7 @@
 /** @var rex_addon $this */
 
 // register permissions
+use Cke5\Handler\Cke5ContentFilter;
 use Cke5\Handler\Cke5ExtensionHandler;
 use Cke5\Handler\Cke5FileRestoreHandler;
 use Cke5\Handler\Cke5FileUploadHandler;
@@ -63,6 +64,12 @@ if (rex::isBackend() && is_object(rex::getUser())) {
     Cke5FileUploadHandler::getTranslationFiles();
     Cke5FileUploadHandler::handleFileDelete();
     Cke5FileUploadHandler::getEditorFiles();
+
+    // register content filter for removing br tags
+    if ($this->getConfig('filter_br_tags', false)) {
+        rex_extension::register('REX_FORM_CONTROL_FIELDS', ['\Cke5\Handler\Cke5ContentFilter', 'filterPostData'], rex_extension::EARLY);
+        rex_extension::register('YFORM_DATA_UPDATE', ['\Cke5\Handler\Cke5ContentFilter', 'filterPostData'], rex_extension::EARLY);
+    }
 
     // register extension point actions
     if (rex_be_controller::getCurrentPagePart(1) === 'cke5') {

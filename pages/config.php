@@ -91,6 +91,11 @@ $field = $form->addInputField('text', 'license_code', null, ['class' => 'form-co
 $field->setLabel($this->i18n('license_code'));
 $field->setNotice($this->i18n('license_code_info'));
 
+// filter br tags option
+$field = $form->addCheckboxField('filter_br_tags');
+$field->addOption($this->i18n('filter_br_tags_label'), 1);
+$field->setNotice($this->i18n('filter_br_tags_notice'));
+
 // Ausgabe des Formulars
 $fragment = new rex_fragment();
 $fragment->setVar('class', 'edit', false);
