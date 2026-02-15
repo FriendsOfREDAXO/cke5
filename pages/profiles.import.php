@@ -144,7 +144,6 @@ if ($func === 'cke5import') {
                     if (!is_array($style)) {
                         continue;
                     }
-                    $now = new DateTime();
                     $sql = rex_sql::factory();
                     $sql->setTable(rex::getTable(Cke5DatabaseHandler::CKE5_STYLES));
 
@@ -152,11 +151,6 @@ if ($func === 'cke5import') {
                         if ($key === 'id') continue;
                         $sql->setValue($key, $value);
                     }
-
-                    $sql->setValue('createuser', Cke5DatabaseHandler::getLogin())
-                        ->setValue('updateuser', Cke5DatabaseHandler::getLogin())
-                        ->setValue('createdate', $now->format(DateTimeInterface::ATOM))
-                        ->setValue('updatedate', $now->format(DateTimeInterface::ATOM));
 
                     if (isset($style['id']) && $style['id'] > 0) {
                         $sql->setWhere('id=:id', ['id' => $style['id']]);
@@ -176,7 +170,6 @@ if ($func === 'cke5import') {
                     if (!is_array($styleGroup)) {
                         continue;
                     }
-                    $now = new DateTime();
                     $sql = rex_sql::factory();
                     $sql->setTable(rex::getTable(Cke5DatabaseHandler::CKE5_STYLE_GROUPS));
 
@@ -184,11 +177,6 @@ if ($func === 'cke5import') {
                         if ($key === 'id') continue;
                         $sql->setValue($key, $value);
                     }
-
-                    $sql->setValue('createuser', Cke5DatabaseHandler::getLogin())
-                        ->setValue('updateuser', Cke5DatabaseHandler::getLogin())
-                        ->setValue('createdate', $now->format(DateTimeInterface::ATOM))
-                        ->setValue('updatedate', $now->format(DateTimeInterface::ATOM));
 
                     if (isset($styleGroup['id']) && $styleGroup['id'] > 0) {
                         $sql->setWhere('id=:id', ['id' => $styleGroup['id']]);
@@ -208,7 +196,6 @@ if ($func === 'cke5import') {
                     if (!is_array($template)) {
                         continue;
                     }
-                    $now = new DateTime();
                     $sql = rex_sql::factory();
                     $sql->setTable(rex::getTable(Cke5DatabaseHandler::CKE5_TEMPLATES));
 
@@ -216,11 +203,6 @@ if ($func === 'cke5import') {
                         if ($key === 'id') continue;
                         $sql->setValue($key, $value);
                     }
-
-                    $sql->setValue('createuser', Cke5DatabaseHandler::getLogin())
-                        ->setValue('updateuser', Cke5DatabaseHandler::getLogin())
-                        ->setValue('createdate', $now->format(DateTimeInterface::ATOM))
-                        ->setValue('updatedate', $now->format(DateTimeInterface::ATOM));
 
                     if (isset($template['id']) && $template['id'] > 0) {
                         $sql->setWhere('id=:id', ['id' => $template['id']]);
@@ -240,7 +222,6 @@ if ($func === 'cke5import') {
                     if (!is_array($templateGroup)) {
                         continue;
                     }
-                    $now = new DateTime();
                     $sql = rex_sql::factory();
                     $sql->setTable(rex::getTable(Cke5DatabaseHandler::CKE5_TEMPLATE_GROUPS));
 
@@ -248,11 +229,6 @@ if ($func === 'cke5import') {
                         if ($key === 'id') continue;
                         $sql->setValue($key, $value);
                     }
-
-                    $sql->setValue('createuser', Cke5DatabaseHandler::getLogin())
-                        ->setValue('updateuser', Cke5DatabaseHandler::getLogin())
-                        ->setValue('createdate', $now->format(DateTimeInterface::ATOM))
-                        ->setValue('updatedate', $now->format(DateTimeInterface::ATOM));
 
                     if (isset($templateGroup['id']) && $templateGroup['id'] > 0) {
                         $sql->setWhere('id=:id', ['id' => $templateGroup['id']]);
