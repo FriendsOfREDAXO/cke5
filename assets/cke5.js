@@ -116,6 +116,34 @@ function cke5_init(element) {
             ClassicEditor.create(document.querySelector('#' + unique_id), options)
                 .then(editor => {
                     ckeditors[unique_id] = editor; // Save for later use.
+
+                    // Hack: Remove CKEditor filler content from output
+                    const originalGetData = editor.getData;
+                    editor.getData = function(options) {
+                        let data = originalGetData.call(this, options);
+                        if (!data) return '';
+                        
+                        // Clean up empty filler content
+                        if (
+                            // Matches <p><br data-cke-filler="true"></p>
+                            /^<p>\s*<br\s+data-cke-filler="true"\s*\/?\s*>\s*<\/p>$/i.test(data) ||
+                            // Matches <p>&nbsp;</p>
+                            /^<p>\s*&nbsp;\s*<\/p>$/i.test(data) ||
+                             // Matches <p><br></p> or <p><br/></p>
+                            /^<p>\s*<br\s*\/?\s*>\s*<\/p>$/i.test(data)
+                        ) {
+                            return '';
+                        }
+                        return data;
+                    };
+
+                    editor.model.document.on('change:data', () => {
+                         const element = $('#' + unique_id);
+                         if(element.length) {
+                             element.val(editor.getData());
+                         }
+                    });
+
                     cke5_pastinit(editor, sub_options);
                     dispatchCke5Event(editor, unique_id);
                 })
