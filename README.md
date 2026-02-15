@@ -77,20 +77,24 @@ This ensures your carefully created profiles won't be lost when upgrading or mig
 
 ## Configuration Options
 
-### Automatic `<br>` Tag Removal
+### Automatic CKEditor Filler Element Removal
 
-By default, pressing **Shift+Enter** in CKEditor creates a soft break (`<br>` tag) instead of a new paragraph. If you want to automatically remove these tags when saving content:
+CKEditor uses internal "filler" elements like `<br data-cke-filler="true">` to maintain proper editor functionality for empty paragraphs. These elements should not be saved to your database. To automatically remove them:
 
 1. Go to **CKEditor5 > Configuration**
-2. Enable the checkbox **"Automatically remove `<br>` tags when saving"**
+2. Enable the checkbox **"Automatically remove CKEditor filler elements when saving"**
 3. Save the configuration
 
-Once enabled, all `<br>` tags will be automatically removed from CKEditor fields before saving to the database. This applies to:
+Once enabled, the following will be automatically removed from CKEditor fields before saving to the database:
+- Filler br tags: `<br data-cke-filler="true">`
+- Empty paragraphs containing only fillers: `<p><br data-cke-filler="true"></p>`
+
+This applies to:
 - REX_FORM inputs
 - YForm fields  
 - Any content submitted through POST requests
 
-**Note:** This is an opt-in feature. Existing content in the database is not affected, only new saves will have `<br>` tags filtered out.
+**Note:** This is an opt-in feature. Existing content in the database is not affected, only new saves will have filler elements filtered out.
 
 ## Usage Examples with Code Snippets
 

@@ -238,8 +238,8 @@ license_translations_path_placeholder = z.B. assets/addons/cke5/vendor/custom/tr
 license_code = Lizenzschlüssel
 license_code_info = Bei Erwerb einer kommerziellen Lizenz für CKEditor 5 kann hier der Lizenzschlüssel eingetragen werden. Der "Powered by CKEditor 5"-Banner entfällt bei Eintrag eines gültigen Lizenzschlüssels automatisch nach dem ein Profile erneut gespeichern wurde. Bitte beachten: Der im AddOn enthaltene CKEditor 5 Build beinhaltet keine Pro-Funktionen.
 license_code_placeholder = CKEditor 5 Lizenzschlüssel
-filter_br_tags_label = <br>-Tags beim Speichern automatisch entfernen
-filter_br_tags_notice = Wenn diese Option aktiviert ist, werden alle <br>-Tags aus CKEditor-Feldern beim Speichern automatisch entfernt. Dies verhindert, dass durch Shift+Enter erzeugte Zeilenumbrüche gespeichert werden.
+filter_br_tags_label = CKEditor Filler-Elemente beim Speichern automatisch entfernen
+filter_br_tags_notice = Wenn diese Option aktiviert ist, werden CKEditor-interne Filler-Elemente (<br data-cke-filler="true">) und leere Absätze, die nur diese enthalten, beim Speichern automatisch entfernt. Diese Elemente dienen nur der Editor-Darstellung und sollten nicht in der Datenbank gespeichert werden.
 cke5_config_header = CKEditor 5 Konfiguration
 cke5_config_info = An dieser Stelle können benutzerdefinierte Pfade und Lizenz-Einstellungen für CKEditor 5 vorgenommen werden. Diese Einstellungen ermöglichen die Verwendung einer eigenen CKEditor 5 Build und eigener Übersetzungen.
 

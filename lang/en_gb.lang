@@ -229,8 +229,8 @@ cke5_classes_area_empty_error = Please enter at least one CSS class
 
 # config
 config_title = Configuration
-filter_br_tags_label = Automatically remove <br> tags when saving
-filter_br_tags_notice = When this option is enabled, all <br> tags will be automatically removed from CKEditor fields when saving. This prevents line breaks created by Shift+Enter from being saved.
+filter_br_tags_label = Automatically remove CKEditor filler elements when saving
+filter_br_tags_notice = When this option is enabled, CKEditor internal filler elements (<br data-cke-filler="true">) and empty paragraphs containing only these will be automatically removed when saving. These elements are only for editor display and should not be saved to the database.
 license_cke5_js_path = Custom path for CKEditor 5 JS
 license_cke5_js_path_info = A custom path to ckeditor.js can be specified here if a different build should be used. Leave empty to use the redaxo default build.
 license_cke5_js_path_placeholder = e.g. assets/addons/cke5/vendor/custom/ckeditor.js

@@ -12,7 +12,11 @@ class Cke5ContentFilter
 {
     /**
      * Filter CKEditor content from POST data
-     * Removes unwanted <br> tags that are often inserted by Shift+Enter
+     * Removes CKEditor filler elements that shouldn't be saved to database
+     * 
+     * Specifically removes:
+     * - <br data-cke-filler="true"> tags (CKEditor's internal filler elements)
+     * - Empty paragraphs containing only filler: <p><br data-cke-filler="true"></p>
      * 
      * Note: This method directly modifies $_POST superglobal to filter content
      * before it's processed by forms. This approach is chosen because:
@@ -40,21 +44,20 @@ class Cke5ContentFilter
     }
 
     /**
-     * Filter br tags from a string
+     * Filter CKEditor filler elements from a string
      * 
      * @param string $content
      * @return string
      */
     private static function filterBrTags(string $content): string
     {
-        // Remove standalone <br> tags (with or without attributes, self-closing or not)
-        // This regex matches:
-        // - <br> 
-        // - <br /> 
-        // - <br/>
-        // - <br class="...">
-        // - <BR> (case insensitive)
-        $content = preg_replace('/<br\b[^>]*\/?>/i', '', $content);
+        // First, remove empty paragraphs containing only CKEditor filler elements
+        // Matches: <p><br data-cke-filler="true"></p> and variations
+        $content = preg_replace('/<p>\s*<br\s+data-cke-filler=["\']true["\']\s*\/?>\s*<\/p>/i', '', $content);
+        
+        // Then remove standalone CKEditor filler br tags
+        // Matches: <br data-cke-filler="true"> and <br data-cke-filler="true" />
+        $content = preg_replace('/<br\s+data-cke-filler=["\']true["\']\s*\/?>/i', '', $content);
         
         return $content;
     }
