@@ -425,7 +425,7 @@ Mit diesen Tastenkürzeln navigierst du effizienter durch die CKEditor 5 Oberfl�
         "mode": "manual",
         "label": "Link mit CSS Klasse",
         "defaultValue": "true",
-        "classes": "arrow"
+        "classes": ["arrow"]
     }
 }]
 ```
@@ -447,12 +447,12 @@ Oder mehrere:
     "isGallery": {
         "mode": "manual",
         "label": "Gallery link",
-        "attributes": {
-            "class": "button light",
-        }
+        "classes": ["button", "light"]
     }
 }]
 ```
+
+> **Hinweis:** Verwende immer die `classes`-Eigenschaft (als Array) auf oberster Ebene, um CSS-Klassen zu einem Link-Dekorator hinzuzufügen. Die Verwendung von `attributes.class` wird nicht empfohlen, da CKEditor 5 für `attributes` einen exakten Attributwert-Vergleich verwendet, der fehlschlägt, wenn mehrere Dekoratoren mit CSS-Klassen auf dasselbe Link-Element angewendet werden. Die `classes`-Array-Eigenschaft verwendet klassenweisen Vergleich und verarbeitet kombinierte Stile korrekt.
 
 ### Mentions
 

@@ -531,6 +531,7 @@ class Cke5ProfilesCreator
             }
             if (is_array($definition) && count($definition) > 0) {
                 foreach ($definition as $item) {
+                    $item = self::normalizeDecoratorClasses($item);
                     $jsonProfile['link']['decorators'] = array_merge($jsonProfile['link']['decorators'], $item);
                 }
             }
@@ -1044,5 +1045,56 @@ class Cke5ProfilesCreator
         }
 
         return $uniqueTemplates;
+    }
+
+    /**
+     * Normalizes class definitions in link decorator configs.
+     *
+     * CKEditor 5 requires CSS classes in link decorators to be specified via the
+     * top-level "classes" property (as an array) rather than as "attributes.class"
+     * (a string). Using "attributes.class" causes exact string matching during
+     * upcast, which fails when multiple decorators with class attributes are
+     * combined on the same link element. The "classes" property uses per-class
+     * subset matching, which correctly handles combined styles.
+     *
+     * @param array $decorators Associative array of decorator name => decorator config
+     * @return array Normalized decorator configs with classes as arrays
+     */
+    private static function normalizeDecoratorClasses(array $decorators): array
+    {
+        foreach ($decorators as $name => &$config) {
+            if (!is_array($config)) {
+                continue;
+            }
+
+            // Collect classes from attributes.class
+            $classesFromAttributes = [];
+            if (isset($config['attributes']['class']) && is_string($config['attributes']['class'])) {
+                $classesFromAttributes = array_values(array_filter(explode(' ', $config['attributes']['class'])));
+                unset($config['attributes']['class']);
+                if (empty($config['attributes'])) {
+                    unset($config['attributes']);
+                }
+            }
+
+            if (empty($classesFromAttributes)) {
+                continue;
+            }
+
+            // Merge with existing classes if already defined
+            $existingClasses = [];
+            if (isset($config['classes'])) {
+                if (is_array($config['classes'])) {
+                    $existingClasses = $config['classes'];
+                } elseif (is_string($config['classes'])) {
+                    $existingClasses = array_values(array_filter(explode(' ', $config['classes'])));
+                }
+            }
+
+            $config['classes'] = array_values(array_unique(array_merge($existingClasses, $classesFromAttributes)));
+        }
+        unset($config);
+
+        return $decorators;
     }
 }

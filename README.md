@@ -482,7 +482,7 @@ Use these keyboard shortcuts for more efficient navigation through the CKEditor 
         "mode": "manual",
         "label": "Link with CSS Class",
         "defaultValue": "true",
-        "classes": "arrow"
+        "classes": ["arrow"]
     }
 }]
 ```
@@ -504,12 +504,12 @@ Or multiple:
     "isGallery": {
         "mode": "manual",
         "label": "Gallery link",
-        "attributes": {
-            "class": "button light",
-        }
+        "classes": ["button", "light"]
     }
 }]
 ```
+
+> **Note:** Always use the top-level `classes` property (as an array) to add CSS classes to a link decorator. Using `attributes.class` is not recommended because CKEditor 5 uses exact attribute-value matching for `attributes`, which fails when multiple decorators with CSS classes are applied to the same link. The `classes` array property uses per-class matching and correctly handles combined styles.
 
 ### Mentions
 
