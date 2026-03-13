@@ -511,6 +511,70 @@ Or multiple:
 
 > **Note:** Always use the top-level `classes` property (as an array) to add CSS classes to a link decorator. Using `attributes.class` is not recommended because CKEditor 5 uses exact attribute-value matching for `attributes`, which fails when multiple decorators with CSS classes are applied to the same link. The `classes` array property uses per-class matching and correctly handles combined styles.
 
+#### Real-world example: UIkit button links
+
+The following example shows a complete set of combinable link decorators for UIkit buttons. Because each decorator uses the `classes` array, multiple decorators can be combined on the same link element (e.g. a primary button that is also small and opens as a modal):
+
+```js
+[{
+    "buttonlink_default": {
+        "mode": "manual",
+        "label": "Default Button",
+        "classes": ["uk-button", "uk-button-default", "uk-margin-small-bottom"]
+    },
+    "buttonlink_primary": {
+        "mode": "manual",
+        "label": "Primary Button",
+        "classes": ["uk-button", "uk-button-primary", "uk-margin-small-bottom"]
+    },
+    "buttonlink_secondary": {
+        "mode": "manual",
+        "label": "Secondary Button",
+        "classes": ["uk-button", "uk-button-secondary", "uk-margin-small-bottom"]
+    },
+    "buttonlink_danger": {
+        "mode": "manual",
+        "label": "Danger Button",
+        "classes": ["uk-button", "uk-button-danger", "uk-margin-small-bottom"]
+    },
+    "buttonlink_text": {
+        "mode": "manual",
+        "label": "Text Button",
+        "classes": ["uk-button", "uk-button-text", "uk-margin-small-bottom"]
+    },
+    "buttonlink_link": {
+        "mode": "manual",
+        "label": "Link Button",
+        "classes": ["uk-button", "uk-button-link", "uk-margin-small-bottom"]
+    },
+    "buttonlink_style_small": {
+        "mode": "manual",
+        "label": "Button Small",
+        "classes": ["uk-button-small"]
+    },
+    "buttonlink_style_large": {
+        "mode": "manual",
+        "label": "Button Large",
+        "classes": ["uk-button-large"]
+    },
+    "buttonlink_style_width_mobile": {
+        "mode": "manual",
+        "label": "Link full width on mobile",
+        "classes": ["uk-width-1-1@s", "uk-width-auto@m"]
+    },
+    "buttonlink_style_width_full": {
+        "mode": "manual",
+        "label": "Link always full width",
+        "classes": ["uk-width-1-1"]
+    },
+    "buttonlink_modal": {
+        "mode": "manual",
+        "label": "Open as modal",
+        "classes": ["ajaxmodal"]
+    }
+}]
+```
+
 ### Mentions
 
 The AddOn provides the [Mentions plugin](https://ckeditor.com/docs/ckeditor5/latest/features/mentions.html). You can configure this freely.

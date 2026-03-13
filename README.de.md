@@ -454,6 +454,70 @@ Oder mehrere:
 
 > **Hinweis:** Verwende immer die `classes`-Eigenschaft (als Array) auf oberster Ebene, um CSS-Klassen zu einem Link-Dekorator hinzuzufügen. Die Verwendung von `attributes.class` wird nicht empfohlen, da CKEditor 5 für `attributes` einen exakten Attributwert-Vergleich verwendet, der fehlschlägt, wenn mehrere Dekoratoren mit CSS-Klassen auf dasselbe Link-Element angewendet werden. Die `classes`-Array-Eigenschaft verwendet klassenweisen Vergleich und verarbeitet kombinierte Stile korrekt.
 
+#### Praxisbeispiel: UIkit Button-Links
+
+Das folgende Beispiel zeigt einen vollständigen Satz kombinierbarer Link-Dekoratoren für UIkit-Buttons. Da jeder Dekorator die `classes`-Array-Eigenschaft verwendet, können mehrere Dekoratoren auf dasselbe Link-Element angewendet werden (z.B. ein Primary-Button der zusätzlich klein ist und als Modal geöffnet wird):
+
+```js
+[{
+    "buttonlink_default": {
+        "mode": "manual",
+        "label": "Default Button",
+        "classes": ["uk-button", "uk-button-default", "uk-margin-small-bottom"]
+    },
+    "buttonlink_primary": {
+        "mode": "manual",
+        "label": "Primary Button",
+        "classes": ["uk-button", "uk-button-primary", "uk-margin-small-bottom"]
+    },
+    "buttonlink_secondary": {
+        "mode": "manual",
+        "label": "Secondary Button",
+        "classes": ["uk-button", "uk-button-secondary", "uk-margin-small-bottom"]
+    },
+    "buttonlink_danger": {
+        "mode": "manual",
+        "label": "Danger Button",
+        "classes": ["uk-button", "uk-button-danger", "uk-margin-small-bottom"]
+    },
+    "buttonlink_text": {
+        "mode": "manual",
+        "label": "Text Button",
+        "classes": ["uk-button", "uk-button-text", "uk-margin-small-bottom"]
+    },
+    "buttonlink_link": {
+        "mode": "manual",
+        "label": "Link Button",
+        "classes": ["uk-button", "uk-button-link", "uk-margin-small-bottom"]
+    },
+    "buttonlink_style_small": {
+        "mode": "manual",
+        "label": "Button Small",
+        "classes": ["uk-button-small"]
+    },
+    "buttonlink_style_large": {
+        "mode": "manual",
+        "label": "Button Large",
+        "classes": ["uk-button-large"]
+    },
+    "buttonlink_style_width_mobile": {
+        "mode": "manual",
+        "label": "Link mobil volle Breite",
+        "classes": ["uk-width-1-1@s", "uk-width-auto@m"]
+    },
+    "buttonlink_style_width_full": {
+        "mode": "manual",
+        "label": "Link immer volle Breite",
+        "classes": ["uk-width-1-1"]
+    },
+    "buttonlink_modal": {
+        "mode": "manual",
+        "label": "Als modal öffnen",
+        "classes": ["ajaxmodal"]
+    }
+}]
+```
+
 ### Mentions
 
 Das AddOn liefert das [Mentions-Plugin](https://ckeditor.com/docs/ckeditor5/latest/features/mentions.html) mit. Das kannst du frei konfigurieren.
