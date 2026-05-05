@@ -1,7 +1,7 @@
 # CKEditor5 for REDAXO CMS
 
 
->🚨 CKE5 Add-on: After nearly  -  it’s over. The add-on will no longer be developed by @joachim.doerr @joachim.doerr  and @skerbis, now it’s archived on GitHub. Thank you, @joachim.doerr, for your years of development and support. -  Keep up the great work
+>🚨 CKE5 Add-on: After nearly 8 years -  it’s over. The add-on will no longer be developed by @joachim.doerr @joachim.doerr  and @skerbis, now it’s archived on GitHub. Thank you, @joachim.doerr, for your years of development and support. -  Keep up the great work
 
 Integrates the [CKEditor5](https://ckeditor.com) into REDAXO CMS.
 
