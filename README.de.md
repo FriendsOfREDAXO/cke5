@@ -1,5 +1,7 @@
 # CKEditor5 für REDAXO CMS
 
+>🚨 CKE5-Add-on: Nach fast 8 Jahren ist es vorbei. Das Add-on wird von @joachim.doerr und @skerbis nicht mehr weiterentwickelt und ist nun auf GitHub archiviert. Vielen Dank, @joachim.doerr, für deine jahrelange Entwicklungsarbeit und Unterstützung. – Mach weiter so!
+
 Hier kommt der [CKEditor5](https://ckeditor.com) für REDAXO CMS.
 
 ![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/cke5.png)
