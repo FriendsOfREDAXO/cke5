@@ -117,12 +117,14 @@ if ($func === '') {
     $field->setLabel(rex_i18n::msg('cke5_style_element'));
     $field->setAttribute('id', 'cke5-element-area');
     $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::HTML_ELEMENTS) . '"]');
+    $field->setAttribute('data-empty-error', rex_i18n::msg('cke5_style_element_empty_error'));
     $field->getValidator()->add('notEmpty', rex_i18n::msg('cke5_style_element_empty_error'));
 
     // style classes
     $field = $form->addTextField('classes');
     $field->setLabel(rex_i18n::msg('cke5_classes_area'));
     $field->setAttribute('id', 'cke5-classes-area');
+    $field->setAttribute('data-empty-error', rex_i18n::msg('cke5_classes_area_empty_error'));
     $field->getValidator()->add('notEmpty', rex_i18n::msg('cke5_classes_area_empty_error'));
 
     // custom area for css

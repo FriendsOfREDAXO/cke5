@@ -20,7 +20,8 @@ function cke5_init_style_edit(element) {
 
     let classesArea = element.find('#cke5-classes-area'),
         elementArea = element.find('#cke5-element-area'),
-        toggleElements = element.find('[data-toggle=toggle]');
+        toggleElements = element.find('[data-toggle=toggle]'),
+        form = element.closest('form');
 
     // Status-Variablen
     let inactivityTimer = null;
@@ -33,6 +34,7 @@ function cke5_init_style_edit(element) {
                 editable: true
             });
         }
+        classesArea.removeAttr('required').removeAttr('aria-required');
     }
 
     if (elementArea.length) {
@@ -46,6 +48,71 @@ function cke5_init_style_edit(element) {
                 }
             });
         }
+        elementArea.removeAttr('required').removeAttr('aria-required');
+    }
+
+    function clearTagInputErrors(field) {
+        let group = field.closest('.form-group');
+        if (group.length) {
+            group.removeClass('has-error');
+            group.find('.cke5-tag-input-error').remove();
+        }
+    }
+
+    function showTagInputError(field, message) {
+        let group = field.closest('.form-group'),
+            list = field.next('.cke5InputTags-list'),
+            visibleInput = list.find('.cke5InputTags-field').first();
+
+        if (!group.length) {
+            return;
+        }
+
+        group.addClass('has-error');
+        if (!group.find('.cke5-tag-input-error').length) {
+            group.append('<p class="help-block cke5-tag-input-error">' + message + '</p>');
+        }
+
+        if (visibleInput.length) {
+            visibleInput.trigger('focus');
+        }
+    }
+
+    function validateRequiredTagField(field) {
+        if (!field.length) {
+            return true;
+        }
+
+        clearTagInputErrors(field);
+
+        if (field.val().trim() !== '') {
+            return true;
+        }
+
+        showTagInputError(field, field.attr('data-empty-error') || 'Bitte Wert eingeben');
+        return false;
+    }
+
+    if (form.length && form.data('cke5-style-submit-validation') !== true) {
+        form.data('cke5-style-submit-validation', true);
+        form.on('submit', function (e) {
+            let isValid = true;
+
+            if (!validateRequiredTagField(elementArea)) {
+                isValid = false;
+            }
+
+            if (!validateRequiredTagField(classesArea)) {
+                isValid = false;
+            }
+
+            if (!isValid) {
+                e.preventDefault();
+                return false;
+            }
+
+            return true;
+        });
     }
 
     // Funktion zum Erstellen eines Tags
