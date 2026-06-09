@@ -52,8 +52,13 @@ function cke5_init_all(elements) {
 }
 
 function cke5_init(element) {
+    let initState = element.attr('data-cke5-init-state');
+    if (initState === 'pending' || initState === 'ready') {
+        return;
+    }
+
     if (!element.next().length || !element.next().hasClass('ck')) {
-        let unique_id = 'ck' + Math.random().toString(16).slice(2),
+        let unique_id = element.attr('id') || ('ck' + Math.random().toString(16).slice(2)),
             options = {},
             sub_options = {},
             profile_set = element.attr('data-profile'),
@@ -64,8 +69,9 @@ function cke5_init(element) {
             content_lang = element.attr('data-content-lang'),
             repeater_cke = (element.attr('repeater_cke') === "1");
 
-
-        if (!repeater_cke) {
+        if (repeater_cke) {
+            unique_id = element.attr('id');
+        } else if (!element.attr('id')) {
             element.attr('id', unique_id);
         } else {
             unique_id = element.attr('id');
@@ -112,17 +118,22 @@ function cke5_init(element) {
         }
 
         if (ckeditors[unique_id] === undefined) {
+            element.attr('data-cke5-init-state', 'pending');
+
             // init editor
             ClassicEditor.create(document.querySelector('#' + unique_id), options)
                 .then(editor => {
                     ckeditors[unique_id] = editor; // Save for later use.
+                    element.attr('data-cke5-init-state', 'ready');
                     cke5_pastinit(editor, sub_options);
                     dispatchCke5Event(editor, unique_id);
                 })
                 .catch(error => {
+                    element.attr('data-cke5-init-state', 'none');
                     console.error(error);
                 });
         } else {
+            element.attr('data-cke5-init-state', 'ready');
             console.log('editor already exist: ' + unique_id);
         }
     }
@@ -134,10 +145,16 @@ function cke5_get_editors() {
 
 function cke5_destroy(elements) {
     elements.each(function () {
-        let next = $(this).next();
-        delete ckeditors[$(this).attr('id')];
-        if (next.length && (next.hasClass('ck-editor') || next.hasClass('ck'))) {
-            next.remove();
+        let element = $(this),
+            next = element.next();
+
+        delete ckeditors[element.attr('id')];
+        element.attr('data-cke5-init-state', 'none');
+
+        while (next.length && (next.hasClass('ck-editor') || next.hasClass('ck'))) {
+            let current = next;
+            next = current.next();
+            current.remove();
         }
     });
 }
