@@ -3,9 +3,22 @@
 ## Version 7.0.0-dev
 
 * Umstellung auf den offiziellen CKEditor-5-Build als Basis des Addons
+* Plugin-System grundlegend neu aufgestellt: native Plugins als Runtime-Registry und externe Plugins offiziell integrierbar
 * Neue native Plugins und überarbeitete Dialoge für den aktuellen Editor-Workflow
 * Templates entfernt und durch Snippets ersetzt
-* Neue PLUGIN_DEVELOPMENT.md für die Plugin-Entwicklung und den Build-Workflow ergänzt
+* Profil-Seeding auf JSON-Bundle umgestellt (`install/default_bundle.json`) statt SQL-Seed-Datei
+* `data.sql` entfernt; Install/Update importiert die Demo-Profile jetzt zentral aus dem Bundle
+* Demo-Profile auf `demo_*` standardisiert (`demo_default`, `demo_light`, `demo_full_expert`)
+* Demo-Profile werden bei Install/Update bewusst überschrieben, damit Demos reproduzierbar bleiben
+* `demo_default` enthält Bootstrap-3-Link-Decoratoren und exklusive Decorator-Gruppen (`redaxoExclusiveGroup`)
+* Link-Decorator-Handling erweitert: pro Gruppe kann nur ein manueller Decorator gleichzeitig aktiv sein
+* Image-Resize-Verhalten modernisiert: Handles pro Profil schaltbar, Toolbar-Resize-Optionen bleiben nutzbar
+* Runtime robuster gemacht (u. a. Soft-Hyphen-Postfixer gegen visuelle Link-Splits)
+* Vendor-Asset-Handling bereinigt: SourceMap-Referenzen werden entfernt, unnötige `.map`-Requests entfallen
+* Neue Entwicklerdokumentation `dev.md` (ersetzt `PLUGIN_DEVELOPMENT.md`) und als Backend-Seite eingebunden
+* Neue Skripte für den Entwickler-Workflow:
+  * `pnpm run demo:variant` für schnelle Demo-Profilvarianten
+  * `pnpm run content-styles:update` für aktuelles CKEditor-Frontend-CSS aus npm
 * Legacy-Altlasten und verwaiste Vendor-Dateien bereinigt
 * Video-Handling, Profil-Defaults und Backend-Konfiguration weiter stabilisiert
 
