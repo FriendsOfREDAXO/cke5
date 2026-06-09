@@ -341,6 +341,16 @@ if ($func === '') {
                 if ($default_value) {
                     $field->setValue(Cke5ProfilesCreator::DEFAULT_VALUES['media_embed_styles_definition']);
                 }
+
+                $field = $form->addTextAreaField('media_embed_width_styles_definition');
+                $field->setLabel(rex_i18n::msg('cke5_media_embed_width_styles'));
+                $field->setAttribute('id', 'cke5-media-embed-width-styles-definition');
+                $field->setAttribute('data-label-placeholder', rex_i18n::msg('label'));
+                $field->setAttribute('data-class-placeholder', rex_i18n::msg('cke5_classes_area'));
+                $field->setNotice(rex_i18n::msg('cke5_media_embed_width_styles_description'));
+                if ($default_value) {
+                    $field->setValue(Cke5ProfilesCreator::DEFAULT_VALUES['media_embed_width_styles_definition']);
+                }
             $form->addRawField('</div>');
 
             $form->addRawField('<div class="collapse" id="cke5for_video-collapse">');

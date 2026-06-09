@@ -170,6 +170,24 @@ class Cke5ProfilesCreator
         "class": "media-embed--full"
     }
 ]',
+        'media_embed_width_styles_definition' => '[
+    {
+        "label": "Auto",
+        "class": "media-embed--w-auto"
+    },
+    {
+        "label": "50%",
+        "class": "media-embed--w-50"
+    },
+    {
+        "label": "75%",
+        "class": "media-embed--w-75"
+    },
+    {
+        "label": "100%",
+        "class": "media-embed--w-100"
+    }
+]',
         'video_styles_definition' => '[
     {
         "label": "Standard",
@@ -822,6 +840,8 @@ class Cke5ProfilesCreator
         }
 
         $mediaEmbedStyles = self::getMediaEmbedStyles($profile);
+        $mediaEmbedWidthStyles = self::getMediaEmbedWidthStyles($profile);
+        $mediaEmbedStyles = array_merge($mediaEmbedStyles, $mediaEmbedWidthStyles);
         if ($mediaEmbedStyles !== []) {
             if (!isset($jsonProfile['mediaEmbed']) || !is_array($jsonProfile['mediaEmbed'])) {
                 $jsonProfile['mediaEmbed'] = [];
@@ -1071,6 +1091,38 @@ class Cke5ProfilesCreator
     private static function getMediaEmbedStyles(array $profile): array
     {
         $definition = $profile['media_embed_styles_definition'] ?? self::DEFAULT_VALUES['media_embed_styles_definition'];
+        if (!is_string($definition) || $definition === '') {
+            return [];
+        }
+
+        $decoded = json_decode($definition, true);
+        if (!is_array($decoded)) {
+            return [];
+        }
+
+        $styles = [];
+        foreach ($decoded as $item) {
+            if (!is_array($item)) {
+                continue;
+            }
+            $label = isset($item['label']) && is_string($item['label']) ? trim($item['label']) : '';
+            $class = isset($item['class']) && is_string($item['class']) ? trim($item['class']) : '';
+            if ($label === '') {
+                continue;
+            }
+            $styles[] = ['label' => $label, 'class' => $class];
+        }
+
+        return $styles;
+    }
+
+    /**
+     * @param array<string,string> $profile
+     * @return array<int,array<string,string>>
+     */
+    private static function getMediaEmbedWidthStyles(array $profile): array
+    {
+        $definition = $profile['media_embed_width_styles_definition'] ?? self::DEFAULT_VALUES['media_embed_width_styles_definition'];
         if (!is_string($definition) || $definition === '') {
             return [];
         }

@@ -71,6 +71,7 @@ $importKeys = [
     "font_families",
     "font_family_default",
     "mediaembed",
+    "media_embed_width_styles_definition",
     "mentions",
     "mentions_definition",
     "sprog_mention",

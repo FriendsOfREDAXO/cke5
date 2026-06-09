@@ -57,6 +57,7 @@ function cke5_init_edit(element) {
     fontfamily_default = element.find('#cke5font-family-default-input-default-font-family'),
     link_decorators = element.find('#cke5link-decorators-definition-input-link-decorators-definition'),
     media_embed_styles_area = element.find('#cke5-media-embed-styles-definition'),
+    media_embed_width_styles_area = element.find('#cke5-media-embed-width-styles-definition'),
     video_styles_area = element.find('#cke5-video-styles-definition'),
     video_width_styles_area = element.find('#cke5-video-width-styles-definition'),
     imgresizeoptions_input = element.find('#cke5image-resize-option-input-default-resize-options'),
@@ -84,6 +85,7 @@ function cke5_init_edit(element) {
   cke5_addIdNameFields(sprog_mention_area);
   cke5_addyTableFields(ytable_area);
   cke5_addLabelClassFields(media_embed_styles_area);
+  cke5_addLabelClassFields(media_embed_width_styles_area);
   cke5_addLabelClassFields(video_styles_area);
   cke5_addLabelClassFields(video_width_styles_area);
   cke5_addResizeOptionsFields(imgresizeoptions_area);
