@@ -472,7 +472,62 @@
           });
           observer.observe(document.body, { childList: true, subtree: true });
         }
+
+        function cke5_prefer_image_toolbar_over_link_form(editor) {
+          if (!editor || editor._cke5PreferImageToolbarInit) {
+            return;
+          }
+          editor._cke5PreferImageToolbarInit = true;
+
+          const imageUtils = editor.plugins && editor.plugins.has("ImageUtils") ? editor.plugins.get("ImageUtils") : null;
+          const linkUI = editor.plugins && editor.plugins.has("LinkUI") ? editor.plugins.get("LinkUI") : null;
+
+          if (!linkUI) {
+            return;
+          }
+
+          const isSelectedImage = () => {
+            const selection = editor.model && editor.model.document ? editor.model.document.selection : null;
+            if (!selection || typeof selection.getSelectedElement !== "function") {
+              return false;
+            }
+
+            const selectedElement = selection.getSelectedElement();
+            if (!selectedElement) {
+              return false;
+            }
+
+            if (imageUtils && typeof imageUtils.isImage === "function") {
+              return imageUtils.isImage(selectedElement);
+            }
+
+            return selectedElement.is && (selectedElement.is("element", "imageBlock") || selectedElement.is("element", "imageInline"));
+          };
+
+          const hideLinkUiForImageSelection = () => {
+            if (!isSelectedImage()) {
+              return;
+            }
+
+            if (typeof linkUI._hideUI === "function") {
+              linkUI._hideUI();
+            }
+          };
+
+          if (editor.model && editor.model.document && editor.model.document.selection) {
+            editor.model.document.selection.on("change:range", () => {
+              window.setTimeout(hideLinkUiForImageSelection, 0);
+            });
+          }
+
+          if (editor.editing && editor.editing.view && editor.editing.view.document) {
+            editor.editing.view.document.on("click", () => {
+              window.setTimeout(hideLinkUiForImageSelection, 0);
+            });
+          }
+        }
         window.cke5_enhance_link_form = cke5_enhance_link_form;
+        window.cke5_prefer_image_toolbar_over_link_form = cke5_prefer_image_toolbar_over_link_form;
         let cke5RedaxoPluginCache = null;
         function cke5_get_native_redaxo_plugins() {
           if (cke5RedaxoPluginCache !== null) {
