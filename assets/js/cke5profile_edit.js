@@ -56,6 +56,9 @@ function cke5_init_edit(element) {
     fontfamily_area = element.find('#cke5fontfamily-area'),
     fontfamily_default = element.find('#cke5font-family-default-input-default-font-family'),
     link_decorators = element.find('#cke5link-decorators-definition-input-link-decorators-definition'),
+    media_embed_styles_area = element.find('#cke5-media-embed-styles-definition'),
+    video_styles_area = element.find('#cke5-video-styles-definition'),
+    video_width_styles_area = element.find('#cke5-video-width-styles-definition'),
     imgresizeoptions_input = element.find('#cke5image-resize-option-input-default-resize-options'),
     imgresizeoptions_area = element.find('#cke5resizeoptions-area');
 
@@ -80,6 +83,9 @@ function cke5_init_edit(element) {
   cke5_addFontFamiliesFields(fontfamily_area);
   cke5_addIdNameFields(sprog_mention_area);
   cke5_addyTableFields(ytable_area);
+  cke5_addLabelClassFields(media_embed_styles_area);
+  cke5_addLabelClassFields(video_styles_area);
+  cke5_addLabelClassFields(video_width_styles_area);
   cke5_addResizeOptionsFields(imgresizeoptions_area);
   cke5_bootstrapToggle_collapse(tablecolor_default);
   cke5_bootstrapToggle_collapse(fontcolor_default);
@@ -439,6 +445,35 @@ function cke5_addResizeOptionsFields(element) {
         // '        <option value="0">inaktiv</option>\n' +
         // '</select>' +
         '<input class="form-control" name="icon" placeholder="' + icon_placeholder + '" type="text">\n' +
+        '</div>\n' +
+        '</div>\n'),
+      limit: 20,
+      onElementAdd: function (el, plugin) {
+        if (CKEDIT_DEBUG) console.log(plugin.elementCount);
+      },
+      onElementRemove: function (el, plugin) {
+        if (CKEDIT_DEBUG) console.log(plugin.elementCount);
+      }
+    });
+  }
+}
+
+function cke5_addLabelClassFields(element) {
+  if (element.length) {
+    if (element.data('cke5-multiinput-initialized') === true) {
+      return;
+    }
+    element.data('cke5-multiinput-initialized', true);
+    let label_placeholder = element.data('label-placeholder'),
+      class_placeholder = element.data('class-placeholder');
+    element.multiInput({
+      json: true,
+      input: $('<div class="row inputElement">\n' +
+        '<div class="form-group col-xs-6">\n' +
+        '<input class="form-control" name="label" placeholder="' + label_placeholder + '" type="text">\n' +
+        '</div>\n' +
+        '<div class="form-group col-xs-6">\n' +
+        '<input class="form-control" name="class" placeholder="' + class_placeholder + '" type="text">\n' +
         '</div>\n' +
         '</div>\n'),
       limit: 20,

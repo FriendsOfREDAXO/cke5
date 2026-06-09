@@ -335,9 +335,8 @@ if ($func === '') {
                 $field = $form->addTextAreaField('media_embed_styles_definition');
                 $field->setLabel(rex_i18n::msg('cke5_media_embed_styles'));
                 $field->setAttribute('id', 'cke5-media-embed-styles-definition');
-                $field->setAttribute('rows', '5');
-                $field->setAttribute('class', 'rex-code');
-                $field->setAttribute('data-codemirror-mode', 'application/json');
+                $field->setAttribute('data-label-placeholder', rex_i18n::msg('label'));
+                $field->setAttribute('data-class-placeholder', rex_i18n::msg('cke5_classes_area'));
                 $field->setNotice(rex_i18n::msg('cke5_media_embed_styles_description'));
                 if ($default_value) {
                     $field->setValue(Cke5ProfilesCreator::DEFAULT_VALUES['media_embed_styles_definition']);
@@ -348,9 +347,8 @@ if ($func === '') {
                 $field = $form->addTextAreaField('video_styles_definition');
                 $field->setLabel(rex_i18n::msg('cke5_video_styles'));
                 $field->setAttribute('id', 'cke5-video-styles-definition');
-                $field->setAttribute('rows', '6');
-                $field->setAttribute('class', 'rex-code');
-                $field->setAttribute('data-codemirror-mode', 'application/json');
+                $field->setAttribute('data-label-placeholder', rex_i18n::msg('label'));
+                $field->setAttribute('data-class-placeholder', rex_i18n::msg('cke5_classes_area'));
                 $field->setNotice(rex_i18n::msg('cke5_video_styles_description'));
                 if ($default_value) {
                     $field->setValue(Cke5ProfilesCreator::DEFAULT_VALUES['video_styles_definition']);
@@ -359,9 +357,8 @@ if ($func === '') {
                 $field = $form->addTextAreaField('video_width_styles_definition');
                 $field->setLabel(rex_i18n::msg('cke5_video_width_styles'));
                 $field->setAttribute('id', 'cke5-video-width-styles-definition');
-                $field->setAttribute('rows', '5');
-                $field->setAttribute('class', 'rex-code');
-                $field->setAttribute('data-codemirror-mode', 'application/json');
+                $field->setAttribute('data-label-placeholder', rex_i18n::msg('label'));
+                $field->setAttribute('data-class-placeholder', rex_i18n::msg('cke5_classes_area'));
                 $field->setNotice(rex_i18n::msg('cke5_video_width_styles_description'));
                 if ($default_value) {
                     $field->setValue(Cke5ProfilesCreator::DEFAULT_VALUES['video_width_styles_definition']);
