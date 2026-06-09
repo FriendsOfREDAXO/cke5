@@ -19,6 +19,17 @@ async function copyFile(src, dest) {
   await fsp.copyFile(src, dest);
 }
 
+async function stripSourceMapReference(filePath) {
+  const content = await fsp.readFile(filePath, 'utf8');
+  const stripped = content
+    .replace(/\/\*# sourceMappingURL=.*?\*\/\s*$/gm, '')
+    .replace(/^\s*\/\/# sourceMappingURL=.*$/gm, '');
+
+  if (stripped !== content) {
+    await fsp.writeFile(filePath, stripped, 'utf8');
+  }
+}
+
 async function recreateDir(dir) {
   if (fs.existsSync(dir)) {
     await fsp.rm(dir, { recursive: true, force: true });
@@ -38,6 +49,8 @@ async function main() {
   await copyFile(path.join(browserRoot, 'ckeditor5.css.map'), path.join(modernRoot, 'ckeditor.css.map'));
   await copyFile(path.join(browserRoot, 'ckeditor5-content.css'), path.join(modernRoot, 'ckeditor-content.css'));
   await copyFile(path.join(browserRoot, 'ckeditor5-editor.css'), path.join(modernRoot, 'ckeditor-editor.css'));
+  await stripSourceMapReference(path.join(modernRoot, 'ckeditor.js'));
+  await stripSourceMapReference(path.join(modernRoot, 'ckeditor.css'));
 
   const outTranslations = path.join(modernRoot, 'translations');
   await recreateDir(outTranslations);

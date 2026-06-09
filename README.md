@@ -202,6 +202,44 @@ Use this to add manual link decorators. A practical use case is Bootstrap-like l
 
 Tip: this JSON is merged into `link.decorators` of the generated CKEditor profile.
 
+Exclusive decorator groups (only one active at a time):
+
+If multiple manual decorators should be mutually exclusive (for example button variants, color variants, badge variants), set the same `redaxoExclusiveGroup` on those decorators.
+
+Example:
+
+```json
+[
+  {
+    "btnPrimary": {
+      "mode": "manual",
+      "label": "Button Primary",
+      "classes": "btn btn-primary",
+      "redaxoExclusiveGroup": "linkButtonStyle"
+    }
+  },
+  {
+    "btnSuccess": {
+      "mode": "manual",
+      "label": "Button Success",
+      "classes": "btn btn-success",
+      "redaxoExclusiveGroup": "linkButtonStyle"
+    }
+  },
+  {
+    "nofollow": {
+      "mode": "manual",
+      "label": "Add nofollow",
+      "attributes": {
+        "rel": "nofollow"
+      }
+    }
+  }
+]
+```
+
+Result: In the link dialog, only one decorator from `linkButtonStyle` can be active at the same time, while unrelated decorators (like `nofollow`) remain independent.
+
 ### 2) `mentions_definition`
 
 Defines custom mention feeds.

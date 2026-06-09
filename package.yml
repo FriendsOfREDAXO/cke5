@@ -36,11 +36,14 @@ page:
         config:
             title: 'translate:config'
         help:
-             title: 'translate:help'
-             subPath: README.md
+            title: 'translate:help'
+            subPath: README.md
+        dev:
+            title: 'Entwickler'
+            subPath: dev.md
         licenses:
-             title: 'translate:licenses'
-             subPath: LICENSE.md     
+            title: 'translate:licenses'
+            subPath: LICENSE.md
 requires:
     redaxo: '^5.12'
     php:

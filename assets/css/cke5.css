@@ -219,6 +219,67 @@
     border: 1px solid #dfe2e5;
 }
 
+/* Avoid fake selection overlays that can split links visually. */
+.ck .ck-fake-link-selection {
+    outline: 0 !important;
+    box-shadow: none !important;
+    background: #111 !important;
+    color: #fff !important;
+}
+
+.ck .ck-link_selected {
+    background: #111 !important;
+    color: #fff !important;
+}
+
+.ck .ck-fake-link-selection_collapsed {
+    border-right: 0 !important;
+    outline: 0 !important;
+    margin-right: 0 !important;
+    display: none !important;
+}
+
+.ck .ck-fake-link-selection {
+    display: contents !important;
+}
+
+/* CKEditor can split selected links into adjacent segments; merge btn segments visually. */
+.ck .ck-content a.btn + a.btn {
+    margin-left: -1px !important;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+    border-left-width: 0 !important;
+}
+
+.ck .ck-content a.btn:has(+ a.btn) {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+.ck .ck-content a.btn:empty {
+    min-width: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border-left-width: 0 !important;
+    border-right-width: 0 !important;
+}
+
+.ck .ck-content a.btn.ck-link_selected + a.btn.ck-link_selected {
+    margin-left: 0 !important;
+}
+
+.ck .ck-content a.btn.ck-link_selected:has(.ck-fake-link-selection_collapsed) {
+    width: 0 !important;
+    min-width: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border-left-width: 0 !important;
+    border-right-width: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    overflow: hidden !important;
+}
+
 .cke5-editor-info p {
     margin: 0;
     padding: 0;

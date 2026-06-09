@@ -50,49 +50,56 @@
           "btnDefault": {
             "mode": "manual",
             "label": "Bootstrap 3 Button Default",
-            "classes": "btn btn-default"
+            "classes": "btn btn-default",
+            "redaxoExclusiveGroup": "linkButtonStyle"
           }
         },
         {
           "btnPrimary": {
             "mode": "manual",
             "label": "Bootstrap 3 Button Primary",
-            "classes": "btn btn-primary"
+            "classes": "btn btn-primary",
+            "redaxoExclusiveGroup": "linkButtonStyle"
           }
         },
         {
           "btnSuccess": {
             "mode": "manual",
             "label": "Bootstrap 3 Button Success",
-            "classes": "btn btn-success"
+            "classes": "btn btn-success",
+            "redaxoExclusiveGroup": "linkButtonStyle"
           }
         },
         {
           "btnInfo": {
             "mode": "manual",
             "label": "Bootstrap 3 Button Info",
-            "classes": "btn btn-info"
+            "classes": "btn btn-info",
+            "redaxoExclusiveGroup": "linkButtonStyle"
           }
         },
         {
           "btnWarning": {
             "mode": "manual",
             "label": "Bootstrap 3 Button Warning",
-            "classes": "btn btn-warning"
+            "classes": "btn btn-warning",
+            "redaxoExclusiveGroup": "linkButtonStyle"
           }
         },
         {
           "btnDanger": {
             "mode": "manual",
             "label": "Bootstrap 3 Button Danger",
-            "classes": "btn btn-danger"
+            "classes": "btn btn-danger",
+            "redaxoExclusiveGroup": "linkButtonStyle"
           }
         },
         {
           "btnLink": {
             "mode": "manual",
             "label": "Bootstrap 3 Button Link",
-            "classes": "btn btn-link"
+            "classes": "btn btn-link",
+            "redaxoExclusiveGroup": "linkButtonStyle"
           }
         }
       ],

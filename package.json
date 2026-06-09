@@ -10,6 +10,7 @@
   "scripts": {
     "check:runtime": "node ./scripts/check-runtime.js",
     "vendor:update": "node ./scripts/vendor-update.js",
-    "demo:variant": "node ./scripts/add-demo-variant.js"
+    "demo:variant": "node ./scripts/add-demo-variant.js",
+    "content-styles:update": "node ./scripts/update-content-styles.js"
   }
 }

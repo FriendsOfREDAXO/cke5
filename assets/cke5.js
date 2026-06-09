@@ -107,6 +107,7 @@
             if (typeof options.licenseKey === "undefined" || options.licenseKey === null || options.licenseKey === "") {
               options.licenseKey = "GPL";
             }
+            options = cke5_prepare_link_decorator_exclusive_groups(options);
             options = cke5_apply_external_profile_transforms(options, element);
             if (ckeditors[unique_id] === void 0) {
               const editorConstructor = cke5_get_editor_constructor();
@@ -122,6 +123,8 @@
                 editorConstructor.create(document.querySelector("#" + unique_id), options).then((editor) => {
                   ckeditors[unique_id] = editor;
                   element.attr("data-cke5-init-state", "ready");
+                  cke5_register_soft_hyphen_postfixer(editor);
+                  cke5_init_link_decorator_exclusive_groups(editor, options);
                   cke5_init_external_plugins(editor, unique_id, element, options);
                   cke5_pastinit(editor, sub_options);
                   dispatchCke5Event(editor, unique_id);
@@ -276,6 +279,103 @@
             return;
           }
           cke5_insert_or_update_link(editor, url, label);
+        }
+        function cke5_get_link_decorator_attribute_name(name) {
+          if (typeof name !== "string" || name.trim() === "") {
+            return null;
+          }
+          const cleanName = name.trim();
+          return "link" + cleanName.charAt(0).toUpperCase() + cleanName.slice(1);
+        }
+        function cke5_prepare_link_decorator_exclusive_groups(options) {
+          if (!options || typeof options !== "object") {
+            return options;
+          }
+          if (!options.link || typeof options.link !== "object") {
+            return options;
+          }
+          if (!options.link.decorators || typeof options.link.decorators !== "object") {
+            return options;
+          }
+
+          const groups = {};
+          Object.keys(options.link.decorators).forEach((decoratorName) => {
+            const decorator = options.link.decorators[decoratorName];
+            if (!decorator || typeof decorator !== "object") {
+              return;
+            }
+            if (decorator.mode !== "manual") {
+              return;
+            }
+
+            const groupName = typeof decorator.redaxoExclusiveGroup === "string" && decorator.redaxoExclusiveGroup.trim() !== "" ? decorator.redaxoExclusiveGroup.trim() : typeof decorator.exclusiveGroup === "string" && decorator.exclusiveGroup.trim() !== "" ? decorator.exclusiveGroup.trim() : "";
+            delete decorator.redaxoExclusiveGroup;
+            delete decorator.exclusiveGroup;
+
+            if (groupName === "") {
+              return;
+            }
+
+            const attrName = cke5_get_link_decorator_attribute_name(decoratorName);
+            if (!attrName) {
+              return;
+            }
+
+            if (!Array.isArray(groups[groupName])) {
+              groups[groupName] = [];
+            }
+            if (!groups[groupName].includes(attrName)) {
+              groups[groupName].push(attrName);
+            }
+          });
+
+          options.redaxoLinkDecoratorExclusiveGroups = Object.values(groups).filter((group) => Array.isArray(group) && group.length > 1);
+          return options;
+        }
+        function cke5_init_link_decorator_exclusive_groups(editor, options) {
+          if (!editor || editor._cke5ExclusiveLinkDecoratorsInit) {
+            return;
+          }
+          if (!options || typeof options !== "object") {
+            return;
+          }
+
+          const groups = Array.isArray(options.redaxoLinkDecoratorExclusiveGroups) ? options.redaxoLinkDecoratorExclusiveGroups : [];
+          if (groups.length === 0) {
+            return;
+          }
+
+          const linkCommand = editor.commands && typeof editor.commands.get === "function" ? editor.commands.get("link") : null;
+          if (!linkCommand || typeof linkCommand.on !== "function") {
+            return;
+          }
+
+          editor._cke5ExclusiveLinkDecoratorsInit = true;
+          linkCommand.on("execute", (evt, args) => {
+            if (!Array.isArray(args) || args.length < 2) {
+              return;
+            }
+            const commandAttributes = args[1];
+            if (!commandAttributes || typeof commandAttributes !== "object") {
+              return;
+            }
+
+            groups.forEach((group) => {
+              if (!Array.isArray(group) || group.length < 2) {
+                return;
+              }
+              const enabled = group.filter((attrName) => commandAttributes[attrName] === true);
+              if (enabled.length === 0) {
+                return;
+              }
+              const keep = enabled[enabled.length - 1];
+              group.forEach((attrName) => {
+                if (attrName !== keep) {
+                  commandAttributes[attrName] = false;
+                }
+              });
+            });
+          }, { priority: "high" });
         }
         function cke5_get_clang_param() {
           try {
@@ -525,6 +625,50 @@
 
           // Keep link editing reachable: only suppress the automatic link balloon on
           // selection changes, not on every click afterwards.
+        }
+        function cke5_register_soft_hyphen_postfixer(editor) {
+          if (!editor || editor._cke5SoftHyphenFixerInit) {
+            return;
+          }
+          if (!editor.model || !editor.model.document || typeof editor.model.document.registerPostFixer !== "function") {
+            return;
+          }
+
+          editor._cke5SoftHyphenFixerInit = true;
+          editor.model.document.registerPostFixer((writer) => {
+            const root = editor.model.document.getRoot();
+            if (!root) {
+              return false;
+            }
+
+            const toFix = [];
+            for (const item of editor.model.createRangeIn(root).getItems()) {
+              if (!item || typeof item.is !== "function" || !item.is("$text")) {
+                continue;
+              }
+              if (typeof item.data !== "string" || item.data.indexOf("\u00AD") === -1) {
+                continue;
+              }
+              toFix.push(item);
+            }
+
+            if (toFix.length === 0) {
+              return false;
+            }
+
+            for (let i = toFix.length - 1; i >= 0; i--) {
+              const item = toFix[i];
+              const clean = item.data.replace(/\u00AD/g, "");
+              const attrs = Object.fromEntries(item.getAttributes());
+              const pos = writer.createPositionBefore(item);
+              writer.remove(item);
+              if (clean !== "") {
+                writer.insertText(clean, attrs, pos);
+              }
+            }
+
+            return true;
+          });
         }
         window.cke5_enhance_link_form = cke5_enhance_link_form;
         window.cke5_prefer_image_toolbar_over_link_form = cke5_prefer_image_toolbar_over_link_form;

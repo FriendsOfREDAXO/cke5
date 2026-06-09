@@ -1484,4 +1484,3 @@
 	exports.wait = On;
 
 }));
-//# sourceMappingURL=ckeditor5.umd.js.map
