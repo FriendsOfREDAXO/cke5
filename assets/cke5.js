@@ -169,6 +169,7 @@
             "Subscript",
             "Superscript",
             "Link",
+            "LinkImage",
             "List",
             "TodoList",
             "Indent",
