@@ -140,6 +140,19 @@ class Cke5ProfilesCreator
         'cktabletypes' => ['tableProperties', 'tableCellProperties']
     ];
     const DEFAULT_VALUES = [
+        'toolbar' => 'bold,italic,bulletedList,numberedList,undo,redo,link,pastePlainText',
+        'heading' => 'paragraph,h1,h2,h3,h4,h5,h6',
+        'highlight' => 'yellowMarker,greenMarker,pinkMarker,blueMarker,redPen,greenPen',
+        'alignment' => 'left,right,center,justify',
+        'code_block' => 'plaintext,c,cs,cpp,css,diff,html,java,javascript,php,python,ruby,typescript,xml',
+        'mediaembed' => 'dailymotion,spotify,youtube,vimeo,instagram,twitter,googleMaps,flickr,facebook',
+        'special_characters' => 'currency,mathematical,latin,arrows,text',
+        'table_toolbar' => '|,tableColumn,tableRow,mergeTableCells,tableProperties,tableCellProperties,toggleTableCaption',
+        'image_toolbar' => '|,imageTextAlternative,block,inline,side,alignLeft,alignCenter,alignRight,alignBlockLeft,alignBlockRight,linkImage,toggleImageCaption',
+        'fontsize' => 'default,tiny,small,big,huge',
+        'rexlink' => 'internal,media,email,phone,ytable',
+        'min_height' => ['"none"', '"100px"', '"200px"', '"300px"', '"400px"', '"500px"', '"600px"'],
+        'max_height' => ['"none"', '"200px"', '"400px"', '"600px"', '"800px"', '"1000px"', '"1200px"'],
         'html_support_allow' => '[
     {
         "name": "regex(/^(div|section|article)$/)",
@@ -228,22 +241,7 @@ class Cke5ProfilesCreator
     const LICENSE_FIELDS = [
         'toolbar' => []
     ];
-    const MIGRATION_TOOLBAR_MAP = [
-        'rexlink' => 'link',
-        'rexImage' => 'insertImage',
-        'pastePlainText' => 'removeFormat',
-        'quote' => 'blockQuote',
-        'insertTemplate' => 'snippets',
-        'snippets' => 'snippets',
-        'phonelink' => 'link',
-        'for_images' => 'insertImage',
-        'for_oembed' => 'mediaEmbed',
-        'for_video' => 'for_video',
-        'for_htmlembed' => 'htmlEmbed',
-        'for_checklist' => 'todoList',
-        'for_checklist_feature' => 'todoList',
-        'for_chars_symbols' => 'specialCharacters',
-    ];
+    const DEFAULTS = self::DEFAULT_VALUES;
     const ALLOWED_FIELDS = [
         'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll', 'specialCharacters', 'pastePlainText', 'htmlEmbed', 'sourceEditing', 'textPartLanguage', 'findAndReplace', 'style', 'snippets', 'for_video', 'showBlocks', 'bookmark', 'accessibilityHelp'],
         'alignment' => ['left', 'right', 'center', 'justify'],
@@ -328,71 +326,7 @@ class Cke5ProfilesCreator
             'view' => 'h6',
             'title' => 'Heading 6',
             'class' => 'ck-heading_heading6'
-        ],
-    ];
-
-    /** @api array<string,array<string,string>> */
-    const HIGHLIGHTS = [
-        'yellowMarker' => [
-            'model' => 'yellowMarker',
-            'class' => 'marker-yellow',
-            'title' => 'Yellow Marker',
-            'color' => 'var(--ck-highlight-marker-yellow)',
-            'type' => 'marker'
-        ],
-        'greenMarker' => [
-            'model' => 'greenMarker',
-            'class' => 'marker-green',
-            'title' => 'Green Marker',
-            'color' => 'var(--ck-highlight-marker-green)',
-            'type' => 'marker'
-        ],
-        'pinkMarker' => [
-            'model' => 'pinkMarker',
-            'class' => 'marker-pink',
-            'title' => 'Pink Marker',
-            'color' => 'var(--ck-highlight-marker-pink)',
-            'type' => 'marker'
-        ],
-        'blueMarker' => [
-            'model' => 'blueMarker',
-            'class' => 'marker-blue',
-            'title' => 'Blue Marker',
-            'color' => 'var(--ck-highlight-marker-blue)',
-            'type' => 'marker'
-        ],
-        'redPen' => [
-            'model' => 'redPen',
-            'class' => 'pen-red',
-            'title' => 'Red pen',
-            'color' => 'var(--ck-highlight-pen-red)',
-            'type' => 'pen'
-        ],
-        'greenPen' => [
-            'model' => 'greenPen',
-            'class' => 'pen-green',
-            'title' => 'Green pen',
-            'color' => 'var(--ck-highlight-pen-green)',
-            'type' => 'pen'
-        ],
-    ];
-
-
-    const DEFAULTS = [
-        'toolbar' => 'heading,|',
-        'alignment' => 'left,right,center',
-        'table_toolbar' => 'tableColumn,tableRow,mergeTableCells,tableProperties,tableCellProperties,toggleTableCaption',
-        'heading' => 'paragraph,h1,h2,h3',
-        'highlight' => 'yellowMarker,greenMarker,redPen,greenPen',
-        'image_toolbar' => 'imageTextAlternative,|,block,alignLeft,alignRight,linkImage',
-        'rexlink' => 'internal,media,email,phone',
-        'fontsize' => 'tiny,small,default,big,huge',
-        'min_height' => [0, 100, 200, 300, 400, 500, 600],
-        'max_height' => [0, 200, 400, 600, 800, 1000, 1200],
-        'mediaembed' => 'youtube,vimeo',
-        'code_block' => 'plaintext,php,javascript,python',
-        'special_characters' => 'currency,mathematical,latin,arrows,text',
-        //'emoji' => 'EmojiPeople,EmojiSymbols,EmojiFlags',
+        ]
     ];
 
     /**
@@ -496,7 +430,7 @@ class Cke5ProfilesCreator
             return ['suboptions' => $jsonSubOption, 'profile' => $jsonProfile];
         }
 
-        $toolbar = self::mapToolbarItemsToNative(self::toArray($profile['toolbar']));
+        $toolbar = self::toArray($profile['toolbar']);
         $linkToolbar = self::toArray($profile['rexlink']);
         $tableToolbar = self::toArray($profile['table_toolbar']);
         $jsonProfile = ['toolbar' => ['items' => $toolbar, 'shouldNotGroupWhenFull' => (!(isset($profile['group_when_full']) && $profile['group_when_full'] !== ''))]];
@@ -530,6 +464,8 @@ class Cke5ProfilesCreator
         if (isset($profile['image_resize_unit']) && $profile['image_resize_unit'] !== '') {
             $jsonProfile['image']['resizeUnit'] = $profile['image_resize_unit'];
         }
+
+        $jsonProfile['redaxoImageResizeHandles'] = !((isset($profile['image_resize_handles']) && $profile['image_resize_handles'] === '') || is_null($profile['image_resize_handles']));
 
         if (isset($profile['image_resize_options']) && $profile['image_resize_options'] !== '' && isset($profile['image_resize_options_definition']) && $profile['image_resize_options_definition'] !== '') {
             /** @var array<string,array<string,string>> $resizeOptions */
@@ -715,10 +651,6 @@ class Cke5ProfilesCreator
 
         if (!in_array('sourceEditing', $toolbar, true)) {
             $jsonProfile['removePlugins'][] = 'SourceEditing';
-        }
-
-        if ((isset($profile['image_resize_handles']) && $profile['image_resize_handles'] === '') || is_null($profile['image_resize_handles'])) {
-            $jsonProfile['removePlugins'][] = 'ImageResizeHandles';
         }
 
         if (!in_array('style', $toolbar, true)) {
@@ -985,103 +917,6 @@ class Cke5ProfilesCreator
         }
 
         return ['suboptions' => $jsonSubOption, 'profile' => $jsonProfile, 'sprog_mention' => $sprogDefinition];
-    }
-
-    /**
-     * @param array<int,string> $toolbar
-     * @return array<int,string>
-     */
-    public static function migrateLegacyToolbarProfilesToNative(): int
-    {
-        $table = rex::getTable('cke5_profiles');
-        $sql = rex_sql::factory();
-        $rows = $sql->getArray('SELECT id, toolbar, expert, expert_definition FROM ' . $table);
-        $updated = 0;
-
-        foreach ($rows as $row) {
-            $id = (int) ($row['id'] ?? 0);
-            if ($id <= 0) {
-                continue;
-            }
-
-            $isExpert = (int) ($row['expert'] ?? 0) === 1;
-            if ($isExpert) {
-                $definition = json_decode((string) ($row['expert_definition'] ?? ''), true);
-                if (!is_array($definition) || !isset($definition['toolbar']) || !is_array($definition['toolbar']) || !isset($definition['toolbar']['items']) || !is_array($definition['toolbar']['items'])) {
-                    continue;
-                }
-
-                $mapped = self::mapToolbarItemsToNative($definition['toolbar']['items']);
-                if ($mapped === $definition['toolbar']['items']) {
-                    continue;
-                }
-
-                $definition['toolbar']['items'] = $mapped;
-
-                $updateSql = rex_sql::factory();
-                $updateSql->setTable($table);
-                $updateSql->setWhere(['id' => $id]);
-                $updateSql->setValue('expert_definition', (string) json_encode($definition));
-                $updateSql->update();
-                $updated++;
-                continue;
-            }
-
-            $toolbarRaw = (string) ($row['toolbar'] ?? '');
-            if ($toolbarRaw === '') {
-                continue;
-            }
-
-            $items = self::toArray($toolbarRaw);
-            $mapped = self::mapToolbarItemsToNative($items);
-            if ($mapped === $items) {
-                continue;
-            }
-
-            $updateSql = rex_sql::factory();
-            $updateSql->setTable($table);
-            $updateSql->setWhere(['id' => $id]);
-            $updateSql->setValue('toolbar', implode(',', $mapped));
-            $updateSql->update();
-            $updated++;
-        }
-
-        return $updated;
-    }
-
-    /**
-     * @param array<int,mixed> $items
-     * @return array<int,string>
-     */
-    private static function mapToolbarItemsToNative(array $items): array
-    {
-        $mapped = [];
-        foreach ($items as $item) {
-            if (!is_string($item) || $item === '') {
-                continue;
-            }
-
-            $nativeItem = self::MIGRATION_TOOLBAR_MAP[$item] ?? $item;
-            if ($nativeItem === '|') {
-                if ($mapped === [] || $mapped[array_key_last($mapped)] === '|') {
-                    continue;
-                }
-                $mapped[] = $nativeItem;
-                continue;
-            }
-
-            if ($mapped !== [] && $mapped[array_key_last($mapped)] === $nativeItem) {
-                continue;
-            }
-
-            $mapped[] = $nativeItem;
-        }
-
-        while ($mapped !== [] && $mapped[array_key_last($mapped)] === '|') {
-            array_pop($mapped);
-        }
-
-        return $mapped;
     }
 
     /**
@@ -1362,7 +1197,52 @@ class Cke5ProfilesCreator
      */
     private static function getHighlight(array $keys): array
     {
-        return self::getReturnValues($keys,self::HIGHLIGHTS);
+        $highlights = [
+            'yellowMarker' => [
+                'model' => 'yellowMarker',
+                'class' => 'marker-yellow',
+                'title' => 'Yellow Marker',
+                'color' => 'var(--ck-highlight-marker-yellow)',
+                'type' => 'marker',
+            ],
+            'greenMarker' => [
+                'model' => 'greenMarker',
+                'class' => 'marker-green',
+                'title' => 'Green Marker',
+                'color' => 'var(--ck-highlight-marker-green)',
+                'type' => 'marker',
+            ],
+            'pinkMarker' => [
+                'model' => 'pinkMarker',
+                'class' => 'marker-pink',
+                'title' => 'Pink Marker',
+                'color' => 'var(--ck-highlight-marker-pink)',
+                'type' => 'marker',
+            ],
+            'blueMarker' => [
+                'model' => 'blueMarker',
+                'class' => 'marker-blue',
+                'title' => 'Blue Marker',
+                'color' => 'var(--ck-highlight-marker-blue)',
+                'type' => 'marker',
+            ],
+            'redPen' => [
+                'model' => 'redPen',
+                'class' => 'pen-red',
+                'title' => 'Red pen',
+                'color' => 'var(--ck-highlight-pen-red)',
+                'type' => 'pen',
+            ],
+            'greenPen' => [
+                'model' => 'greenPen',
+                'class' => 'pen-green',
+                'title' => 'Green pen',
+                'color' => 'var(--ck-highlight-pen-green)',
+                'type' => 'pen',
+            ],
+        ];
+
+        return self::getReturnValues($keys, $highlights);
     }
 
     /**

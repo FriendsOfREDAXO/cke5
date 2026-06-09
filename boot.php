@@ -11,15 +11,6 @@ use Cke5\Provider\Cke5AssetsProvider;
 if (rex::isBackend() && is_object(rex::getUser())) {
     rex_perm::register('cke5_addon[]');
 
-    if (!$this->getConfig('native_toolbar_migration_done', false)) {
-        $migratedProfiles = Cke5\Creator\Cke5ProfilesCreator::migrateLegacyToolbarProfilesToNative();
-        $this->setConfig('native_toolbar_migration_done', true);
-
-        if ($migratedProfiles > 0) {
-            Cke5ExtensionHandler::updateOrCreateProfiles();
-        }
-    }
-
     // Allow third-party addons to register runtime plugins before assets are loaded.
     rex_extension::registerPoint(new rex_extension_point('CKE5_REGISTER_PLUGINS'));
 

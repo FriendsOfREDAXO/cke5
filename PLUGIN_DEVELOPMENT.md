@@ -124,3 +124,31 @@ Beispiel im Expert-JSON:
 - Nur Toolbar-Token im Profil setzen reicht nicht: Das Plugin muss auch real im Build/Runtime verfügbar sein.
 - Unkontrollierte „alle Plugins automatisch laden“-Ansätze führen leicht zu Konflikten (z. B. Legacy/Modern List-Plugins).
 - Änderungen immer in Quell- und ausgelieferten Dateien synchron halten (`assets/cke5.js`, `assets/plugins/*.js`, `public/assets/addons/cke5/cke5.js`, `public/assets/addons/cke5/plugins/*.js`).
+
+## 7) Demo-Profile schnell als Varianten anlegen
+
+Die Demo-Profile werden ueber `install/default_bundle.json` gepflegt und bei Install/Update bewusst ueberschrieben.
+
+Bestehende Demo-Basisprofile:
+- `demo_default`
+- `demo_light`
+- `demo_full_expert`
+
+### Neue Variante aus `demo_default` erzeugen
+
+```bash
+pnpm run demo:variant -- --name demo_marketing --desc "Demo Marketing Profil"
+```
+
+Optional:
+- Andere Quelle statt `demo_default`: `--from demo_light`
+- Vorhandene Variante ersetzen: `--overwrite`
+
+Beispiele:
+
+```bash
+pnpm run demo:variant -- --name demo_newsletter --from demo_light --desc "Demo Newsletter Profil"
+pnpm run demo:variant -- --name demo_landingpage --overwrite
+```
+
+Danach nur noch die gewuenschten Felder in `install/default_bundle.json` anpassen (z. B. `toolbar`, `link_decorators_definition_data`, `rexlink`, `mediaembed`).

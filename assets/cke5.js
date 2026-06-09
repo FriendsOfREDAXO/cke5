@@ -182,7 +182,6 @@
             "ImageCaption",
             "ImageStyle",
             "ImageResize",
-            "ImageResizeHandles",
             "ImageUpload",
             "AutoImage",
             "MediaEmbed",
@@ -205,9 +204,10 @@
             "ShowBlocks",
             "AccessibilityHelp",
             "Style",
-            "RemoveFormat"
+            "RemoveFormat",
+            "Bookmark"
           ];
-          return pluginNames.map((name) => cke[name]).filter((plugin) => typeof plugin === "function");
+            return pluginNames.map((name) => cke[name]).filter((plugin) => typeof plugin === "function");
         }
         function cke5_insert_or_update_link(editor, url, label) {
           if (!editor || typeof url !== "string" || url === "") {
@@ -539,7 +539,7 @@
           }
           const cke = window.CKEDITOR;
           const registry = typeof window.CKE5_NATIVE_PLUGINS === "object" && window.CKE5_NATIVE_PLUGINS !== null ? window.CKE5_NATIVE_PLUGINS : {};
-          const pluginNames = ["RedaxoLinkIntegration", "RedaxoMediaImage", "RedaxoMediaVideo", "RedaxoSnippets", "RedaxoForToc", "RedaxoPastePlainTextToggle"];
+          const pluginNames = ["RedaxoLinkIntegration", "RedaxoMediaImage", "RedaxoMediaVideo", "RedaxoSnippets", "RedaxoPastePlainTextToggle"];
           const plugins = [];
           pluginNames.forEach((pluginName) => {
             const factory = registry[pluginName];
@@ -570,6 +570,12 @@
             if (item === "insertTemplate") {
               return "snippets";
             }
+            if (item === "rexImage" || item === "insertImage") {
+              return "redaxoMedia";
+            }
+            if (item === "for_toc") {
+              return null;
+            }
             return item;
           });
           if (options.toolbar.items.includes("insertImage") && !options.toolbar.items.includes("redaxoMedia")) {
@@ -591,6 +597,48 @@
               options.plugins.push(plugin);
             }
           });
+          return options;
+        }
+        function cke5_apply_resize_handle_mode(options) {
+          if (!options || typeof options !== "object") {
+            return options;
+          }
+          if (typeof window.CKEDITOR !== "object" || window.CKEDITOR === null) {
+            return options;
+          }
+          if (!Array.isArray(options.plugins)) {
+            options.plugins = [];
+          }
+
+          const cke = window.CKEDITOR;
+          const handlesDisabled = options.redaxoImageResizeHandles === false;
+          const removePluginByName = (name) => {
+            const plugin = cke[name];
+            if (typeof plugin !== "function") {
+              return;
+            }
+            options.plugins = options.plugins.filter((current) => current !== plugin);
+          };
+          const addPluginByName = (name) => {
+            const plugin = cke[name];
+            if (typeof plugin !== "function") {
+              return;
+            }
+            if (!options.plugins.includes(plugin)) {
+              options.plugins.push(plugin);
+            }
+          };
+
+          if (!handlesDisabled) {
+            return options;
+          }
+
+          // Vendor-konformer Fallback ohne Drag-Handles: Buttons + Commands bleiben aktiv.
+          removePluginByName("ImageResize");
+          removePluginByName("ImageResizeHandles");
+          addPluginByName("ImageResizeEditing");
+          addPluginByName("ImageResizeButtons");
+          addPluginByName("ImageCustomResizeUI");
           return options;
         }
         function cke5_apply_modern_constructor_fallback(options, editorConstructor) {
@@ -615,6 +663,7 @@
             });
           }
           options = cke5_register_native_redaxo_plugins(options);
+          options = cke5_apply_resize_handle_mode(options);
           options = cke5_apply_native_redaxo_toolbar(options);
           return options;
         }

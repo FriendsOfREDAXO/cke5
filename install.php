@@ -1,6 +1,7 @@
 <?php
 /** @var rex_addon $this */
 
+use Cke5\Handler\Cke5DefaultDataService;
 use Cke5\Handler\Cke5ExtensionHandler;
 
 include_once(__DIR__ . '/db.php');
@@ -12,12 +13,8 @@ if ($this->getConfig('license_code') === null) {
 
 $this->setConfig('restore_files', true);
 
-// install default demo profiles
 try {
-    $sql = rex_sql::factory();
-    if (sizeof($sql->getArray("SELECT id FROM " . rex::getTable('cke5_profiles') . " WHERE id=1")) <= 0) {
-        rex_sql_util::importDump($this->getPath('data.sql'));
-    }
+    Cke5DefaultDataService::importBundle($this->getPath('install/default_bundle.json'), ['demo_default', 'demo_light', 'demo_full_expert']);
     // copy custom data to assets folder
     if (!file_exists(rex_path::assets('addons/cke5_custom_data'))) {
         mkdir(rex_path::assets('addons/cke5_custom_data'));

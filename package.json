@@ -9,6 +9,7 @@
   },
   "scripts": {
     "check:runtime": "node ./scripts/check-runtime.js",
-    "vendor:update": "node ./scripts/vendor-update.js"
+    "vendor:update": "node ./scripts/vendor-update.js",
+    "demo:variant": "node ./scripts/add-demo-variant.js"
   }
 }

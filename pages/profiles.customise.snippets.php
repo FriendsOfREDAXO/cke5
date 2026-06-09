@@ -56,7 +56,7 @@ if ($func === 'add' || $func === 'edit') {
     $field = $form->addTextAreaField('content');
     $field->setLabel(rex_i18n::msg('cke5_snippets_content'));
     $field->setAttribute('class', 'form-control cke5-editor');
-    $field->setAttribute('data-profile', 'default');
+    $field->setAttribute('data-profile', 'demo_default');
 
     $field = $form->addSelectField('active');
     $field->setLabel(rex_i18n::msg('cke5_snippets_active'));
