@@ -15,9 +15,6 @@
         if (typeof window.cke5_enhance_link_form === 'function') {
           window.cke5_enhance_link_form(this.editor);
         }
-        if (typeof window.cke5_prefer_image_toolbar_over_link_form === 'function') {
-          window.cke5_prefer_image_toolbar_over_link_form(this.editor);
-        }
       }
     };
   };
