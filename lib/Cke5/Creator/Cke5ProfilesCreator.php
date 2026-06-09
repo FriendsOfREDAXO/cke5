@@ -134,7 +134,7 @@ class Cke5ProfilesCreator
     ];
     const EDITOR_SETTINGS = [
         /* todo: specialCharacters not work because : https://github.com/ckeditor/ckeditor5/issues/6160 */
-        'cktypes' => ['heading', 'fontSize', 'mediaEmbed', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable', 'fontBackgroundColor', 'fontColor', 'codeBlock', 'bulletedList', 'numberedList', 'htmlEmbed'/*, 'emoji'*/, 'sourceEditing', 'textPartLanguage'/*, 'specialCharacters' */, 'style', 'insertTemplate'],
+        'cktypes' => ['heading', 'fontSize', 'mediaEmbed', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable', 'fontBackgroundColor', 'fontColor', 'codeBlock', 'bulletedList', 'numberedList', 'htmlEmbed'/*, 'emoji'*/, 'sourceEditing', 'textPartLanguage'/*, 'specialCharacters' */, 'style', 'snippets', 'for_video'],
         'ckimgtypes' => ['rexImage', 'imageUpload'],
         'cklinktypes' => ['ytable', 'media', 'internal'],
         'cktabletypes' => ['tableProperties', 'tableCellProperties']
@@ -148,12 +148,86 @@ class Cke5ProfilesCreator
         "styles": true
     }
 ]',
+        'media_embed_styles_definition' => '[
+    {
+        "label": "Standard",
+        "class": ""
+    },
+    {
+        "label": "Links",
+        "class": "media-embed--left"
+    },
+    {
+        "label": "Zentriert",
+        "class": "media-embed--center"
+    },
+    {
+        "label": "Rechts",
+        "class": "media-embed--right"
+    },
+    {
+        "label": "Volle Breite",
+        "class": "media-embed--full"
+    }
+]',
+        'video_styles_definition' => '[
+    {
+        "label": "Standard",
+        "class": "video--pos-default"
+    },
+    {
+        "label": "Links",
+        "class": "video--pos-left"
+    },
+    {
+        "label": "Zentriert",
+        "class": "video--pos-center"
+    },
+    {
+        "label": "Rechts",
+        "class": "video--pos-right"
+    }
+]',
+        'video_width_styles_definition' => '[
+    {
+        "label": "Auto",
+        "class": "video--w-auto"
+    },
+    {
+        "label": "50%",
+        "class": "video--w-50"
+    },
+    {
+        "label": "75%",
+        "class": "video--w-75"
+    },
+    {
+        "label": "100%",
+        "class": "video--w-100"
+    }
+]',
     ];
     const LICENSE_FIELDS = [
-        'toolbar' => ['insertTemplate', 'tableOfContents']
+        'toolbar' => []
+    ];
+    const MIGRATION_TOOLBAR_MAP = [
+        'rexlink' => 'link',
+        'rexImage' => 'insertImage',
+        'pastePlainText' => 'removeFormat',
+        'quote' => 'blockQuote',
+        'insertTemplate' => 'snippets',
+        'snippets' => 'snippets',
+        'phonelink' => 'link',
+        'for_images' => 'insertImage',
+        'for_oembed' => 'mediaEmbed',
+        'for_video' => 'for_video',
+        'for_htmlembed' => 'htmlEmbed',
+        'for_checklist' => 'todoList',
+        'for_checklist_feature' => 'todoList',
+        'for_chars_symbols' => 'specialCharacters',
     ];
     const ALLOWED_FIELDS = [
-        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll', 'specialCharacters', 'pastePlainText', 'htmlEmbed', 'sourceEditing', 'textPartLanguage', 'findAndReplace', 'style', 'insertTemplate', /*'tableOfContents'*/ 'showBlocks', 'bookmark', 'accessibilityHelp'],
+        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll', 'specialCharacters', 'pastePlainText', 'htmlEmbed', 'sourceEditing', 'textPartLanguage', 'findAndReplace', 'style', 'snippets', 'for_video', 'showBlocks', 'bookmark', 'accessibilityHelp'],
         'alignment' => ['left', 'right', 'center', 'justify'],
         'table_toolbar' => ['|', 'tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties', 'toggleTableCaption'],
         'heading' => ['paragraph', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
@@ -404,13 +478,17 @@ class Cke5ProfilesCreator
             return ['suboptions' => $jsonSubOption, 'profile' => $jsonProfile];
         }
 
-        $toolbar = self::toArray($profile['toolbar']);
+        $toolbar = self::mapToolbarItemsToNative(self::toArray($profile['toolbar']));
         $linkToolbar = self::toArray($profile['rexlink']);
         $tableToolbar = self::toArray($profile['table_toolbar']);
         $jsonProfile = ['toolbar' => ['items' => $toolbar, 'shouldNotGroupWhenFull' => (!(isset($profile['group_when_full']) && $profile['group_when_full'] !== ''))]];
         $jsonSubOption = [];
         $jsonProfile['removePlugins'] = [];
         $sprogDefinition = [];
+
+        if (isset($profile['paste_plain_text_default']) && $profile['paste_plain_text_default'] !== '') {
+            $jsonProfile['pastePlainTextDefault'] = true;
+        }
 
         if (in_array('link', $toolbar, true) && count($linkToolbar) > 0) {
             $jsonProfile['link'] = ['rexlink' => $linkToolbar];
@@ -548,10 +626,6 @@ class Cke5ProfilesCreator
             $jsonProfile['removePlugins'][] = 'DocumentOutline';
         }
 
-        if (!in_array('insertTable', $toolbar, true)) {
-            $jsonProfile['removePlugins'][] = 'TableOfContents';
-        }
-
         if (isset($profile['group_styles']) && $profile['group_styles'] !== '') {
             $styleGroups = array_filter(explode('|', $profile['group_styles']));
             $stylesGroupTable = rex::getTable(Cke5DatabaseHandler::CKE5_STYLE_GROUPS);
@@ -602,62 +676,23 @@ class Cke5ProfilesCreator
             $jsonProfile['style']['definitions'] = self::getUniqueStylesByName($jsonProfile['style']['definitions']);
         }
 
-        if (isset($profile['group_templates']) && $profile['group_templates'] !== '') {
-            $templateGroups = array_filter(explode('|', $profile['group_templates']));
-            $templateGroupTable = rex::getTable(Cke5DatabaseHandler::CKE5_TEMPLATE_GROUPS);
-            $sql = rex_sql::factory();
-            $sqlResult = $sql->getArray("select * from $templateGroupTable where id in (" . implode(', ', $templateGroups) . ")");
-
-            if (count($sqlResult) > 0) {
-                foreach ($sqlResult as $result) {
-                    if (!empty($result['json_config'])) {
-                        try {
-                            $jsonConfig = json_decode($result['json_config'], true);
-                        } catch (Exception $e) {
-                            rex_logger::logException($e);
-                            throw $e;
-                        }
-
-                        // JSON-Konfiguration parsen
-                        if (is_array($jsonConfig) && count($jsonConfig) > 0) {
-                            if (!isset($jsonProfile['template']['definitions'])) {
-                                $jsonProfile['template']['definitions'] = [];
-                            }
-                            foreach ($jsonConfig as $value) {
-                                $jsonProfile['template']['definitions'][] = $value;
-                            }
-                        }
+        if (isset($profile['snippets']) && $profile['snippets'] !== '') {
+            $snippetIds = array_filter(explode('|', $profile['snippets']));
+            if ($snippetIds !== []) {
+                $snippetTable = rex::getTable(Cke5DatabaseHandler::CKE5_SNIPPETS);
+                $sql = rex_sql::factory();
+                $sqlResult = $sql->getArray('select id, name, content, active from ' . $snippetTable . ' where id in (' . implode(', ', $snippetIds) . ') order by name');
+                foreach ($sqlResult as $snippet) {
+                    if ((int) ($snippet['active'] ?? 0) !== 1) {
+                        continue;
                     }
-                }
-            }
-        }
-
-        if (isset($profile['templates']) && $profile['templates'] !== '') {
-            $templates = array_filter(explode('|', $profile['templates']));
-            $templateTable = rex::getTable(Cke5DatabaseHandler::CKE5_TEMPLATES);
-            $sql = rex_sql::factory();
-            $sqlResult = $sql->getArray("select * from $templateTable where id in (".implode(', ', $templates).")");
-            if (count($sqlResult) > 0) {
-                foreach ($sqlResult as $result) {
-                    if (!isset($result['data'])) continue;
-                    $data = $result['data'];
-                    $data = str_replace(["\r", "\n", "\t"], '', $data);
-                    $data = preg_replace('/>\s+</', '><', $data);
-                    $item = [
-                        'title' => $result['title'],
-                        'data' => $data,
+                    $jsonProfile['redaxoSnippets'][] = [
+                        'id' => (int) ($snippet['id'] ?? 0),
+                        'name' => (string) ($snippet['name'] ?? ''),
+                        'content' => (string) ($snippet['content'] ?? ''),
                     ];
-
-                    if (!empty($result['description'])) $item['description'] = $result['description'];
-                    if (!empty($result['icon'])) $item['icon'] = $result['icon'];
-
-                    $jsonProfile['template']['definitions'][] = $item;
                 }
             }
-        }
-
-        if (!empty($jsonProfile['template']['definitions'])) {
-            $jsonProfile['template']['definitions'] = self::getUniqueTemplatesByTitle($jsonProfile['template']['definitions']);
         }
 
         if (!in_array('sourceEditing', $toolbar, true)) {
@@ -672,11 +707,8 @@ class Cke5ProfilesCreator
             $jsonProfile['removePlugins'][] = 'Style';
         }
 
-        if (!in_array('insertTemplate', $toolbar, true)) {
-            $jsonProfile['removePlugins'][] = 'Template';
-        }
-
-        if (!in_array('sourceEditing', $toolbar, true) && !in_array('style', $toolbar, true)) {
+        $requiresCustomHtml = in_array('for_video', $toolbar, true);
+        if (!in_array('sourceEditing', $toolbar, true) && !in_array('style', $toolbar, true) && !$requiresCustomHtml) {
             $jsonProfile['removePlugins'][] = 'GeneralHtmlSupport';
         }
 
@@ -789,6 +821,36 @@ class Cke5ProfilesCreator
             $jsonProfile['mediaEmbed'] = ['removeProviders' => $provider];
         }
 
+        $mediaEmbedStyles = self::getMediaEmbedStyles($profile);
+        if ($mediaEmbedStyles !== []) {
+            if (!isset($jsonProfile['mediaEmbed']) || !is_array($jsonProfile['mediaEmbed'])) {
+                $jsonProfile['mediaEmbed'] = [];
+            }
+            $jsonProfile['mediaEmbed']['styles'] = $mediaEmbedStyles;
+        }
+
+        $videoStyles = self::getVideoStyles($profile);
+        if ($videoStyles !== []) {
+            $jsonProfile['redaxoVideo']['styles'] = $videoStyles;
+        }
+
+        $videoWidthStyles = self::getVideoWidthStyles($profile);
+        if ($videoWidthStyles !== []) {
+            $jsonProfile['redaxoVideo']['widthStyles'] = $videoWidthStyles;
+        }
+
+        $jsonProfile['redaxoVideo']['defaults'] = [
+            'controls' => self::profileFlagEnabled($profile, 'video_controls_default', true),
+            'autoplay' => self::profileFlagEnabled($profile, 'video_autoplay_default', false),
+            'muted' => self::profileFlagEnabled($profile, 'video_muted_default', false),
+            'loop' => self::profileFlagEnabled($profile, 'video_loop_default', false),
+            'playsinline' => self::profileFlagEnabled($profile, 'video_playsinline_default', true),
+        ];
+
+        if ($jsonProfile['redaxoVideo']['defaults']['autoplay'] && !$jsonProfile['redaxoVideo']['defaults']['muted']) {
+            $jsonProfile['redaxoVideo']['defaults']['muted'] = true;
+        }
+
         if (in_array('rexImage', $toolbar, true)) {
             if (isset($profile['mediatype']) && $profile['mediatype'] !== '') {
                 $jsonProfile['image']['rexmedia_type'] = $profile['mediatype'];
@@ -856,9 +918,13 @@ class Cke5ProfilesCreator
             $jsonProfile = array_merge($jsonProfile, $htmlSupport);
         } else {
             $jsonProfile['removePlugins'][] = 'SourceEditing';
-            if (!in_array('styleEditing', $toolbar, true)) {
+            if (!in_array('style', $toolbar, true) && !$requiresCustomHtml) {
                 $jsonProfile['removePlugins'][] = 'GeneralHtmlSupport';
             }
+        }
+
+        if (in_array('for_video', $toolbar, true)) {
+            $jsonProfile = self::addVideoHtmlSupport($jsonProfile);
         }
 
         if (isset($profile['extra']) && $profile['extra'] !== '' && isset($profile['extra_definition']) && $profile['extra_definition'] !== '') {
@@ -900,6 +966,278 @@ class Cke5ProfilesCreator
 
         return ['suboptions' => $jsonSubOption, 'profile' => $jsonProfile, 'sprog_mention' => $sprogDefinition];
     }
+
+    /**
+     * @param array<int,string> $toolbar
+     * @return array<int,string>
+     */
+    public static function migrateLegacyToolbarProfilesToNative(): int
+    {
+        $table = rex::getTable('cke5_profiles');
+        $sql = rex_sql::factory();
+        $rows = $sql->getArray('SELECT id, toolbar, expert, expert_definition FROM ' . $table);
+        $updated = 0;
+
+        foreach ($rows as $row) {
+            $id = (int) ($row['id'] ?? 0);
+            if ($id <= 0) {
+                continue;
+            }
+
+            $isExpert = (int) ($row['expert'] ?? 0) === 1;
+            if ($isExpert) {
+                $definition = json_decode((string) ($row['expert_definition'] ?? ''), true);
+                if (!is_array($definition) || !isset($definition['toolbar']) || !is_array($definition['toolbar']) || !isset($definition['toolbar']['items']) || !is_array($definition['toolbar']['items'])) {
+                    continue;
+                }
+
+                $mapped = self::mapToolbarItemsToNative($definition['toolbar']['items']);
+                if ($mapped === $definition['toolbar']['items']) {
+                    continue;
+                }
+
+                $definition['toolbar']['items'] = $mapped;
+
+                $updateSql = rex_sql::factory();
+                $updateSql->setTable($table);
+                $updateSql->setWhere(['id' => $id]);
+                $updateSql->setValue('expert_definition', (string) json_encode($definition));
+                $updateSql->update();
+                $updated++;
+                continue;
+            }
+
+            $toolbarRaw = (string) ($row['toolbar'] ?? '');
+            if ($toolbarRaw === '') {
+                continue;
+            }
+
+            $items = self::toArray($toolbarRaw);
+            $mapped = self::mapToolbarItemsToNative($items);
+            if ($mapped === $items) {
+                continue;
+            }
+
+            $updateSql = rex_sql::factory();
+            $updateSql->setTable($table);
+            $updateSql->setWhere(['id' => $id]);
+            $updateSql->setValue('toolbar', implode(',', $mapped));
+            $updateSql->update();
+            $updated++;
+        }
+
+        return $updated;
+    }
+
+    /**
+     * @param array<int,mixed> $items
+     * @return array<int,string>
+     */
+    private static function mapToolbarItemsToNative(array $items): array
+    {
+        $mapped = [];
+        foreach ($items as $item) {
+            if (!is_string($item) || $item === '') {
+                continue;
+            }
+
+            $nativeItem = self::MIGRATION_TOOLBAR_MAP[$item] ?? $item;
+            if ($nativeItem === '|') {
+                if ($mapped === [] || $mapped[array_key_last($mapped)] === '|') {
+                    continue;
+                }
+                $mapped[] = $nativeItem;
+                continue;
+            }
+
+            if ($mapped !== [] && $mapped[array_key_last($mapped)] === $nativeItem) {
+                continue;
+            }
+
+            $mapped[] = $nativeItem;
+        }
+
+        while ($mapped !== [] && $mapped[array_key_last($mapped)] === '|') {
+            array_pop($mapped);
+        }
+
+        return $mapped;
+    }
+
+    /**
+     * @param array<string,string> $profile
+     * @return array<int,array<string,string>>
+     */
+    private static function getMediaEmbedStyles(array $profile): array
+    {
+        $definition = $profile['media_embed_styles_definition'] ?? self::DEFAULT_VALUES['media_embed_styles_definition'];
+        if (!is_string($definition) || $definition === '') {
+            return [];
+        }
+
+        $decoded = json_decode($definition, true);
+        if (!is_array($decoded)) {
+            return [];
+        }
+
+        $styles = [];
+        foreach ($decoded as $item) {
+            if (!is_array($item)) {
+                continue;
+            }
+            $label = isset($item['label']) && is_string($item['label']) ? trim($item['label']) : '';
+            $class = isset($item['class']) && is_string($item['class']) ? trim($item['class']) : '';
+            if ($label === '') {
+                continue;
+            }
+            $styles[] = ['label' => $label, 'class' => $class];
+        }
+
+        return $styles;
+    }
+
+    /**
+     * @param array<string,string> $profile
+     * @return array<int,array<string,string>>
+     */
+    private static function getVideoStyles(array $profile): array
+    {
+        $definition = $profile['video_styles_definition'] ?? self::DEFAULT_VALUES['video_styles_definition'];
+        if (is_string($definition) && $definition !== '') {
+            $decoded = json_decode($definition, true);
+            if (is_array($decoded)) {
+                $styles = [];
+                foreach ($decoded as $item) {
+                    if (!is_array($item)) {
+                        continue;
+                    }
+                    $label = isset($item['label']) && is_string($item['label']) ? trim($item['label']) : '';
+                    $class = isset($item['class']) && is_string($item['class']) ? trim($item['class']) : '';
+                    if ($label === '') {
+                        continue;
+                    }
+                    $styles[] = ['label' => $label, 'class' => $class];
+                }
+                if ($styles !== []) {
+                    return $styles;
+                }
+            }
+        }
+
+        $fallback = [];
+        $imageToolbar = isset($profile['image_toolbar']) && is_string($profile['image_toolbar']) ? self::toArray($profile['image_toolbar']) : [];
+        $map = [
+            'block' => 'Block',
+            'inline' => 'Inline',
+            'side' => 'Seitlich',
+            'alignLeft' => 'Links',
+            'alignCenter' => 'Zentriert',
+            'alignRight' => 'Rechts',
+            'alignBlockLeft' => 'Block links',
+            'alignBlockRight' => 'Block rechts',
+        ];
+
+        foreach ($imageToolbar as $item) {
+            if (isset($map[$item])) {
+                $fallback[] = ['label' => $map[$item], 'class' => $item];
+            }
+        }
+
+        return $fallback;
+    }
+
+    /**
+     * @param array<string,string> $profile
+     * @return array<int,array<string,string>>
+     */
+    private static function getVideoWidthStyles(array $profile): array
+    {
+        $definition = $profile['video_width_styles_definition'] ?? self::DEFAULT_VALUES['video_width_styles_definition'];
+        if (!is_string($definition) || $definition === '') {
+            return [];
+        }
+
+        $decoded = json_decode($definition, true);
+        if (!is_array($decoded)) {
+            return [];
+        }
+
+        $styles = [];
+        foreach ($decoded as $item) {
+            if (!is_array($item)) {
+                continue;
+            }
+
+            $label = isset($item['label']) && is_string($item['label']) ? trim($item['label']) : '';
+            $class = isset($item['class']) && is_string($item['class']) ? trim($item['class']) : '';
+            if ($label === '') {
+                continue;
+            }
+
+            $styles[] = ['label' => $label, 'class' => $class];
+        }
+
+        return $styles;
+    }
+
+    /**
+     * @param array<string,string> $profile
+     */
+    private static function profileFlagEnabled(array $profile, string $key, bool $default): bool
+    {
+        if (!array_key_exists($key, $profile)) {
+            return $default;
+        }
+
+        return isset($profile[$key]) && $profile[$key] !== '';
+    }
+
+    /**
+     * @param array<string,mixed> $jsonProfile
+     * @return array<string,mixed>
+     */
+    private static function addVideoHtmlSupport(array $jsonProfile): array
+    {
+        if (!isset($jsonProfile['htmlSupport']) || !is_array($jsonProfile['htmlSupport'])) {
+            $jsonProfile['htmlSupport'] = [];
+        }
+
+        if (!isset($jsonProfile['htmlSupport']['allow']) || !is_array($jsonProfile['htmlSupport']['allow'])) {
+            $jsonProfile['htmlSupport']['allow'] = [];
+        }
+
+        $jsonProfile['htmlSupport']['allow'][] = [
+            'name' => 'video',
+            'attributes' => true,
+            'classes' => true,
+            'styles' => true,
+        ];
+        $jsonProfile['htmlSupport']['allow'][] = [
+            'name' => 'source',
+            'attributes' => true,
+            'classes' => true,
+            'styles' => true,
+        ];
+        $jsonProfile['htmlSupport']['allow'][] = [
+            'name' => 'track',
+            'attributes' => true,
+            'classes' => true,
+            'styles' => true,
+        ];
+        $jsonProfile['htmlSupport']['allow'][] = [
+            'name' => 'figure',
+            'attributes' => true,
+            'classes' => true,
+            'styles' => true,
+        ];
+
+        return $jsonProfile;
+    }
+
+    /**
+     * @param array<string,mixed> $jsonProfile
+     * @return array<string,mixed>
+     */
 
     /**
      * @return rex_addon_interface|rex_addon

@@ -718,7 +718,7 @@ if ($func === '') {
 
             // get current lang
             $lang = rex_i18n::getLocale();
-            $langFiles = glob($this->getPath('assets/vendor/ckeditor5-classic/translations/*.js'));
+            $langFiles = glob($this->getPath('assets/vendor/ckeditor5-modern/translations/*.js'));
 
             if (is_array($langFiles)) {
                 foreach ($langFiles as $langFile) {

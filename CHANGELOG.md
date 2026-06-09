@@ -1,5 +1,14 @@
 # Changelog
 
+## Version 7.0.0-dev
+
+* Umstellung auf den offiziellen CKEditor-5-Build als Basis des Addons
+* Neue native Plugins und überarbeitete Dialoge für den aktuellen Editor-Workflow
+* Templates entfernt und durch Snippets ersetzt
+* Neue PLUGIN_DEVELOPMENT.md für die Plugin-Entwicklung und den Build-Workflow ergänzt
+* Legacy-Altlasten und verwaiste Vendor-Dateien bereinigt
+* Video-Handling, Profil-Defaults und Backend-Konfiguration weiter stabilisiert
+
 ## Version 6.4.2
 
 * Fix: Regenerate CSS file on style/template save and delete (Issue #207)

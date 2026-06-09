@@ -286,6 +286,38 @@ After installing this AddOn, the CSS file /assets/addons/cke5/cke5_content_style
 
 [Check it out: REDAXO Tricks](https://friendsofredaxo.github.io/tricks/snippets/ckeditor_im_frontend)
 
+## Build and Update Workflow
+
+The addon now runs on the modern vendor path by default.
+
+### 1) Install tooling
+
+```bash
+pnpm install
+```
+
+### 2) Build/update modern vendor snapshot
+
+```bash
+pnpm run vendor:update
+```
+
+This writes a testable vendor snapshot to:
+
+- `assets/vendor/ckeditor5-modern/ckeditor.js`
+- `assets/vendor/ckeditor5-modern/translations/*.js`
+
+### 3) Check runtime files
+
+```bash
+pnpm run check:runtime
+```
+
+Notes:
+
+- Runtime is loaded directly from `assets/vendor/ckeditor5-modern`.
+- Default profile `licenseKey` remains `GPL` unless you set a custom key.
+
 ## Keyboard Shortcuts
 
 Here are the most important keyboard shortcuts for CKEditor 5 and its features:

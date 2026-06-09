@@ -18,7 +18,7 @@ $send = rex_request::request('send', 'boolean', false);
 
 $profileTable = rex::getTable(Cke5DatabaseHandler::CKE5_PROFILES);
 $stylesTable = rex::getTable(Cke5DatabaseHandler::CKE5_STYLES);
-$templatesTable = rex::getTable(Cke5DatabaseHandler::CKE5_TEMPLATES);
+$snippetsTable = rex::getTable(Cke5DatabaseHandler::CKE5_SNIPPETS);
 $message = '';
 
 if ($func === 'clone') {
@@ -188,6 +188,16 @@ if ($func === '') {
             $field->addOption(rex_i18n::msg('cke5_group_when_full_description'), 'group_when_full');
             if ($default_value) $field->setValue('group_when_full');
 
+            // paste plain text default
+            $field = $form->addCheckboxField('paste_plain_text_default');
+            $field->setAttribute('id', 'cke5pasteplaintextdefault-input');
+            $field->setAttribute('data-toggle', 'toggle');
+            $field->setLabel(rex_i18n::msg('cke5_paste_plain_text_default'));
+            $field->addOption(rex_i18n::msg('cke5_paste_plain_text_default_description'), 'paste_plain_text_default');
+            if ($default_value) {
+                $field->setValue('');
+            }
+
             // text part lang
             $form->addRawField('<div class="collapse" id="cke5textPartLanguage-collapse">');
                 $field = $form->addSelectField('text_part_language');
@@ -235,34 +245,20 @@ if ($func === '') {
         $form->addRawField('</fieldset>');
     $form->addRawField('</div>');
 
-// TEMPLATES
-    $form->addRawField('<div class="collapse" id="cke5insertTemplate-collapse">');
-        $form->addRawField('<fieldset><legend>' . rex_i18n::msg('cke5_template') . '</legend>');
-            // Template-Gruppen-Auswahl
-            $field = $form->addSelectField('group_templates');
+// SNIPPETS
+    $form->addRawField('<div class="collapse" id="cke5snippets-collapse">');
+        $form->addRawField('<fieldset><legend>' . rex_i18n::msg('cke5_snippets') . '</legend>');
+            $field = $form->addSelectField('snippets');
             $field->setAttribute('class', 'form-control selectpicker');
             $field->setAttribute('data-live-search', 'true');
             $field->setAttribute('multiple', 'multiple');
-            $field->setLabel(rex_i18n::msg('cke5_group_templates'));
+            $field->setLabel(rex_i18n::msg('cke5_snippets_profile_select'));
 
-            // Laden der Template Groups aus der Datenbank
-            $templateGroupTable = rex::getTable(Cke5DatabaseHandler::CKE5_TEMPLATE_GROUPS);
             $sql = rex_sql::factory();
-            $sqlResult = $sql->getArray("select id, name from $templateGroupTable");
-
-            foreach ($sqlResult as $group) {
-                $field->getSelect()->addOption($group['name'] . ' [' . $group['id'] . ']', $group['id']);
-            }
-
-            $field = $form->addSelectField('templates');
-            $field->setAttribute('class', 'form-control selectpicker');
-            $field->setAttribute('data-live-search', 'true');
-            $field->setAttribute('multiple', 'multiple');
-            $field->setLabel(rex_i18n::msg('cke5_template'));
-            $sql = rex_sql::factory();
-            $sqlResult = $sql->getArray('select id, title from ' . $templatesTable);
-            foreach ($sqlResult as $key => $value) {
-                $field->getSelect()->addOption($value['title'] . ' [' . $value['id'] . ']', $value['id']);
+            $sqlResult = $sql->getArray('select id, name, active from ' . $snippetsTable . ' order by name');
+            foreach ($sqlResult as $value) {
+                $suffix = ((int) $value['active'] === 1) ? '' : ' (' . rex_i18n::msg('offline') . ')';
+                $field->getSelect()->addOption($value['name'] . $suffix . ' [' . $value['id'] . ']', $value['id']);
             }
         $form->addRawField('</fieldset>');
     $form->addRawField('</div>');
@@ -335,6 +331,79 @@ if ($func === '') {
                 $field->setAttribute('data-tag-init', 1);
                 $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['providers']) . '"]');
                 if ($default_value) $field->setValue(Cke5ProfilesCreator::DEFAULTS['mediaembed']);
+
+                $field = $form->addTextAreaField('media_embed_styles_definition');
+                $field->setLabel(rex_i18n::msg('cke5_media_embed_styles'));
+                $field->setAttribute('id', 'cke5-media-embed-styles-definition');
+                $field->setAttribute('rows', '5');
+                $field->setAttribute('class', 'rex-code');
+                $field->setAttribute('data-codemirror-mode', 'application/json');
+                $field->setNotice(rex_i18n::msg('cke5_media_embed_styles_description'));
+                if ($default_value) {
+                    $field->setValue(Cke5ProfilesCreator::DEFAULT_VALUES['media_embed_styles_definition']);
+                }
+            $form->addRawField('</div>');
+
+            $form->addRawField('<div class="collapse" id="cke5for_video-collapse">');
+                $field = $form->addTextAreaField('video_styles_definition');
+                $field->setLabel(rex_i18n::msg('cke5_video_styles'));
+                $field->setAttribute('id', 'cke5-video-styles-definition');
+                $field->setAttribute('rows', '6');
+                $field->setAttribute('class', 'rex-code');
+                $field->setAttribute('data-codemirror-mode', 'application/json');
+                $field->setNotice(rex_i18n::msg('cke5_video_styles_description'));
+                if ($default_value) {
+                    $field->setValue(Cke5ProfilesCreator::DEFAULT_VALUES['video_styles_definition']);
+                }
+
+                $field = $form->addTextAreaField('video_width_styles_definition');
+                $field->setLabel(rex_i18n::msg('cke5_video_width_styles'));
+                $field->setAttribute('id', 'cke5-video-width-styles-definition');
+                $field->setAttribute('rows', '5');
+                $field->setAttribute('class', 'rex-code');
+                $field->setAttribute('data-codemirror-mode', 'application/json');
+                $field->setNotice(rex_i18n::msg('cke5_video_width_styles_description'));
+                if ($default_value) {
+                    $field->setValue(Cke5ProfilesCreator::DEFAULT_VALUES['video_width_styles_definition']);
+                }
+
+                $form->addRawField('<fieldset><legend>' . rex_i18n::msg('cke5_video_defaults') . '</legend>');
+                    $field = $form->addCheckboxField('video_controls_default');
+                    $field->setAttribute('id', 'cke5video-controls-default-input');
+                    $field->setAttribute('data-toggle', 'toggle');
+                    $field->setLabel(rex_i18n::msg('cke5_video_controls_default'));
+                    $field->addOption(rex_i18n::msg('cke5_video_controls_default_description'), 'video_controls_default');
+                    if ($default_value) {
+                        $field->setValue('video_controls_default');
+                    }
+
+                    $field = $form->addCheckboxField('video_autoplay_default');
+                    $field->setAttribute('id', 'cke5video-autoplay-default-input');
+                    $field->setAttribute('data-toggle', 'toggle');
+                    $field->setLabel(rex_i18n::msg('cke5_video_autoplay_default'));
+                    $field->addOption(rex_i18n::msg('cke5_video_autoplay_default_description'), 'video_autoplay_default');
+
+                    $field = $form->addCheckboxField('video_muted_default');
+                    $field->setAttribute('id', 'cke5video-muted-default-input');
+                    $field->setAttribute('data-toggle', 'toggle');
+                    $field->setLabel(rex_i18n::msg('cke5_video_muted_default'));
+                    $field->addOption(rex_i18n::msg('cke5_video_muted_default_description'), 'video_muted_default');
+
+                    $field = $form->addCheckboxField('video_loop_default');
+                    $field->setAttribute('id', 'cke5video-loop-default-input');
+                    $field->setAttribute('data-toggle', 'toggle');
+                    $field->setLabel(rex_i18n::msg('cke5_video_loop_default'));
+                    $field->addOption(rex_i18n::msg('cke5_video_loop_default_description'), 'video_loop_default');
+
+                    $field = $form->addCheckboxField('video_playsinline_default');
+                    $field->setAttribute('id', 'cke5video-playsinline-default-input');
+                    $field->setAttribute('data-toggle', 'toggle');
+                    $field->setLabel(rex_i18n::msg('cke5_video_playsinline_default'));
+                    $field->addOption(rex_i18n::msg('cke5_video_playsinline_default_description'), 'video_playsinline_default');
+                    if ($default_value) {
+                        $field->setValue('video_playsinline_default');
+                    }
+                $form->addRawField('</fieldset>');
             $form->addRawField('</div>');
 
             // embed html_preview
@@ -785,7 +854,7 @@ if ($func === '') {
 
             // get current lang
             $lang = rex_i18n::getLocale();
-            $langFiles = glob($this->getPath('assets/vendor/ckeditor5-classic/translations/*.js'));
+            $langFiles = glob($this->getPath('assets/vendor/ckeditor5-modern/translations/*.js'));
 
             if (is_array($langFiles)) {
                 foreach ($langFiles as $langFile) {

@@ -20,7 +20,7 @@ class Cke5FileRestoreHandler
 
             foreach ($editorFiles as $file) {
                 $fileName = basename($file);
-                $targetFile = rex_path::addonAssets('cke5', 'vendor/ckeditor5-classic/' . $fileName);
+                $targetFile = rex_path::addonAssets('cke5', 'vendor/ckeditor5-modern/' . $fileName);
 
                 // Stelle sicher, dass das Zielverzeichnis existiert
                 $targetDir = dirname($targetFile);
@@ -47,7 +47,7 @@ class Cke5FileRestoreHandler
 
             // Speichere die Dateien in der Konfiguration
             if ($editorMainFile !== null) {
-                $addon->setConfig('license_cke5_js_path', 'assets/addons/cke5/vendor/ckeditor5-classic/' . $editorMainFile);
+                $addon->setConfig('license_cke5_js_path', 'assets/addons/cke5/vendor/ckeditor5-modern/' . $editorMainFile);
                 $addon->setConfig('editor_file', $editorMainFile);
             }
 
@@ -69,7 +69,7 @@ class Cke5FileRestoreHandler
 
             foreach ($translationFiles as $file) {
                 $fileName = basename($file);
-                $targetDir = rex_path::addonAssets('cke5', 'vendor/ckeditor5-classic/translations/');
+                $targetDir = rex_path::addonAssets('cke5', 'vendor/ckeditor5-modern/translations/');
 
                 // Stelle sicher, dass das Zielverzeichnis existiert
                 if (!is_dir($targetDir)) {
@@ -86,7 +86,7 @@ class Cke5FileRestoreHandler
 
             // Speichere die Übersetzungsdateien in der Konfiguration
             if (!empty($translations)) {
-                $addon->setConfig('license_translations_path', 'assets/addons/cke5/vendor/ckeditor5-classic/translations/');
+                $addon->setConfig('license_translations_path', 'assets/addons/cke5/vendor/ckeditor5-modern/translations/');
                 $addon->setConfig('translation_files', $translations);
             }
         }

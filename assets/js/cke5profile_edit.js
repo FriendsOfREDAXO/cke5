@@ -22,6 +22,10 @@ $(document).on('rex:ready', function (event, container) {
 });
 
 function cke5_init_edit(element) {
+  if (element.data('cke5-profile-edit-initialized') === true) {
+    return;
+  }
+  element.data('cke5-profile-edit-initialized', true);
 
   let taginputs = element.find('input[data-tag-init=1]'),
     expert = element.find('#cke5-expert-toggle-expert-definition'),
@@ -123,6 +127,10 @@ function cke5_init_edit(element) {
 
   if (taginputs.length) {
     taginputs.each(function () {
+      if ($(this).data('cke5-tag-init-done') === true) {
+        return;
+      }
+      $(this).data('cke5-tag-init-done', true);
       // if ($(this).attr('data-default-tags') === '1') {
       //     $(this).attr('value', $(this).attr('data-defaults'))
       // }
@@ -259,6 +267,10 @@ function cke5_init_edit(element) {
 
 function cke5_addFromToFields(element) {
   if (element.length) {
+    if (element.data('cke5-multiinput-initialized') === true) {
+      return;
+    }
+    element.data('cke5-multiinput-initialized', true);
     let from_placeholder = element.data('from-placeholder'),
       to_name_placeholder = element.data('to-placeholder');
     element.multiInput({
@@ -284,6 +296,10 @@ function cke5_addFromToFields(element) {
 
 function cke5_addIdNameFields(element) {
   if (element.length) {
+    if (element.data('cke5-multiinput-initialized') === true) {
+      return;
+    }
+    element.data('cke5-multiinput-initialized', true);
     let sprog_key_placeholder = element.data('sprog-key-placeholder'),
       sprog_description_placeholder = element.data('sprog-description-placeholder');
     element.multiInput({
@@ -309,6 +325,10 @@ function cke5_addIdNameFields(element) {
 
 function cke5_addColorFields(element) {
   if (element.length) {
+    if (element.data('cke5-multiinput-initialized') === true) {
+      return;
+    }
+    element.data('cke5-multiinput-initialized', true);
     let color_placeholder = element.data('color-placeholder'),
       color_name_placeholder = element.data('color-name-placeholder'),
       has_border_label = element.data('has-border-label');
@@ -362,6 +382,10 @@ function cke5_addColorFields(element) {
 
 function cke5_addyTableFields(element) {
   if (element.length) {
+    if (element.data('cke5-multiinput-initialized') === true) {
+      return;
+    }
+    element.data('cke5-multiinput-initialized', true);
     let title_placeholder = element.data('ytable-title-placeholder'),
       table_placeholder = element.data('ytable-table-placeholder'),
       column_placeholder = element.data('ytable-column-placeholder');
@@ -391,6 +415,10 @@ function cke5_addyTableFields(element) {
 
 function cke5_addResizeOptionsFields(element) {
   if (element.length) {
+    if (element.data('cke5-multiinput-initialized') === true) {
+      return;
+    }
+    element.data('cke5-multiinput-initialized', true);
     let name_placeholder = element.data('name-placeholder'),
       icon_placeholder = element.data('icon-placeholder'),
       value_placeholder = element.data('value-placeholder');
@@ -426,6 +454,10 @@ function cke5_addResizeOptionsFields(element) {
 
 function cke5_addFontFamiliesFields(element) {
   if (element.length) {
+    if (element.data('cke5-multiinput-initialized') === true) {
+      return;
+    }
+    element.data('cke5-multiinput-initialized', true);
     let color_placeholder = element.data('family-placeholder');
     element.multiInput({
       json: true,
@@ -456,8 +488,12 @@ function cke5_toolbar_create_tag(typename, tags) {
             toggle_collapse('numberedList', 'show');
           }
           break;
-        case 'insertTemplate':
-          toggle_collapse('insertTemplate', 'show');
+        case 'snippets':
+          toggle_collapse('snippets', 'show');
+        break;
+        case 'for_video':
+          toggle_collapse('mediaEmbed', 'show');
+          toggle_collapse('for_video', 'show');
         break;
         default:
           toggle_collapse(type, 'show');
@@ -512,9 +548,10 @@ function cke5_toolbar_destroy_tag(typename, tags) {
             break;
           case 'htmlEmbed':
           case 'mediaEmbed':
+          case 'for_video':
             embedhide++;
             if (CKEDIT_DEBUG) console.log(embedhide + ' - ' + type);
-            toggle_collapse(type, 'hide', (embedhide === 2));
+            toggle_collapse(type, 'hide', (embedhide === 3));
             break;
           case 'fontSize':
           case 'fontFamily':
@@ -524,7 +561,11 @@ function cke5_toolbar_destroy_tag(typename, tags) {
             toggle_collapse(type, 'hide', (fonthide === 4));
             break;
           default:
-            toggle_collapse(type, 'hide');
+            if (type === 'snippets') {
+              toggle_collapse('snippets', 'hide');
+            } else {
+              toggle_collapse(type, 'hide');
+            }
         }
       }
     }

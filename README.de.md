@@ -215,6 +215,10 @@ Im Editor einfach '{{' eintippen, dann bekommst du eine Liste der Platzhalter.
 
 Die Optik des Editors kann per CSS an die Frontend-Ausgabe angepasst werden. Dafür gibt's im Ordner `assets/addons/cke5_custom_data` eine CSS-Datei.
 
+## Build, interne und externe Plugins
+
+Eine technische Dokumentation zu Build-Quellen, Runtime-Dateien, internen Plugins und dem Erstellen/Einbinden externer Plugins liegt in [PLUGIN_DEVELOPMENT.md](PLUGIN_DEVELOPMENT.md).
+
 ## CSS Content-Styles
 
 [Styleguide hier](https://ckeditor.com/docs/ckeditor5/latest/builds/guides/integration/content-styles.html)
@@ -226,6 +230,38 @@ Nach der Installation dieses AddOns ist die CSS-Datei /assets/addons/cke5/cke5_c
 ## CKE im Frontend
 
 [Schau mal hier: REDAXO Tricks](https://friendsofredaxo.github.io/tricks/snippets/ckeditor_im_frontend)
+
+## Build- und Update-Workflow
+
+Das AddOn läuft jetzt standardmäßig direkt mit dem Modern-Vendor-Pfad.
+
+### 1) Tooling installieren
+
+```bash
+pnpm install
+```
+
+### 2) Modernen Vendor-Snapshot bauen/aktualisieren
+
+```bash
+pnpm run vendor:update
+```
+
+Das schreibt nach:
+
+- `assets/vendor/ckeditor5-modern/ckeditor.js`
+- `assets/vendor/ckeditor5-modern/translations/*.js`
+
+### 3) Runtime-Dateien prüfen
+
+```bash
+pnpm run check:runtime
+```
+
+Hinweise:
+
+- Die Runtime wird direkt aus `assets/vendor/ckeditor5-modern` geladen.
+- Der Default-`licenseKey` in Profilen bleibt `GPL`, solange kein eigener Schlüssel gesetzt ist.
 
 ## Tastenkürzel
 

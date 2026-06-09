@@ -3,6 +3,7 @@
 namespace Cke5\Provider;
 
 use Cke5\Creator\Cke5ProfilesCreator;
+use Cke5\PluginRegistry;
 use Cke5\Utils\Cke5CssHandler;
 use Cke5\Utils\Cke5Lang;
 use rex;
@@ -53,14 +54,15 @@ class Cke5AssetsProvider
 
             // Bestimme den Editor-Pfad
             $editorPath = $addon->getConfig('license_cke5_js_path');
-            $editorFile = rex_url::base((($editorPath != '') ? $editorPath : 'assets/addons/cke5/vendor/ckeditor5-classic/ckeditor.js'));
+            $editorFile = rex_url::base((($editorPath != '') ? $editorPath : 'assets/addons/cke5/vendor/ckeditor5-modern/ckeditor.js'));
 
             // Bestimme den Übersetzungspfad
-            $translationsPath = $addon->getConfig('license_translations_path', 'assets/addons/cke5/vendor/ckeditor5-classic/translations/');
-            $translationsUrl = rex_url::base(($translationsPath != '') ? $translationsPath : 'assets/addons/cke5/vendor/ckeditor5-classic/translations/');
+            $translationsPath = $addon->getConfig('license_translations_path', 'assets/addons/cke5/vendor/ckeditor5-modern/translations/');
+            $translationsUrl = rex_url::base(($translationsPath != '') ? $translationsPath : 'assets/addons/cke5/vendor/ckeditor5-modern/translations/');
 
             // add cke5 editor and translation
             rex_view::addCssFile(self::getAddon()->getAssetsUrl('css/cke5.css'));
+            rex_view::addCssFile(rex_url::base('assets/addons/cke5/vendor/ckeditor5-modern/ckeditor.css'));
             rex_view::addJsFile($editorFile);
 
             $sql = rex_sql::factory();
@@ -89,6 +91,26 @@ class Cke5AssetsProvider
                 rex_view::addJsFile($translationsUrl . self::getLang(Cke5Lang::getOutputLang()) . '.js');
                 $langKit[] = self::getLang(Cke5Lang::getOutputLang());
             }
+
+            foreach ([
+                'plugins/redaxo-link-integration.js',
+                'plugins/redaxo-media-image.js',
+                'plugins/redaxo-media-video.js',
+                'plugins/redaxo-snippets.js',
+                'plugins/redaxo-paste-plain-text-toggle.js',
+            ] as $nativePluginFile) {
+                rex_view::addJsFile(self::getAddon()->getAssetsUrl($nativePluginFile));
+            }
+
+            $externalPlugins = PluginRegistry::all();
+            foreach ($externalPlugins as $plugin) {
+                if (!isset($plugin['url']) || !is_string($plugin['url']) || $plugin['url'] === '') {
+                    continue;
+                }
+                rex_view::addJsFile($plugin['url']);
+            }
+
+            rex_view::setJsProperty('cke5ExternalPlugins', PluginRegistry::clientConfig());
 
             rex_view::addJsFile(self::getAddon()->getAssetsUrl(Cke5ProfilesCreator::PROFILES_FILENAME));
             rex_view::addJsFile(self::getAddon()->getAssetsUrl('cke5.js'));

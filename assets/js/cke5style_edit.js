@@ -13,6 +13,11 @@ $(document).on('rex:ready', function (event, container) {
 });
 
 function cke5_init_style_edit(element) {
+    if (element.data('cke5-style-edit-initialized') === true) {
+        return;
+    }
+    element.data('cke5-style-edit-initialized', true);
+
     let classesArea = element.find('#cke5-classes-area'),
         elementArea = element.find('#cke5-element-area'),
         toggleElements = element.find('[data-toggle=toggle]');
@@ -22,19 +27,25 @@ function cke5_init_style_edit(element) {
     const INACTIVITY_DELAY = 2000; // 2 Sekunden
 
     if (classesArea.length) {
-        classesArea.cke5InputTags({
-            editable: true
-        });
+        if (classesArea.data('cke5-tag-init-done') !== true) {
+            classesArea.data('cke5-tag-init-done', true);
+            classesArea.cke5InputTags({
+                editable: true
+            });
+        }
     }
 
     if (elementArea.length) {
-        elementArea.cke5InputTags({
-            max: 1,
-            editable: true,
-            autocomplete: {
-                values: JSON.parse(elementArea.attr('data-tags')),
-            }
-        });
+        if (elementArea.data('cke5-tag-init-done') !== true) {
+            elementArea.data('cke5-tag-init-done', true);
+            elementArea.cke5InputTags({
+                max: 1,
+                editable: true,
+                autocomplete: {
+                    values: JSON.parse(elementArea.attr('data-tags')),
+                }
+            });
+        }
     }
 
     // Funktion zum Erstellen eines Tags
