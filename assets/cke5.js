@@ -520,11 +520,8 @@
             });
           }
 
-          if (editor.editing && editor.editing.view && editor.editing.view.document) {
-            editor.editing.view.document.on("click", () => {
-              window.setTimeout(hideLinkUiForImageSelection, 0);
-            });
-          }
+          // Keep link editing reachable: only suppress the automatic link balloon on
+          // selection changes, not on every click afterwards.
         }
         window.cke5_enhance_link_form = cke5_enhance_link_form;
         window.cke5_prefer_image_toolbar_over_link_form = cke5_prefer_image_toolbar_over_link_form;
