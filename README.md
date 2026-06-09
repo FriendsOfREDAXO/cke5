@@ -158,6 +158,173 @@ echo MBlock::show($id, $mform->show());
 - Style groups and styles are selected per profile and merged for output config.
 - In profile edit mode, language placeholders can be configured per REDAXO locale.
 
+## JSON Configuration Cookbook (Profile Fields)
+
+Several profile fields expect JSON input. This section gives working starter examples.
+
+### 1) `link_decorators_definition`
+
+Use this to add manual link decorators. A practical use case is Bootstrap-like link buttons.
+
+```json
+[
+  {
+    "btnPrimary": {
+      "mode": "manual",
+      "label": "Button Primary",
+      "attributes": {
+        "class": "btn btn-primary",
+        "role": "button"
+      }
+    }
+  },
+  {
+    "btnOutline": {
+      "mode": "manual",
+      "label": "Button Outline",
+      "attributes": {
+        "class": "btn btn-outline-secondary",
+        "role": "button"
+      }
+    }
+  },
+  {
+    "nofollow": {
+      "mode": "manual",
+      "label": "Add nofollow",
+      "attributes": {
+        "rel": "nofollow"
+      }
+    }
+  }
+]
+```
+
+Tip: this JSON is merged into `link.decorators` of the generated CKEditor profile.
+
+### 2) `mentions_definition`
+
+Defines custom mention feeds.
+
+```json
+[
+  {
+    "marker": "@",
+    "minimumCharacters": 1,
+    "feed": ["@support", "@sales", "@redaktion", "@admin"]
+  },
+  {
+    "marker": "#",
+    "minimumCharacters": 1,
+    "feed": ["#news", "#release", "#event", "#faq"]
+  }
+]
+```
+
+### 3) `sprog_mention_definition`
+
+Sprog replacements are JSON-based and are exposed via `{` mention marker.
+
+```json
+[
+  { "id": "{{company}}", "text": "Friends Of REDAXO" },
+  { "id": "{{support_mail}}", "text": "support@example.org" },
+  { "id": "{{hotline}}", "text": "+49 000 123456" }
+]
+```
+
+### 4) `image_resize_options_definition`
+
+Defines explicit image resize options used in image toolbar.
+
+```json
+[
+  { "name": "resizeImage:original", "label": "Original", "value": null },
+  { "name": "resizeImage:25", "label": "25%", "value": "25" },
+  { "name": "resizeImage:50", "label": "50%", "value": "50" },
+  { "name": "resizeImage:75", "label": "75%", "value": "75" }
+]
+```
+
+Note: the addon normalizes names internally for profile output.
+
+### 5) `transformation_extra`
+
+Adds additional typing transformations.
+
+```json
+[
+  { "from": "->", "to": "→" },
+  { "from": "<-", "to": "←" },
+  { "from": "(c)", "to": "©" },
+  { "from": "(r)", "to": "®" }
+]
+```
+
+### 6) `html_support_allow`
+
+Allow additional elements/attributes/classes/styles.
+
+```json
+[
+  {
+    "name": "regex(/^(section|article|div)$/)",
+    "attributes": true,
+    "classes": true,
+    "styles": true
+  },
+  {
+    "name": "a",
+    "attributes": ["target", "rel", "data-bs-toggle", "data-bs-target"],
+    "classes": ["btn", "btn-primary", "btn-outline-secondary"],
+    "styles": false
+  }
+]
+```
+
+### 7) `html_support_disallow`
+
+Disallow specific patterns even if allowed elsewhere.
+
+```json
+[
+  {
+    "name": "script",
+    "attributes": true,
+    "classes": true,
+    "styles": true
+  },
+  {
+    "name": "*",
+    "attributes": ["on.*"]
+  }
+]
+```
+
+### 8) `extra_definition`
+
+Advanced raw merge into generated profile JSON. Use with care.
+
+```json
+{
+  "removePlugins": ["Autoformat"],
+  "heading": {
+    "options": [
+      { "model": "paragraph", "title": "Paragraph", "class": "ck-heading_paragraph" },
+      { "model": "heading2", "view": "h2", "title": "H2", "class": "ck-heading_heading2" }
+    ]
+  }
+}
+```
+
+Tip: if you define `removePlugins` here, it is merged with existing remove list.
+
+### Validation Tips
+
+- Always use valid JSON (double quotes, no trailing commas).
+- Start with small JSON snippets and test in one profile first.
+- If a profile fails to behave as expected, open profile preview and inspect generated JSON.
+
 ## Snippets Instead of Templates
 
 Templates are no longer part of the active workflow.
