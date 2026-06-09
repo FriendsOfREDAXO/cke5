@@ -3,6 +3,7 @@
 ## Version 7.0.0-dev
 
 * Umstellung auf den offiziellen CKEditor-5-Build als Basis des Addons
+* Vendor-Update auf CKEditor 5 `48.2.0` (npm-Paket `ckeditor5`)
 * Plugin-System grundlegend neu aufgestellt: native Plugins als Runtime-Registry und externe Plugins offiziell integrierbar
 * Neue native Plugins und überarbeitete Dialoge für den aktuellen Editor-Workflow
 * Templates entfernt und durch Snippets ersetzt
