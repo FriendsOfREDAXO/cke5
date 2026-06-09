@@ -116,6 +116,7 @@
                 return;
               }
               options = cke5_apply_modern_constructor_fallback(options, editorConstructor);
+              options = cke5_ensure_image_link_toolbar(options);
               element.attr("data-cke5-init-state", "pending");
               try {
                 editorConstructor.create(document.querySelector("#" + unique_id), options).then((editor) => {
@@ -663,6 +664,33 @@
             return aliases[item] || item;
           });
           options.toolbar.items = cke5_normalize_toolbar_items(options.toolbar.items);
+          return options;
+        }
+        function cke5_ensure_image_link_toolbar(options) {
+          if (!options || typeof options !== "object") {
+            return options;
+          }
+          if (!options.image || typeof options.image !== "object") {
+            return options;
+          }
+
+          let toolbarItems = [];
+          if (Array.isArray(options.image.toolbar)) {
+            toolbarItems = options.image.toolbar.slice();
+          } else if (typeof options.image.toolbar === "string") {
+            toolbarItems = options.image.toolbar.split(",").map((item) => item.trim()).filter((item) => item !== "");
+          }
+
+          if (toolbarItems.length === 0) {
+            return options;
+          }
+
+          if (!toolbarItems.includes("linkImage")) {
+            const insertIndex = toolbarItems.includes("toggleImageCaption") ? toolbarItems.indexOf("toggleImageCaption") : toolbarItems.length;
+            toolbarItems.splice(insertIndex, 0, "linkImage");
+          }
+
+          options.image.toolbar = cke5_normalize_toolbar_items(toolbarItems);
           return options;
         }
         function cke5_normalize_toolbar_items(items) {
