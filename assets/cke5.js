@@ -182,6 +182,7 @@
             "ImageCaption",
             "ImageStyle",
             "ImageResize",
+            "ImageResizeHandles",
             "ImageUpload",
             "AutoImage",
             "MediaEmbed",
