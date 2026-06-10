@@ -3,6 +3,7 @@
 
 use Cke5\Provider\Cke5NavigationProvider;
 use Cke5\Handler\Cke5ExtensionHandler;
+use Cke5\Creator\Cke5ProfilesCreator;
 
 $navigation = '<div class="cke5_subpagenavigation">' . Cke5NavigationProvider::getSubNavigation('profiles.customise') . '</div>';
 $defaultMediaPath = str_replace(['../', '/'], '', rex_url::media());
@@ -92,6 +93,27 @@ $field = $form->addTextAreaField('global_font_families');
 $field->setLabel($this->i18n('cke5_font_family'));
 $field->setAttribute('id', 'cke5-global-fontfamily-area');
 $field->setAttribute('data-family-placeholder', $this->i18n('cke5_family_name_placeholder'));
+$form->addRawField('</div>');
+
+$field = $form->addCheckboxField('global_clear_widget_enabled');
+$field->setAttribute('id', 'cke5global-clear-widget-enabled-input');
+$field->setAttribute('data-toggle', 'toggle');
+$field->setAttribute('data-collapse-target', 'globalClearWidget');
+$field->setLabel($this->i18n('cke5_global_clear_widget_definition'));
+$field->addOption($this->i18n('cke5_global_clear_widget_definition_notice'), '1');
+
+$form->addRawField('<div class="collapse" id="cke5globalClearWidget-collapse">');
+$field = $form->addTextAreaField('global_clear_widget_definition');
+$field->setLabel($this->i18n('cke5_global_clear_widget_definition'));
+$field->setAttribute('id', 'cke5-global-clear-widget-area');
+$field->setAttribute('class', 'rex-code');
+$field->setAttribute('data-codemirror-mode', 'application/json');
+$field->setNotice($this->i18n('cke5_global_clear_widget_definition_example'));
+
+$currentClearDefinition = (string) $this->getConfig('global_clear_widget_definition', '');
+if ('' === trim($currentClearDefinition)) {
+    $field->setValue(Cke5ProfilesCreator::DEFAULT_VALUES['global_clear_widget_definition']);
+}
 $form->addRawField('</div>');
 
 $fragment = new rex_fragment();

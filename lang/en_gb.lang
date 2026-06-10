@@ -310,6 +310,12 @@ cke5_global_mediatype = Media manager type (global)
 cke5_global_mediapath = Media path (global)
 cke5_global_font_family_default = Default font family (global)
 cke5_global_font_family_default_notice = Forces the CKEditor default font family when the profile does not set its own value.
+cke5_global_clear_widget_definition = Clear widget styles (global)
+cke5_global_clear_widget_definition_notice = JSON presets for the clear widget. Profiles only decide if and where for_clear appears in the toolbar.
+cke5_global_clear_widget_definition_example = Example: presets for UIkit 3, Bootstrap 5 and Tailwind; preset selects the active set.
+cke5_clear_widget_preset = Clear widget preset (profile override)
+cke5_clear_widget_preset_notice = Optional: overrides the global clear widget preset only for this profile.
+cke5_clear_widget_preset_global_default = Use global preset
 
 cke5_pro_feature_info = Pro features only work with custom editor builds that include the licensed Pro features modules.
 

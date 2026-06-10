@@ -1079,6 +1079,20 @@ if ($func === '') {
                 $field->setAttribute('rows', '2');
                 $field->setLabel(rex_i18n::msg('cke5_extra_definition_area'));
             $form->addRawField('</div>');
+
+            $form->addRawField('<div class="collapse" id="cke5for_clear-collapse">');
+                $field = $form->addSelectField('clear_widget_preset');
+                $field->setAttribute('class', 'form-control selectpicker');
+                $field->setLabel(rex_i18n::msg('cke5_clear_widget_preset'));
+                $field->setNotice(rex_i18n::msg('cke5_clear_widget_preset_notice'));
+                $field->getSelect()->addOption(rex_i18n::msg('cke5_clear_widget_preset_global_default'), '');
+                $field->getSelect()->addOption('UIkit 3', 'uikit3');
+                $field->getSelect()->addOption('Bootstrap 5', 'bootstrap5');
+                $field->getSelect()->addOption('Tailwind', 'tailwind');
+                if ($default_value) {
+                    $field->setValue('');
+                }
+            $form->addRawField('</div>');
         // close fieldset DEFAULT SETUP
         $form->addRawField('</fieldset>');
 

@@ -40,6 +40,7 @@ $(document).on('rex:ready', function (event, container) {
   let ytable = root.find('input[id^="cke5global-ytable-enabled-input"]');
   let media = root.find('input[id^="cke5global-media-enabled-input"]');
   let fontFamilyDefault = root.find('input[id^="cke5global-font-family-default-input"]');
+  let clearWidget = root.find('input[id^="cke5global-clear-widget-enabled-input"]');
 
   if (typeof cke5_bootstrapToggle_collapse === 'function') {
     cke5_bootstrapToggle_collapse(mentions, true);
@@ -47,12 +48,14 @@ $(document).on('rex:ready', function (event, container) {
     cke5_bootstrapToggle_collapse(ytable, true);
     cke5_bootstrapToggle_collapse(media, true);
     cke5_bootstrapToggle_collapse(fontFamilyDefault);
+    cke5_bootstrapToggle_collapse(clearWidget, true);
   } else {
     initLocalCollapse(mentions);
     initLocalCollapse(sprog);
     initLocalCollapse(ytable);
     initLocalCollapse(media);
     initLocalCollapse(fontFamilyDefault);
+    initLocalCollapse(clearWidget);
   }
 
   let fontFamilyArea = root.find('#cke5-global-fontfamily-area');

@@ -1091,6 +1091,57 @@ dl + .cke5_clangtabs .nav.nav-tabs,
     max-width: 100%;
 }
 
+.ck-content .redaxo-clear-widget {
+    clear: both;
+    min-height: 1px;
+}
+
+.ck-content .redaxo-clear-widget--editing {
+    display: block;
+    clear: both;
+    min-height: 42px;
+    margin: 10px 0;
+    padding: 10px 12px;
+    border: 1px dashed #89a2ba;
+    background: #eef4fa;
+    color: #31475b;
+    border-radius: 6px;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.ck.ck-reset_all.cke5-clear-dialog-form {
+    min-width: 320px;
+    padding: 16px 18px !important;
+}
+
+.cke5-clear-dialog-form__intro {
+    color: #5f6b79;
+    font-size: 12px;
+    margin-bottom: 10px;
+    padding: 8px 10px;
+    background: #f8fafc;
+    border: 1px solid #d8e1ea;
+    border-radius: 6px;
+}
+
+.cke5-clear-dialog-form__group {
+    margin-bottom: 8px;
+}
+
+.cke5-clear-dialog-form__group label {
+    display: block;
+    font-size: 12px;
+    color: #1f2933;
+    margin-bottom: 5px;
+}
+
+.cke5-clear-dialog-form__group select.ck.ck-input {
+    width: 100%;
+    min-height: 34px;
+    border-radius: 6px;
+}
+
 .ck.ck-reset_all.cke5-video-dialog-form {
     min-width: 340px;
     padding: 16px 18px !important;

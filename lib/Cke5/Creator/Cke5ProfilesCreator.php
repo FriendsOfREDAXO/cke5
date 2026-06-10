@@ -134,7 +134,7 @@ class Cke5ProfilesCreator
     ];
     const EDITOR_SETTINGS = [
         /* todo: specialCharacters not work because : https://github.com/ckeditor/ckeditor5/issues/6160 */
-        'cktypes' => ['heading', 'fontSize', 'mediaEmbed', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable', 'fontBackgroundColor', 'fontColor', 'codeBlock', 'bulletedList', 'numberedList', 'htmlEmbed'/*, 'emoji'*/, 'sourceEditing', 'textPartLanguage'/*, 'specialCharacters' */, 'style', 'snippets', 'for_video'],
+        'cktypes' => ['heading', 'fontSize', 'mediaEmbed', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable', 'fontBackgroundColor', 'fontColor', 'codeBlock', 'bulletedList', 'numberedList', 'htmlEmbed'/*, 'emoji'*/, 'sourceEditing', 'textPartLanguage'/*, 'specialCharacters' */, 'style', 'snippets', 'for_video', 'for_clear'],
         'ckimgtypes' => ['rexImage', 'imageUpload'],
         'cklinktypes' => ['ytable', 'media', 'internal'],
         'cktabletypes' => ['tableProperties', 'tableCellProperties']
@@ -237,14 +237,79 @@ class Cke5ProfilesCreator
         "class": "video--w-100"
     }
 ]',
+        'global_clear_widget_definition' => '{
+    "preset": "bootstrap5",
+    "presets": {
+        "uikit3": {
+            "label": "UIkit 3",
+            "styles": [
+                {
+                    "id": "clear",
+                    "label": "Clear",
+                    "class": "uk-clearfix"
+                },
+                {
+                    "id": "space-sm",
+                    "label": "Abstand S",
+                    "class": "uk-clearfix uk-margin-small-top"
+                },
+                {
+                    "id": "space-md",
+                    "label": "Abstand M",
+                    "class": "uk-clearfix uk-margin-top"
+                }
+            ]
+        },
+        "bootstrap5": {
+            "label": "Bootstrap 5",
+            "styles": [
+                {
+                    "id": "clear",
+                    "label": "Clear",
+                    "class": "clearfix"
+                },
+                {
+                    "id": "space-sm",
+                    "label": "Abstand S",
+                    "class": "clearfix mt-2"
+                },
+                {
+                    "id": "space-md",
+                    "label": "Abstand M",
+                    "class": "clearfix mt-4"
+                }
+            ]
+        },
+        "tailwind": {
+            "label": "Tailwind",
+            "styles": [
+                {
+                    "id": "clear",
+                    "label": "Clear",
+                    "class": "clear-both"
+                },
+                {
+                    "id": "space-sm",
+                    "label": "Abstand S",
+                    "class": "clear-both mt-2"
+                },
+                {
+                    "id": "space-md",
+                    "label": "Abstand M",
+                    "class": "clear-both mt-4"
+                }
+            ]
+        }
+    }
+}',
     ];
     const LICENSE_FIELDS = [
         'toolbar' => []
     ];
     const DEFAULTS = self::DEFAULT_VALUES;
     const ALLOWED_FIELDS = [
-        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll', 'specialCharacters', 'pastePlainText', 'redaxoMarkdownPasteToggle', 'redaxoMinimapToggle', 'htmlEmbed', 'sourceEditing', 'textPartLanguage', 'findAndReplace', 'style', 'snippets', 'for_video', 'showBlocks', 'bookmark', 'accessibilityHelp'],
-        'balloon_toolbar' => ['style', '|', 'paragraph', 'heading', 'bulletedList', 'numberedList', 'todoList', 'outdent', 'indent', 'blockQuote', 'insertTable', 'mediaEmbed', 'for_video', 'codeBlock', 'link', 'horizontalLine', 'specialCharacters', 'removeFormat', 'undo', 'redo'],
+        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll', 'specialCharacters', 'pastePlainText', 'redaxoMarkdownPasteToggle', 'redaxoMinimapToggle', 'htmlEmbed', 'sourceEditing', 'textPartLanguage', 'findAndReplace', 'style', 'snippets', 'for_video', 'for_clear', 'showBlocks', 'bookmark', 'accessibilityHelp'],
+        'balloon_toolbar' => ['style', '|', 'paragraph', 'heading', 'bulletedList', 'numberedList', 'todoList', 'outdent', 'indent', 'blockQuote', 'insertTable', 'mediaEmbed', 'for_video', 'for_clear', 'codeBlock', 'link', 'horizontalLine', 'specialCharacters', 'removeFormat', 'undo', 'redo'],
         'alignment' => ['left', 'right', 'center', 'justify'],
         'table_toolbar' => ['|', 'tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties', 'toggleTableCaption'],
         'heading' => ['paragraph', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
@@ -470,6 +535,18 @@ class Cke5ProfilesCreator
         }
 
         $jsonProfile = ['toolbar' => ['items' => $toolbar, 'shouldNotGroupWhenFull' => (!(isset($profile['group_when_full']) && $profile['group_when_full'] !== ''))]];
+        $jsonProfile['redaxoClearWidget'] = self::decodeGlobalClearWidgetConfig($globalSettings);
+
+        $profileClearWidgetPreset = isset($profile['clear_widget_preset']) ? trim((string) $profile['clear_widget_preset']) : '';
+        if (
+            '' !== $profileClearWidgetPreset
+            && isset($jsonProfile['redaxoClearWidget']['presets'])
+            && is_array($jsonProfile['redaxoClearWidget']['presets'])
+            && array_key_exists($profileClearWidgetPreset, $jsonProfile['redaxoClearWidget']['presets'])
+        ) {
+            $jsonProfile['redaxoClearWidget']['preset'] = $profileClearWidgetPreset;
+        }
+
         $jsonSubOption = [];
         $jsonProfile['removePlugins'] = [];
         $sprogDefinition = [];
@@ -1302,7 +1379,34 @@ class Cke5ProfilesCreator
             'global_mediapath' => (string) self::getAddon()->getConfig('global_mediapath', ''),
             'global_font_family_default' => (string) self::getAddon()->getConfig('global_font_family_default', ''),
             'global_font_families' => (string) self::getAddon()->getConfig('global_font_families', ''),
+            'global_clear_widget_enabled' => (string) self::getAddon()->getConfig('global_clear_widget_enabled', ''),
+            'global_clear_widget_definition' => (string) self::getAddon()->getConfig('global_clear_widget_definition', self::DEFAULT_VALUES['global_clear_widget_definition']),
         ];
+    }
+
+    /**
+     * @param array<string,mixed> $settings
+     * @return array<string,mixed>
+     */
+    private static function decodeGlobalClearWidgetConfig(array $settings): array
+    {
+        $defaultDecoded = json_decode(self::DEFAULT_VALUES['global_clear_widget_definition'], true);
+        $fallback = is_array($defaultDecoded) ? $defaultDecoded : [];
+
+        if (!self::isGlobalSettingEnabled($settings, 'global_clear_widget_enabled')) {
+            return $fallback;
+        }
+
+        if (!isset($settings['global_clear_widget_definition']) || !is_string($settings['global_clear_widget_definition']) || '' === trim($settings['global_clear_widget_definition'])) {
+            return $fallback;
+        }
+
+        $decoded = json_decode($settings['global_clear_widget_definition'], true);
+        if (!is_array($decoded)) {
+            return $fallback;
+        }
+
+        return $decoded;
     }
 
     /**

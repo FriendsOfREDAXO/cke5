@@ -980,7 +980,7 @@
           }
           const cke = window.CKEDITOR;
           const registry = typeof window.CKE5_NATIVE_PLUGINS === "object" && window.CKE5_NATIVE_PLUGINS !== null ? window.CKE5_NATIVE_PLUGINS : {};
-          const pluginNames = ["RedaxoLinkIntegration", "RedaxoMediaImage", "RedaxWidgetVideo", "RedaxoSnippets", "RedaxoPastePlainTextToggle", "RedaxoMarkdownPasteToggle", "RedaxoMinimapToggle"];
+          const pluginNames = ["RedaxoLinkIntegration", "RedaxoMediaImage", "RedaxWidgetVideo", "RedaxoClearWidget", "RedaxoSnippets", "RedaxoPastePlainTextToggle", "RedaxoMarkdownPasteToggle", "RedaxoMinimapToggle"];
           const plugins = [];
           pluginNames.forEach((pluginName) => {
             const factory = registry[pluginName];
@@ -1019,6 +1019,9 @@
             }
             if (item === "for_video_widget_test") {
               return "for_video";
+            }
+            if (item === "for_clear_widget") {
+              return "for_clear";
             }
             return item;
           });
@@ -1138,6 +1141,7 @@
             "insertTable",
             "mediaEmbed",
             "for_video",
+            "for_clear",
             "codeBlock",
             "link",
             "horizontalLine",
@@ -1176,6 +1180,7 @@
             "insertTable",
             "mediaEmbed",
             "for_video",
+            "for_clear",
             "codeBlock",
             "|",
             "link",

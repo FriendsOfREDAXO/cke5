@@ -767,6 +767,9 @@ function cke5_toolbar_create_tag(typename, tags) {
           toggle_collapse('mediaEmbed', 'show');
           toggle_collapse('for_video', 'show');
         break;
+        case 'for_clear':
+          toggle_collapse('for_clear', 'show');
+        break;
         default:
           toggle_collapse(type, 'show');
       }
@@ -829,6 +832,9 @@ function cke5_toolbar_destroy_tag(typename, tags) {
             } else {
               toggle_collapse(type, 'hide', (embedhide === 3));
             }
+            break;
+          case 'for_clear':
+            toggle_collapse('for_clear', 'hide');
             break;
           case 'fontSize':
           case 'fontFamily':
