@@ -181,34 +181,41 @@
     document.body.appendChild(svg);
 
     /* ------------------------------------------------------------------
-       CKEditor-Elemente mit data-Attribut markieren
+       CKEditor-Elemente mit SVG-Filter via Inline-Style versehen
+       WICHTIG: backdrop-filter: url(#id) muss als Inline-Style gesetzt werden,
+       da CSS-Dateien die URL relativ zur CSS-Datei auflösen (nicht zur Seite).
+       Inline-Styles werden immer relativ zur aktuellen Seiten-URL aufgelöst.
     ------------------------------------------------------------------ */
-    function markEditorElements() {
+    const filterValue = 'url(#cke5-liquid-glass-filter) blur(3px) saturate(1.5)';
+
+    function applyFilterToEditorElements() {
         document.querySelectorAll(
             '.ck.ck-toolbar, .ck.ck-balloon-panel, .ck.ck-dropdown__panel'
         ).forEach(function (el) {
             if (!el.hasAttribute('data-lg-filter')) {
                 el.setAttribute('data-lg-filter', 'active');
+                el.style.backdropFilter = filterValue;
+                el.style.webkitBackdropFilter = filterValue;
             }
         });
     }
 
     /* Einmalig und bei DOM-Änderungen durch CKEditor */
-    markEditorElements();
+    applyFilterToEditorElements();
 
     const observer = new MutationObserver(function (mutations) {
-        let shouldMark = false;
+        let shouldApply = false;
         mutations.forEach(function (m) {
             m.addedNodes.forEach(function (node) {
                 if (node.nodeType === 1 && node.classList &&
                     (node.classList.contains('ck-toolbar') ||
                      node.classList.contains('ck-balloon-panel') ||
                      node.classList.contains('ck-dropdown__panel'))) {
-                    shouldMark = true;
+                    shouldApply = true;
                 }
             });
         });
-        if (shouldMark) markEditorElements();
+        if (shouldApply) applyFilterToEditorElements();
     });
 
     observer.observe(document.body, { childList: true, subtree: true });

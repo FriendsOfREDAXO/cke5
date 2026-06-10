@@ -198,7 +198,7 @@ body.rex-theme-dark .ck-reset_all {
     box-shadow: var(--lg-shadow), var(--lg-shadow-inset) !important;
     border-radius: var(--lg-radius-sm) var(--lg-radius-sm) 0 0 !important;
     position: relative;
-    overflow: hidden;
+    /* kein overflow:hidden — würde Dropdown-Panels abschneiden */
 }
 
 /* Specular Highlight: conic-gradient simuliert Lichtbrechung am Rand */
@@ -454,21 +454,15 @@ body.rex-has-theme:not(.rex-theme-light) .ck.ck-input {
     border-top-color: var(--lg-border-top) !important;
     border-radius: var(--lg-radius-sm) !important;
     box-shadow: var(--lg-shadow-panel), var(--lg-shadow-inset) !important;
-    overflow: hidden;
+    /* kein overflow:hidden — würde Sub-Menüs abschneiden */
 }
 
 /* ==========================================================================
    SVG-Displacement-Filter (Chrome)
-   Aktiviert wenn cke5_liquid_glass.js das Attribut setzt
+   HINWEIS: backdrop-filter: url(#id) wird vom Browser relativ zur CSS-Datei
+   aufgelöst, nicht zur Seiten-URL. Daher wird der Filter nur via JS gesetzt,
+   das die korrekte Seiten-URL kennt. CSS-seitig kein @supports-Block nötig.
    ========================================================================== */
-@supports (backdrop-filter: url(#x)) {
-    .ck.ck-toolbar[data-lg-filter="active"],
-    .ck.ck-balloon-panel[data-lg-filter="active"],
-    .ck.ck-dropdown__panel[data-lg-filter="active"] {
-        backdrop-filter: url(#cke5-liquid-glass-filter) blur(3px) saturate(150%) !important;
-        -webkit-backdrop-filter: url(#cke5-liquid-glass-filter) blur(3px) saturate(150%) !important;
-    }
-}
 
 /* ==========================================================================
    Erschein-Animation
