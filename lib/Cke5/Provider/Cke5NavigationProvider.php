@@ -15,7 +15,10 @@ class Cke5NavigationProvider
 {
     public static function getMainSubNavigationHeader(): string
     {
-        $createdBy = rex_i18n::msg('cke5_subnavigation_header_credit');
+        $createdBy = sprintf(
+            '<a href="https://friendsofredaxo.github.io" target="_blank" rel="noopener">%s</a>',
+            rex_i18n::msg('cke5_subnavigation_header_credit')
+        );
         return '
             <header class="cke5-header">
                 <div class="header-inner">
