@@ -85,7 +85,7 @@ $content .= Cke5NavigationProvider::getMainSubNavigationHeader() .
                             <tr>
                                 <td>Schwanheim</td>
                                 <td>Wohnen &amp; Natur</td>
-                                <td>Niddaauen, Mainufer, Streuobstwiesen – Heimat von <a href="https://github.com/skerbis" target="_blank" rel="noopener">Thomas Skerbis</a></td>
+                                <td>Niddaauen, Mainufer, Streuobstwiesen – Lieblingsort von <a href="https://github.com/skerbis" target="_blank" rel="noopener">Thomas Skerbis</a></td>
                             </tr>
                         </tbody>
                     </table>
@@ -94,7 +94,7 @@ $content .= Cke5NavigationProvider::getMainSubNavigationHeader() .
                         <figure class="image image-style-align-left" style="width:80px; margin: 0 1.2rem 0.5rem 0;">
                             <img src="/assets/addons/cke5/images/skerbis.jpg" alt="Thomas Skerbis" style="border-radius:50%;">
                         </figure>
-                        <a href="https://github.com/skerbis" target="_blank" rel="noopener"><strong>Thomas Skerbis</strong></a> lebt in Schwanheim und ist einer der aktivsten Köpfe hinter Friends of REDAXO. Als langjähriger Core-Contributor pflegt er Addons, schreibt Dokumentation und treibt das Ökosystem rund um REDAXO voran.
+                        <a href="https://github.com/skerbis" target="_blank" rel="noopener"><strong>Thomas Skerbis</strong></a> hat einen Lieblingsort in Schwanheim und ist einer der aktivsten Köpfe hinter Friends of REDAXO. Als langjähriger Core-Contributor pflegt er Addons, schreibt Dokumentation und treibt das Ökosystem rund um REDAXO voran.
                     </p>
 
                     <blockquote>
@@ -122,6 +122,30 @@ $content .= Cke5NavigationProvider::getMainSubNavigationHeader() .
                             <li><a href="#">Frankfurt</a></li>
                         </ul>
                     </nav>
+
+                    <h2>Dank &amp; Credits</h2>
+
+                    <p>Ein herzliches Dankeschön geht an <a href="https://github.com/joachimdoerr" target="_blank" rel="noopener"><strong>Joachim Dörr</strong></a>, der das CKEditor 5 AddOn für REDAXO entwickelt und über viele Jahre gepflegt hat. Ohne seinen Einsatz und sein Durchhaltevermögen würde dieses Addon nicht existieren.</p>
+
+                    <p>Ebenso herzlichen Dank an alle, die durch Issues, Pull Requests und Feedback zur Verbesserung des Addons beigetragen haben:</p>
+
+                    <ul>
+                        <li><a href="https://github.com/crydotsnake" target="_blank" rel="noopener">crydotsnake</a></li>
+                        <li><a href="https://github.com/interweave-media" target="_blank" rel="noopener">interweave-media</a></li>
+                        <li><a href="https://github.com/staabm" target="_blank" rel="noopener">staabm</a></li>
+                        <li><a href="https://github.com/nandes2062" target="_blank" rel="noopener">nandes2062</a></li>
+                        <li><a href="https://github.com/TobiasKrais" target="_blank" rel="noopener">TobiasKrais</a></li>
+                        <li><a href="https://github.com/schuer" target="_blank" rel="noopener">schuer</a></li>
+                        <li><a href="https://github.com/marcohanke" target="_blank" rel="noopener">marcohanke</a></li>
+                        <li><a href="https://github.com/eaCe" target="_blank" rel="noopener">eaCe</a></li>
+                        <li><a href="https://github.com/aeberhard" target="_blank" rel="noopener">aeberhard</a></li>
+                        <li><a href="https://github.com/Bio-GitHub" target="_blank" rel="noopener">Bio-GitHub</a></li>
+                        <li><a href="https://github.com/dergel" target="_blank" rel="noopener">dergel</a></li>
+                        <li><a href="https://github.com/V-Simos" target="_blank" rel="noopener">V-Simos</a></li>
+                        <li><a href="https://github.com/VIEWSION" target="_blank" rel="noopener">VIEWSION</a></li>
+                        <li><a href="https://github.com/ynamite" target="_blank" rel="noopener">ynamite</a></li>
+                        <li><a href="https://github.com/ischfr" target="_blank" rel="noopener">ischfr</a></li>
+                    </ul>
                 </div>
             </div>
             <div class="col-md-4">
