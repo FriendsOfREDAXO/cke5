@@ -23,6 +23,8 @@ page:
                 customise:
                     title: 'translate:customise'
                     subpages:
+                        global:
+                            title: 'translate:global_settings'
                         groups:
                             title: 'translate:style_groups'
                         styles:
@@ -45,10 +47,10 @@ page:
             title: 'translate:licenses'
             subPath: LICENSE.md
 requires:
-    redaxo: '^5.12'
+    redaxo: '^5.19'
     php:
-        version: '>=7.2, <9'
+        version: '>=8.1, <9'
 conflicts:
     packages:
-        mblock: '<3.4.0'
-        mform: '<6.1.0'
+        mblock: '<4.3.0'
+        mform: '<7.0.0'

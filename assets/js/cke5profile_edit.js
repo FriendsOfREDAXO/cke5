@@ -19,7 +19,74 @@ $(document).on('rex:ready', function (event, container) {
   if (container.find(ckedit).length) {
     cke5_init_edit($(ckedit));
   }
+
+  cke5_init_copy_buttons();
 });
+
+$(document).on('ready', function () {
+  cke5_init_copy_buttons();
+});
+
+function cke5_init_copy_buttons() {
+  if ($(document).data('cke5-copy-buttons-initialized') === true) {
+    return;
+  }
+  $(document).data('cke5-copy-buttons-initialized', true);
+
+  $(document).on('click', '.cke5-copy-btn', function () {
+    let button = $(this),
+      targetId = button.attr('data-cke5-copy-target'),
+      target = targetId ? $('#' + targetId) : $(),
+      text = target.length ? target.text().trim() : '';
+
+    if (!text) {
+      return;
+    }
+
+    cke5_copy_to_clipboard(text, button);
+  });
+}
+
+function cke5_copy_to_clipboard(text, button) {
+  let resetLabel = function () {
+    window.setTimeout(function () {
+      button.text('Kopieren');
+    }, 1200);
+  };
+
+  if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+    navigator.clipboard.writeText(text).then(function () {
+      button.text('Kopiert');
+      resetLabel();
+    }).catch(function () {
+      cke5_copy_to_clipboard_fallback(text, button, resetLabel);
+    });
+    return;
+  }
+
+  cke5_copy_to_clipboard_fallback(text, button, resetLabel);
+}
+
+function cke5_copy_to_clipboard_fallback(text, button, resetLabel) {
+  let textarea = $('<textarea>').css({
+    position: 'fixed',
+    left: '-9999px',
+    top: '-9999px'
+  }).val(text);
+
+  $('body').append(textarea);
+  textarea.trigger('focus').trigger('select');
+
+  try {
+    document.execCommand('copy');
+    button.text('Kopiert');
+  } catch (e) {
+    button.text('Fehler');
+  }
+
+  textarea.remove();
+  resetLabel();
+}
 
 function cke5_init_edit(element) {
   if (element.data('cke5-profile-edit-initialized') === true) {
@@ -36,6 +103,8 @@ function cke5_init_edit(element) {
     transformation_extra_area = element.find('#cke5-transformation-extra-area'),
     sprog_mention_area = element.find('#cke5-sprog-mention-area'),
     toolbar = element.find('#cke5toolbar-input'),
+    balloon_toolbar = element.find('#cke5balloon-toolbar-input'),
+    balloon_toolbar_custom = element.find('input[id^="cke5balloon-toolbar-custom-input"]'),
     table_toolbar = element.find('#cke5inserttable-input'),
     rexlink_toolbar = element.find('#cke5link-input'),
     name = element.find('#cke5name-input'),
@@ -67,6 +136,8 @@ function cke5_init_edit(element) {
   cklinktypes = JSON.parse(element.attr('data-cklinktypes'));
   ckimgtypes = JSON.parse(element.attr('data-ckimgtypes'));
   cktabletypes = JSON.parse(element.attr('data-cktabletypes'));
+
+  cke5_init_modern_profile_layout(element);
 
   imageDragDrop = element.find('#cke5uploaddefault-input-default-upload');
 
@@ -100,6 +171,7 @@ function cke5_init_edit(element) {
   cke5_bootstrapToggle_collapse(transformation, true);
   cke5_bootstrapToggle_collapse(link_decorators, true);
   cke5_bootstrapToggle_collapse(imgresizeoptions_input, true);
+  cke5_bootstrapToggle_collapse(balloon_toolbar_custom, true);
 
   if (name.length) {
     name.alphanum({
@@ -150,6 +222,9 @@ function cke5_init_edit(element) {
           if ($(this).attr('id') === toolbar.attr('id')) {
             cke5_toolbar_create_tag('toolbar', e.tags);
           }
+          if ($(this).attr('id') === balloon_toolbar.attr('id')) {
+            cke5_toolbar_create_tag('balloon_toolbar', e.tags);
+          }
           if ($(this).attr('id') === table_toolbar.attr('id')) {
             cke5_toolbar_create_tag('table_toolbar', e.tags);
           }
@@ -160,6 +235,9 @@ function cke5_init_edit(element) {
         destroy: function (e) {
           if ($(this).attr('id') === toolbar.attr('id')) {
             cke5_toolbar_destroy_tag('toolbar', e.tags);
+          }
+          if ($(this).attr('id') === balloon_toolbar.attr('id')) {
+            cke5_toolbar_destroy_tag('balloon_toolbar', e.tags);
           }
           if ($(this).attr('id') === table_toolbar.attr('id')) {
             cke5_toolbar_destroy_tag('table_toolbar', e.tags);
@@ -230,6 +308,7 @@ function cke5_init_edit(element) {
 
   // init collapse
   if (toolbar.val() !== undefined) cke5_toolbar_create_tag('toolbar', toolbar.val().split(','));
+  if (balloon_toolbar.val() !== undefined) cke5_toolbar_create_tag('balloon_toolbar', balloon_toolbar.val().split(','));
   if (table_toolbar.val() !== undefined) cke5_toolbar_create_tag('table_toolbar', table_toolbar.val().split(','));
   if (rexlink_toolbar.val() !== undefined) cke5_toolbar_create_tag('rexlink_toolbar', rexlink_toolbar.val().split(','));
 
@@ -273,6 +352,161 @@ function cke5_init_edit(element) {
 
 }
 
+function cke5_init_modern_profile_layout(element) {
+  let editorCollapse = element.find('#cke5profileEditor-collapse');
+  if (!editorCollapse.length || editorCollapse.data('cke5-modern-layout') === true) {
+    return;
+  }
+
+  editorCollapse.data('cke5-modern-layout', true);
+
+  let root = $('<div class="cke5-profile-modern"></div>');
+  let toolbar = $(
+    '<div class="cke5-profile-modern-toolbar">' +
+      '<ul class="nav nav-tabs" role="tablist">' +
+        '<li class="active"><a href="#cke5-tab-view" role="tab" data-toggle="tab">Ansicht & Optionen</a></li>' +
+        '<li><a href="#cke5-tab-content" role="tab" data-toggle="tab">Inhalte</a></li>' +
+        '<li><a href="#cke5-tab-text" role="tab" data-toggle="tab">Text & Stil</a></li>' +
+        '<li><a href="#cke5-tab-media" role="tab" data-toggle="tab">Medien</a></li>' +
+        '<li><a href="#cke5-tab-links" role="tab" data-toggle="tab">Links</a></li>' +
+        '<li><a href="#cke5-tab-advanced" role="tab" data-toggle="tab">Erweitert</a></li>' +
+      '</ul>' +
+      '<div class="cke5-profile-modern-search">' +
+        '<input type="text" class="form-control" placeholder="Einstellung suchen..." data-cke5-profile-filter="1">' +
+      '</div>' +
+    '</div>'
+  );
+
+  let panes = $('<div class="tab-content cke5-profile-modern-content"></div>');
+  let paneView = $('<div class="tab-pane active" id="cke5-tab-view"></div>');
+  let paneContent = $('<div class="tab-pane" id="cke5-tab-content"></div>');
+  let paneText = $('<div class="tab-pane" id="cke5-tab-text"></div>');
+  let paneMedia = $('<div class="tab-pane" id="cke5-tab-media"></div>');
+  let paneLinks = $('<div class="tab-pane" id="cke5-tab-links"></div>');
+  let paneAdvanced = $('<div class="tab-pane" id="cke5-tab-advanced"></div>');
+
+  panes.append(paneView, paneContent, paneText, paneMedia, paneLinks, paneAdvanced);
+  root.append(toolbar, panes);
+
+  editorCollapse.children().each(function () {
+    let block = $(this);
+    if (block.hasClass('cke5-preview-row')) {
+      return;
+    }
+
+    if (
+      block.hasClass('cke5_clangtabs') ||
+      block.hasClass('cke5-placeholder-scope-note') ||
+      block.hasClass('cke5-profile-settings-note') ||
+      block.find('#cke5toolbar-input').length ||
+      block.find('input[id^="cke5height-input"]').length
+    ) {
+      paneView.append(block);
+      return;
+    }
+
+    if (block.is('#cke5style-collapse') || block.is('#cke5snippets-collapse')) {
+      paneContent.append(block);
+      return;
+    }
+
+    if (block.find('#cke5heading-input').length || block.is('#cke5font-collapse-parent') || block.is('#cke5highlight-collapse')) {
+      paneText.append(block);
+      return;
+    }
+
+    if (block.is('#cke5insertTable-collapse')) {
+      paneContent.append(block);
+      return;
+    }
+
+    if (block.is('#cke5embed-collapse-parent') || block.find('#cke5image-input').length) {
+      paneMedia.append(block);
+      return;
+    }
+
+    if (block.is('#cke5link-collapse')) {
+      paneLinks.append(block);
+      return;
+    }
+
+    paneAdvanced.append(block);
+  });
+
+  editorCollapse.prepend(root);
+
+  // Keep potentially risky raw JSON options out of basic view settings.
+  const extraOptionField = root.find('input[id^="cke5extra-definition-input"]').closest('dl.rex-form-group, dl.form-group');
+  const extraOptionCollapse = root.find('#cke5extraDefinition-collapse').first();
+  const transformationField = root.find('input[id^="cke5transformation-definition-input"]').closest('dl.rex-form-group, dl.form-group');
+  const transformationCollapse = root.find('#cke5transformationDefinition-collapse').first();
+
+  if (transformationField.length) {
+    paneContent.append(transformationField);
+  }
+  if (transformationCollapse.length) {
+    paneContent.append(transformationCollapse);
+  }
+
+  if (extraOptionField.length) {
+    paneAdvanced.append(extraOptionField);
+  }
+  if (extraOptionCollapse.length) {
+    paneAdvanced.append(extraOptionCollapse);
+  }
+
+  root.find('[data-cke5-profile-filter="1"]').on('input', function () {
+    let query = ($(this).val() || '').toString().toLowerCase().trim();
+    let targets = root.find('.tab-pane > fieldset, .tab-pane > .collapse, .tab-pane > .cke5_clangtabs');
+    let tabs = root.find('.nav-tabs > li > a[data-toggle="tab"]');
+    let paneHasMatches = {};
+
+    targets.each(function () {
+      let target = $(this);
+      let pane = target.closest('.tab-pane');
+      let paneId = pane.attr('id') || '';
+      let hasMatch = true;
+
+      if (query !== '') {
+        let text = target.text().toLowerCase();
+        hasMatch = text.indexOf(query) !== -1;
+      }
+
+      target.toggleClass('cke5-filter-hidden', !hasMatch);
+
+      if (paneId !== '') {
+        paneHasMatches[paneId] = (paneHasMatches[paneId] === true) || hasMatch;
+      }
+    });
+
+    tabs.each(function () {
+      let tab = $(this);
+      let paneId = (tab.attr('href') || '').replace('#', '');
+      let hasMatches = query === '' || paneHasMatches[paneId] === true;
+      tab.parent().toggleClass('cke5-filter-empty', !hasMatches);
+    });
+
+    if (query === '') {
+      tabs.parent().removeClass('cke5-filter-empty');
+      return;
+    }
+
+    let activePane = root.find('.tab-pane.active').attr('id') || '';
+    if (paneHasMatches[activePane] === true) {
+      return;
+    }
+
+    let firstMatchTab = tabs.filter(function () {
+      let paneId = ($(this).attr('href') || '').replace('#', '');
+      return paneHasMatches[paneId] === true;
+    }).first();
+
+    if (firstMatchTab.length) {
+      firstMatchTab.tab('show');
+    }
+  });
+}
+
 function cke5_addFromToFields(element) {
   if (element.length) {
     if (element.data('cke5-multiinput-initialized') === true) {
@@ -308,8 +542,8 @@ function cke5_addIdNameFields(element) {
       return;
     }
     element.data('cke5-multiinput-initialized', true);
-    let sprog_key_placeholder = element.data('sprog-key-placeholder'),
-      sprog_description_placeholder = element.data('sprog-description-placeholder');
+    let sprog_key_placeholder = element.data('sprog-key-placeholder') || element.data('id-placeholder') || 'Sprog Key',
+      sprog_description_placeholder = element.data('sprog-description-placeholder') || element.data('name-placeholder') || 'Sprog Text';
     element.multiInput({
       json: true,
       input: $('<div class="row inputElement">\n' +
@@ -516,7 +750,7 @@ function cke5_addFontFamiliesFields(element) {
 
 function cke5_toolbar_create_tag(typename, tags) {
   cktypes.forEach(function (type) {
-    if ($.inArray(type, tags) !== -1 && typename === 'toolbar') {
+    if ($.inArray(type, tags) !== -1 && (typename === 'toolbar' || typename === 'balloon_toolbar')) {
       switch (type) {
         case 'bulletedList':
         case 'numberedList':
@@ -529,6 +763,7 @@ function cke5_toolbar_create_tag(typename, tags) {
           toggle_collapse('snippets', 'show');
         break;
         case 'for_video':
+        case 'for_video_widget_test':
           toggle_collapse('mediaEmbed', 'show');
           toggle_collapse('for_video', 'show');
         break;
@@ -571,7 +806,7 @@ function cke5_toolbar_destroy_tag(typename, tags) {
   cktypes.forEach(function (type) {
     if ($.inArray(type, tags) !== -1) {
     } else {
-      if (typename === 'toolbar') {
+      if (typename === 'toolbar' || typename === 'balloon_toolbar') {
         switch (type) {
           case 'bulletedList':
           case 'numberedList':
@@ -586,9 +821,14 @@ function cke5_toolbar_destroy_tag(typename, tags) {
           case 'htmlEmbed':
           case 'mediaEmbed':
           case 'for_video':
+          case 'for_video_widget_test':
             embedhide++;
             if (CKEDIT_DEBUG) console.log(embedhide + ' - ' + type);
-            toggle_collapse(type, 'hide', (embedhide === 3));
+            if (type === 'for_video_widget_test') {
+              toggle_collapse('for_video', 'hide', (embedhide === 3));
+            } else {
+              toggle_collapse(type, 'hide', (embedhide === 3));
+            }
             break;
           case 'fontSize':
           case 'fontFamily':

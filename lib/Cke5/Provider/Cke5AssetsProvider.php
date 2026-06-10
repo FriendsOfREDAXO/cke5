@@ -95,9 +95,11 @@ class Cke5AssetsProvider
             foreach ([
                 'plugins/redaxo-link-integration.js',
                 'plugins/redaxo-media-image.js',
-                'plugins/redaxo-media-video.js',
+                'plugins/redax-widget-video.js',
                 'plugins/redaxo-snippets.js',
                 'plugins/redaxo-paste-plain-text-toggle.js',
+                'plugins/redaxo-markdown-paste-toggle.js',
+                'plugins/redaxo-minimap-toggle.js',
             ] as $nativePluginFile) {
                 rex_view::addJsFile(self::getAddon()->getAssetsUrl($nativePluginFile));
             }
@@ -152,6 +154,7 @@ class Cke5AssetsProvider
             // add js vendors
             self::addJS([
                 'cke5style_edit' => 'js/cke5style_edit.js',
+                'cke5customise_global' => 'js/cke5customise_global.js',
             ]);
         }
     }

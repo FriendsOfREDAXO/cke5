@@ -28,9 +28,17 @@
             var syntaxError = false;
             var jsonObject;
             var stringifiedJson;
+            var escapeHtml = function(value) {
+                return String(value)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;');
+            };
 
             if(!this.options.json){
-                this.options.json = $.trim(this.element.html());
+                this.options.json = $.trim(this.element.text());
             }
 
             // checks if json is a string, or object already
@@ -61,7 +69,7 @@
             // All necessary HTML and plain text JSON
             html += '<div class="rainbowJSON">';
             html += '<a href="javascript:void(0);" onclick="$(this).next(\'.plainJSON\').toggle();">Show plain JSON</a>';
-            html += '<pre class="plainJSON">' + stringifiedJson + '</pre>';
+            html += '<pre class="plainJSON">' + escapeHtml(stringifiedJson) + '</pre>';
             html += '<div class="formattedJSON" style="background-color: '+this.options.bgColor+'"></div>';
             html += '</div>';
 

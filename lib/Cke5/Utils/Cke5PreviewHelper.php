@@ -2,7 +2,6 @@
 
 namespace Cke5\Utils;
 
-
 use Cke5\Creator\Cke5ProfilesCreator;
 use rex_addon;
 use rex_i18n;
@@ -10,11 +9,44 @@ use rex_i18n;
 class Cke5PreviewHelper
 {
     /**
+     * @param non-empty-string $label
+     */
+    private static function renderCodeSample(string $label, string $code, string $languageClass = ''): string
+    {
+        $sampleId = 'cke5-code-' . md5($label . $code . $languageClass);
+        $codeClass = '' !== $languageClass ? ' class="' . htmlspecialchars($languageClass, ENT_QUOTES) . '"' : '';
+
+        return '<div class="cke5-code-sample">'
+            . '<div class="cke5-code-sample-head">'
+            . '<strong>' . htmlspecialchars($label, ENT_QUOTES) . '</strong>'
+            . '<button type="button" class="btn btn-xs btn-default cke5-copy-btn" data-cke5-copy-target="' . $sampleId . '">Kopieren</button>'
+            . '</div>'
+            . '<pre id="' . $sampleId . '" class="cke5-code-block" data-cke5-copy-source="1"><code' . $codeClass . '>' . htmlspecialchars($code, ENT_QUOTES) . '</code></pre>'
+            . '</div>';
+    }
+
+    /**
      * @param array<string,mixed> $profile
      */
     public static function getMFormCode(array $profile): string
     {
-        return (rex_addon::exists('mform')) ? '<pre><span style="color: #aa0000">$mform</span>-&gt;<span style="color: #1e90ff">addTextAreaField</span>(<span style="color: #aa5500">&#39;1&#39;</span>, [<span style="color: #aa5500">&#39;class&#39;</span> =&gt; <span style="color: #aa5500">&#39;cke5-editor&#39;</span>, <span style="color: #aa5500">&#39;data-lang&#39;</span> =&gt; \Cke5\Utils\Cke5Lang::<span style="color: #1e90ff">getUserLang</span>(), <span style="color: #aa5500">&#39;data-content-lang&#39;</span> =&gt; \Cke5\Utils\Cke5Lang::<span style="color: #1e90ff">getOutputLang</span>(), <span style="color: #aa5500">&#39;data-profile&#39;</span> =&gt; <span style="color: #aa5500">&#39;' . $profile['name'] . '&#39;</span>]);</pre>' : '';
+        if (!rex_addon::exists('mform')) {
+            return '';
+        }
+
+        $profileName = (string) ($profile['name'] ?? 'default');
+        $userLang = (string) Cke5Lang::getUserLang();
+        $outputLang = (string) Cke5Lang::getOutputLang();
+
+        $code = '$mform->addTextAreaField(\'1\', [\'class\' => \'cke5-editor\', \'data-lang\' => \''
+            . $userLang
+            . '\', \'data-content-lang\' => \''
+            . $outputLang
+            . '\', \'data-profile\' => \''
+            . $profileName
+            . '\']);';
+
+        return self::renderCodeSample('MForm Beispiel', $code, 'language-php');
     }
 
     /**
@@ -22,7 +54,38 @@ class Cke5PreviewHelper
      */
     public static function getHtmlCode(array $profile): string
     {
-        return '<pre style=\'color:#000020;background:#f6f8ff;\'><span style=\'color:#0057a6; \'>&lt;</span><span style=\'color:#200080; font-weight:bold; \'>textarea</span><span style=\'color:#474796; \'> </span><span style=\'color:#074726; \'>class</span><span style=\'color:#308080; \'>=</span><span style=\'color:#1060b6; \'>"form-control cke5-editor"</span><span style=\'color:#474796; \'> </span><span style=\'color:#074726; \'>data</span><span style=\'color:#474796; \'>-</span><span style=\'color:#074726; \'>profile</span><span style=\'color:#308080; \'>=</span><span style=\'color:#1060b6; \'>"' . $profile['name'] . '"</span><span style=\'color:#474796; \'> </span><span style=\'color:#074726; \'>data</span><span style=\'color:#474796; \'>-</span><span style=\'color:#074726; \'>lang</span><span style=\'color:#308080; \'>=</span><span style=\'color:#1060b6; \'>"</span><span style=\'color:#333385; background:#cceeee; \'>&lt;?php</span><span style=\'color:#000000; background:#cceeee; \'> </span><span style=\'color:#200080; background:#cceeee; font-weight:bold; \'>echo</span><span style=\'color:#000000; background:#cceeee; \'> </span><span style=\'color:#406080; background:#cceeee; \'>\</span><span style=\'color:#0066ee; background:#cceeee; \'>Cke5</span><span style=\'color:#406080; background:#cceeee; \'>\</span><span style=\'color:#0066ee; background:#cceeee; \'>Utils</span><span style=\'color:#406080; background:#cceeee; \'>\</span><span style=\'color:#000000; background:#cceeee; \'>Cke5Lang</span><span style=\'color:#406080; background:#cceeee; \'>:</span><span style=\'color:#406080; background:#cceeee; \'>:</span><span style=\'color:#000000; background:#cceeee; \'>getUserLang</span><span style=\'color:#308080; background:#cceeee; \'>(</span><span style=\'color:#308080; background:#cceeee; \'>)</span><span style=\'color:#406080; background:#cceeee; \'>;</span><span style=\'color:#000000; background:#cceeee; \'> </span><span style=\'color:#333385; background:#cceeee; \'>?></span><span style=\'color:#1060b6; \'>"</span><span style=\'color:#474796; \'> </span><span style=\'color:#074726; \'>data</span><span style=\'color:#474796; \'>-</span><span style=\'color:#074726; \'>content</span><span style=\'color:#474796; \'>-</span><span style=\'color:#074726; \'>lang</span><span style=\'color:#308080; \'>=</span><span style=\'color:#1060b6; \'>"</span><span style=\'color:#333385; background:#cceeee; \'>&lt;?php</span><span style=\'color:#000000; background:#cceeee; \'> </span><span style=\'color:#200080; background:#cceeee; font-weight:bold; \'>echo</span><span style=\'color:#000000; background:#cceeee; \'> </span><span style=\'color:#406080; background:#cceeee; \'>\</span><span style=\'color:#0066ee; background:#cceeee; \'>Cke5</span><span style=\'color:#406080; background:#cceeee; \'>\</span><span style=\'color:#0066ee; background:#cceeee; \'>Utils</span><span style=\'color:#406080; background:#cceeee; \'>\</span><span style=\'color:#000000; background:#cceeee; \'>Cke5Lang</span><span style=\'color:#406080; background:#cceeee; \'>:</span><span style=\'color:#406080; background:#cceeee; \'>:</span><span style=\'color:#000000; background:#cceeee; \'>getOutputLang</span><span style=\'color:#308080; background:#cceeee; \'>(</span><span style=\'color:#308080; background:#cceeee; \'>)</span><span style=\'color:#406080; background:#cceeee; \'>;</span><span style=\'color:#000000; background:#cceeee; \'> </span><span style=\'color:#333385; background:#cceeee; \'>?></span><span style=\'color:#1060b6; \'>"</span><span style=\'color:#474796; \'> </span><span style=\'color:#074726; \'>name</span><span style=\'color:#308080; \'>=</span><span style=\'color:#1060b6; \'>"REX_INPUT_VALUE[1]"</span><span style=\'color:#0057a6; \'>></span>REX_VALUE[<span style=\'color:#008c00; \'>1</span>]<span style=\'color:#0057a6; \'>&lt;/</span><span style=\'color:#200080; font-weight:bold; \'>textarea</span><span style=\'color:#0057a6; \'>></span></pre>';
+        $profileName = (string) ($profile['name'] ?? 'default');
+        $userLang = (string) Cke5Lang::getUserLang();
+        $outputLang = (string) Cke5Lang::getOutputLang();
+
+        $code = '<textarea class="form-control cke5-editor" data-profile="'
+            . $profileName
+            . '" data-lang="'
+            . $userLang
+            . '" data-content-lang="'
+            . $outputLang
+            . '">REX_VALUE[1]</textarea>';
+
+        return self::renderCodeSample('HTML Beispiel', $code, 'language-html');
+    }
+
+    /**
+     * @param array<string,mixed> $profile
+     */
+    public static function getYFormJsonCode(array $profile): string
+    {
+        $data = [
+            'style' => 'max-width: 843',
+            'class' => 'form-control cke5-editor',
+            'data-profile' => 'default',
+            'data-lang' => 'de',
+        ];
+
+        return self::renderCodeSample(
+            'YForm JSON Beispiel',
+            (string) json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+            'language-json'
+        );
     }
 
     /**
@@ -51,10 +114,14 @@ class Cke5PreviewHelper
     public static function getProfilePreview(array $profile, bool $html = true, bool $mform = true, bool $details = true): string
     {
         $code = '';
+        $profileName = (string) ($profile['name'] ?? 'default');
+        $userLang = (string) Cke5Lang::getUserLang();
+        $outputLang = (string) Cke5Lang::getOutputLang();
 
         if ($html || $mform || $details) {
             $code = '<div class="cke5-preview-code">';
             $code .= ($html) ? self::getHtmlCode($profile) : '';
+            $code .= self::getYFormJsonCode($profile);
             $code .= ($mform) ? self::getMFormCode($profile) : '';
             $code .= ($details) ? self::getProfileDetails($profile) : '';
             $code .= '</div>';
@@ -62,8 +129,8 @@ class Cke5PreviewHelper
 
         return '        <div class="cke5-preview-row">
             <div class="cke5-preview-editor">
-                <h4>"<a href="index.php?page=cke5/profiles&func=edit&id=' . $profile['id'] . '">' . $profile['name'] . '</a>" - ' . $profile['description'] . '</h4>
-                <div class="cke5-editor" data-profile="' . $profile['name'] . '"></div>
+                <h4>"<a href="index.php?page=cke5/profiles&func=edit&profile=' . rawurlencode($profileName) . '">' . htmlspecialchars($profileName, ENT_QUOTES) . '</a>" - ' . htmlspecialchars((string) ($profile['description'] ?? ''), ENT_QUOTES) . '</h4>
+                <div class="cke5-editor" data-profile="' . htmlspecialchars($profileName, ENT_QUOTES) . '" data-lang="' . htmlspecialchars($userLang, ENT_QUOTES) . '" data-content-lang="' . htmlspecialchars($outputLang, ENT_QUOTES) . '"></div>
                 ' . $code . '
             </div>
         </div>';

@@ -3,6 +3,8 @@
     (() => {
       (() => {
         let ckeditors = {};
+        let cke5BalloonBindings = {};
+        let cke5MinimapBindings = {};
         let ckareas = ".cke5-editor";
         $(document).on("rex:ready", function(e, container) {
           cke5_init_ready(container.find(ckareas));
@@ -110,9 +112,9 @@
             options = cke5_prepare_link_decorator_exclusive_groups(options);
             options = cke5_apply_external_profile_transforms(options, element);
             if (ckeditors[unique_id] === void 0) {
-              const editorConstructor = cke5_get_editor_constructor();
+              const editorConstructor = cke5_get_editor_constructor(options);
               if (!editorConstructor || typeof editorConstructor.create !== "function") {
-                console.error("cke5: ClassicEditor constructor not available");
+                console.error("cke5: no supported editor constructor available");
                 element.attr("data-cke5-init-state", "none");
                 return;
               }
@@ -120,9 +122,10 @@
               options = cke5_ensure_image_link_toolbar(options);
               element.attr("data-cke5-init-state", "pending");
               try {
-                editorConstructor.create(document.querySelector("#" + unique_id), options).then((editor) => {
+                cke5_create_editor_instance(editorConstructor, element, unique_id, options).then((editor) => {
                   ckeditors[unique_id] = editor;
                   element.attr("data-cke5-init-state", "ready");
+                  cke5_init_upload_adapter(editor, options);
                   cke5_register_soft_hyphen_postfixer(editor);
                   cke5_init_link_decorator_exclusive_groups(editor, options);
                   cke5_init_external_plugins(editor, unique_id, element, options);
@@ -134,6 +137,7 @@
                 });
               } catch (error) {
                 element.attr("data-cke5-init-state", "none");
+                cke5_remove_balloon_binding(unique_id);
                 console.error(error);
               }
             } else {
@@ -142,14 +146,307 @@
             }
           }
         }
-        function cke5_get_editor_constructor() {
-          if (typeof window.ClassicEditor !== "undefined") {
-            return window.ClassicEditor;
+        function cke5_normalize_editor_type(editorType) {
+          if (typeof editorType !== "string") {
+            return "classic";
           }
-          if (typeof window.CKEDITOR === "object" && window.CKEDITOR !== null && typeof window.CKEDITOR.ClassicEditor !== "undefined") {
-            return window.CKEDITOR.ClassicEditor;
+          const normalized = editorType.trim().toLowerCase();
+          if (normalized === "classic_balloon" || normalized === "classic-balloon" || normalized === "classic_with_balloon" || normalized === "classic-with-balloon" || normalized === "hybrid" || normalized === "combo") {
+            return "classic_balloon";
+          }
+          if (normalized === "balloon_block" || normalized === "balloon-block" || normalized === "balloon" || normalized === "balloon_block_editor" || normalized === "balloon-block-editor") {
+            return "balloon_block";
+          }
+          return "classic";
+        }
+        function cke5_get_editor_constructor(options) {
+          const editorType = cke5_normalize_editor_type(options && typeof options === "object" ? options.redaxoEditorType : "");
+          const constructorNames = editorType === "balloon_block" ? ["BalloonBlockEditor", "BalloonEditor", "ClassicEditor"] : ["ClassicEditor", "BalloonEditor", "BalloonBlockEditor"];
+          for (let i = 0; i < constructorNames.length; i += 1) {
+            const constructorName = constructorNames[i];
+            if (typeof window[constructorName] !== "undefined") {
+              return window[constructorName];
+            }
+            if (typeof window.CKEDITOR === "object" && window.CKEDITOR !== null && typeof window.CKEDITOR[constructorName] !== "undefined") {
+              return window.CKEDITOR[constructorName];
+            }
           }
           return null;
+        }
+        function cke5_is_balloon_constructor(editorConstructor) {
+          if (!editorConstructor || typeof editorConstructor !== "function") {
+            return false;
+          }
+          const name = typeof editorConstructor.name === "string" ? editorConstructor.name : "";
+          if (name.indexOf("Balloon") !== -1) {
+            return true;
+          }
+          if (typeof window.CKEDITOR === "object" && window.CKEDITOR !== null) {
+            if (editorConstructor === window.CKEDITOR.BalloonEditor || editorConstructor === window.CKEDITOR.BalloonBlockEditor) {
+              return true;
+            }
+          }
+          return false;
+        }
+        function cke5_sync_source_from_editor(editor, unique_id) {
+          const binding = cke5BalloonBindings[unique_id];
+          if (!binding || !binding.sourceElement || !editor || typeof editor.getData !== "function") {
+            return;
+          }
+          cke5_set_source_element_data(binding.sourceElement, editor.getData());
+        }
+        function cke5_get_source_element_data(sourceElement) {
+          if (!sourceElement) {
+            return "";
+          }
+          if (sourceElement.tagName === "TEXTAREA" || sourceElement.tagName === "INPUT") {
+            return sourceElement.value || "";
+          }
+          return sourceElement.innerHTML || "";
+        }
+        function cke5_set_source_element_data(sourceElement, data) {
+          if (!sourceElement) {
+            return;
+          }
+          if (sourceElement.tagName === "TEXTAREA" || sourceElement.tagName === "INPUT") {
+            sourceElement.value = data;
+            return;
+          }
+          sourceElement.innerHTML = data;
+        }
+        function cke5_remove_balloon_binding(unique_id) {
+          const binding = cke5BalloonBindings[unique_id];
+          if (!binding) {
+            return;
+          }
+          if (binding.formElement && binding.formHandler) {
+            binding.formElement.removeEventListener("submit", binding.formHandler);
+          }
+          if (binding.sourceElement) {
+            binding.sourceElement.style.display = "";
+          }
+          if (binding.hostElement && binding.hostElement.parentNode) {
+            binding.hostElement.parentNode.removeChild(binding.hostElement);
+          }
+          delete cke5BalloonBindings[unique_id];
+        }
+        function cke5_remove_minimap_binding(unique_id) {
+          const binding = cke5MinimapBindings[unique_id];
+          if (!binding) {
+            return;
+          }
+          if (binding.wrapper && binding.wrapper.parentNode) {
+            if (binding.sourceElement && binding.wrapper.contains(binding.sourceElement)) {
+              binding.wrapper.parentNode.insertBefore(binding.sourceElement, binding.wrapper);
+            }
+            binding.wrapper.parentNode.removeChild(binding.wrapper);
+          }
+          if (binding.container && binding.container.parentNode) {
+            binding.container.parentNode.removeChild(binding.container);
+          }
+          delete cke5MinimapBindings[unique_id];
+        }
+        function cke5_get_minimap_storage_key(unique_id) {
+          return "cke5:minimap:" + unique_id;
+        }
+        function cke5_load_minimap_state(unique_id) {
+          try {
+            const raw = window.localStorage.getItem(cke5_get_minimap_storage_key(unique_id));
+            if (!raw) {
+              return null;
+            }
+            const state = JSON.parse(raw);
+            if (!state || typeof state !== "object") {
+              return null;
+            }
+            return state;
+          } catch (error) {
+            return null;
+          }
+        }
+        function cke5_save_minimap_state(unique_id, state) {
+          try {
+            window.localStorage.setItem(cke5_get_minimap_storage_key(unique_id), JSON.stringify(state));
+          } catch (error) {
+          }
+        }
+        function cke5_enable_minimap_floating(unique_id, binding) {
+          if (!binding || !binding.wrapper || !binding.container) {
+            return;
+          }
+          const wrapper = binding.wrapper;
+          const container = binding.container;
+          wrapper.classList.add("is-floating-minimap");
+          container.classList.add("cke5-minimap-floating");
+
+          let handle = container.querySelector(".cke5-minimap-drag-handle");
+          if (!handle) {
+            handle = document.createElement("button");
+            handle.type = "button";
+            handle.className = "cke5-minimap-drag-handle";
+            handle.title = "Minimap verschieben";
+            handle.textContent = "Minimap";
+            container.insertBefore(handle, container.firstChild);
+          }
+
+          const getRect = () => wrapper.getBoundingClientRect();
+          const state = cke5_load_minimap_state(unique_id) || {};
+          const startWidth = Number.isFinite(state.width) ? state.width : 190;
+          const startHeight = Number.isFinite(state.height) ? state.height : 240;
+          container.style.width = Math.max(150, Math.min(360, startWidth)) + "px";
+          container.style.height = Math.max(160, Math.min(520, startHeight)) + "px";
+
+          const applyPosition = (left, top) => {
+            const rect = getRect();
+            const maxLeft = Math.max(0, rect.width - container.offsetWidth);
+            const maxTop = Math.max(0, rect.height - container.offsetHeight);
+            const clampedLeft = Math.max(0, Math.min(maxLeft, left));
+            const clampedTop = Math.max(0, Math.min(maxTop, top));
+            container.style.left = clampedLeft + "px";
+            container.style.top = clampedTop + "px";
+            cke5_save_minimap_state(unique_id, {
+              left: clampedLeft,
+              top: clampedTop,
+              width: container.offsetWidth,
+              height: container.offsetHeight
+            });
+          };
+
+          if (Number.isFinite(state.left) && Number.isFinite(state.top)) {
+            applyPosition(state.left, state.top);
+          } else {
+            const rect = getRect();
+            const defaultLeft = Math.max(0, rect.width - container.offsetWidth - 12);
+            applyPosition(defaultLeft, 12);
+          }
+
+          let dragStart = null;
+          const onMove = (event) => {
+            if (!dragStart) {
+              return;
+            }
+            event.preventDefault();
+            applyPosition(dragStart.left + (event.clientX - dragStart.x), dragStart.top + (event.clientY - dragStart.y));
+          };
+          const onUp = () => {
+            dragStart = null;
+            window.removeEventListener("pointermove", onMove);
+            window.removeEventListener("pointerup", onUp);
+          };
+
+          handle.onpointerdown = (event) => {
+            event.preventDefault();
+            dragStart = {
+              x: event.clientX,
+              y: event.clientY,
+              left: parseFloat(container.style.left) || 0,
+              top: parseFloat(container.style.top) || 0
+            };
+            window.addEventListener("pointermove", onMove);
+            window.addEventListener("pointerup", onUp);
+          };
+
+          container.onpointerup = () => {
+            cke5_save_minimap_state(unique_id, {
+              left: parseFloat(container.style.left) || 0,
+              top: parseFloat(container.style.top) || 0,
+              width: container.offsetWidth,
+              height: container.offsetHeight
+            });
+          };
+        }
+        function cke5_prepare_minimap_binding(sourceElement, unique_id, options, editorType) {
+          cke5_remove_minimap_binding(unique_id);
+          if (!options || typeof options !== "object") {
+            return null;
+          }
+          const minimapEnabled = options.redaxoMinimapEnabled === true || options.redaxoMinimapEnabled === 1 || options.redaxoMinimapEnabled === "1" || options.redaxoMinimapEnabled === "true";
+          if (!minimapEnabled) {
+            return null;
+          }
+          if (editorType === "balloon_block") {
+            return null;
+          }
+          if (typeof window.CKEDITOR !== "object" || window.CKEDITOR === null || typeof window.CKEDITOR.Minimap !== "function") {
+            return null;
+          }
+
+          const containerId = unique_id + "__minimap";
+          const wrapper = document.createElement("div");
+          wrapper.className = "cke5-minimap-wrapper";
+
+          sourceElement.parentNode.insertBefore(wrapper, sourceElement);
+          wrapper.appendChild(sourceElement);
+
+          const container = document.createElement("div");
+          container.id = containerId;
+          container.className = "cke5-minimap-container cke5-minimap-side";
+          wrapper.appendChild(container);
+
+          cke5MinimapBindings[unique_id] = { container, wrapper, sourceElement };
+          return container;
+        }
+        function cke5_create_balloon_host(sourceElement, unique_id) {
+          const hostId = unique_id + "__balloon_host";
+          let hostElement = document.getElementById(hostId);
+          if (!hostElement) {
+            hostElement = document.createElement("div");
+            hostElement.id = hostId;
+            hostElement.className = "cke5-balloon-editor-host";
+            sourceElement.parentNode.insertBefore(hostElement, sourceElement.nextSibling);
+          }
+          hostElement.innerHTML = cke5_get_source_element_data(sourceElement);
+          sourceElement.style.display = "none";
+          const formElement = sourceElement.closest("form");
+          const formHandler = function() {
+            const editor = ckeditors[unique_id];
+            cke5_sync_source_from_editor(editor, unique_id);
+          };
+          if (formElement) {
+            formElement.addEventListener("submit", formHandler);
+          }
+          cke5BalloonBindings[unique_id] = {
+            sourceElement,
+            hostElement,
+            formElement,
+            formHandler
+          };
+          return hostElement;
+        }
+        function cke5_create_editor_instance(editorConstructor, element, unique_id, options) {
+          const sourceElement = document.querySelector("#" + unique_id);
+          if (!sourceElement) {
+            return Promise.reject(new Error("cke5: source element not found for " + unique_id));
+          }
+          const editorType = cke5_normalize_editor_type(options && typeof options === "object" ? options.redaxoEditorType : "");
+          const minimapContainer = cke5_prepare_minimap_binding(sourceElement, unique_id, options, editorType);
+          if (minimapContainer) {
+            options = Object.assign({}, options);
+            options.minimap = Object.assign({}, options.minimap || {}, { container: minimapContainer });
+          }
+          if (editorType !== "balloon_block" || !cke5_is_balloon_constructor(editorConstructor)) {
+            cke5_remove_balloon_binding(unique_id);
+            return editorConstructor.create(sourceElement, options);
+          }
+
+          const hostElement = cke5_create_balloon_host(sourceElement, unique_id);
+          const initialData = cke5_get_source_element_data(sourceElement);
+          const createConfig = Object.assign({}, options, {
+            root: {
+              element: hostElement,
+              initialData
+            }
+          });
+          if (typeof createConfig.balloonToolbar === "undefined" && createConfig.toolbar && Array.isArray(createConfig.toolbar.items)) {
+            createConfig.balloonToolbar = createConfig.toolbar.items.slice();
+          }
+          if (typeof createConfig.blockToolbar === "undefined" && createConfig.toolbar && Array.isArray(createConfig.toolbar.items)) {
+            createConfig.blockToolbar = createConfig.toolbar.items.slice();
+          }
+
+          return editorConstructor.create(createConfig).catch(() => {
+            return editorConstructor.create(hostElement, options);
+          });
         }
         function cke5_get_modern_default_plugins() {
           if (typeof window.CKEDITOR !== "object" || window.CKEDITOR === null) {
@@ -683,7 +980,7 @@
           }
           const cke = window.CKEDITOR;
           const registry = typeof window.CKE5_NATIVE_PLUGINS === "object" && window.CKE5_NATIVE_PLUGINS !== null ? window.CKE5_NATIVE_PLUGINS : {};
-          const pluginNames = ["RedaxoLinkIntegration", "RedaxoMediaImage", "RedaxoMediaVideo", "RedaxoSnippets", "RedaxoPastePlainTextToggle"];
+          const pluginNames = ["RedaxoLinkIntegration", "RedaxoMediaImage", "RedaxWidgetVideo", "RedaxoSnippets", "RedaxoPastePlainTextToggle", "RedaxoMarkdownPasteToggle", "RedaxoMinimapToggle"];
           const plugins = [];
           pluginNames.forEach((pluginName) => {
             const factory = registry[pluginName];
@@ -720,6 +1017,9 @@
             if (item === "for_toc") {
               return null;
             }
+            if (item === "for_video_widget_test") {
+              return "for_video";
+            }
             return item;
           });
           if (options.toolbar.items.includes("insertImage") && !options.toolbar.items.includes("redaxoMedia")) {
@@ -728,6 +1028,34 @@
           }
           options.toolbar.items = cke5_normalize_toolbar_items(options.toolbar.items);
           return options;
+        }
+        function cke5_ensure_toolbar_item(options, itemName, referenceItem) {
+          if (!options || typeof options !== "object") {
+            return options;
+          }
+          if (!options.toolbar || typeof options.toolbar !== "object" || !Array.isArray(options.toolbar.items)) {
+            return options;
+          }
+          if (options.toolbar.items.includes(itemName)) {
+            return options;
+          }
+
+          if (typeof referenceItem === "string") {
+            const referenceIndex = options.toolbar.items.indexOf(referenceItem);
+            if (referenceIndex !== -1) {
+              options.toolbar.items.splice(referenceIndex + 1, 0, itemName);
+            } else {
+              options.toolbar.items.push(itemName);
+            }
+          } else {
+            options.toolbar.items.push(itemName);
+          }
+
+          options.toolbar.items = cke5_normalize_toolbar_items(options.toolbar.items);
+          return options;
+        }
+        function cke5_is_enabled_option(value) {
+          return value === true || value === 1 || value === "1" || value === "true";
         }
         function cke5_register_native_redaxo_plugins(options) {
           if (!options || typeof options !== "object") {
@@ -785,6 +1113,87 @@
           addPluginByName("ImageCustomResizeUI");
           return options;
         }
+        function cke5_apply_balloon_block_mode(options) {
+          if (!options || typeof options !== "object") {
+            return options;
+          }
+          if (!Array.isArray(options.plugins)) {
+            options.plugins = [];
+          }
+          if (typeof window.CKEDITOR === "object" && window.CKEDITOR !== null && typeof window.CKEDITOR.BlockToolbar === "function" && !options.plugins.includes(window.CKEDITOR.BlockToolbar)) {
+            options.plugins.push(window.CKEDITOR.BlockToolbar);
+          }
+
+          const toolbarItems = options.toolbar && typeof options.toolbar === "object" && Array.isArray(options.toolbar.items) ? cke5_normalize_toolbar_items(options.toolbar.items) : [];
+          const allowedBlockItems = [
+            "style",
+            "paragraph",
+            "heading",
+            "bulletedList",
+            "numberedList",
+            "todoList",
+            "outdent",
+            "indent",
+            "blockQuote",
+            "insertTable",
+            "mediaEmbed",
+            "for_video",
+            "codeBlock",
+            "link",
+            "horizontalLine",
+            "specialCharacters",
+            "removeFormat",
+            "undo",
+            "redo"
+          ];
+          const normalizeBlockItems = (items) => {
+            if (!Array.isArray(items)) {
+              return [];
+            }
+            return cke5_normalize_toolbar_items(items.filter((item) => item === "|" || allowedBlockItems.includes(item)));
+          };
+          const configuredBlockItems = normalizeBlockItems(
+            Array.isArray(options.blockToolbar)
+              ? options.blockToolbar
+              : options.blockToolbar && typeof options.blockToolbar === "object" && Array.isArray(options.blockToolbar.items)
+                ? options.blockToolbar.items
+                : []
+          );
+          const preferredBlockItems = [
+            "style",
+            "|",
+            "paragraph",
+            "heading",
+            "|",
+            "bulletedList",
+            "numberedList",
+            "todoList",
+            "|",
+            "outdent",
+            "indent",
+            "blockQuote",
+            "|",
+            "insertTable",
+            "mediaEmbed",
+            "for_video",
+            "codeBlock",
+            "|",
+            "link",
+            "undo",
+            "redo"
+          ];
+          const allowedItems = toolbarItems.filter((item) => item !== "|" && preferredBlockItems.includes(item));
+          const normalizedBlockItems = cke5_normalize_toolbar_items(allowedItems.length > 0 ? preferredBlockItems.filter((item) => item === "|" || allowedItems.includes(item)) : ["style", "|", "paragraph", "heading", "|", "bulletedList", "numberedList", "|", "blockQuote", "insertTable"]);
+
+          // Explicit profile config wins, but is sanitized to a safe/sensible subset.
+          options.blockToolbar = configuredBlockItems.length > 0 ? configuredBlockItems : normalizedBlockItems;
+
+          if (!Array.isArray(options.balloonToolbar) && toolbarItems.length > 0) {
+            options.balloonToolbar = toolbarItems;
+          }
+
+          return options;
+        }
         function cke5_apply_modern_constructor_fallback(options, editorConstructor) {
           if (!editorConstructor || typeof editorConstructor !== "function") {
             return options;
@@ -792,7 +1201,8 @@
           if (typeof window.CKEDITOR !== "object" || window.CKEDITOR === null) {
             return options;
           }
-          if (editorConstructor !== window.CKEDITOR.ClassicEditor) {
+          const supportedConstructors = [window.CKEDITOR.ClassicEditor, window.CKEDITOR.BalloonEditor, window.CKEDITOR.BalloonBlockEditor].filter((item) => typeof item === "function");
+          if (!supportedConstructors.includes(editorConstructor)) {
             return options;
           }
           const plugins = cke5_get_modern_default_plugins();
@@ -806,9 +1216,28 @@
               }
             });
           }
+
+          if (cke5_is_enabled_option(options.redaxoMarkdownPasteEnabled) && typeof window.CKEDITOR.PasteFromMarkdownExperimental === "function" && !options.plugins.includes(window.CKEDITOR.PasteFromMarkdownExperimental)) {
+            options.plugins.push(window.CKEDITOR.PasteFromMarkdownExperimental);
+            options = cke5_ensure_toolbar_item(options, "redaxoMarkdownPasteToggle", "pastePlainText");
+          }
+
+          if (cke5_is_enabled_option(options.redaxoMinimapEnabled) && typeof window.CKEDITOR.Minimap === "function" && !options.plugins.includes(window.CKEDITOR.Minimap)) {
+            options.plugins.push(window.CKEDITOR.Minimap);
+            options = cke5_ensure_toolbar_item(options, "redaxoMinimapToggle", "redaxoMarkdownPasteToggle");
+          }
+
+          if (options.title !== null && typeof options.title === "object" && typeof window.CKEDITOR.Title === "function" && !options.plugins.includes(window.CKEDITOR.Title)) {
+            options.plugins.push(window.CKEDITOR.Title);
+          }
+
           options = cke5_register_native_redaxo_plugins(options);
           options = cke5_apply_resize_handle_mode(options);
           options = cke5_apply_native_redaxo_toolbar(options);
+          const editorType = cke5_normalize_editor_type(options.redaxoEditorType);
+          if (editorType === "balloon_block" || editorType === "classic_balloon") {
+            options = cke5_apply_balloon_block_mode(options);
+          }
           return options;
         }
         function cke5_get_external_registry() {
@@ -974,7 +1403,19 @@
         function cke5_destroy(elements) {
           elements.each(function() {
             let element = $(this), next = element.next();
-            delete ckeditors[element.attr("id")];
+            let unique_id = element.attr("id");
+            let editor = ckeditors[unique_id];
+            if (editor && typeof editor.destroy === "function") {
+              cke5_sync_source_from_editor(editor, unique_id);
+              try {
+                editor.destroy();
+              } catch (error) {
+                console.warn("cke5: editor destroy failed", error);
+              }
+            }
+            delete ckeditors[unique_id];
+            cke5_remove_balloon_binding(unique_id);
+            cke5_remove_minimap_binding(unique_id);
             element.attr("data-cke5-init-state", "none");
             while (next.length && (next.hasClass("ck-editor") || next.hasClass("ck"))) {
               let current = next;
@@ -982,6 +1423,73 @@
               current.remove();
             }
           });
+        }
+        function cke5_init_upload_adapter(editor, options) {
+          if (!editor || !editor.plugins || typeof editor.plugins.get !== "function") {
+            return;
+          }
+
+          const uploadUrl = options && options.ckfinder && typeof options.ckfinder.uploadUrl === "string" ? options.ckfinder.uploadUrl : "";
+          if (uploadUrl.trim() === "") {
+            return;
+          }
+
+          let fileRepository = null;
+          try {
+            fileRepository = editor.plugins.get("FileRepository");
+          } catch (error) {
+            fileRepository = null;
+          }
+
+          if (!fileRepository || typeof fileRepository !== "object") {
+            return;
+          }
+
+          if (typeof fileRepository.createUploadAdapter === "function") {
+            return;
+          }
+
+          fileRepository.createUploadAdapter = (loader) => {
+            let xhr = null;
+
+            return {
+              upload: () => loader.file.then((file) => new Promise((resolve, reject) => {
+                xhr = new XMLHttpRequest();
+              xhr.open("POST", uploadUrl, true);
+              xhr.responseType = "json";
+
+              xhr.addEventListener("error", () => reject("Upload failed"));
+              xhr.addEventListener("abort", () => reject("Upload aborted"));
+              xhr.addEventListener("load", () => {
+                const response = xhr.response;
+                if (!response || response.error || !response.url) {
+                  reject(response && response.error && response.error.message ? response.error.message : "Upload failed");
+                  return;
+                }
+
+                resolve({ default: response.url });
+              });
+
+              if (xhr.upload) {
+                xhr.upload.addEventListener("progress", (event) => {
+                  if (event.lengthComputable) {
+                    loader.uploadTotal = event.total;
+                    loader.uploaded = event.loaded;
+                  }
+                });
+              }
+
+              const data = new FormData();
+              data.append("upload", file);
+              xhr.send(data);
+              })),
+              abort: () => {
+                if (xhr) {
+                  xhr.abort();
+                }
+              }
+            };
+          };
         }
         function cke5_pastinit(editor, sub_options) {
           editor.editing.view.change((writer) => {

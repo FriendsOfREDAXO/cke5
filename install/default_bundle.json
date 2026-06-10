@@ -3,7 +3,7 @@
     {
       "name": "demo_default",
       "description": "Demo Default Profile",
-      "toolbar": "heading,|,bold,italic,underline,strikethrough,blockQuote,|,subscript,superscript,|,bulletedList,numberedList,|,insertTable,|,outdent,indent,alignment,|,link,redaxoMedia,|,redo,undo,|,findAndReplace,removeFormat,selectAll,|,specialCharacters,pastePlainText",
+      "toolbar": "heading,|,bold,italic,underline,strikethrough,blockQuote,|,subscript,superscript,|,bulletedList,numberedList,|,insertTable,|,outdent,indent,alignment,|,link,redaxoMedia,|,style,redo,undo,|,findAndReplace,removeFormat,selectAll,|,specialCharacters,pastePlainText",
       "code_block": "css,html,javascript,php,plaintext,c,cs,cpp,diff,java,python,ruby,typescript,xml",
       "table_color_default": "|default_table_color|",
       "table_color_data": [
@@ -169,6 +169,11 @@
       "mediatypes": "",
       "mediapath": "media",
       "mediacategory": 0,
+      "styles_ref": [
+        "for-section-highlight",
+        "for-demo-split",
+        "for-toc"
+      ],
       "upload_default": "|default_upload|"
     },
     {
@@ -249,6 +254,25 @@
     }
   ],
   "style_groups": [],
-  "styles": [],
+  "styles": [
+    {
+      "name": "for-section-highlight",
+      "element": "section",
+      "classes": "for-section-highlight panel panel-info",
+      "css_definition": ""
+    },
+    {
+      "name": "for-demo-split",
+      "element": "section",
+      "classes": "for-demo-split",
+      "css_definition": ""
+    },
+    {
+      "name": "for-toc",
+      "element": "nav",
+      "classes": "for-toc",
+      "css_definition": ""
+    }
+  ],
   "snippets": []
 }

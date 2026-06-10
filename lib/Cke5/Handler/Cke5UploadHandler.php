@@ -51,7 +51,11 @@ class Cke5UploadHandler
 
             /** @var string $mediaType */
             $mediaType = rex_request::get('media_type', 'string', '');
-            $mediaSrcPath = '/' . rex_request::get('media_path', 'string', self::MEDIA_PATH) . '/';
+            $mediaPathRequest = trim(rex_request::get('media_path', 'string', ''), '/');
+            if ($mediaPathRequest === '') {
+                $mediaPathRequest = trim(self::MEDIA_PATH, '/');
+            }
+            $mediaSrcPath = '/' . $mediaPathRequest . '/';
 
             if ($mediaType !== '') {
                 $mediaSrcPath = sprintf(self::MEDIA_TYPE_PATH, $mediaType);
