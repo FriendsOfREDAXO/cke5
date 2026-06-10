@@ -71,7 +71,6 @@ $importKeys = [
     "font_families",
     "font_family_default",
     "mediaembed",
-    "media_embed_width_styles_definition",
     "mentions",
     "mentions_definition",
     "sprog_mention",
@@ -166,6 +165,10 @@ if ($func === 'cke5import') {
                     }
 
                     if (!$fail && is_array($profile)) {
+                        if (!array_key_exists('media_embed_width_styles_definition', $profile)) {
+                            $profile['media_embed_width_styles_definition'] = '';
+                        }
+
                         /** @var array<string,string> $profile */
                         $result = Cke5DatabaseHandler::importProfile($profile);
                         $importResult[] = rex_view::info(sprintf($this->i18n('profiles_import_' . (($result === true) ? 'success' : 'fail')), $profile['name'], $profile['id']));
@@ -182,6 +185,10 @@ if ($func === 'cke5import') {
                         }
                     }
                     if (!$fail && is_array($profile)) {
+                        if (!array_key_exists('media_embed_width_styles_definition', $profile)) {
+                            $profile['media_embed_width_styles_definition'] = '';
+                        }
+
                         /** @var array<string,string> $profile */
                         $result = Cke5DatabaseHandler::importProfile($profile);
                         $importResult[] = rex_view::info(sprintf($this->i18n('profiles_import_' . (($result === true) ? 'success' : 'fail')), $profile['name'], $profile['id']));

@@ -27,7 +27,12 @@ $collectIds = static function (array $profile, string $fieldName): array {
         return $id !== '';
     });
 
-    return array_values(array_unique(array_map('intval', $ids)));
+    $ids = array_map('intval', $ids);
+    $ids = array_filter($ids, static function (int $id): bool {
+        return $id > 0;
+    });
+
+    return array_values(array_unique($ids));
 };
 
 /**
@@ -92,7 +97,10 @@ if (rex_request::post('_csrf_token', 'string', '') !== '') {
         ];
 
         // create filename and export the data set
-        $names = (strlen(implode('_', $exportNames)) > 100) ? substr(implode('_', $exportNames), 0, 100) . '_etc_' : implode('_', $exportNames);
+        $names = implode('_', $exportNames);
+        if (strlen($names) > 100) {
+            $names = substr($names, 0, 100) . '_etc_';
+        }
         $fileName = 'cke5_export_' . $names . '_' . date('YmdHis') . '.json';
         header('Content-Disposition: attachment; filename="' . $fileName . '"; charset=utf-8'); // create header info
         rex_response::sendContent((string) json_encode($exportData, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT), 'application/octetstream'); // stream it out

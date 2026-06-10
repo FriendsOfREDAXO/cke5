@@ -41,7 +41,10 @@ if (rex::isBackend() && is_object(rex::getUser())) {
         }
 
         if (!$hasGlobalWidgetJs) {
-            rex_view::addJsFile($this->getAssetsUrl('js/cke5customise_global.js'));
+            $globalWidgetJs = $this->getAssetsPath('js/cke5customise_global.js');
+            if (is_file($globalWidgetJs)) {
+                rex_view::addJsFile($this->getAssetsUrl('js/cke5customise_global.js'));
+            }
         }
     }
 
@@ -51,7 +54,7 @@ if (rex::isBackend() && is_object(rex::getUser())) {
         $user = rex::requireUser();
 
         // get user settings for theme
-        $themeType = $user->getValue('theme');
+        $themeType = (string) $user->getValue('theme');
         $theme = $themeType !== '' ? $themeType : 'auto';
 
         if (rex::getProperty('theme') === 'light') {
