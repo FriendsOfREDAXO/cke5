@@ -16,7 +16,7 @@ cke5_editor_preview_info = Inlägg i redigeringsförhandsgranskningen sparas int
 cke5_editor_preview_shop_profile_settings = Show profile-settings
 
 # heading
-cke5_subnavigation_header_title = CKEditor 5 till Redaxo 5
+cke5_subnavigation_header_title = CKEditor 5 för REDAXO CMS
 cke5_subnavigation_header_photo = Foto från %s på %s
 
 # profiles list & form

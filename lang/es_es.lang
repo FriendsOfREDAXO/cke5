@@ -16,7 +16,7 @@ cke5_editor_preview_info = Las entradas en la vista previa del editor no se guar
 cke5_editor_preview_shop_profile_settings = Show profile-settings
 
 # heading
-cke5_subnavigation_header_title = CKEditor 5 para Redaxo 5
+cke5_subnavigation_header_title = CKEditor 5 para REDAXO CMS
 cke5_subnavigation_header_photo = Foto de %s en %s
 
 # profiles list & form

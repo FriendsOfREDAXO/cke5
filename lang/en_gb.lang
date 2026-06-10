@@ -17,7 +17,7 @@ cke5_editor_preview_info = Entries in the editor preview will not be saved, the 
 cke5_editor_preview_shop_profile_settings = Show profile-settings
 
 # heading
-cke5_subnavigation_header_title = CKEditor 5 for Redaxo 5
+cke5_subnavigation_header_title = CKEditor 5 for REDAXO CMS
 cke5_subnavigation_header_credit = Created by Friends of REDAXO
 cke5_subnavigation_header_photo = Photo by %s on %s
 

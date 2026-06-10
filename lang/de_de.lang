@@ -17,7 +17,7 @@ cke5_editor_preview_info = Eingaben in der Editor-Preview werden nicht gespeiche
 cke5_editor_preview_shop_profile_settings = Profilesettings einblenden
 
 # heading
-cke5_subnavigation_header_title = CKEditor 5 für Redaxo 5
+cke5_subnavigation_header_title = CKEditor 5 für REDAXO CMS
 cke5_subnavigation_header_credit = Created by Friends of REDAXO
 cke5_subnavigation_header_photo = Foto von %s auf %s
 
