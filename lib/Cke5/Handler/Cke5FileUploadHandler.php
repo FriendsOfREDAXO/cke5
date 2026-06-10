@@ -71,7 +71,7 @@ class Cke5FileUploadHandler
 
                     if ($isValidType) {
                         // Beide Pfade - Addon-Quellordner und Frontend-Assets-Ordner
-                        $assetsDir = rex_path::addonAssets('cke5', 'vendor/ckeditor5-classic/');
+                        $assetsDir = rex_path::addonAssets('cke5', 'vendor/ckeditor5-modern/');
 
                         // Stelle sicher dass das Verzeichnis existiert
                         if (!is_dir($assetsDir)) {
@@ -102,7 +102,7 @@ class Cke5FileUploadHandler
                             // Normale JS-Datei-Verarbeitung
                             if (move_uploaded_file($file['tmp_name'], $assetsFilePath)) {
                                 // Speichere Dateiname in Addon-Konfiguration
-                                $addon->setConfig('license_cke5_js_path', 'assets/addons/cke5/vendor/ckeditor5-classic/' . $file['name']);
+                                $addon->setConfig('license_cke5_js_path', 'assets/addons/cke5/vendor/ckeditor5-modern/' . $file['name']);
                                 $addon->setConfig('editor_file', $file['name']);
 
                                 $success = true;
@@ -122,7 +122,7 @@ class Cke5FileUploadHandler
                 $files = rex_request::files('file');
 
                 if (!empty($files)) {
-                    $assetsDir = rex_path::addonAssets('cke5', 'vendor/ckeditor5-classic/');
+                    $assetsDir = rex_path::addonAssets('cke5', 'vendor/ckeditor5-modern/');
 
                     // Stelle sicher dass das Verzeichnis existiert
                     if (!is_dir($assetsDir)) {
@@ -188,7 +188,7 @@ class Cke5FileUploadHandler
 
                             if (!$isMap && $fileName === $mainJsFile) {
                                 // Hauptdatei für den Editor
-                                $addon->setConfig('license_cke5_js_path', 'assets/addons/cke5/vendor/ckeditor5-classic/' . $fileName);
+                                $addon->setConfig('license_cke5_js_path', 'assets/addons/cke5/vendor/ckeditor5-modern/' . $fileName);
                                 $addon->setConfig('editor_file', $fileName);
                             } else {
                                 // Zusätzliche Dateien oder Map-Dateien
@@ -213,7 +213,7 @@ class Cke5FileUploadHandler
             $files = rex_request::files('files');
 
             if (!empty($files)) {
-                $assetsDir = rex_path::addonAssets('cke5', 'vendor/ckeditor5-classic/translations/');
+                $assetsDir = rex_path::addonAssets('cke5', 'vendor/ckeditor5-modern/translations/');
 
                 // Create directory if it doesn't exist
                 if (!is_dir($assetsDir)) {
@@ -250,7 +250,7 @@ class Cke5FileUploadHandler
 
                 if ($success) {
                     // Pfad in Addon-Konfiguration speichern
-                    $addon->setConfig('license_translations_path', 'assets/addons/cke5/vendor/ckeditor5-classic/translations/');
+                    $addon->setConfig('license_translations_path', 'assets/addons/cke5/vendor/ckeditor5-modern/translations/');
 
                     // Speichere hochgeladene Dateien in Addon-Konfiguration
                     $existingFiles = $addon->getConfig('translation_files', []);
@@ -328,16 +328,16 @@ class Cke5FileUploadHandler
 
         if ($type === 'editor') {
             // Assets-Pfad für die hochgeladene Datei
-            $assetsFilePath = rex_path::addonAssets('cke5', 'vendor/ckeditor5-classic/' . $filename);
+            $assetsFilePath = rex_path::addonAssets('cke5', 'vendor/ckeditor5-modern/' . $filename);
             // Original-Pfad im Addon
-            $originalFilePath = $addon->getPath('assets/vendor/ckeditor5-classic/' . $filename);
+            $originalFilePath = $addon->getPath('assets/vendor/ckeditor5-modern/' . $filename);
 
             if (!file_exists($originalFilePath) && $filename !== 'ckeditor.js') {
                 // Für zusätzliche Dateien, die nicht im Original sind
-                $originalFilePath = $addon->getPath('assets/vendor/ckeditor5-classic/ckeditor.js');
+                $originalFilePath = $addon->getPath('assets/vendor/ckeditor5-modern/ckeditor.js');
                 if (pathinfo($filename, PATHINFO_EXTENSION) === 'map') {
                     // Für .map Dateien verwenden wir die Originalmap, wenn vorhanden
-                    $originalMapPath = $addon->getPath('assets/vendor/ckeditor5-classic/ckeditor.js.map');
+                    $originalMapPath = $addon->getPath('assets/vendor/ckeditor5-modern/ckeditor.js.map');
                     if (file_exists($originalMapPath)) {
                         $originalFilePath = $originalMapPath;
                     }
@@ -394,7 +394,7 @@ class Cke5FileUploadHandler
             }
         } elseif ($type === 'all_editor') {
             // Lösche alle Editor-Dateien
-            $assetsDir = rex_path::addonAssets('cke5', 'vendor/ckeditor5-classic/');
+            $assetsDir = rex_path::addonAssets('cke5', 'vendor/ckeditor5-modern/');
             $success = true;
 
             // Lösche die Hauptdatei
@@ -419,7 +419,7 @@ class Cke5FileUploadHandler
 
             if ($success) {
                 // Kopiere die Original-Dateien zurück
-                $originalDir = $addon->getPath('assets/vendor/ckeditor5-classic/');
+                $originalDir = $addon->getPath('assets/vendor/ckeditor5-modern/');
 
                 // Kopiere die Hauptdatei zurück
                 $originalMainFilePath = $originalDir . 'ckeditor.js';
@@ -447,9 +447,9 @@ class Cke5FileUploadHandler
             }
         } elseif ($type === 'translations') {
             // Assets-Pfad für die hochgeladene Übersetzungsdatei
-            $assetsFilePath = rex_path::addonAssets('cke5', 'vendor/ckeditor5-classic/translations/' . $filename);
+            $assetsFilePath = rex_path::addonAssets('cke5', 'vendor/ckeditor5-modern/translations/' . $filename);
             // Original-Pfad im Addon
-            $originalFilePath = $addon->getPath('assets/vendor/ckeditor5-classic/translations/' . $filename);
+            $originalFilePath = $addon->getPath('assets/vendor/ckeditor5-modern/translations/' . $filename);
 
             if (file_exists($assetsFilePath)) {
                 if (unlink($assetsFilePath)) {
@@ -489,7 +489,7 @@ class Cke5FileUploadHandler
             }
         } elseif ($type === 'all_translations') {
             // Lösche alle Übersetzungsdateien
-            $translationsDir = rex_path::addonAssets('cke5', 'vendor/ckeditor5-classic/translations/');
+            $translationsDir = rex_path::addonAssets('cke5', 'vendor/ckeditor5-modern/translations/');
             $success = true;
 
             if (is_dir($translationsDir)) {
@@ -508,7 +508,7 @@ class Cke5FileUploadHandler
 
                 if ($success) {
                     // Kopiere alle Original-Dateien zurück
-                    $originalDir = $addon->getPath('assets/vendor/ckeditor5-classic/translations/');
+                    $originalDir = $addon->getPath('assets/vendor/ckeditor5-modern/translations/');
                     if (is_dir($originalDir)) {
                         $originalFiles = glob($originalDir . '*.js');
                         if ($originalFiles) {
@@ -612,10 +612,10 @@ class Cke5FileUploadHandler
         $exists = false;
 
         if ($type === 'editor') {
-            $filePath = rex_path::addonAssets('cke5', 'vendor/ckeditor5-classic/' . $filename);
+            $filePath = rex_path::addonAssets('cke5', 'vendor/ckeditor5-modern/' . $filename);
             $exists = file_exists($filePath);
         } elseif ($type === 'translations') {
-            $filePath = rex_path::addonAssets('cke5', 'vendor/ckeditor5-classic/translations/' . $filename);
+            $filePath = rex_path::addonAssets('cke5', 'vendor/ckeditor5-modern/translations/' . $filename);
             $exists = file_exists($filePath);
         }
 
@@ -651,7 +651,7 @@ class Cke5FileUploadHandler
         $existingFiles = [];
 
         if ($type === 'translations') {
-            $baseDir = rex_path::addonAssets('cke5', 'vendor/ckeditor5-classic/translations/');
+            $baseDir = rex_path::addonAssets('cke5', 'vendor/ckeditor5-modern/translations/');
 
             foreach ($filenames as $filename) {
                 if (file_exists($baseDir . $filename)) {

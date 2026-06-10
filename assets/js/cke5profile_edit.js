@@ -22,6 +22,10 @@ $(document).on('rex:ready', function (event, container) {
 });
 
 function cke5_init_edit(element) {
+  if (element.data('cke5-profile-edit-initialized') === true) {
+    return;
+  }
+  element.data('cke5-profile-edit-initialized', true);
 
   let taginputs = element.find('input[data-tag-init=1]'),
     expert = element.find('#cke5-expert-toggle-expert-definition'),
@@ -52,6 +56,10 @@ function cke5_init_edit(element) {
     fontfamily_area = element.find('#cke5fontfamily-area'),
     fontfamily_default = element.find('#cke5font-family-default-input-default-font-family'),
     link_decorators = element.find('#cke5link-decorators-definition-input-link-decorators-definition'),
+    media_embed_styles_area = element.find('#cke5-media-embed-styles-definition'),
+    media_embed_width_styles_area = element.find('#cke5-media-embed-width-styles-definition'),
+    video_styles_area = element.find('#cke5-video-styles-definition'),
+    video_width_styles_area = element.find('#cke5-video-width-styles-definition'),
     imgresizeoptions_input = element.find('#cke5image-resize-option-input-default-resize-options'),
     imgresizeoptions_area = element.find('#cke5resizeoptions-area');
 
@@ -76,6 +84,10 @@ function cke5_init_edit(element) {
   cke5_addFontFamiliesFields(fontfamily_area);
   cke5_addIdNameFields(sprog_mention_area);
   cke5_addyTableFields(ytable_area);
+  cke5_addLabelClassFields(media_embed_styles_area);
+  cke5_addLabelClassFields(media_embed_width_styles_area);
+  cke5_addLabelClassFields(video_styles_area);
+  cke5_addLabelClassFields(video_width_styles_area);
   cke5_addResizeOptionsFields(imgresizeoptions_area);
   cke5_bootstrapToggle_collapse(tablecolor_default);
   cke5_bootstrapToggle_collapse(fontcolor_default);
@@ -123,6 +135,10 @@ function cke5_init_edit(element) {
 
   if (taginputs.length) {
     taginputs.each(function () {
+      if ($(this).data('cke5-tag-init-done') === true) {
+        return;
+      }
+      $(this).data('cke5-tag-init-done', true);
       // if ($(this).attr('data-default-tags') === '1') {
       //     $(this).attr('value', $(this).attr('data-defaults'))
       // }
@@ -259,6 +275,10 @@ function cke5_init_edit(element) {
 
 function cke5_addFromToFields(element) {
   if (element.length) {
+    if (element.data('cke5-multiinput-initialized') === true) {
+      return;
+    }
+    element.data('cke5-multiinput-initialized', true);
     let from_placeholder = element.data('from-placeholder'),
       to_name_placeholder = element.data('to-placeholder');
     element.multiInput({
@@ -284,6 +304,10 @@ function cke5_addFromToFields(element) {
 
 function cke5_addIdNameFields(element) {
   if (element.length) {
+    if (element.data('cke5-multiinput-initialized') === true) {
+      return;
+    }
+    element.data('cke5-multiinput-initialized', true);
     let sprog_key_placeholder = element.data('sprog-key-placeholder'),
       sprog_description_placeholder = element.data('sprog-description-placeholder');
     element.multiInput({
@@ -309,6 +333,10 @@ function cke5_addIdNameFields(element) {
 
 function cke5_addColorFields(element) {
   if (element.length) {
+    if (element.data('cke5-multiinput-initialized') === true) {
+      return;
+    }
+    element.data('cke5-multiinput-initialized', true);
     let color_placeholder = element.data('color-placeholder'),
       color_name_placeholder = element.data('color-name-placeholder'),
       has_border_label = element.data('has-border-label');
@@ -362,6 +390,10 @@ function cke5_addColorFields(element) {
 
 function cke5_addyTableFields(element) {
   if (element.length) {
+    if (element.data('cke5-multiinput-initialized') === true) {
+      return;
+    }
+    element.data('cke5-multiinput-initialized', true);
     let title_placeholder = element.data('ytable-title-placeholder'),
       table_placeholder = element.data('ytable-table-placeholder'),
       column_placeholder = element.data('ytable-column-placeholder');
@@ -391,6 +423,10 @@ function cke5_addyTableFields(element) {
 
 function cke5_addResizeOptionsFields(element) {
   if (element.length) {
+    if (element.data('cke5-multiinput-initialized') === true) {
+      return;
+    }
+    element.data('cke5-multiinput-initialized', true);
     let name_placeholder = element.data('name-placeholder'),
       icon_placeholder = element.data('icon-placeholder'),
       value_placeholder = element.data('value-placeholder');
@@ -424,8 +460,41 @@ function cke5_addResizeOptionsFields(element) {
   }
 }
 
+function cke5_addLabelClassFields(element) {
+  if (element.length) {
+    if (element.data('cke5-multiinput-initialized') === true) {
+      return;
+    }
+    element.data('cke5-multiinput-initialized', true);
+    let label_placeholder = element.data('label-placeholder'),
+      class_placeholder = element.data('class-placeholder');
+    element.multiInput({
+      json: true,
+      input: $('<div class="row inputElement">\n' +
+        '<div class="form-group col-xs-6">\n' +
+        '<input class="form-control" name="label" placeholder="' + label_placeholder + '" type="text">\n' +
+        '</div>\n' +
+        '<div class="form-group col-xs-6">\n' +
+        '<input class="form-control" name="class" placeholder="' + class_placeholder + '" type="text">\n' +
+        '</div>\n' +
+        '</div>\n'),
+      limit: 20,
+      onElementAdd: function (el, plugin) {
+        if (CKEDIT_DEBUG) console.log(plugin.elementCount);
+      },
+      onElementRemove: function (el, plugin) {
+        if (CKEDIT_DEBUG) console.log(plugin.elementCount);
+      }
+    });
+  }
+}
+
 function cke5_addFontFamiliesFields(element) {
   if (element.length) {
+    if (element.data('cke5-multiinput-initialized') === true) {
+      return;
+    }
+    element.data('cke5-multiinput-initialized', true);
     let color_placeholder = element.data('family-placeholder');
     element.multiInput({
       json: true,
@@ -456,8 +525,12 @@ function cke5_toolbar_create_tag(typename, tags) {
             toggle_collapse('numberedList', 'show');
           }
           break;
-        case 'insertTemplate':
-          toggle_collapse('insertTemplate', 'show');
+        case 'snippets':
+          toggle_collapse('snippets', 'show');
+        break;
+        case 'for_video':
+          toggle_collapse('mediaEmbed', 'show');
+          toggle_collapse('for_video', 'show');
         break;
         default:
           toggle_collapse(type, 'show');
@@ -512,9 +585,10 @@ function cke5_toolbar_destroy_tag(typename, tags) {
             break;
           case 'htmlEmbed':
           case 'mediaEmbed':
+          case 'for_video':
             embedhide++;
             if (CKEDIT_DEBUG) console.log(embedhide + ' - ' + type);
-            toggle_collapse(type, 'hide', (embedhide === 2));
+            toggle_collapse(type, 'hide', (embedhide === 3));
             break;
           case 'fontSize':
           case 'fontFamily':
@@ -524,7 +598,11 @@ function cke5_toolbar_destroy_tag(typename, tags) {
             toggle_collapse(type, 'hide', (fonthide === 4));
             break;
           default:
-            toggle_collapse(type, 'hide');
+            if (type === 'snippets') {
+              toggle_collapse('snippets', 'hide');
+            } else {
+              toggle_collapse(type, 'hide');
+            }
         }
       }
     }

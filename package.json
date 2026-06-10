@@ -1,0 +1,16 @@
+{
+  "name": "redaxo-cke5-addon",
+  "private": true,
+  "dependencies": {
+    "ckeditor5": "^48.2.0"
+  },
+  "devDependencies": {
+    "fast-glob": "^3.3.3"
+  },
+  "scripts": {
+    "check:runtime": "node ./scripts/check-runtime.js",
+    "vendor:update": "node ./scripts/vendor-update.js",
+    "demo:variant": "node ./scripts/add-demo-variant.js",
+    "content-styles:update": "node ./scripts/update-content-styles.js"
+  }
+}

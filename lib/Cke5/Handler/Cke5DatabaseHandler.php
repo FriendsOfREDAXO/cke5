@@ -18,8 +18,9 @@ class Cke5DatabaseHandler
 {
     const CKE5_PROFILES = 'cke5_profiles';
     const CKE5_STYLES = 'cke5_styles';
-    const CKE5_TEMPLATES = 'cke5_templates';
     const CKE5_STYLE_GROUPS = 'cke5_style_groups';
+    const CKE5_SNIPPETS = 'cke5_snippets';
+    const CKE5_TEMPLATES = 'cke5_templates';
     const CKE5_TEMPLATE_GROUPS = 'cke5_template_groups';
 
     public static function profileExist(string $name): bool

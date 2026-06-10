@@ -1,595 +1,479 @@
-# CKEditor5 für REDAXO CMS
+# CKEditor 5 für REDAXO
 
->🚨 CKE5-Add-on: Nach fast 8 Jahren ist es vorbei. Das Add-on wird von @joachim.doerr und @skerbis nicht mehr weiterentwickelt und ist nun auf GitHub archiviert. Vielen Dank, @joachim.doerr, für deine jahrelange Entwicklungsarbeit und Unterstützung. – Mach weiter so!
+CKEditor-5-Integration für REDAXO mit profilbasierter Konfiguration, REDAXO-Medien- und Link-Dialogen, Snippets, Style-Management und Import/Export-Workflows.
 
-Hier kommt der [CKEditor5](https://ckeditor.com) für REDAXO CMS.
+## Version
 
-![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/cke5.png)
+Aktuelle Entwicklungsversion: `7.0.0-dev`
 
-## Features nach Funktionsgruppen
+## Voraussetzungen
 
-### Basis-Features
-- Ein leistungsstarker WYSIWYG-Editor mit moderner Oberfläche
-- Dark-Mode-Support für REDAXO >= 5.13
-- Platzhalter für alle Backend-Sprachen
-- Nur unterstützte Formate werden eingefügt
+- REDAXO: `>= 5.19`
+- PHP: `>= 8.1, < 9`
+- Konflikte:
+  - `mblock < 4.3.0`
+  - `mform < 7.0.0`
 
-### Konfiguration und Anpassung
-- Profilkonfigurator mit Drag&Drop für einfaches Zusammenklicken von Profilen
-- Expertenmodus: Entwickle Profile frei im Quellcode
-- Zusätzliche Optionen zur individuellen Anpassung des Editors
-- Konfigurationsseite für Lizenzschlüssel zum Entfernen des "Powered by CKEditor" Banner
-- API für programmatische Profilgenerierung
+## Neu in 7.0.0-dev
 
-### Style-Management
-- Style-Manager zur einfachen Verwaltung von CSS-Stilen
-- Style-Gruppen für schnelles Erfassen von Stilen als JSON-Array
-- CSS-Definitionen aus jedem Stil werden im Backend automatisch hinzugefügt
-- Eigene Schriften können integriert und verwaltet werden
-- Verbessertes Tag-Handling im Profil- und Style-Editor
+- Umstellung auf den offiziellen CKEditor-5-Build als Basis
+- Neue native Runtime-Plugins und überarbeitete Dialoge
+- Templates durch Snippets ersetzt
+- Erweiterter Profil-Export/Import inklusive abhängiger Daten:
+  - profiles
+  - style_groups
+  - styles
+  - snippets
+- Neue Entwicklerdokumentation in `dev.md`
+- Bereinigung von Legacy- und verwaisten Vendor-/Runtime-Dateien
+- Neue globale Defaults-Seite (`Profiles > Defaults > Global settings`) für Mentions, Sprog-Ersetzungen, yTables, Medien-Defaults und Schriftfamilien-Defaults
+- Neuer Editor-Typ `classic_balloon` sowie konfigurierbare Balloon-Toolbar im Profilmanager
+- Verbesserte Merge-/Fallback-Logik zwischen Profilwerten und globalen Defaults
+- UX-Fixes im Profil-/Defaults-Widget-Handling (Mention-Beispiele, stabile Placeholder, robuste Toggle-/Collapse-Initialisierung)
 
-### Medienintegration
-- Bild-Upload in den Medienpool per Drag & Drop direkt ins Textfeld
-- Bild-Upload-Kategorie pro Profil einstellbar
-- Medienmanager-Typ je Profil einstellbar
-- Drag & Drop Upload für CKEditor Vendor-Dateien (konfigurierbar in config.php)
+## Funktionsüberblick
 
-### Link-Features
-- Umfassendes REDAXO Link-Widget
-- Linkmap-Support
-- YForm-Datasets Integration
-- Tel: und Mailto: Links
-- Medienlinks
-- Eigene Link-Decorators für benutzerdefinierte Attribute und Klassen
+### Editor und Bedienung
 
-### Erweiterungen und Plugins
-- Alle kostenlosen Anbieter-Plugins sind integriert
-- Sprog-Ersetzungen via Mentions-Plugin
-- AccessibilityHelper für verbesserte Barrierefreiheit
-- Einfügen von Klartext
-- Transformationen: z.B. Umwandlung von (c) in ©
-- Auswahl für Sonderzeichen
-- Neue Toolbar-Elemente: Emoji, Bookmarks, ShowBlocks
+- Moderne CKEditor-5-Integration im REDAXO-Backend
+- Theme-Unterstützung (`dark`, `auto`, `notheme`)
+- Sprachabhängige Platzhalter sowie UI-/Content-Sprachsteuerung
+- Höhensteuerung per Datenattributen (`data-min-height`, `data-max-height`)
+- Stabile Initialisierung für dynamische/repetierende Felder (z. B. MBlock)
 
-### Import und Export
-- Profil-Export und -Import für einfache Migration
-- Datensicherung vor Updates
-- Konsistente Style-Übertragung zwischen Installationen
+### Profilsystem
 
-## Style-Gruppen verwenden
+- Profilmanager für Editor-Konfigurationen
+- Drag-and-drop-/Tag-basierter Profil-Editor
+- Expertenmodus mit `expert_definition` + `expert_suboption`
+- Vorschau-Seite mit Integrationsbeispielen und Profil-Details
 
-Style-Gruppen ermöglichen es, mehrere CSS-Stile als JSON-Array zu definieren und sie gemeinsam zu verwalten. Diese Funktion wurde in Version 6.3.3 eingeführt und vereinfacht die konsistente Gestaltung deiner Inhalte.
+### Styles und Snippets
 
-### Beispiel einer Style-Gruppe
+- Einzelne Styles mit Element/Klassen und optionalem CSS
+- Style-Gruppen mit JSON-Konfiguration und optionalem CSS
+- Snippets pro Profil auswählbar (Ersatz für Templates)
+- Auto-generiertes Backend-CSS aus Style-/Gruppen-Definitionen
 
-Unter "CKEditor5" > "Profiles" > "Customise" > "Style Groups" kannst du Style-Gruppen erstellen:
+### Medien und Links
 
-```json
-[
-    {
-        "name": "Blue Box",
-        "element": "div",
-        "classes": ["blue-box", "rounded", "shadow"]
-    },
-    {
-        "name": "Highlighted Text",
-        "element": "span",
-        "classes": ["highlight", "bold"]
-    },
-    {
-        "name": "Info Panel",
-        "element": "section",
-        "classes": ["info-panel"],
-        "attributes": {
-            "data-type": "info",
-            "role": "note"
-        }
-    }
-]
-```
+- REDAXO-Medienintegration (`openREXMedia`) für Bildeinfügen/-ersetzen
+- REDAXO-Linkintegration (`openLinkMap`, Medienlinks, `mailto:`, `tel:`, YTable)
+- Bild-Upload-Endpunkt für Mediapool-Uploads
+- Absicherung der Bild-Link-Funktion in der Bild-Toolbar (`linkImage`)
 
-### So verwendest du Style-Gruppen:
+### Plugin-Runtime
 
-1. Erstelle eine Style-Gruppe mit der JSON-Konfiguration
-2. Optional: Füge direkt CSS-Definitionen hinzu, die automatisch im Backend geladen werden
-3. Aktiviere das "Style"-Tool in deinem Editor-Profil
-4. Wähle deine erstellte Style-Gruppe im Profileditor aus
+- Native Addon-Plugins zur Laufzeit:
+  - `RedaxoLinkIntegration`
+  - `RedaxoMediaImage`
+  - `RedaxoSnippets`
+  - `RedaxoPastePlainTextToggle`
+  - `RedaxoMarkdownPasteToggle`
+  - `RedaxoMinimapToggle`
+  - `RedaxoVideoWidgetTest`
+- Unterstützung externer Plugins über Registry und JS-Konfiguration
+- Toolbar-Alias-Transformationen für externe Plugins
 
-### Vorteile:
-- Konsistente Gestaltung über verschiedene Profile hinweg
-- Zentrale Verwaltung von zusammengehörigen Stilen
-- Automatische CSS-Integration im Backend
-- Einfacher Export/Import zwischen REDAXO-Instanzen
+## Installation
 
-### CSS-Definitionen für Style-Gruppen
+1. Addon installieren (Installer oder Deployment).
+2. REDAXO-Update/Install-Routine ausführen.
+3. Unter `CKEditor 5 > Profiles` mindestens ein Profil konfigurieren.
+4. Profil im Textarea über `data-profile` verwenden.
 
-Du kannst direkt CSS zu deinen Style-Gruppen hinzufügen:
+## Basisverwendung
 
-```css
-.blue-box {
-    background-color: #e7f5ff;
-    border: 1px solid #4dabf7;
-    padding: 15px;
-}
-
-.blue-box.rounded {
-    border-radius: 8px;
-}
-
-.highlight {
-    background-color: #fff9db;
-    padding: 2px 4px;
-}
-
-.info-panel {
-    border-left: 4px solid #1c7ed6;
-    background: #f8f9fa;
-    padding: 10px 15px;
-    margin: 15px 0;
-}
-```
-
-## Eine kleine Demo
-
-![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/ckeditor5_demo.gif)
-
-## Der Profil-Editor
-
-Konfiguriere deinen Editor so, wie du ihn brauchst.
-
-![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/ckeditor_profile_editor_demo.gif)
-
-## Code-Beispiele, damit's auch läuft
-
-### Allgemeine Verwendung:
-
-### Eingabe-Code
+### Minimale Textarea-Integration
 
 ```php
- <textarea class="form-control cke5-editor" data-profile="default" data-lang="<?php echo \Cke5\Utils\Cke5Lang::getUserLang(); ?>" name="REX_INPUT_VALUE[1]">REX_VALUE[1]</textarea>
+<textarea
+  class="form-control cke5-editor"
+  data-profile="default"
+  data-lang="<?php echo \Cke5\Utils\Cke5Lang::getUserLang(); ?>"
+  data-content-lang="<?php echo \Cke5\Utils\Cke5Lang::getOutputLang(); ?>"
+  name="REX_INPUT_VALUE[1]"
+>REX_VALUE[1]</textarea>
 ```
 
-### Ausgabe-Code
+### Mit Höhenbegrenzung
+
+```php
+<textarea
+  class="form-control cke5-editor"
+  data-profile="default"
+  data-min-height="220"
+  data-max-height="700"
+  data-lang="<?php echo \Cke5\Utils\Cke5Lang::getUserLang(); ?>"
+  name="REX_INPUT_VALUE[2]"
+>REX_VALUE[2]</textarea>
+```
+
+### Frontend-Ausgabe
 
 ```html
 REX_VALUE[id="1" output="html"]
 ```
 
-Über weitere Data-Attribute kannst du die Minimal- und Maximalhöhe sowie die Sprache steuern:
+## Integrationsbeispiele
 
-- data-max-height
-- data-min-height
-- data-lang
-
-### Verwendung in YForm
-
-- Im individuellen Attribute-Feld: ``` {"class":"cke5-editor","data-profile":"default","data-lang":"de"} ```
-- Weitere Attribute lassen sich durch Kommas trennen
-
-### Verwendung in MForm
+### MForm
 
 ```php
 $mform = new MForm();
-$mform->addTextAreaField(1,
-        array(
-        'label'=>'Text',
-        'class'=>'cke5-editor',
-        'data-lang'=>\Cke5\Utils\Cke5Lang::getUserLang(),
-        'data-profile'=>'default')
-        );
+$mform->addTextAreaField(1, [
+    'label' => 'Text',
+    'class' => 'cke5-editor',
+    'data-profile' => 'default',
+    'data-lang' => \Cke5\Utils\Cke5Lang::getUserLang(),
+    'data-content-lang' => \Cke5\Utils\Cke5Lang::getOutputLang(),
+]);
+
 echo $mform->show();
 ```
 
-### Verwendung mit MBlock
+### MBlock
 
 ```php
 $id = 1;
 $mform = new MForm();
 $mform->addFieldset('Accordion');
-$mform->addTextField("$id.0.titel", array('label'=>'Titel'));
-$mform->addTextAreaField("$id.0.text",
-        array(
-        'label'=>'Text',
-        'class'=>'cke5-editor',
-        'data-lang'=>\Cke5\Utils\Cke5Lang::getUserLang(),
-        'data-profile'=>'default')
-        );
+$mform->addTextField("$id.0.title", ['label' => 'Titel']);
+$mform->addTextAreaField("$id.0.text", [
+    'label' => 'Text',
+    'class' => 'cke5-editor',
+    'data-profile' => 'default',
+    'data-lang' => \Cke5\Utils\Cke5Lang::getUserLang(),
+    'data-content-lang' => \Cke5\Utils\Cke5Lang::getOutputLang(),
+]);
+
 echo MBlock::show($id, $mform->show());
 ```
 
-## Eigene Schriften einbinden
-
-![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/fonts.png)
-
-Damit die Schriften im Backend angezeigt werden, musst du sie als Assets laden.
-Das kannst du z.B. in der `boot.php` des Projekt-AddOns oder in der `backend.css` des Theme-AddOns machen.
-Die Schriften kommen in den Abschnitt *FontFamily* des Profil-Editors, in der gewohnten CSS-Schreibweise.
-
-## Sprog-Ersetzungen – kurz und knackig
-
-Unter `Mention & Sprog Ersetzungen` > `Sprog Ersetzungen` > `Ersetzungen` kannst du Sprog-Platzhalter mit Titel oder Beschreibung hinterlegen.
-Schreibweise: `{{key}}`. Im nächsten Feld kommt der Titel.
-Im Editor einfach '{{' eintippen, dann bekommst du eine Liste der Platzhalter.
-
-## Individualisierung – mach's zu deinem Editor
-
-Die Optik des Editors kann per CSS an die Frontend-Ausgabe angepasst werden. Dafür gibt's im Ordner `assets/addons/cke5_custom_data` eine CSS-Datei.
-
-## CSS Content-Styles
-
-[Styleguide hier](https://ckeditor.com/docs/ckeditor5/latest/builds/guides/integration/content-styles.html)
-
-Den Styles wird das Präfix `.ck-content` vorangestellt. Die Klasse sollte dem Ausgabeelement hinzugefügt werden und die mitgelieferte `cke5_content_styles.css` aus dem Asset-Ordner geladen werden.
-
-Nach der Installation dieses AddOns ist die CSS-Datei /assets/addons/cke5/cke5_content_styles.css sofort einsatzbereit. Aber eine eigene Datei zu erstellen, ist vielleicht die bessere Wahl.
-
-## CKE im Frontend
-
-[Schau mal hier: REDAXO Tricks](https://friendsofredaxo.github.io/tricks/snippets/ckeditor_im_frontend)
-
-## Tastenkürzel
-
-Hier die wichtigsten Tastenkürzel für CKEditor 5 und seine Features:
-
-<table>
-	<thead>
-		<tr>
-			<th>Aktion</th>
-			<th>PC</th>
-			<th>Mac</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td>Kopieren</td>
-			<td><kbd>Strg</kbd> + <kbd>C</kbd></td>
-			<td><kbd>⌘</kbd> + <kbd>C</kbd></td>
-		</tr>
-		<tr>
-			<td>Einfügen</td>
-			<td><kbd>Strg</kbd> + <kbd>V</kbd></td>
-			<td><kbd>⌘</kbd> + <kbd>V</kbd></td>
-		</tr>
-		<tr>
-			<td>Rückgängig</td>
-			<td><kbd>Strg</kbd> + <kbd>Z</kbd></td>
-			<td><kbd>⌘</kbd> + <kbd>Z</kbd></td>
-		</tr>
-		<tr>
-			<td>Wiederherstellen</td>
-			<td><kbd>Strg</kbd> + <kbd>Y</kbd> <br> <kbd>Strg</kbd> + <kbd>Umschalt</kbd> + <kbd>Z</kbd></td>
-			<td><kbd>⌘</kbd> + <kbd>Y</kbd> <br> <kbd>⌘</kbd> + <kbd>Umschalt</kbd> + <kbd>Z</kbd></td>
-		</tr>
-		<tr>
-			<td>Fett</td>
-			<td><kbd>Strg</kbd> + <kbd>B</kbd></td>
-			<td><kbd>⌘</kbd> + <kbd>B</kbd></td>
-		</tr>
-		<tr>
-			<td>Kursiv</td>
-			<td><kbd>Strg</kbd> + <kbd>I</kbd></td>
-			<td><kbd>⌘</kbd> + <kbd>I</kbd></td>
-		</tr>
-		<tr>
-			<td>Link</td>
-			<td><kbd>Strg</kbd> + <kbd>K</kbd></td>
-			<td><kbd>⌘</kbd> + <kbd>K</kbd></td>
-		</tr>
-		<tr>
-			<td>Harter Zeilenumbruch (z.B. neuer Absatz)</td>
-			<td colspan="2"><kbd>Enter</kbd></td>
-		</tr>
-		<tr>
-			<td>Weicher Zeilenumbruch (<code>&lt;br&gt;</code>)</td>
-			<td colspan="2"><kbd>Umschalt</kbd> + <kbd>Enter</kbd></td>
-		</tr>
-		<tr>
-			<td>Aktuellen Listeneintrag einrücken (wenn man sich in einer Liste befindet)</td>
-			<td colspan="2"><kbd>Tab</kbd></td>
-		</tr>
-		<tr>
-			<th colspan="3">Wenn ein Widget ausgewählt ist (z.B. Bild, Tabelle, horizontale Linie usw.)</th>
-		</tr>
-		<tr>
-			<td>Neuen Absatz direkt nach einem Widget einfügen</td>
-			<td colspan="2"><kbd>Enter</kbd></td>
-		</tr>
-		<tr>
-			<td>Neuen Absatz direkt vor einem Widget einfügen</td>
-			<td colspan="2"><kbd>Umschalt</kbd> + <kbd>Enter</kbd></td>
-		</tr>
-		<tr>
-			<td>Den Cursor anzeigen, um direkt vor einem Widget schreiben zu können</td>
-			<td colspan="2"><kbd>↑</kbd> / <kbd>←</kbd></td>
-		</tr>
-		<tr>
-			<td>Den Cursor anzeigen, um direkt nach einem Widget schreiben zu können</td>
-			<td colspan="2"><kbd>↓</kbd> / <kbd>→</kbd></td>
-		</tr>
-		<tr>
-			<th colspan="3">In einer Tabellenzelle</th>
-		</tr>
-		<tr>
-			<td>Die Auswahl zur nächsten Zelle verschieben</td>
-			<td colspan="2"><kbd>Tab</kbd></td>
-		</tr>
-		<tr>
-			<td>Die Auswahl zur vorherigen Zelle verschieben</td>
-			<td colspan="2"><kbd>Umschalt</kbd> + <kbd>Tab</kbd></td>
-		</tr>
-		<tr>
-			<td>Neue Tabellenzeile einfügen (wenn man sich in der letzten Zelle einer Tabelle befindet)</td>
-			<td colspan="2"><kbd>Tab</kbd></td>
-		</tr>
-        <tr>
-            <td>Durch die Tabelle navigieren</td>
-            <td colspan="2"><kbd>↑</kbd> / <kbd>→</kbd> / <kbd>↓</kbd> / <kbd>←</kbd></td>
-        </tr>
-	</tbody>
-</table>
-
-#### Benutzeroberfläche und Navigation
-
-Mit diesen Tastenkürzeln navigierst du effizienter durch die CKEditor 5 Oberfläche:
-
-<table>
-	<thead>
-		<tr>
-			<th>Aktion</th>
-			<th>PC</th>
-			<th>Mac</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td>Kontext-Ballons und UI-Komponenten wie Dropdowns schließen</td>
-			<td colspan="2"><kbd>Esc</kbd></td>
-		</tr>
-		<tr>
-			<td>Fokus zum sichtbaren Kontext-Ballon verschieben</td>
-			<td colspan="2"><kbd>Tab</kbd></td>
-		</tr>
-		<tr>
-			<td>Fokus zwischen Feldern (Eingabefelder und Buttons) in Kontext-Ballons verschieben</td>
-			<td colspan="2"><kbd>Tab</kbd></td>
-		</tr>
-		<tr>
-			<td>Fokus zur Toolbar verschieben</td>
-			<td><kbd>Alt</kbd> + <kbd>F10</kbd></td>
-			<td><kbd>Alt</kbd> + <kbd>F10</kbd> <br> (kann <kbd>Fn</kbd> erfordern)</td>
-		</tr>
-		<tr>
-			<td>Durch die Toolbar navigieren</td>
-			<td colspan="2"><kbd>↑</kbd> / <kbd>→</kbd> / <kbd>↓</kbd> / <kbd>←</kbd></td>
-		</tr>
-		<tr>
-			<td>Die aktuell fokussierte Schaltfläche ausführen</td>
-			<td colspan="2"><kbd>Enter</kbd></td>
-		</tr>
-	</tbody>
-</table>
-
-## Für Entwickler
-
-### Beispiel für Extra-Optionen
+### YForm (eigene Attribute)
 
 ```json
-{
-    "removePlugins": ["Autoformat"],
-    "heading": {
-        "options": [{
-                "model": "paragraph",
-                "title": "Paragraph",
-                "class": "ck-heading_paragraph"
-            },
-            {
-                "model": "paragrap1tl",
-                "view": {
-                    "name": "span",
-                    "classes": "uk-text-large"
-                },
-                "title": "Fließtext groß",
-                "class": "ck-heading_paragraph"
-            },
-            {
-                "model": "heading1",
-                "view": {
-                    "name": "h1",
-                    "classes": "uk-animation-fade uk-heading-large"
-                },
-                "title": "Überschrift 1 sehr groß",
-                "class": "ck-heading_heading1"
-            }
-
-        ]
-    }
-}
+{"class":"cke5-editor","data-profile":"default","data-lang":"de","data-content-lang":"de"}
 ```
 
-### Beispiel für benutzerdefinierte Link-Dekorator
-*Wichtig: Die Keys müssen klein geschrieben werden*
+## Profile: Hinweise aus der Praxis
 
-```js
-[{
-    "newtab": {
-        "mode": "manual",
-        "label": "In neuem Tab öffnen",
-        "attributes": {
-            "target": "_blank",
-            "rel": "noopener noreferrer"
-        }
-    }
-}]
-```
-```js
-[{
-    "arrowclass": {
-        "mode": "manual",
-        "label": "Link mit CSS Klasse",
-        "defaultValue": "true",
-        "classes": "arrow"
-    }
-}]
-```
+- Toolbar verwendet CKEditor-IDs (`link`, `insertImage`, `snippets`, ...).
+- Legacy-Aliase werden intern migriert/normalisiert, wo nötig.
+- Snippets werden pro Profil ausgewählt.
+- Style-Gruppen und Styles werden pro Profil gewählt und zusammengeführt.
+- Im Profil-Editor können Platzhalter pro REDAXO-Sprache gesetzt werden.
 
-Oder mehrere:
-```js
-[{
-    "openInNewTab": {
-        "mode": "manual",
-        "label": "In neuem Tab öffnen",
-        "defaultValue": true,
-        "attributes": {
-            "target": "_blank",
-            "rel": "noopener noreferrer"
-        }
-    }
-},
-{
-    "isGallery": {
-        "mode": "manual",
-        "label": "Gallery link",
-        "attributes": {
-            "class": "button light",
-        }
-    }
-}]
-```
+## JSON-Kochbuch (Profilfelder)
 
-### Mentions
+Mehrere Profilfelder erwarten JSON-Eingaben. Hier sind funktionierende Startbeispiele.
 
-Das AddOn liefert das [Mentions-Plugin](https://ckeditor.com/docs/ckeditor5/latest/features/mentions.html) mit. Das kannst du frei konfigurieren.
-Hier ein Beispiel:
+### 1) `link_decorators_definition`
+
+Damit definierst du manuelle Link-Decorator. Ein typischer Anwendungsfall sind Bootstrap-ähnliche Link-Buttons.
 
 ```json
-[{
-    "marker": "@",
-    "feed": [
-        "@test",
-        "@test2"
-    ],
-    "minimumCharacters": "0"
-}]
-```
-
-### YForm-Links
-
-Um generierte URLs wie `rex_news://1` zu ersetzen, füge das folgende Skript in die `boot.php` des `project` AddOns ein.
-Der Code für die URLs muss angepasst werden.
-
-```php
-rex_extension::register('OUTPUT_FILTER', function(\rex_extension_point $ep) {
-    return preg_replace_callback(
-        '@((rex_news|rex_person))://(\d+)(?:-(\d+))?/?@i',
-        function ($matches) {
-            // table = $matches[1]
-            // id = $matches[3]
-            $url = '';
-            switch ($matches[1]) {
-                case 'news':
-                    // Beispiel, wenn die URLs via Url-AddOn generiert werden
-                    $id = $matches[3];
-                    if ($id) {
-                       return rex_getUrl('', '', ['news' => $id]);
-                    }
-                    break;
-                case 'person':
-                    // Ein anderes Beispiel
-                    $url = '/index.php?person='.$matches[3];
-                    break;
-            }
-            return $url;
-        },
-        $ep->getSubject()
-    );
-}, rex_extension::NORMAL);
-```
-
-### Profile API
-
-Über die API kannst du eigene Profile abseits des Profileditors erstellen: `Cke5\Creator\Cke5ProfilesApi::addProfile`
-
-Beispiel:
-
-```php
-    $create = \Cke5\Creator\Cke5ProfilesApi::addProfile(
-        'profile_name_cke5',
-        'API created Cke5 profile',
-        '{
-           "toolbar": ["link", "rexImage", "|", "undo", "redo", "|", "selectAll", "insertTable", "code", "codeBlock"],
-           "removePlugins": ["Alignment", "Font", "FontFamily", "MediaEmbed", "Bold", "Italic", "BlockQuote", "Heading", "Alignment", "Highlight", "Strikethrough", "Underline", "Subscript", "Superscript", "Emoji", "RemoveFormat", "TodoList", "HorizontalLine", "PageBreak"],
-           "link": {"rexlink": ["internal", "media"]},
-           "image": {
-             "toolbar": ["imageTextAlternative", "|", "imageStyle:full", "imageStyle:alignLeft", "imageStyle:alignRight", "imageStyle:alignCenter"],
-             "styles": ["block", "alignLeft", "alignRight", "alignCenter"]
-           },
-           "table": {"toolbar": ["tableColumn", "tableRow", "mergeTableCells", "tableProperties", "tableCellProperties"]},
-           "rexImage": {"media_path": "\/media\/"},
-           "ckfinder": {"uploadUrl": ".\/index.php?cke5upload=1&media_path=media"},
-           "placeholder_en": "Placeholder EN",
-           "placeholder_de": "Placeholder DE",
-           "codeBlock": {
-             "languages": [{"language": "plaintext", "label": "Plain text", "class": ""}, {
-               "language": "php",
-               "label": "PHP",
-               "class": "php-code"
-             }]
-           }
-         }',
-        '[{"min-height": 100}, {"max-height": 280}]'
-    );
-    echo (is_string($create)) ? $create : 'successful profile created';
-```
-
-### HTML-Support
-
-Source-Editing Plugin hat ein Update bekommen.
-Nach einem Update von einer sehr alten Version fehlt evtl. die Grundeinstellung für das PlugIn im Abschnitt HtmlSupport.
-
-```JSON
 [
-    {
-        "name": "regex(/.*/)",
-        "attributes": true,
-        "classes": true,
-        "styles": true
+  {
+    "btnPrimary": {
+      "mode": "manual",
+      "label": "Button Primary",
+      "attributes": {
+        "class": "btn btn-primary",
+        "role": "button"
+      }
     }
+  },
+  {
+    "btnOutline": {
+      "mode": "manual",
+      "label": "Button Outline",
+      "attributes": {
+        "class": "btn btn-outline-secondary",
+        "role": "button"
+      }
+    }
+  },
+  {
+    "nofollow": {
+      "mode": "manual",
+      "label": "Nofollow setzen",
+      "attributes": {
+        "rel": "nofollow"
+      }
+    }
+  }
 ]
 ```
 
-### Autoformat deaktivieren
+Hinweis: Dieses JSON wird in `link.decorators` des generierten CKEditor-Profils zusammengeführt.
 
-Du kannst das Autoformat-Feature (Markdown-Code-Ersatz) deaktivieren, indem du diese Option in den Abschnitt Extra Options einfügst:
+Exklusive Decorator-Gruppen (immer nur einer gleichzeitig):
+
+Wenn mehrere manuelle Decorators gegenseitig exklusiv sein sollen (z. B. Button-Varianten, Farb-Varianten, Badge-Varianten), gib ihnen denselben Wert in `redaxoExclusiveGroup`.
+
+Beispiel:
 
 ```json
-{"removePlugins": ["Autoformat"]}
+[
+  {
+    "btnPrimary": {
+      "mode": "manual",
+      "label": "Button Primary",
+      "classes": "btn btn-primary",
+      "redaxoExclusiveGroup": "linkButtonStyle"
+    }
+  },
+  {
+    "btnSuccess": {
+      "mode": "manual",
+      "label": "Button Success",
+      "classes": "btn btn-success",
+      "redaxoExclusiveGroup": "linkButtonStyle"
+    }
+  },
+  {
+    "nofollow": {
+      "mode": "manual",
+      "label": "Nofollow setzen",
+      "attributes": {
+        "rel": "nofollow"
+      }
+    }
+  }
+]
 ```
 
-## Bugtracker
+Ergebnis: Im Link-Dialog kann immer nur ein Decorator aus `linkButtonStyle` aktiv sein. Unabhängige Decorators wie `nofollow` bleiben parallel nutzbar.
 
-Fehler gefunden oder eine Idee? Erstelle ein [Issue](https://github.com/FriendsOfREDAXO/cke5/issues).
-Bevor du ein neues Issue erstellst, such bitte, ob es schon ein ähnliches gibt. Und lies dir die [Issue Guidelines (englisch)](https://github.com/necolas/issue-guidelines) von [Nicolas Gallagher](https://github.com/necolas/) durch.
+### 2) `mentions_definition`
 
-## Changelog
+Definiert eigene Mention-Feeds.
 
-Schau mal im [CHANGELOG.md](https://github.com/FriendsOfREDAXO/cke5/blob/master/CHANGELOG.md) nach.
+```json
+[
+  {
+    "marker": "@",
+    "minimumCharacters": 1,
+    "feed": ["@support", "@sales", "@redaktion", "@admin"]
+  },
+  {
+    "marker": "#",
+    "minimumCharacters": 1,
+    "feed": ["#news", "#release", "#event", "#faq"]
+  }
+]
+```
 
-## Lizenzen
+### 3) `sprog_mention_definition`
 
-AddOn: [MIT LICENSE](https://github.com/FriendsOfREDAXO/cke5/blob/master/LICENSE)
-CKEDITOR: [GPL LICENSE](https://github.com/ckeditor/ckeditor5/blob/master/LICENSE.md)
+Sprog-Ersetzungen sind JSON-basiert und werden über den Marker `{` angeboten.
 
-## Wer's gemacht hat
+```json
+[
+  { "id": "{{company}}", "text": "Friends Of REDAXO" },
+  { "id": "{{support_mail}}", "text": "support@example.org" },
+  { "id": "{{hotline}}", "text": "+49 000 123456" }
+]
+```
 
-**Friends Of REDAXO**
+### 4) `image_resize_options_definition`
 
-* http://www.redaxo.org
-* https://github.com/FriendsOfREDAXO
+Definiert feste Größenoptionen für die Bild-Toolbar.
 
-**Projektleitung**
+```json
+[
+  { "name": "resizeImage:original", "label": "Original", "value": null },
+  { "name": "resizeImage:25", "label": "25%", "value": "25" },
+  { "name": "resizeImage:50", "label": "50%", "value": "50" },
+  { "name": "resizeImage:75", "label": "75%", "value": "75" }
+]
+```
 
-[Joachim Dörr](https://github.com/joachimdoerr)
+Hinweis: Das Addon normalisiert die Namen intern beim Profilaufbau.
 
-**Initiator:**
+### 5) `transformation_extra`
 
-[KLXM Crossmedia / Thomas Skerbis](https://klxm.de)
+Ergänzt zusätzliche Typing-Transformationen.
+
+```json
+[
+  { "from": "->", "to": "→" },
+  { "from": "<-", "to": "←" },
+  { "from": "(c)", "to": "©" },
+  { "from": "(r)", "to": "®" }
+]
+```
+
+### 6) `html_support_allow`
+
+Erlaubt zusätzliche Elemente/Attribute/Klassen/Styles.
+
+```json
+[
+  {
+    "name": "regex(/^(section|article|div)$/)",
+    "attributes": true,
+    "classes": true,
+    "styles": true
+  },
+  {
+    "name": "a",
+    "attributes": ["target", "rel", "data-bs-toggle", "data-bs-target"],
+    "classes": ["btn", "btn-primary", "btn-outline-secondary"],
+    "styles": false
+  }
+]
+```
+
+### 7) `html_support_disallow`
+
+Sperrt bestimmte Muster, selbst wenn sie anderweitig erlaubt sind.
+
+```json
+[
+  {
+    "name": "script",
+    "attributes": true,
+    "classes": true,
+    "styles": true
+  },
+  {
+    "name": "*",
+    "attributes": ["on.*"]
+  }
+]
+```
+
+### 8) `extra_definition`
+
+Erweiterte Roh-Konfiguration, die direkt in das generierte Profil-JSON gemerged wird. Mit Vorsicht einsetzen.
+
+```json
+{
+  "removePlugins": ["Autoformat"],
+  "heading": {
+    "options": [
+      { "model": "paragraph", "title": "Paragraph", "class": "ck-heading_paragraph" },
+      { "model": "heading2", "view": "h2", "title": "H2", "class": "ck-heading_heading2" }
+    ]
+  }
+}
+```
+
+Hinweis: `removePlugins` aus diesem Feld wird mit der bestehenden Liste zusammengeführt.
+
+### Validierungs-Tipps
+
+- Immer gültiges JSON verwenden (doppelte Anführungszeichen, keine trailing commas).
+- Mit kleinen JSON-Blöcken starten und zuerst in einem Profil testen.
+- Wenn etwas nicht greift, in der Profilvorschau das generierte JSON prüfen.
+
+## Snippets statt Templates
+
+Templates sind nicht mehr Teil des aktiven Workflows.
+Für wiederverwendbare Inhaltsbausteine werden Snippets verwendet.
+
+Empfohlener Ablauf:
+
+1. Snippets unter `Profiles > Customise > Snippets` anlegen.
+2. Snippets einem oder mehreren Profilen zuweisen.
+3. Button `snippets` in der Toolbar aktivieren.
+
+## Export und Import
+
+### Export
+
+`Profiles > Export` exportiert gewählte Profile inklusive Abhängigkeiten.
+
+Export-Payload enthält:
+
+- `profiles`
+- `style_groups`
+- `styles`
+- `snippets`
+
+### Import
+
+`Profiles > Import` unterstützt:
+
+- neues Bundle-Format (Profile + Abhängigkeiten)
+- Legacy-Format (nur Profile)
+
+Beim Bundle-Import erfolgt ein ID-basiertes Upsert für die abhängigen Tabellen, danach der Profilimport.
+
+## Konfigurationsseite
+
+`CKEditor 5 > Config` bietet:
+
+- Lizenzschlüssel-Konfiguration
+- Upload/Ersetzen der Editor-Runtime (`.js`, `.js.map`)
+- Upload/Ersetzen von Übersetzungsdateien (`.js`)
+
+Standard-Runtimepfad ist der moderne Build unter:
+
+- `assets/addons/cke5/vendor/ckeditor5-modern/`
+
+## API-Beispiel
+
+Programmgesteuert ein Expertenprofil anlegen:
+
+```php
+use Cke5\Creator\Cke5ProfilesApi;
+
+$definition = json_encode([
+    'toolbar' => [
+        'items' => ['heading', '|', 'bold', 'italic', 'link', 'snippets', 'undo', 'redo'],
+    ],
+], JSON_UNESCAPED_UNICODE);
+
+Cke5ProfilesApi::addProfile(
+    'project_expert',
+    'Projekt-Expertenprofil',
+    $definition,
+    null
+);
+```
+
+## Custom-CSS-Strategie
+
+Kombinierbar sind:
+
+- statisches Custom-CSS in Addon-/Projekt-Assets
+- generiertes CSS aus Style-/Gruppen-Definitionen
+- optionale externe CSS-Pfade pro Style/Style-Gruppe
+
+Bei Änderungen an Styles/Style-Gruppen werden die Backend-CSS-Artefakte neu erzeugt.
+
+## Plugin-Entwicklung
+
+Für Build-Quellen, Runtime-Plugin-Architektur und Einbindung externer Plugins siehe:
+
+- `PLUGIN_DEVELOPMENT.md`
+
+## Fehlerbehebung
+
+### Editor initialisiert nicht
+
+- Prüfen, ob die Textarea die Klasse `cke5-editor` besitzt.
+- Prüfen, ob `data-profile` auf ein vorhandenes Profil zeigt.
+- Prüfen, ob `cke5profiles.js` erzeugt und geladen wurde.
+
+### Link-Button am Bild fehlt/deaktiviert
+
+- Prüfen, ob `linkImage` in der Bild-Toolbar enthalten ist.
+- Prüfen, ob der Build das Plugin `LinkImage` enthält.
+- Nach JS-Änderungen Backend hart neu laden.
+
+### Übersetzungen werden nicht geladen
+
+- Übersetzungspfad und Dateien in der Config-Seite prüfen.
+- Prüfen, ob Profil-/Benutzersprache zu vorhandenen CKEditor-Translation-Dateien passt.
+
+## Lizenz
+
+Siehe `LICENSE.md`.
+
+## Support
+
+- Issues: https://github.com/FriendsOfREDAXO/cke5/issues

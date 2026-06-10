@@ -219,6 +219,67 @@
     border: 1px solid #dfe2e5;
 }
 
+/* Avoid fake selection overlays that can split links visually. */
+.ck .ck-fake-link-selection {
+    outline: 0 !important;
+    box-shadow: none !important;
+    background: #111 !important;
+    color: #fff !important;
+}
+
+.ck .ck-link_selected {
+    background: #111 !important;
+    color: #fff !important;
+}
+
+.ck .ck-fake-link-selection_collapsed {
+    border-right: 0 !important;
+    outline: 0 !important;
+    margin-right: 0 !important;
+    display: none !important;
+}
+
+.ck .ck-fake-link-selection {
+    display: contents !important;
+}
+
+/* CKEditor can split selected links into adjacent segments; merge btn segments visually. */
+.ck .ck-content a.btn + a.btn {
+    margin-left: -1px !important;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+    border-left-width: 0 !important;
+}
+
+.ck .ck-content a.btn:has(+ a.btn) {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+.ck .ck-content a.btn:empty {
+    min-width: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border-left-width: 0 !important;
+    border-right-width: 0 !important;
+}
+
+.ck .ck-content a.btn.ck-link_selected + a.btn.ck-link_selected {
+    margin-left: 0 !important;
+}
+
+.ck .ck-content a.btn.ck-link_selected:has(.ck-fake-link-selection_collapsed) {
+    width: 0 !important;
+    min-width: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border-left-width: 0 !important;
+    border-right-width: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    overflow: hidden !important;
+}
+
 .cke5-editor-info p {
     margin: 0;
     padding: 0;
@@ -256,6 +317,17 @@
 
 .cke5-preview h4 {
     margin: 1em 0;
+}
+
+.ck-redaxo-link-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.ck-redaxo-link-buttons .ck.ck-button {
+    text-transform: capitalize;
 }
 
 .cke5-preview .cke5-preview-row {
@@ -442,6 +514,198 @@ dl + .cke5_clangtabs .nav.nav-tabs,
     margin: 0;
     padding: var(--ck-spacing-standard);
     width: 50%;
+}
+
+.ck-content nav.for-toc {
+    border-left: 3px solid #d4dbe3;
+    background: #f6f8fa;
+    padding: 0.75em 1em;
+    margin: 1em 0;
+}
+
+.ck-content figure.for-video {
+    margin: 1em 0;
+}
+
+.ck-content figure.for-video video {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.ck-content .for-video.alignLeft,
+.ck-content .for-video.alignBlockLeft,
+.ck-content .for-video.side {
+    max-width: 420px;
+    float: left;
+    margin-right: 1em;
+}
+
+.ck-content .for-video.alignRight,
+.ck-content .for-video.alignBlockRight {
+    max-width: 420px;
+    float: right;
+    margin-left: 1em;
+}
+
+.ck-content .for-video.alignCenter,
+.ck-content .for-video.block {
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.ck-content .for-video.inline {
+    display: inline-block;
+    max-width: 420px;
+}
+
+.ck-content .for-video.video--pos-left {
+    float: left;
+    margin-right: 1em;
+}
+
+.ck-content .for-video.video--pos-right {
+    float: right;
+    margin-left: 1em;
+}
+
+.ck-content .for-video.video--pos-center,
+.ck-content .for-video.video--pos-default {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.ck-content .for-video.video--w-auto {
+    max-width: 720px;
+    width: auto;
+}
+
+.ck-content .for-video.video--w-50 {
+    max-width: 50%;
+    width: 50%;
+}
+
+.ck-content .for-video.video--w-75 {
+    max-width: 75%;
+    width: 75%;
+}
+
+.ck-content .for-video.video--w-100 {
+    max-width: 100%;
+    width: 100%;
+}
+
+/* Legacy compatibility from older combined presets */
+.ck-content .for-video.video--left-50 {
+    float: left;
+    margin-right: 1em;
+    max-width: 50%;
+    width: 50%;
+}
+
+.ck-content .for-video.video--right-50 {
+    float: right;
+    margin-left: 1em;
+    max-width: 50%;
+    width: 50%;
+}
+
+.ck-content .for-video.video--center-50 {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 50%;
+    width: 50%;
+}
+
+.ck-content .for-video.video--center-75 {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 75%;
+    width: 75%;
+}
+
+.ck-content .for-video.video--full {
+    max-width: 100%;
+    width: 100%;
+}
+
+.ck-content .media-embed--left,
+.ck-content .for-video.media-embed--left {
+    max-width: 420px;
+    float: left;
+    margin-right: 1em;
+}
+
+.ck-content .media-embed--right,
+.ck-content .for-video.media-embed--right {
+    max-width: 420px;
+    float: right;
+    margin-left: 1em;
+}
+
+.ck-content .media-embed--center,
+.ck-content .for-video.media-embed--center {
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.ck-content .media-embed--full,
+.ck-content .for-video.media-embed--full {
+    width: 100%;
+    max-width: 100%;
+}
+
+.cke5-video-dialog-form {
+    min-width: 360px;
+    padding: 4px;
+}
+
+.cke5-video-dialog-form__intro {
+    color: #6b7280;
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+
+.cke5-video-dialog-form__group {
+    margin-bottom: 10px;
+}
+
+.cke5-video-dialog-form__group label {
+    display: block;
+    font-size: 12px;
+    margin-bottom: 4px;
+}
+
+.cke5-video-dialog-form__group select {
+    width: 100%;
+}
+
+.cke5-video-dialog-form__checks {
+    display: grid;
+    gap: 6px;
+}
+
+.cke5-video-dialog-form__subtitle {
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.cke5-video-dialog-form__checks label {
+    align-items: center;
+    display: flex;
+    font-size: 12px;
+    gap: 6px;
+    margin: 0;
+}
+
+.cke5-video-dialog-form__check {
+    background: #f7f9fb;
+    border: 1px solid #e5e9ef;
+    border-radius: 4px;
+    padding: 6px 8px;
 }
 
 @media (prefers-color-scheme:dark) {

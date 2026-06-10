@@ -83,6 +83,53 @@ $importKeys = [
     "upload_default"
 ];
 
+/**
+ * @param array<string,mixed> $rows
+ * @return void
+ */
+$importRows = static function (string $tableName, array $rows): void {
+    $table = rex::getTable($tableName);
+
+    foreach ($rows as $row) {
+        if (!is_array($row)) {
+            continue;
+        }
+
+        $id = isset($row['id']) ? (int) $row['id'] : 0;
+        if ($id <= 0) {
+            continue;
+        }
+
+        $check = rex_sql::factory();
+        $check->setTable($table)
+            ->setWhere('id = :id', ['id' => $id])
+            ->select('id');
+
+        $sql = rex_sql::factory();
+        $sql->setTable($table);
+
+        foreach ($row as $key => $value) {
+            if ($key === 'id') {
+                continue;
+            }
+
+            if (is_array($value)) {
+                $value = json_encode($value, JSON_UNESCAPED_UNICODE);
+            }
+
+            $sql->setValue((string) $key, $value);
+        }
+
+        if ($check->getRows() > 0) {
+            $sql->setWhere('id = :id', ['id' => $id]);
+            $sql->update();
+        } else {
+            $sql->setValue('id', $id);
+            $sql->insert();
+        }
+    }
+};
+
 // action
 if ($func === 'cke5import') {
     try {
@@ -102,19 +149,50 @@ if ($func === 'cke5import') {
         $data = json_decode((string)$content, true);
 
         if (is_array($data)) {
-            foreach ($data as $i => $profile) {
-                $fail = false;
-                foreach ($importKeys as $key) {
-                    if (is_array($profile) && !array_key_exists($key, $profile)) {
-                        $importResult[] = rex_view::error(sprintf($this->i18n('profiles_import_validation_fail'), "$i"));
-                        $fail = true;
-                        break;
+            if (isset($data['profiles']) && is_array($data['profiles'])) {
+                $importRows(Cke5DatabaseHandler::CKE5_STYLE_GROUPS, is_array($data['style_groups'] ?? null) ? $data['style_groups'] : []);
+                $importRows(Cke5DatabaseHandler::CKE5_STYLES, is_array($data['styles'] ?? null) ? $data['styles'] : []);
+                $importRows(Cke5DatabaseHandler::CKE5_SNIPPETS, is_array($data['snippets'] ?? null) ? $data['snippets'] : []);
+
+                foreach ($data['profiles'] as $i => $profile) {
+                    $fail = false;
+                    foreach ($importKeys as $key) {
+                        if (is_array($profile) && !array_key_exists($key, $profile)) {
+                            $importResult[] = rex_view::error(sprintf($this->i18n('profiles_import_validation_fail'), "$i"));
+                            $fail = true;
+                            break;
+                        }
+                    }
+
+                    if (!$fail && is_array($profile)) {
+                        if (!array_key_exists('media_embed_width_styles_definition', $profile)) {
+                            $profile['media_embed_width_styles_definition'] = '';
+                        }
+
+                        /** @var array<string,string> $profile */
+                        $result = Cke5DatabaseHandler::importProfile($profile);
+                        $importResult[] = rex_view::info(sprintf($this->i18n('profiles_import_' . (($result === true) ? 'success' : 'fail')), $profile['name'], $profile['id']));
                     }
                 }
-                if (!$fail && is_array($profile)) {
-                    /** @var array<string,string> $profile */
-                    $result = Cke5DatabaseHandler::importProfile($profile);
-                    $importResult[] = rex_view::info(sprintf($this->i18n('profiles_import_' . (($result === true) ? 'success' : 'fail')), $profile['name'], $profile['id']));
+            } else {
+                foreach ($data as $i => $profile) {
+                    $fail = false;
+                    foreach ($importKeys as $key) {
+                        if (is_array($profile) && !array_key_exists($key, $profile)) {
+                            $importResult[] = rex_view::error(sprintf($this->i18n('profiles_import_validation_fail'), "$i"));
+                            $fail = true;
+                            break;
+                        }
+                    }
+                    if (!$fail && is_array($profile)) {
+                        if (!array_key_exists('media_embed_width_styles_definition', $profile)) {
+                            $profile['media_embed_width_styles_definition'] = '';
+                        }
+
+                        /** @var array<string,string> $profile */
+                        $result = Cke5DatabaseHandler::importProfile($profile);
+                        $importResult[] = rex_view::info(sprintf($this->i18n('profiles_import_' . (($result === true) ? 'success' : 'fail')), $profile['name'], $profile['id']));
+                    }
                 }
             }
         }

@@ -1,5 +1,44 @@
 # Changelog
 
+## Version 7.0.0-dev
+
+* Umstellung auf den offiziellen CKEditor-5-Build als Basis des Addons
+* Vendor-Update auf CKEditor 5 `48.2.0` (npm-Paket `ckeditor5`)
+* Plugin-System grundlegend neu aufgestellt: native Plugins als Runtime-Registry und externe Plugins offiziell integrierbar
+* Neue native Plugins und überarbeitete Dialoge für den aktuellen Editor-Workflow
+* Templates entfernt und durch Snippets ersetzt
+* Profil-Seeding auf JSON-Bundle umgestellt (`install/default_bundle.json`) statt SQL-Seed-Datei
+* `data.sql` entfernt; Install/Update importiert die Demo-Profile jetzt zentral aus dem Bundle
+* Demo-Profile auf `demo_*` standardisiert (`demo_default`, `demo_light`, `demo_full_expert`)
+* Demo-Profile werden bei Install/Update bewusst überschrieben, damit Demos reproduzierbar bleiben
+* `demo_default` enthält Bootstrap-3-Link-Decoratoren und exklusive Decorator-Gruppen (`redaxoExclusiveGroup`)
+* Link-Decorator-Handling erweitert: pro Gruppe kann nur ein manueller Decorator gleichzeitig aktiv sein
+* Image-Resize-Verhalten modernisiert: Handles pro Profil schaltbar, Toolbar-Resize-Optionen bleiben nutzbar
+* Runtime robuster gemacht (u. a. Soft-Hyphen-Postfixer gegen visuelle Link-Splits)
+* Vendor-Asset-Handling bereinigt: SourceMap-Referenzen werden entfernt, unnötige `.map`-Requests entfallen
+* Upload-/Asset-Handling für Editor-Dateien erweitert: `.js` und `.js.map` werden sauber verarbeitet
+* Neue Entwicklerdokumentation `dev.md` (ersetzt `PLUGIN_DEVELOPMENT.md`) und als Backend-Seite eingebunden
+* Neue Skripte für den Entwickler-Workflow:
+  * `pnpm run demo:variant` für schnelle Demo-Profilvarianten
+  * `pnpm run content-styles:update` für aktuelles CKEditor-Frontend-CSS aus npm
+* Legacy-Altlasten und verwaiste Vendor-Dateien bereinigt
+* Markdown-Paste als Profiloption integriert (`markdown_paste`) inkl. Toolbar-Toggle (`redaxoMarkdownPasteToggle`)
+* Minimap als Profiloption integriert (`minimap`) inkl. Toolbar-Toggle (`redaxoMinimapToggle`) und Layout-Verbesserungen
+* Video-Widget-Workflow überarbeitet (`for_video_widget_test`): Dialog-UX, Medienpool-Übernahme und Breiten-/Figure-Handling stabilisiert
+* Mapping alter Toolbar-Konfigurationen (`for_video`) auf den Widget-Button (`for_video_widget_test`) für abwärtskompatible Profile
+* Profilmanager-UX erweitert: eigener Balloon-Toolbar-Schalter inkl. konfigurierbarer `balloon_toolbar`-Items
+* Neuer Editor-Modus `classic_balloon` (Classic + Balloon-Toolbar kombiniert) mit stabiler Runtime-Normalisierung
+* Block-/Balloon-Toolbar-Handling verbessert: konfigurierbar, validiert und mit sinnvollen Fallback-Items (inkl. `style` und Video-Widget)
+* Neue Defaults-Unterseite `profiles/customise/global` für globale Voreinstellungen (Mentions, Sprog, yTables, Medien, Schriftfamilie)
+* Globale Einstellungen werden beim Profil-Mapping gezielt als Fallback gemerged (Profilwerte behalten Vorrang)
+* Globales Schriftfamilien-Fallback ergänzt (`global_font_families`) und Logik für `global_font_family_default` korrigiert
+* Widget-Initialisierung für die Defaults-Seite ergänzt (inkl. robustem `rex:ready`- und Collapse-Fallback)
+* Sprog-MultiInput stabilisiert: fehlerhafte `undefined`-Placeholder behoben und Attribut-Fallbacks ergänzt
+* Mention-Felder um JSON-Beispielhinweise erweitert (Profil und globale Defaults)
+* CSS-Regeneration gehärtet: keine Abhängigkeit mehr von `cke5_templates` auf frischen Installationen ohne Template-Tabelle
+* Profil-Import abwärtskompatibel gemacht: ältere Exportdateien ohne `media_embed_width_styles_definition` werden wieder akzeptiert
+* Merge-Konflikt mit `main` in `package.yml` aufgelöst; `7.0.0-dev` als Zielstand für die laufende Entwicklungsreihe fixiert
+
 ## Version 6.4.2
 
 * Fix: Regenerate CSS file on style/template save and delete (Issue #207)

@@ -13,27 +13,105 @@ $(document).on('rex:ready', function (event, container) {
 });
 
 function cke5_init_style_edit(element) {
+    if (element.data('cke5-style-edit-initialized') === true) {
+        return;
+    }
+    element.data('cke5-style-edit-initialized', true);
+
     let classesArea = element.find('#cke5-classes-area'),
         elementArea = element.find('#cke5-element-area'),
-        toggleElements = element.find('[data-toggle=toggle]');
+        toggleElements = element.find('[data-toggle=toggle]'),
+        form = element.closest('form');
 
     // Status-Variablen
     let inactivityTimer = null;
     const INACTIVITY_DELAY = 2000; // 2 Sekunden
 
     if (classesArea.length) {
-        classesArea.cke5InputTags({
-            editable: true
-        });
+        if (classesArea.data('cke5-tag-init-done') !== true) {
+            classesArea.data('cke5-tag-init-done', true);
+            classesArea.cke5InputTags({
+                editable: true
+            });
+        }
+        classesArea.removeAttr('required').removeAttr('aria-required');
     }
 
     if (elementArea.length) {
-        elementArea.cke5InputTags({
-            max: 1,
-            editable: true,
-            autocomplete: {
-                values: JSON.parse(elementArea.attr('data-tags')),
+        if (elementArea.data('cke5-tag-init-done') !== true) {
+            elementArea.data('cke5-tag-init-done', true);
+            elementArea.cke5InputTags({
+                max: 1,
+                editable: true,
+                autocomplete: {
+                    values: JSON.parse(elementArea.attr('data-tags')),
+                }
+            });
+        }
+        elementArea.removeAttr('required').removeAttr('aria-required');
+    }
+
+    function clearTagInputErrors(field) {
+        let group = field.closest('.form-group');
+        if (group.length) {
+            group.removeClass('has-error');
+            group.find('.cke5-tag-input-error').remove();
+        }
+    }
+
+    function showTagInputError(field, message) {
+        let group = field.closest('.form-group'),
+            list = field.next('.cke5InputTags-list'),
+            visibleInput = list.find('.cke5InputTags-field').first();
+
+        if (!group.length) {
+            return;
+        }
+
+        group.addClass('has-error');
+        if (!group.find('.cke5-tag-input-error').length) {
+            group.append('<p class="help-block cke5-tag-input-error">' + message + '</p>');
+        }
+
+        if (visibleInput.length) {
+            visibleInput.trigger('focus');
+        }
+    }
+
+    function validateRequiredTagField(field) {
+        if (!field.length) {
+            return true;
+        }
+
+        clearTagInputErrors(field);
+
+        if (field.val().trim() !== '') {
+            return true;
+        }
+
+        showTagInputError(field, field.attr('data-empty-error') || 'Bitte Wert eingeben');
+        return false;
+    }
+
+    if (form.length && form.data('cke5-style-submit-validation') !== true) {
+        form.data('cke5-style-submit-validation', true);
+        form.on('submit', function (e) {
+            let isValid = true;
+
+            if (!validateRequiredTagField(elementArea)) {
+                isValid = false;
             }
+
+            if (!validateRequiredTagField(classesArea)) {
+                isValid = false;
+            }
+
+            if (!isValid) {
+                e.preventDefault();
+                return false;
+            }
+
+            return true;
         });
     }
 

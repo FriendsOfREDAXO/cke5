@@ -11,6 +11,9 @@ use Cke5\Provider\Cke5AssetsProvider;
 if (rex::isBackend() && is_object(rex::getUser())) {
     rex_perm::register('cke5_addon[]');
 
+    // Allow third-party addons to register runtime plugins before assets are loaded.
+    rex_extension::registerPoint(new rex_extension_point('CKE5_REGISTER_PLUGINS'));
+
     // restore config editor files
     if ($this->getConfig('restore_files', false) === true) {
         Cke5FileRestoreHandler::restoreEditorFiles($this);
@@ -23,14 +26,36 @@ if (rex::isBackend() && is_object(rex::getUser())) {
     Cke5AssetsProvider::provideCke5BaseData();
     Cke5AssetsProvider::provideCke5CustomData();
 
+    if (
+        rex_be_controller::getCurrentPagePart(1) === 'cke5'
+        && rex_be_controller::getCurrentPagePart(2) === 'profiles'
+        && rex_be_controller::getCurrentPagePart(3) === 'customise'
+        && rex_be_controller::getCurrentPagePart(4) === 'global'
+    ) {
+        $hasGlobalWidgetJs = false;
+        foreach (rex_view::getJsFiles() as $jsFile) {
+            if (strpos($jsFile, 'cke5customise_global') !== false) {
+                $hasGlobalWidgetJs = true;
+                break;
+            }
+        }
+
+        if (!$hasGlobalWidgetJs) {
+            $globalWidgetJs = $this->getAssetsPath('js/cke5customise_global.js');
+            if (is_file($globalWidgetJs)) {
+                rex_view::addJsFile($this->getAssetsUrl('js/cke5customise_global.js'));
+            }
+        }
+    }
+
     // Check REDAXO version
     if (rex_version::compare(rex::getVersion(), '5.13.0-dev', '>=')) {
         rex_view::addCssFile($this->getAssetsUrl('css/cke5_dark.css'));
         $user = rex::requireUser();
 
         // get user settings for theme
-        $themeType = $user->getValue('theme');
-        $theme = (!is_null($themeType) && $themeType !== '') ? $themeType : 'auto';
+        $themeType = (string) $user->getValue('theme');
+        $theme = $themeType !== '' ? $themeType : 'auto';
 
         if (rex::getProperty('theme') === 'light') {
             $theme = 'light';
@@ -77,8 +102,7 @@ if (rex::isBackend() && is_object(rex::getUser())) {
 
             // Prüfen, ob es sich um eine der relevanten Tabellen handelt
             if ($tableName === rex::getTable('cke5_styles') ||
-                $tableName === rex::getTable('cke5_style_groups') ||
-                $tableName === rex::getTable('cke5_templates')) {
+                $tableName === rex::getTable('cke5_style_groups')) {
 
                 Cke5\Utils\Cke5CssHandler::regenerateCssFile();
             }

@@ -12,6 +12,46 @@ $profileTable = rex::getTable(Cke5DatabaseHandler::CKE5_PROFILES);
 $message = '';
 $profiles = Cke5DatabaseHandler::getAllProfiles();
 
+/**
+ * @param array<string,string> $profile
+ * @param string $fieldName
+ * @return array<int,int>
+ */
+$collectIds = static function (array $profile, string $fieldName): array {
+    if (!isset($profile[$fieldName]) || $profile[$fieldName] === '') {
+        return [];
+    }
+
+    $ids = array_map('trim', explode('|', (string) $profile[$fieldName]));
+    $ids = array_filter($ids, static function ($id): bool {
+        return $id !== '';
+    });
+
+    $ids = array_map('intval', $ids);
+    $ids = array_filter($ids, static function (int $id): bool {
+        return $id > 0;
+    });
+
+    return array_values(array_unique($ids));
+};
+
+/**
+ * @param string $tableName
+ * @param array<int,int> $ids
+ * @return array<int,array<string,string>>
+ */
+$loadRows = static function (string $tableName, array $ids): array {
+    if ($ids === []) {
+        return [];
+    }
+
+    $sql = rex_sql::factory();
+    $table = rex::getTable($tableName);
+    $rows = $sql->getArray('SELECT * FROM ' . $table . ' WHERE id IN (' . implode(', ', $ids) . ') ORDER BY id');
+
+    return is_array($rows) ? $rows : [];
+};
+
 // action
 if (rex_request::post('_csrf_token', 'string', '') !== '') {
     try {
@@ -26,6 +66,9 @@ if (rex_request::post('_csrf_token', 'string', '') !== '') {
         $exportIds = $exportIds['profiles'];
         $exportProfiles = [];
         $exportNames = [];
+        $styleGroupIds = [];
+        $styleIds = [];
+        $snippetIds = [];
 
         // and use the loaded profiles
         if (!is_null($profiles)) {
@@ -34,16 +77,33 @@ if (rex_request::post('_csrf_token', 'string', '') !== '') {
                     if ($exportId == $profile['id']) {
                         $exportProfiles[] = $profile; // to get the entire stuff
                         $exportNames[] = $profile['name']; // and to get the file name
+                        $styleGroupIds = array_merge($styleGroupIds, $collectIds($profile, 'group_styles'));
+                        $styleIds = array_merge($styleIds, $collectIds($profile, 'styles'));
+                        $snippetIds = array_merge($snippetIds, $collectIds($profile, 'snippets'));
                     }
                 }
             }
         }
 
+        $exportStyleGroups = $loadRows(Cke5DatabaseHandler::CKE5_STYLE_GROUPS, array_values(array_unique($styleGroupIds)));
+        $exportStyles = $loadRows(Cke5DatabaseHandler::CKE5_STYLES, array_values(array_unique($styleIds)));
+        $exportSnippets = $loadRows(Cke5DatabaseHandler::CKE5_SNIPPETS, array_values(array_unique($snippetIds)));
+
+        $exportData = [
+            'profiles' => $exportProfiles,
+            'style_groups' => $exportStyleGroups,
+            'styles' => $exportStyles,
+            'snippets' => $exportSnippets,
+        ];
+
         // create filename and export the data set
-        $names = (strlen(implode('_', $exportNames)) > 100) ? implode('_', $exportNames) : substr(implode('_', $exportNames), 0, 100) . '_etc_';
-        $fileName = 'cke5_profiles_' . $names . '_' . date('YmdHis') . '.json';
+        $names = implode('_', $exportNames);
+        if (strlen($names) > 100) {
+            $names = substr($names, 0, 100) . '_etc_';
+        }
+        $fileName = 'cke5_export_' . $names . '_' . date('YmdHis') . '.json';
         header('Content-Disposition: attachment; filename="' . $fileName . '"; charset=utf-8'); // create header info
-        rex_response::sendContent((string)json_encode($exportProfiles), 'application/octetstream'); // stream it out
+        rex_response::sendContent((string) json_encode($exportData, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT), 'application/octetstream'); // stream it out
         exit; // stop process
     } catch (LengthException $e) {
         $message = rex_view::error($this->i18n('profiles_export_missing_input_error', $e->getMessage()));

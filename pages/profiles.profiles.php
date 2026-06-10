@@ -12,13 +12,14 @@ use Cke5\Utils\Cke5PreviewHelper;
 $func = rex_request::request('func', 'string');
 /** @var int $id */
 $id = rex_request::request('id', 'int');
+$profileKey = trim(rex_request::request('profile', 'string', ''));
 /** @var int $start */
 $start = rex_request::request('start', 'int', NULL);
 $send = rex_request::request('send', 'boolean', false);
 
 $profileTable = rex::getTable(Cke5DatabaseHandler::CKE5_PROFILES);
 $stylesTable = rex::getTable(Cke5DatabaseHandler::CKE5_STYLES);
-$templatesTable = rex::getTable(Cke5DatabaseHandler::CKE5_TEMPLATES);
+$snippetsTable = rex::getTable(Cke5DatabaseHandler::CKE5_SNIPPETS);
 $message = '';
 
 if ($func === 'clone') {
@@ -26,6 +27,7 @@ if ($func === 'clone') {
     rex_extension::registerPoint(new rex_extension_point('CKE5_PROFILE_CLONE', $id));
     $func = '';
 }
+
 
 if ($func === 'delete') {
     $message = Cke5ListHelper::deleteData($profileTable, $id);
@@ -49,11 +51,11 @@ if ($func === '') {
     $tdIcon = '<i class="rex-icon fa-cube"></i>';
 
     $list->addColumn($thIcon, $tdIcon, 0, ['<th class="rex-table-icon">###VALUE###</th>', '<td class="rex-table-icon">###VALUE###</td>']);
-    $list->setColumnParams($thIcon, ['func' => 'edit', 'id' => '###id###']);
+    $list->setColumnParams($thIcon, ['func' => 'edit', 'profile' => '###name###']);
 
     // name
     $list->setColumnLabel('name', rex_i18n::msg('cke5_name'));
-    $list->setColumnParams('name', ['func' => 'edit', 'id' => '###id###', 'start' => $start]);
+    $list->setColumnParams('name', ['func' => 'edit', 'profile' => '###name###', 'start' => $start]);
 
     // description
     $list->setColumnLabel('description', rex_i18n::msg('cke5_description'));
@@ -62,7 +64,7 @@ if ($func === '') {
     $list->addColumn('edit', '<i class="rex-icon fa-pencil-square-o"></i> ' . rex_i18n::msg('edit'), -1, ['', '<td>###VALUE###</td>']);
     $list->setColumnLabel('edit', rex_i18n::msg('cke5_list_function'));
     $list->setColumnLayout('edit', array('<th colspan="3">###VALUE###</th>', '<td>###VALUE###</td>'));
-    $list->setColumnParams('edit', ['func' => 'edit', 'id' => '###id###', 'start' => $start]);
+    $list->setColumnParams('edit', ['func' => 'edit', 'profile' => '###name###', 'start' => $start]);
 
     // delete
     $list->addColumn('delete', '');
@@ -90,6 +92,47 @@ if ($func === '') {
 } elseif ($func === 'edit' || $func === 'add') {
 
     $id = rex_request('id', 'int');
+    $profileKey = trim(rex_request('profile', 'string', ''));
+    $resolvedProfileRow = null;
+
+    if ($func === 'edit') {
+        if ($profileKey !== '') {
+            $profileRows = rex_sql::factory()->getArray(
+                'SELECT id FROM ' . $profileTable . ' WHERE name = :name LIMIT 1',
+                ['name' => $profileKey]
+            );
+
+            if (!isset($profileRows[0]['id'])) {
+                echo rex_view::error('Das gewünschte Profil wurde nicht gefunden (Key: ' . htmlspecialchars($profileKey) . '). Bitte öffne die Profil-Liste erneut.');
+                return;
+            }
+
+            $id = (int) $profileRows[0]['id'];
+            $profileKey = (string) $profileKey;
+            $resolvedProfileRow = rex_sql::factory()->getArray(
+                'SELECT * FROM ' . $profileTable . ' WHERE name = :name LIMIT 1',
+                ['name' => $profileKey]
+            );
+        }
+
+        if ($id <= 0) {
+            echo rex_view::error('Ungültige Profil-ID. Bitte öffne die Profil-Liste erneut.');
+            return;
+        }
+
+        if ($resolvedProfileRow === null) {
+            $profileExists = (int) rex_sql::factory()->getValue(
+                'SELECT COUNT(*) FROM ' . $profileTable . ' WHERE id = :id',
+                ['id' => $id]
+            );
+
+            if ($profileExists !== 1) {
+                echo rex_view::error('Das gewünschte Profil wurde nicht gefunden (ID: ' . $id . '). Bitte öffne die Profil-Liste erneut.');
+                return;
+            }
+        }
+    }
+
     $form = rex_form::factory($profileTable, '', 'id=' . $id, 'post');
     $form->addParam('start', $start);
     $form->addParam('send', true);
@@ -98,21 +141,56 @@ if ($func === '') {
     $prefix = '';
 
     if ($func === 'edit') {
-        $form->addParam('id', $id);
+        if ($profileKey !== '') {
+            $form->addParam('profile', $profileKey);
+        } else {
+            $form->addParam('id', $id);
+        }
         $result = rex_request::post($form->getName(), 'array', 'null');
 
         if (!is_array($result)) {
-            $result = $form->getSql()->getRow();
+            if (is_array($resolvedProfileRow) && isset($resolvedProfileRow[0]) && is_array($resolvedProfileRow[0])) {
+                $result = $resolvedProfileRow[0];
+                $prefix = rex::getTable('cke5_profiles') . '.';
+            }
+
+            if (is_array($result)) {
+                // Profil wurde bereits über den Key geladen.
+            } else {
+            $rows = $form->getSql()->getArray(
+                'SELECT * FROM ' . $profileTable . ' WHERE id = :id LIMIT 1',
+                ['id' => $id]
+            );
+
+            if (!isset($rows[0]) || !is_array($rows[0])) {
+                echo rex_view::error('Das gewünschte Profil wurde nicht gefunden (ID: ' . $id . '). Bitte öffne die Profil-Liste erneut.');
+                return;
+            }
+
+            $result = $rows[0];
             $prefix = rex::getTable('cke5_profiles') . '.';
+            }
         }
     }
 
     $default_value = $func === 'add' && $send === false;
-    $min_height = (is_array($result) && isset($result[$prefix . 'min_height'])) ? intval($result[$prefix . 'min_height']) : 0;
-    $max_height = (is_array($result) && isset($result[$prefix . 'max_height'])) ? intval($result[$prefix . 'max_height']) : 0;
-    $profile = (is_array($result) && isset($result[$prefix . 'name'])) ? $result[$prefix . 'name'] : '';
-    $mediaPath = (is_array($result) && (isset($result[$prefix . 'mediapath']) && $result[$prefix . 'mediapath'] !== '')) ? $result[$prefix . 'mediapath'] : str_replace(['../', '/'], '', rex_url::media());
-    $expert = (is_array($result) && isset($result[$prefix . 'expert']) && $result[$prefix . 'expert'] !== '');
+    $resultValue = static function (array $row, string $field, string $fieldPrefix = '') {
+        if ('' !== $fieldPrefix && array_key_exists($fieldPrefix . $field, $row)) {
+            return $row[$fieldPrefix . $field];
+        }
+
+        return $row[$field] ?? null;
+    };
+
+    $min_height = is_array($result) ? intval((string) ($resultValue($result, 'min_height', $prefix) ?? '0')) : 0;
+    $max_height = is_array($result) ? intval((string) ($resultValue($result, 'max_height', $prefix) ?? '0')) : 0;
+    $profile = is_array($result) ? (string) ($resultValue($result, 'name', $prefix) ?? '') : '';
+
+    $mediaPathValue = is_array($result) ? $resultValue($result, 'mediapath', $prefix) : null;
+    $mediaPath = is_string($mediaPathValue) && '' !== $mediaPathValue ? $mediaPathValue : str_replace(['../', '/'], '', rex_url::media());
+
+    $expertValue = is_array($result) ? $resultValue($result, 'expert', $prefix) : null;
+    $expert = is_string($expertValue) && '' !== $expertValue;
 
     // wrapper
     $form->addRawField('<div class="cke5_wrap_rex_profile_data">');
@@ -141,11 +219,13 @@ if ($func === '') {
             // text area
             $field = $form->addTextAreaField('expert_definition');
             $field->setAttribute('id', 'cke5-expert-definition-area');
+            $field->setAttribute('class', 'rex-code');
             $field->setAttribute('rows', '2');
             $field->setLabel(rex_i18n::msg('cke5_expert_definition_area'));
             // text area
             $field = $form->addTextAreaField('expert_suboption');
             $field->setAttribute('id', 'cke5-expert-suboption-area');
+            $field->setAttribute('class', 'rex-code');
             $field->setAttribute('rows', '2');
             $field->setLabel(rex_i18n::msg('cke5_expert_suboption_area'));
         // end collapse
@@ -158,6 +238,8 @@ if ($func === '') {
         $locales = rex_i18n::getLocales();
         asort($locales);
 
+        $form->addRawField('<div class="cke5-placeholder-scope-note text-muted"><small>' . rex_i18n::msg('cke5_placeholder_tabs_scope_note') . '</small></div>');
+
         Cke5FormHelper::addRexLangTabs($form, 'wrapper', rex_i18n::getLocale());
         foreach ($locales as $locale) {
             Cke5FormHelper::addRexLangTabs($form, 'inner_wrapper', $locale, rex_i18n::getLocale());
@@ -167,9 +249,21 @@ if ($func === '') {
             Cke5FormHelper::addRexLangTabs($form, 'close_inner_wrapper');
         }
         Cke5FormHelper::addRexLangTabs($form, 'close_wrapper');
+        $form->addRawField('<p class="cke5-profile-settings-note text-muted"><small>' . rex_i18n::msg('cke5_profile_global_settings_note') . '</small></p>');
 
 // TOOLBAR
         $form->addRawField('<fieldset><legend>'.rex_i18n::msg('cke5_toolbar').'</legend>');
+            $field = $form->addSelectField('editor_type');
+            $field->setAttribute('id', 'cke5editor-type-select');
+            $field->setLabel(rex_i18n::msg('cke5_editor_type'));
+            $field->setNotice(rex_i18n::msg('cke5_editor_type_notice'));
+            $field->getSelect()->addOption(rex_i18n::msg('cke5_editor_type_classic'), Cke5ProfilesCreator::EDITOR_TYPES['classic']);
+            $field->getSelect()->addOption(rex_i18n::msg('cke5_editor_type_classic_balloon'), Cke5ProfilesCreator::EDITOR_TYPES['classic_balloon']);
+            $field->getSelect()->addOption(rex_i18n::msg('cke5_editor_type_balloon_block'), Cke5ProfilesCreator::EDITOR_TYPES['balloon_block']);
+            if ($default_value) {
+                $field->setValue(Cke5ProfilesCreator::EDITOR_TYPES['classic']);
+            }
+
             // toolbar
             $toolbarItems = Cke5FormHelper::potentialRemoveLicenseItems(Cke5ProfilesCreator::ALLOWED_FIELDS['toolbar'], Cke5ProfilesCreator::LICENSE_FIELDS['toolbar']);
 
@@ -180,6 +274,24 @@ if ($func === '') {
             $field->setLabel(rex_i18n::msg('cke5_toolbar_elements'));
             if ($default_value) $field->setValue(Cke5ProfilesCreator::DEFAULTS['toolbar']);
 
+            $field = $form->addCheckboxField('balloon_toolbar_custom');
+            $field->setAttribute('id', 'cke5balloon-toolbar-custom-input');
+            $field->setAttribute('data-toggle', 'toggle');
+            $field->setAttribute('data-collapse-target', 'balloonToolbar');
+            $field->setLabel(rex_i18n::msg('cke5_balloon_toolbar_custom'));
+            $field->addOption(rex_i18n::msg('cke5_balloon_toolbar_custom_description'), 'balloon_toolbar_custom');
+            if ($default_value) {
+                $field->setValue('');
+            }
+
+            $form->addRawField('<div class="collapse" id="cke5balloonToolbar-collapse">');
+            $field = $form->addTextField('balloon_toolbar');
+            $field->setAttribute('id', 'cke5balloon-toolbar-input');
+            $field->setAttribute('data-tag-init', 1);
+            $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['balloon_toolbar']) . '"]');
+            $field->setLabel(rex_i18n::msg('cke5_balloon_toolbar_elements'));
+            $form->addRawField('</div>');
+
             // group when full
             $field = $form->addCheckboxField('group_when_full');
             $field->setAttribute('id', 'cke5group-input');
@@ -187,6 +299,36 @@ if ($func === '') {
             $field->setLabel(rex_i18n::msg('cke5_group_when_full_default'));
             $field->addOption(rex_i18n::msg('cke5_group_when_full_description'), 'group_when_full');
             if ($default_value) $field->setValue('group_when_full');
+
+            // paste plain text default
+            $field = $form->addCheckboxField('paste_plain_text_default');
+            $field->setAttribute('id', 'cke5pasteplaintextdefault-input');
+            $field->setAttribute('data-toggle', 'toggle');
+            $field->setLabel(rex_i18n::msg('cke5_paste_plain_text_default'));
+            $field->addOption(rex_i18n::msg('cke5_paste_plain_text_default_description'), 'paste_plain_text_default');
+            if ($default_value) {
+                $field->setValue('paste_plain_text_default');
+            }
+
+            // markdown paste
+            $field = $form->addCheckboxField('markdown_paste');
+            $field->setAttribute('id', 'cke5markdownpaste-input');
+            $field->setAttribute('data-toggle', 'toggle');
+            $field->setLabel(rex_i18n::msg('cke5_markdown_paste'));
+            $field->addOption(rex_i18n::msg('cke5_markdown_paste_description'), 'markdown_paste');
+            if ($default_value) {
+                $field->setValue('');
+            }
+
+            // minimap
+            $field = $form->addCheckboxField('minimap');
+            $field->setAttribute('id', 'cke5minimap-input');
+            $field->setAttribute('data-toggle', 'toggle');
+            $field->setLabel(rex_i18n::msg('cke5_minimap'));
+            $field->addOption(rex_i18n::msg('cke5_minimap_description'), 'minimap');
+            if ($default_value) {
+                $field->setValue('');
+            }
 
             // text part lang
             $form->addRawField('<div class="collapse" id="cke5textPartLanguage-collapse">');
@@ -235,40 +377,36 @@ if ($func === '') {
         $form->addRawField('</fieldset>');
     $form->addRawField('</div>');
 
-// TEMPLATES
-    $form->addRawField('<div class="collapse" id="cke5insertTemplate-collapse">');
-        $form->addRawField('<fieldset><legend>' . rex_i18n::msg('cke5_template') . '</legend>');
-            // Template-Gruppen-Auswahl
-            $field = $form->addSelectField('group_templates');
+// SNIPPETS
+    $form->addRawField('<div class="collapse" id="cke5snippets-collapse">');
+        $form->addRawField('<fieldset><legend>' . rex_i18n::msg('cke5_snippets') . '</legend>');
+            $field = $form->addSelectField('snippets');
             $field->setAttribute('class', 'form-control selectpicker');
             $field->setAttribute('data-live-search', 'true');
             $field->setAttribute('multiple', 'multiple');
-            $field->setLabel(rex_i18n::msg('cke5_group_templates'));
+            $field->setLabel(rex_i18n::msg('cke5_snippets_profile_select'));
 
-            // Laden der Template Groups aus der Datenbank
-            $templateGroupTable = rex::getTable(Cke5DatabaseHandler::CKE5_TEMPLATE_GROUPS);
             $sql = rex_sql::factory();
-            $sqlResult = $sql->getArray("select id, name from $templateGroupTable");
-
-            foreach ($sqlResult as $group) {
-                $field->getSelect()->addOption($group['name'] . ' [' . $group['id'] . ']', $group['id']);
-            }
-
-            $field = $form->addSelectField('templates');
-            $field->setAttribute('class', 'form-control selectpicker');
-            $field->setAttribute('data-live-search', 'true');
-            $field->setAttribute('multiple', 'multiple');
-            $field->setLabel(rex_i18n::msg('cke5_template'));
-            $sql = rex_sql::factory();
-            $sqlResult = $sql->getArray('select id, title from ' . $templatesTable);
-            foreach ($sqlResult as $key => $value) {
-                $field->getSelect()->addOption($value['title'] . ' [' . $value['id'] . ']', $value['id']);
+            $sqlResult = $sql->getArray('select id, name, active from ' . $snippetsTable . ' order by name');
+            foreach ($sqlResult as $value) {
+                $suffix = ((int) $value['active'] === 1) ? '' : ' (' . rex_i18n::msg('offline') . ')';
+                $field->getSelect()->addOption($value['name'] . $suffix . ' [' . $value['id'] . ']', $value['id']);
             }
         $form->addRawField('</fieldset>');
     $form->addRawField('</div>');
 
 // BASIS TEXT STYLES
         $form->addRawField('<fieldset><legend>'.rex_i18n::msg('cke5_base_text_styles').'</legend>');
+            $field = $form->addCheckboxField('document_title');
+            $field->setAttribute('id', 'cke5document-title-input');
+            $field->setAttribute('data-toggle', 'toggle');
+            $field->setLabel(rex_i18n::msg('cke5_document_title'));
+            $field->addOption(rex_i18n::msg('cke5_document_title_description'), 'document_title');
+            $field->setNotice(rex_i18n::msg('cke5_document_title_notice'));
+            if ($default_value) {
+                $field->setValue('');
+            }
+
             // heading
             $form->addRawField('<div class="collapse" id="cke5heading-collapse">');
                 $field = $form->addTextField('heading');
@@ -335,6 +473,86 @@ if ($func === '') {
                 $field->setAttribute('data-tag-init', 1);
                 $field->setAttribute('data-tags', '["' . implode('","', Cke5ProfilesCreator::ALLOWED_FIELDS['providers']) . '"]');
                 if ($default_value) $field->setValue(Cke5ProfilesCreator::DEFAULTS['mediaembed']);
+
+                $field = $form->addTextAreaField('media_embed_styles_definition');
+                $field->setLabel(rex_i18n::msg('cke5_media_embed_styles'));
+                $field->setAttribute('id', 'cke5-media-embed-styles-definition');
+                $field->setAttribute('data-label-placeholder', rex_i18n::msg('label'));
+                $field->setAttribute('data-class-placeholder', rex_i18n::msg('cke5_classes_area'));
+                $field->setNotice(rex_i18n::msg('cke5_media_embed_styles_description'));
+                if ($default_value) {
+                    $field->setValue(Cke5ProfilesCreator::DEFAULT_VALUES['media_embed_styles_definition']);
+                }
+
+                $field = $form->addTextAreaField('media_embed_width_styles_definition');
+                $field->setLabel(rex_i18n::msg('cke5_media_embed_width_styles'));
+                $field->setAttribute('id', 'cke5-media-embed-width-styles-definition');
+                $field->setAttribute('data-label-placeholder', rex_i18n::msg('label'));
+                $field->setAttribute('data-class-placeholder', rex_i18n::msg('cke5_classes_area'));
+                $field->setNotice(rex_i18n::msg('cke5_media_embed_width_styles_description'));
+                if ($default_value) {
+                    $field->setValue(Cke5ProfilesCreator::DEFAULT_VALUES['media_embed_width_styles_definition']);
+                }
+            $form->addRawField('</div>');
+
+            $form->addRawField('<div class="collapse" id="cke5for_video-collapse">');
+                $field = $form->addTextAreaField('video_styles_definition');
+                $field->setLabel(rex_i18n::msg('cke5_video_styles'));
+                $field->setAttribute('id', 'cke5-video-styles-definition');
+                $field->setAttribute('data-label-placeholder', rex_i18n::msg('label'));
+                $field->setAttribute('data-class-placeholder', rex_i18n::msg('cke5_classes_area'));
+                $field->setNotice(rex_i18n::msg('cke5_video_styles_description'));
+                if ($default_value) {
+                    $field->setValue(Cke5ProfilesCreator::DEFAULT_VALUES['video_styles_definition']);
+                }
+
+                $field = $form->addTextAreaField('video_width_styles_definition');
+                $field->setLabel(rex_i18n::msg('cke5_video_width_styles'));
+                $field->setAttribute('id', 'cke5-video-width-styles-definition');
+                $field->setAttribute('data-label-placeholder', rex_i18n::msg('label'));
+                $field->setAttribute('data-class-placeholder', rex_i18n::msg('cke5_classes_area'));
+                $field->setNotice(rex_i18n::msg('cke5_video_width_styles_description'));
+                if ($default_value) {
+                    $field->setValue(Cke5ProfilesCreator::DEFAULT_VALUES['video_width_styles_definition']);
+                }
+
+                $form->addRawField('<fieldset><legend>' . rex_i18n::msg('cke5_video_defaults') . '</legend>');
+                    $field = $form->addCheckboxField('video_controls_default');
+                    $field->setAttribute('id', 'cke5video-controls-default-input');
+                    $field->setAttribute('data-toggle', 'toggle');
+                    $field->setLabel(rex_i18n::msg('cke5_video_controls_default'));
+                    $field->addOption(rex_i18n::msg('cke5_video_controls_default_description'), 'video_controls_default');
+                    if ($default_value) {
+                        $field->setValue('video_controls_default');
+                    }
+
+                    $field = $form->addCheckboxField('video_autoplay_default');
+                    $field->setAttribute('id', 'cke5video-autoplay-default-input');
+                    $field->setAttribute('data-toggle', 'toggle');
+                    $field->setLabel(rex_i18n::msg('cke5_video_autoplay_default'));
+                    $field->addOption(rex_i18n::msg('cke5_video_autoplay_default_description'), 'video_autoplay_default');
+
+                    $field = $form->addCheckboxField('video_muted_default');
+                    $field->setAttribute('id', 'cke5video-muted-default-input');
+                    $field->setAttribute('data-toggle', 'toggle');
+                    $field->setLabel(rex_i18n::msg('cke5_video_muted_default'));
+                    $field->addOption(rex_i18n::msg('cke5_video_muted_default_description'), 'video_muted_default');
+
+                    $field = $form->addCheckboxField('video_loop_default');
+                    $field->setAttribute('id', 'cke5video-loop-default-input');
+                    $field->setAttribute('data-toggle', 'toggle');
+                    $field->setLabel(rex_i18n::msg('cke5_video_loop_default'));
+                    $field->addOption(rex_i18n::msg('cke5_video_loop_default_description'), 'video_loop_default');
+
+                    $field = $form->addCheckboxField('video_playsinline_default');
+                    $field->setAttribute('id', 'cke5video-playsinline-default-input');
+                    $field->setAttribute('data-toggle', 'toggle');
+                    $field->setLabel(rex_i18n::msg('cke5_video_playsinline_default'));
+                    $field->addOption(rex_i18n::msg('cke5_video_playsinline_default_description'), 'video_playsinline_default');
+                    if ($default_value) {
+                        $field->setValue('video_playsinline_default');
+                    }
+                $form->addRawField('</fieldset>');
             $form->addRawField('</div>');
 
             // embed html_preview
@@ -713,6 +931,7 @@ if ($func === '') {
                 $field->setAttribute('id', 'cke5-link-decorators-definition-area');
                 $field->setAttribute('rows', '2');
                 $field->setLabel(rex_i18n::msg('cke5_link_decorators_definition_area'));
+                $field->setNotice('CKEditor API: JSON-Objekt mit Decorator-Key => Konfiguration, z. B. {"isDownloadable":{"mode":"manual","label":"Download","attributes":{"download":"download"}}}');
             $form->addRawField('</div>');
         // close fieldset LINKS
         $form->addRawField('</fieldset></div>');
@@ -744,6 +963,7 @@ if ($func === '') {
             $field->setAttribute('id', 'cke5-mentions-area');
             $field->setAttribute('rows', '2');
             $field->setLabel(rex_i18n::msg('cke5_mentions_definition_area'));
+            $field->setNotice(rex_i18n::msg('cke5_mentions_definition_example'));
             $form->addRawField('</div>');
 
             // sprog_mention for experts
@@ -758,8 +978,8 @@ if ($func === '') {
             $form->addRawField('<div class="collapse" id="cke5sprog_mentionDefinition-collapse">');
                 $field = $form->addTextAreaField('sprog_mention_definition');
                 $field->setAttribute('id', 'cke5-sprog-mention-area');
-                $field->setAttribute('data-id-placeholder', rex_i18n::msg('cke5_sprog_mention_key'));
-                $field->setAttribute('data-name-placeholder', rex_i18n::msg('cke5_sprog_mention_description'));
+                $field->setAttribute('data-sprog-key-placeholder', rex_i18n::msg('cke5_sprog_mention_key'));
+                $field->setAttribute('data-sprog-description-placeholder', rex_i18n::msg('cke5_sprog_mention_description'));
                 $field->setLabel(rex_i18n::msg('cke5_sprog_mention_definition_area'));
             $form->addRawField('</div>');
 
@@ -785,7 +1005,7 @@ if ($func === '') {
 
             // get current lang
             $lang = rex_i18n::getLocale();
-            $langFiles = glob($this->getPath('assets/vendor/ckeditor5-classic/translations/*.js'));
+            $langFiles = glob($this->getPath('assets/vendor/ckeditor5-modern/translations/*.js'));
 
             if (is_array($langFiles)) {
                 foreach ($langFiles as $langFile) {
@@ -861,11 +1081,29 @@ if ($func === '') {
             $form->addRawField('</div>');
         // close fieldset DEFAULT SETUP
         $form->addRawField('</fieldset>');
+
+        $externalWidgetHtml = rex_extension::registerPoint(new rex_extension_point(
+            'CKE5_PROFILE_WIDGETS',
+            '',
+            [
+                'form' => $form,
+                'result' => $result,
+                'default_value' => $default_value,
+                'func' => $func,
+            ]
+        ));
+        if (is_string($externalWidgetHtml) && trim($externalWidgetHtml) !== '') {
+            $form->addRawField('<fieldset><legend>Plugin-Widgets</legend>');
+            $form->addRawField($externalWidgetHtml);
+            $form->addRawField('</fieldset>');
+        }
+
     // close form wrapper collapse
     $form->addRawField('</div>');
 
     if ($func === 'edit') {
         $profileResult = array();
+        $previewSeedHtml = '<h3>Preview</h3><p>Dies ist ein kurzer Beispieltext zur Editor-Vorschau.</p><p><a href="#">Beispiel-Link</a></p>';
         if (is_array($result)) {
             foreach ($result as $key => $value) {
                 $profileResult[str_replace($prefix, '', $key)] = $value;
@@ -878,10 +1116,11 @@ if ($func === '') {
                     <label class="control-label">' . rex_i18n::msg('cke5_editor_preview') . '</label>
                 </dt>
                 <dd>
-                    <div class="cke5-editor" data-profile="' . $profile . '" data-lang="' . Cke5Lang::getUserLang() . '"></div>           
+                    <div class="cke5-editor" data-profile="' . $profile . '" data-lang="' . Cke5Lang::getUserLang() . '">' . $previewSeedHtml . '</div>
                     <div class="cke5-editor-info"><p>' . rex_i18n::msg('cke5_editor_preview_info') . '</p></div>
                     <div class="cke5-preview-code">
                         ' . Cke5PreviewHelper::getHtmlCode($profileResult) . '
+                        ' . Cke5PreviewHelper::getYFormJsonCode($profileResult) . '
                         ' . Cke5PreviewHelper::getMFormCode($profileResult) . '
                     </div>
                 </dd>
@@ -899,4 +1138,3 @@ if ($func === '') {
     $fragment->setVar('body', $content, false);
     echo $fragment->parse('core/page/section.php');
 }
-

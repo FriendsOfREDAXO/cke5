@@ -134,12 +134,25 @@ class Cke5ProfilesCreator
     ];
     const EDITOR_SETTINGS = [
         /* todo: specialCharacters not work because : https://github.com/ckeditor/ckeditor5/issues/6160 */
-        'cktypes' => ['heading', 'fontSize', 'mediaEmbed', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable', 'fontBackgroundColor', 'fontColor', 'codeBlock', 'bulletedList', 'numberedList', 'htmlEmbed'/*, 'emoji'*/, 'sourceEditing', 'textPartLanguage'/*, 'specialCharacters' */, 'style', 'insertTemplate'],
+        'cktypes' => ['heading', 'fontSize', 'mediaEmbed', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable', 'fontBackgroundColor', 'fontColor', 'codeBlock', 'bulletedList', 'numberedList', 'htmlEmbed'/*, 'emoji'*/, 'sourceEditing', 'textPartLanguage'/*, 'specialCharacters' */, 'style', 'snippets', 'for_video_widget_test'],
         'ckimgtypes' => ['rexImage', 'imageUpload'],
         'cklinktypes' => ['ytable', 'media', 'internal'],
         'cktabletypes' => ['tableProperties', 'tableCellProperties']
     ];
     const DEFAULT_VALUES = [
+        'toolbar' => 'bold,italic,bulletedList,numberedList,undo,redo,link,pastePlainText',
+        'heading' => 'paragraph,h1,h2,h3,h4,h5,h6',
+        'highlight' => 'yellowMarker,greenMarker,pinkMarker,blueMarker,redPen,greenPen',
+        'alignment' => 'left,right,center,justify',
+        'code_block' => 'plaintext,c,cs,cpp,css,diff,html,java,javascript,php,python,ruby,typescript,xml',
+        'mediaembed' => 'dailymotion,spotify,youtube,vimeo,instagram,twitter,googleMaps,flickr,facebook',
+        'special_characters' => 'currency,mathematical,latin,arrows,text',
+        'table_toolbar' => '|,tableColumn,tableRow,mergeTableCells,tableProperties,tableCellProperties,toggleTableCaption',
+        'image_toolbar' => '|,imageTextAlternative,block,inline,side,alignLeft,alignCenter,alignRight,alignBlockLeft,alignBlockRight,linkImage,toggleImageCaption',
+        'fontsize' => 'default,tiny,small,big,huge',
+        'rexlink' => 'internal,media,email,phone,ytable',
+        'min_height' => ['"none"', '"100px"', '"200px"', '"300px"', '"400px"', '"500px"', '"600px"'],
+        'max_height' => ['"none"', '"200px"', '"400px"', '"600px"', '"800px"', '"1000px"', '"1200px"'],
         'html_support_allow' => '[
     {
         "name": "regex(/^(div|section|article)$/)",
@@ -148,12 +161,90 @@ class Cke5ProfilesCreator
         "styles": true
     }
 ]',
+        'media_embed_styles_definition' => '[
+    {
+        "label": "Standard",
+        "class": ""
+    },
+    {
+        "label": "Links",
+        "class": "media-embed--left"
+    },
+    {
+        "label": "Zentriert",
+        "class": "media-embed--center"
+    },
+    {
+        "label": "Rechts",
+        "class": "media-embed--right"
+    },
+    {
+        "label": "Volle Breite",
+        "class": "media-embed--full"
+    }
+]',
+        'media_embed_width_styles_definition' => '[
+    {
+        "label": "Auto",
+        "class": "media-embed--w-auto"
+    },
+    {
+        "label": "50%",
+        "class": "media-embed--w-50"
+    },
+    {
+        "label": "75%",
+        "class": "media-embed--w-75"
+    },
+    {
+        "label": "100%",
+        "class": "media-embed--w-100"
+    }
+]',
+        'video_styles_definition' => '[
+    {
+        "label": "Standard",
+        "class": "video--pos-default"
+    },
+    {
+        "label": "Links",
+        "class": "video--pos-left"
+    },
+    {
+        "label": "Zentriert",
+        "class": "video--pos-center"
+    },
+    {
+        "label": "Rechts",
+        "class": "video--pos-right"
+    }
+]',
+        'video_width_styles_definition' => '[
+    {
+        "label": "Auto",
+        "class": "video--w-auto"
+    },
+    {
+        "label": "50%",
+        "class": "video--w-50"
+    },
+    {
+        "label": "75%",
+        "class": "video--w-75"
+    },
+    {
+        "label": "100%",
+        "class": "video--w-100"
+    }
+]',
     ];
     const LICENSE_FIELDS = [
-        'toolbar' => ['insertTemplate', 'tableOfContents']
+        'toolbar' => []
     ];
+    const DEFAULTS = self::DEFAULT_VALUES;
     const ALLOWED_FIELDS = [
-        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll', 'specialCharacters', 'pastePlainText', 'htmlEmbed', 'sourceEditing', 'textPartLanguage', 'findAndReplace', 'style', 'insertTemplate', /*'tableOfContents'*/ 'showBlocks', 'bookmark', 'accessibilityHelp'],
+        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll', 'specialCharacters', 'pastePlainText', 'redaxoMarkdownPasteToggle', 'redaxoMinimapToggle', 'htmlEmbed', 'sourceEditing', 'textPartLanguage', 'findAndReplace', 'style', 'snippets', 'for_video', 'for_video_widget_test', 'showBlocks', 'bookmark', 'accessibilityHelp'],
+        'balloon_toolbar' => ['style', '|', 'paragraph', 'heading', 'bulletedList', 'numberedList', 'todoList', 'outdent', 'indent', 'blockQuote', 'insertTable', 'mediaEmbed', 'for_video', 'for_video_widget_test', 'codeBlock', 'link', 'horizontalLine', 'specialCharacters', 'removeFormat', 'undo', 'redo'],
         'alignment' => ['left', 'right', 'center', 'justify'],
         'table_toolbar' => ['|', 'tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties', 'toggleTableCaption'],
         'heading' => ['paragraph', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
@@ -174,6 +265,12 @@ class Cke5ProfilesCreator
         'providers' => ['dailymotion', 'spotify', 'youtube', 'vimeo', 'instagram', 'twitter', 'googleMaps', 'flickr', 'facebook'],
         'code_block' => ['plaintext', 'c', 'cs', 'cpp', 'css', 'diff', 'html', 'java', 'javascript', 'php', 'python', 'ruby', 'typescript', 'xml'],
         'special_characters' => ['currency', 'mathematical', 'latin', 'arrows', 'text']
+    ];
+
+    const EDITOR_TYPES = [
+        'classic' => 'classic',
+        'classic_balloon' => 'classic_balloon',
+        'balloon_block' => 'balloon_block',
     ];
 
     /** @api array<string,array<string,string>> */
@@ -236,71 +333,7 @@ class Cke5ProfilesCreator
             'view' => 'h6',
             'title' => 'Heading 6',
             'class' => 'ck-heading_heading6'
-        ],
-    ];
-
-    /** @api array<string,array<string,string>> */
-    const HIGHLIGHTS = [
-        'yellowMarker' => [
-            'model' => 'yellowMarker',
-            'class' => 'marker-yellow',
-            'title' => 'Yellow Marker',
-            'color' => 'var(--ck-highlight-marker-yellow)',
-            'type' => 'marker'
-        ],
-        'greenMarker' => [
-            'model' => 'greenMarker',
-            'class' => 'marker-green',
-            'title' => 'Green Marker',
-            'color' => 'var(--ck-highlight-marker-green)',
-            'type' => 'marker'
-        ],
-        'pinkMarker' => [
-            'model' => 'pinkMarker',
-            'class' => 'marker-pink',
-            'title' => 'Pink Marker',
-            'color' => 'var(--ck-highlight-marker-pink)',
-            'type' => 'marker'
-        ],
-        'blueMarker' => [
-            'model' => 'blueMarker',
-            'class' => 'marker-blue',
-            'title' => 'Blue Marker',
-            'color' => 'var(--ck-highlight-marker-blue)',
-            'type' => 'marker'
-        ],
-        'redPen' => [
-            'model' => 'redPen',
-            'class' => 'pen-red',
-            'title' => 'Red pen',
-            'color' => 'var(--ck-highlight-pen-red)',
-            'type' => 'pen'
-        ],
-        'greenPen' => [
-            'model' => 'greenPen',
-            'class' => 'pen-green',
-            'title' => 'Green pen',
-            'color' => 'var(--ck-highlight-pen-green)',
-            'type' => 'pen'
-        ],
-    ];
-
-
-    const DEFAULTS = [
-        'toolbar' => 'heading,|',
-        'alignment' => 'left,right,center',
-        'table_toolbar' => 'tableColumn,tableRow,mergeTableCells,tableProperties,tableCellProperties,toggleTableCaption',
-        'heading' => 'paragraph,h1,h2,h3',
-        'highlight' => 'yellowMarker,greenMarker,redPen,greenPen',
-        'image_toolbar' => 'imageTextAlternative,|,block,alignLeft,alignRight,linkImage',
-        'rexlink' => 'internal,media,email,phone',
-        'fontsize' => 'tiny,small,default,big,huge',
-        'min_height' => [0, 100, 200, 300, 400, 500, 600],
-        'max_height' => [0, 200, 400, 600, 800, 1000, 1200],
-        'mediaembed' => 'youtube,vimeo',
-        'code_block' => 'plaintext,php,javascript,python',
-        'special_characters' => 'currency,mathematical,latin,arrows,text',
-        //'emoji' => 'EmojiPeople,EmojiSymbols,EmojiFlags',
+        ]
     ];
 
     /**
@@ -405,18 +438,73 @@ class Cke5ProfilesCreator
         }
 
         $toolbar = self::toArray($profile['toolbar']);
+        $balloonToolbar = self::toArray(isset($profile['balloon_toolbar']) ? $profile['balloon_toolbar'] : null);
         $linkToolbar = self::toArray($profile['rexlink']);
         $tableToolbar = self::toArray($profile['table_toolbar']);
+        $globalSettings = self::getGlobalProfileSettings();
+        $globalMentions = self::isGlobalSettingEnabled($globalSettings, 'global_mentions_enabled') ? self::decodeGlobalJsonList($globalSettings, 'global_mentions_definition') : [];
+        $globalSprogMentions = self::isGlobalSettingEnabled($globalSettings, 'global_sprog_enabled') ? self::decodeGlobalJsonList($globalSettings, 'global_sprog_mention_definition') : [];
+        $globalYtables = self::isGlobalSettingEnabled($globalSettings, 'global_ytable_enabled') ? self::decodeGlobalJsonList($globalSettings, 'global_ytable_definition') : [];
+
+        if (self::isGlobalSettingEnabled($globalSettings, 'global_media_enabled') && (isset($profile['mediatypes']) && '' === trim((string) $profile['mediatypes']) || !isset($profile['mediatypes'])) && isset($globalSettings['global_mediatypes']) && '' !== trim((string) $globalSettings['global_mediatypes'])) {
+            $profile['mediatypes'] = trim((string) $globalSettings['global_mediatypes']);
+        }
+
+        if (self::isGlobalSettingEnabled($globalSettings, 'global_media_enabled') && (isset($profile['mediatype']) && '' === trim((string) $profile['mediatype']) || !isset($profile['mediatype'])) && isset($globalSettings['global_mediatype']) && '' !== trim((string) $globalSettings['global_mediatype'])) {
+            $profile['mediatype'] = trim((string) $globalSettings['global_mediatype']);
+        }
+
+        if (self::isGlobalSettingEnabled($globalSettings, 'global_media_enabled') && (isset($profile['mediapath']) && '' === trim((string) $profile['mediapath']) || !isset($profile['mediapath'])) && isset($globalSettings['global_mediapath']) && '' !== trim((string) $globalSettings['global_mediapath'])) {
+            $profile['mediapath'] = trim((string) $globalSettings['global_mediapath']);
+        }
+
+        $profileHasFontFamilyDefault = isset($profile['font_family_default']) && '' !== trim((string) $profile['font_family_default']);
+        $profileHasCustomFontFamilies = isset($profile['font_families']) && '' !== trim((string) $profile['font_families']);
+
+        if (self::isGlobalSettingEnabled($globalSettings, 'global_font_family_default') && !$profileHasFontFamilyDefault && !$profileHasCustomFontFamilies) {
+            $profile['font_family_default'] = 'default_font_family';
+        }
+
+        if (!self::isGlobalSettingEnabled($globalSettings, 'global_font_family_default') && !$profileHasCustomFontFamilies && '' !== trim((string) $globalSettings['global_font_families'])) {
+            $profile['font_families'] = trim((string) $globalSettings['global_font_families']);
+        }
+
         $jsonProfile = ['toolbar' => ['items' => $toolbar, 'shouldNotGroupWhenFull' => (!(isset($profile['group_when_full']) && $profile['group_when_full'] !== ''))]];
         $jsonSubOption = [];
         $jsonProfile['removePlugins'] = [];
         $sprogDefinition = [];
 
+        $jsonProfile['redaxoEditorType'] = self::normalizeEditorType(isset($profile['editor_type']) && is_string($profile['editor_type']) ? $profile['editor_type'] : '');
+
+        if (isset($profile['balloon_toolbar_custom']) && '' !== $profile['balloon_toolbar_custom'] && count($balloonToolbar) > 0) {
+            $jsonProfile['balloonToolbar'] = $balloonToolbar;
+            $jsonProfile['blockToolbar'] = $balloonToolbar;
+        }
+
+        if (isset($profile['paste_plain_text_default']) && $profile['paste_plain_text_default'] !== '') {
+            $jsonProfile['pastePlainTextDefault'] = true;
+        }
+
+        $jsonProfile['redaxoMarkdownPasteEnabled'] = self::profileFlagEnabled($profile, 'markdown_paste', false);
+        $jsonProfile['redaxoMinimapEnabled'] = self::profileFlagEnabled($profile, 'minimap', false);
+
+        if ($jsonProfile['redaxoMarkdownPasteEnabled'] && !in_array('redaxoMarkdownPasteToggle', $jsonProfile['toolbar']['items'], true)) {
+            $jsonProfile['toolbar']['items'][] = 'redaxoMarkdownPasteToggle';
+        }
+
+        if ($jsonProfile['redaxoMinimapEnabled'] && !in_array('redaxoMinimapToggle', $jsonProfile['toolbar']['items'], true)) {
+            $jsonProfile['toolbar']['items'][] = 'redaxoMinimapToggle';
+        }
+
         if (in_array('link', $toolbar, true) && count($linkToolbar) > 0) {
             $jsonProfile['link'] = ['rexlink' => $linkToolbar];
 
-            if (in_array('ytable', $linkToolbar, true) && isset($profile['ytable']) && $profile['ytable'] !== '') {
-                $jsonProfile['link']['ytable'] = json_decode($profile['ytable'], true);
+            if (in_array('ytable', $linkToolbar, true)) {
+                $profileYtables = isset($profile['ytable']) && '' !== $profile['ytable'] ? (array) json_decode($profile['ytable'], true) : [];
+                $mergedYtables = self::mergeConfigLists($globalYtables, $profileYtables);
+                if (count($mergedYtables) > 0) {
+                    $jsonProfile['link']['ytable'] = $mergedYtables;
+                }
             }
         }
 
@@ -434,6 +522,8 @@ class Cke5ProfilesCreator
         if (isset($profile['image_resize_unit']) && $profile['image_resize_unit'] !== '') {
             $jsonProfile['image']['resizeUnit'] = $profile['image_resize_unit'];
         }
+
+        $jsonProfile['redaxoImageResizeHandles'] = !((isset($profile['image_resize_handles']) && $profile['image_resize_handles'] === '') || is_null($profile['image_resize_handles']));
 
         if (isset($profile['image_resize_options']) && $profile['image_resize_options'] !== '' && isset($profile['image_resize_options_definition']) && $profile['image_resize_options_definition'] !== '') {
             /** @var array<string,array<string,string>> $resizeOptions */
@@ -533,6 +623,7 @@ class Cke5ProfilesCreator
                 foreach ($definition as $item) {
                     $jsonProfile['link']['decorators'] = array_merge($jsonProfile['link']['decorators'], $item);
                 }
+                $jsonProfile['link']['decorators'] = self::normalizeLinkDecorators($jsonProfile['link']['decorators']);
             }
         }
 
@@ -546,10 +637,6 @@ class Cke5ProfilesCreator
             $jsonProfile['documentOutline']['container'] = "document.querySelector( '.document-outline-container' )";
         } else {
             $jsonProfile['removePlugins'][] = 'DocumentOutline';
-        }
-
-        if (!in_array('insertTable', $toolbar, true)) {
-            $jsonProfile['removePlugins'][] = 'TableOfContents';
         }
 
         if (isset($profile['group_styles']) && $profile['group_styles'] !== '') {
@@ -602,81 +689,35 @@ class Cke5ProfilesCreator
             $jsonProfile['style']['definitions'] = self::getUniqueStylesByName($jsonProfile['style']['definitions']);
         }
 
-        if (isset($profile['group_templates']) && $profile['group_templates'] !== '') {
-            $templateGroups = array_filter(explode('|', $profile['group_templates']));
-            $templateGroupTable = rex::getTable(Cke5DatabaseHandler::CKE5_TEMPLATE_GROUPS);
-            $sql = rex_sql::factory();
-            $sqlResult = $sql->getArray("select * from $templateGroupTable where id in (" . implode(', ', $templateGroups) . ")");
-
-            if (count($sqlResult) > 0) {
-                foreach ($sqlResult as $result) {
-                    if (!empty($result['json_config'])) {
-                        try {
-                            $jsonConfig = json_decode($result['json_config'], true);
-                        } catch (Exception $e) {
-                            rex_logger::logException($e);
-                            throw $e;
-                        }
-
-                        // JSON-Konfiguration parsen
-                        if (is_array($jsonConfig) && count($jsonConfig) > 0) {
-                            if (!isset($jsonProfile['template']['definitions'])) {
-                                $jsonProfile['template']['definitions'] = [];
-                            }
-                            foreach ($jsonConfig as $value) {
-                                $jsonProfile['template']['definitions'][] = $value;
-                            }
-                        }
+        if (isset($profile['snippets']) && $profile['snippets'] !== '') {
+            $snippetIds = array_filter(explode('|', $profile['snippets']));
+            if ($snippetIds !== []) {
+                $snippetTable = rex::getTable(Cke5DatabaseHandler::CKE5_SNIPPETS);
+                $sql = rex_sql::factory();
+                $sqlResult = $sql->getArray('select id, name, content, active from ' . $snippetTable . ' where id in (' . implode(', ', $snippetIds) . ') order by name');
+                foreach ($sqlResult as $snippet) {
+                    if ((int) ($snippet['active'] ?? 0) !== 1) {
+                        continue;
                     }
-                }
-            }
-        }
-
-        if (isset($profile['templates']) && $profile['templates'] !== '') {
-            $templates = array_filter(explode('|', $profile['templates']));
-            $templateTable = rex::getTable(Cke5DatabaseHandler::CKE5_TEMPLATES);
-            $sql = rex_sql::factory();
-            $sqlResult = $sql->getArray("select * from $templateTable where id in (".implode(', ', $templates).")");
-            if (count($sqlResult) > 0) {
-                foreach ($sqlResult as $result) {
-                    if (!isset($result['data'])) continue;
-                    $data = $result['data'];
-                    $data = str_replace(["\r", "\n", "\t"], '', $data);
-                    $data = preg_replace('/>\s+</', '><', $data);
-                    $item = [
-                        'title' => $result['title'],
-                        'data' => $data,
+                    $jsonProfile['redaxoSnippets'][] = [
+                        'id' => (int) ($snippet['id'] ?? 0),
+                        'name' => (string) ($snippet['name'] ?? ''),
+                        'content' => (string) ($snippet['content'] ?? ''),
                     ];
-
-                    if (!empty($result['description'])) $item['description'] = $result['description'];
-                    if (!empty($result['icon'])) $item['icon'] = $result['icon'];
-
-                    $jsonProfile['template']['definitions'][] = $item;
                 }
             }
-        }
-
-        if (!empty($jsonProfile['template']['definitions'])) {
-            $jsonProfile['template']['definitions'] = self::getUniqueTemplatesByTitle($jsonProfile['template']['definitions']);
         }
 
         if (!in_array('sourceEditing', $toolbar, true)) {
             $jsonProfile['removePlugins'][] = 'SourceEditing';
         }
 
-        if ((isset($profile['image_resize_handles']) && $profile['image_resize_handles'] === '') || is_null($profile['image_resize_handles'])) {
-            $jsonProfile['removePlugins'][] = 'ImageResizeHandles';
-        }
-
         if (!in_array('style', $toolbar, true)) {
             $jsonProfile['removePlugins'][] = 'Style';
         }
 
-        if (!in_array('insertTemplate', $toolbar, true)) {
-            $jsonProfile['removePlugins'][] = 'Template';
-        }
-
-        if (!in_array('sourceEditing', $toolbar, true) && !in_array('style', $toolbar, true)) {
+        $requiresCustomHtml = in_array('for_video', $toolbar, true) || in_array('for_video_widget_test', $toolbar, true);
+        if (!in_array('sourceEditing', $toolbar, true) && !in_array('style', $toolbar, true) && !$requiresCustomHtml) {
             $jsonProfile['removePlugins'][] = 'GeneralHtmlSupport';
         }
 
@@ -689,6 +730,14 @@ class Cke5ProfilesCreator
 
         if (in_array('heading', $toolbar, true) && isset($profile['heading']) && $profile['heading'] !== '') {
             $jsonProfile['heading'] = ['options' => self::getHeadings(self::toArray($profile['heading']))];
+        }
+
+        if (self::profileFlagEnabled($profile, 'document_title', false)) {
+            $jsonProfile['title'] = [
+                'placeholder' => rex_i18n::msg('cke5_document_title_placeholder'),
+            ];
+        } else {
+            $jsonProfile['removePlugins'][] = 'Title';
         }
 
         if (in_array('bulletedList', $toolbar, true) || in_array('numberedList', $toolbar)) {
@@ -789,6 +838,38 @@ class Cke5ProfilesCreator
             $jsonProfile['mediaEmbed'] = ['removeProviders' => $provider];
         }
 
+        $mediaEmbedStyles = self::getMediaEmbedStyles($profile);
+        $mediaEmbedWidthStyles = self::getMediaEmbedWidthStyles($profile);
+        $mediaEmbedStyles = array_merge($mediaEmbedStyles, $mediaEmbedWidthStyles);
+        if ($mediaEmbedStyles !== []) {
+            if (!isset($jsonProfile['mediaEmbed']) || !is_array($jsonProfile['mediaEmbed'])) {
+                $jsonProfile['mediaEmbed'] = [];
+            }
+            $jsonProfile['mediaEmbed']['styles'] = $mediaEmbedStyles;
+        }
+
+        $videoStyles = self::getVideoStyles($profile);
+        if ($videoStyles !== []) {
+            $jsonProfile['redaxoVideo']['styles'] = $videoStyles;
+        }
+
+        $videoWidthStyles = self::getVideoWidthStyles($profile);
+        if ($videoWidthStyles !== []) {
+            $jsonProfile['redaxoVideo']['widthStyles'] = $videoWidthStyles;
+        }
+
+        $jsonProfile['redaxoVideo']['defaults'] = [
+            'controls' => self::profileFlagEnabled($profile, 'video_controls_default', true),
+            'autoplay' => self::profileFlagEnabled($profile, 'video_autoplay_default', false),
+            'muted' => self::profileFlagEnabled($profile, 'video_muted_default', false),
+            'loop' => self::profileFlagEnabled($profile, 'video_loop_default', false),
+            'playsinline' => self::profileFlagEnabled($profile, 'video_playsinline_default', true),
+        ];
+
+        if ($jsonProfile['redaxoVideo']['defaults']['autoplay'] && !$jsonProfile['redaxoVideo']['defaults']['muted']) {
+            $jsonProfile['redaxoVideo']['defaults']['muted'] = true;
+        }
+
         if (in_array('rexImage', $toolbar, true)) {
             if (isset($profile['mediatype']) && $profile['mediatype'] !== '') {
                 $jsonProfile['image']['rexmedia_type'] = $profile['mediatype'];
@@ -807,7 +888,12 @@ class Cke5ProfilesCreator
             if (isset($profile['mediatype']) && $profile['mediatype'] !== '') {
                 $ckFinderUrl .= '&media_type=' . $profile['mediatype'];
             } else {
-                $ckFinderUrl .= '&media_path=' . $profile['mediapath'];
+                $mediaPath = 'media';
+                if (isset($profile['mediapath']) && is_string($profile['mediapath']) && trim($profile['mediapath']) !== '') {
+                    $mediaPath = trim($profile['mediapath']);
+                }
+
+                $ckFinderUrl .= '&media_path=' . rawurlencode(trim($mediaPath, '/'));
             }
 
             if (isset($profile['upload_mediacategory']) && $profile['upload_mediacategory'] !== '') {
@@ -856,9 +942,13 @@ class Cke5ProfilesCreator
             $jsonProfile = array_merge($jsonProfile, $htmlSupport);
         } else {
             $jsonProfile['removePlugins'][] = 'SourceEditing';
-            if (!in_array('styleEditing', $toolbar, true)) {
+            if (!in_array('style', $toolbar, true) && !$requiresCustomHtml) {
                 $jsonProfile['removePlugins'][] = 'GeneralHtmlSupport';
             }
+        }
+
+        if (in_array('for_video', $toolbar, true) || in_array('for_video_widget_test', $toolbar, true)) {
+            $jsonProfile = self::addVideoHtmlSupport($jsonProfile);
         }
 
         if (isset($profile['extra']) && $profile['extra'] !== '' && isset($profile['extra_definition']) && $profile['extra_definition'] !== '') {
@@ -872,22 +962,34 @@ class Cke5ProfilesCreator
             }
         }
 
+        $profileSprogMentions = [];
         if (isset($profile['sprog_mention']) && $profile['sprog_mention'] !== '' && isset($profile['sprog_mention_definition']) && $profile['sprog_mention_definition'] !== '') {
             $definition = json_decode($profile['sprog_mention_definition'], true);
             if (is_array($definition)) {
-                $sprogDefinition = $definition;
-                $jsonProfile['mention']['feeds'][] = ['marker' => '{', 'feed' => 'getSprogFeedItems' . $profile['name'], 'itemRenderer' => 'sprogItemRenderer', 'minimumCharacters' => 1];
+                $profileSprogMentions = $definition;
             }
         }
 
+        $mergedSprogMentions = self::mergeConfigLists($globalSprogMentions, $profileSprogMentions);
+        if (count($mergedSprogMentions) > 0) {
+            $sprogDefinition = $mergedSprogMentions;
+            $jsonProfile['mention']['feeds'][] = ['marker' => '{', 'feed' => 'getSprogFeedItems' . $profile['name'], 'itemRenderer' => 'sprogItemRenderer', 'minimumCharacters' => 1];
+        }
+
+        $profileMentions = [];
         if (isset($profile['mentions']) && $profile['mentions'] !== '' && isset($profile['mentions_definition']) && $profile['mentions_definition'] !== '') {
             $definition = json_decode($profile['mentions_definition'], true);
             if (is_array($definition)) {
-                if (!isset($jsonProfile['mention']['feeds']) || !is_array($jsonProfile['mention']['feeds'])) {
-                    $jsonProfile['mention']['feeds'] = [];
-                }
-                $jsonProfile['mention']['feeds'] = array_merge($jsonProfile['mention']['feeds'], $definition);
+                $profileMentions = $definition;
             }
+        }
+
+        $mergedMentions = self::mergeConfigLists($globalMentions, $profileMentions);
+        if (count($mergedMentions) > 0) {
+            if (!isset($jsonProfile['mention']['feeds']) || !is_array($jsonProfile['mention']['feeds'])) {
+                $jsonProfile['mention']['feeds'] = [];
+            }
+            $jsonProfile['mention']['feeds'] = self::mergeConfigLists($jsonProfile['mention']['feeds'], $mergedMentions);
         }
 
         // licence
@@ -900,6 +1002,399 @@ class Cke5ProfilesCreator
 
         return ['suboptions' => $jsonSubOption, 'profile' => $jsonProfile, 'sprog_mention' => $sprogDefinition];
     }
+
+    /**
+     * @param array<string,string> $profile
+     * @return array<int,array<string,string>>
+     */
+    private static function getMediaEmbedStyles(array $profile): array
+    {
+        $definition = $profile['media_embed_styles_definition'] ?? self::DEFAULT_VALUES['media_embed_styles_definition'];
+        if (!is_string($definition) || $definition === '') {
+            return [];
+        }
+
+        $decoded = json_decode($definition, true);
+        if (!is_array($decoded)) {
+            return [];
+        }
+
+        $styles = [];
+        foreach ($decoded as $item) {
+            if (!is_array($item)) {
+                continue;
+            }
+            $label = isset($item['label']) && is_string($item['label']) ? trim($item['label']) : '';
+            $class = isset($item['class']) && is_string($item['class']) ? trim($item['class']) : '';
+            if ($label === '') {
+                continue;
+            }
+            $styles[] = ['label' => $label, 'class' => $class];
+        }
+
+        return $styles;
+    }
+
+    /**
+     * @param array<string,string> $profile
+     * @return array<int,array<string,string>>
+     */
+    private static function getMediaEmbedWidthStyles(array $profile): array
+    {
+        $definition = $profile['media_embed_width_styles_definition'] ?? self::DEFAULT_VALUES['media_embed_width_styles_definition'];
+        if (!is_string($definition) || $definition === '') {
+            return [];
+        }
+
+        $decoded = json_decode($definition, true);
+        if (!is_array($decoded)) {
+            return [];
+        }
+
+        $styles = [];
+        foreach ($decoded as $item) {
+            if (!is_array($item)) {
+                continue;
+            }
+            $label = isset($item['label']) && is_string($item['label']) ? trim($item['label']) : '';
+            $class = isset($item['class']) && is_string($item['class']) ? trim($item['class']) : '';
+            if ($label === '') {
+                continue;
+            }
+            $styles[] = ['label' => $label, 'class' => $class];
+        }
+
+        return $styles;
+    }
+
+    /**
+     * @param array<string,string> $profile
+     * @return array<int,array<string,string>>
+     */
+    private static function getVideoStyles(array $profile): array
+    {
+        $definition = $profile['video_styles_definition'] ?? self::DEFAULT_VALUES['video_styles_definition'];
+        if (is_string($definition) && $definition !== '') {
+            $decoded = json_decode($definition, true);
+            if (is_array($decoded)) {
+                $styles = [];
+                foreach ($decoded as $item) {
+                    if (!is_array($item)) {
+                        continue;
+                    }
+                    $label = isset($item['label']) && is_string($item['label']) ? trim($item['label']) : '';
+                    $class = isset($item['class']) && is_string($item['class']) ? trim($item['class']) : '';
+                    if ($label === '') {
+                        continue;
+                    }
+                    $styles[] = ['label' => $label, 'class' => $class];
+                }
+                if ($styles !== []) {
+                    return $styles;
+                }
+            }
+        }
+
+        $fallback = [];
+        $imageToolbar = isset($profile['image_toolbar']) && is_string($profile['image_toolbar']) ? self::toArray($profile['image_toolbar']) : [];
+        $map = [
+            'block' => 'Block',
+            'inline' => 'Inline',
+            'side' => 'Seitlich',
+            'alignLeft' => 'Links',
+            'alignCenter' => 'Zentriert',
+            'alignRight' => 'Rechts',
+            'alignBlockLeft' => 'Block links',
+            'alignBlockRight' => 'Block rechts',
+        ];
+
+        foreach ($imageToolbar as $item) {
+            if (isset($map[$item])) {
+                $fallback[] = ['label' => $map[$item], 'class' => $item];
+            }
+        }
+
+        return $fallback;
+    }
+
+    /**
+     * @param array<string,string> $profile
+     * @return array<int,array<string,string>>
+     */
+    private static function getVideoWidthStyles(array $profile): array
+    {
+        $definition = $profile['video_width_styles_definition'] ?? self::DEFAULT_VALUES['video_width_styles_definition'];
+        if (!is_string($definition) || $definition === '') {
+            return [];
+        }
+
+        $decoded = json_decode($definition, true);
+        if (!is_array($decoded)) {
+            return [];
+        }
+
+        $styles = [];
+        foreach ($decoded as $item) {
+            if (!is_array($item)) {
+                continue;
+            }
+
+            $label = isset($item['label']) && is_string($item['label']) ? trim($item['label']) : '';
+            $class = isset($item['class']) && is_string($item['class']) ? trim($item['class']) : '';
+            if ($label === '') {
+                continue;
+            }
+
+            $styles[] = ['label' => $label, 'class' => $class];
+        }
+
+        return $styles;
+    }
+
+    /**
+     * @param array<string,string> $profile
+     */
+    private static function profileFlagEnabled(array $profile, string $key, bool $default): bool
+    {
+        if (!array_key_exists($key, $profile)) {
+            return $default;
+        }
+
+        return isset($profile[$key]) && $profile[$key] !== '';
+    }
+
+    /**
+     * @param array<string,mixed> $jsonProfile
+     * @return array<string,mixed>
+     */
+    private static function addVideoHtmlSupport(array $jsonProfile): array
+    {
+        if (!isset($jsonProfile['htmlSupport']) || !is_array($jsonProfile['htmlSupport'])) {
+            $jsonProfile['htmlSupport'] = [];
+        }
+
+        if (!isset($jsonProfile['htmlSupport']['allow']) || !is_array($jsonProfile['htmlSupport']['allow'])) {
+            $jsonProfile['htmlSupport']['allow'] = [];
+        }
+
+        $jsonProfile['htmlSupport']['allow'][] = [
+            'name' => 'video',
+            'attributes' => true,
+            'classes' => true,
+            'styles' => true,
+        ];
+        $jsonProfile['htmlSupport']['allow'][] = [
+            'name' => 'source',
+            'attributes' => true,
+            'classes' => true,
+            'styles' => true,
+        ];
+        $jsonProfile['htmlSupport']['allow'][] = [
+            'name' => 'track',
+            'attributes' => true,
+            'classes' => true,
+            'styles' => true,
+        ];
+        $jsonProfile['htmlSupport']['allow'][] = [
+            'name' => 'figure',
+            'attributes' => true,
+            'classes' => true,
+            'styles' => true,
+        ];
+
+        return $jsonProfile;
+    }
+
+    /**
+     * Normalize custom link decorators to CKEditor-compatible structure.
+     *
+     * @param mixed $decorators
+     * @return array<string,array<string,mixed>>
+     */
+    private static function normalizeLinkDecorators($decorators): array
+    {
+        if (!is_array($decorators)) {
+            return [];
+        }
+
+        $normalized = [];
+
+        foreach ($decorators as $name => $config) {
+            if (!is_string($name) || trim($name) === '') {
+                continue;
+            }
+
+            if (!is_array($config)) {
+                continue;
+            }
+
+            $mode = isset($config['mode']) && is_string($config['mode']) ? trim($config['mode']) : '';
+            if (!in_array($mode, ['manual', 'automatic'], true)) {
+                continue;
+            }
+
+            $entry = ['mode' => $mode];
+
+            if (isset($config['label']) && is_string($config['label']) && trim($config['label']) !== '') {
+                $entry['label'] = trim($config['label']);
+            }
+
+            if ($mode === 'manual') {
+                if (!isset($config['attributes']) || !is_array($config['attributes']) || $config['attributes'] === []) {
+                    continue;
+                }
+                $entry['attributes'] = $config['attributes'];
+            }
+
+            if ($mode === 'automatic') {
+                if (isset($config['attributes']) && is_array($config['attributes']) && $config['attributes'] !== []) {
+                    $entry['attributes'] = $config['attributes'];
+                }
+                if (isset($config['callback']) && is_string($config['callback']) && trim($config['callback']) !== '') {
+                    $entry['callback'] = trim($config['callback']);
+                }
+                if (!isset($entry['attributes']) && !isset($entry['callback'])) {
+                    continue;
+                }
+            }
+
+            $normalized[$name] = $entry;
+        }
+
+        return $normalized;
+    }
+
+    private static function normalizeEditorType(string $editorType): string
+    {
+        $normalized = trim(strtolower($editorType));
+
+        if (in_array($normalized, ['classic_balloon', 'classic-balloon', 'classic_with_balloon', 'classic-with-balloon', 'hybrid', 'combo'], true)) {
+            return self::EDITOR_TYPES['classic_balloon'];
+        }
+
+        if (in_array($normalized, ['balloon_block', 'balloon-block', 'balloon', 'balloon_block_editor', 'balloon-block-editor'], true)) {
+            return self::EDITOR_TYPES['balloon_block'];
+        }
+
+        return self::EDITOR_TYPES['classic'];
+    }
+
+    /**
+     * @return array<string,mixed>
+     */
+    private static function getGlobalProfileSettings(): array
+    {
+        $settings = self::getAddon()->getConfig('global_profile_settings');
+        if (is_array($settings)) {
+            return $settings;
+        }
+
+        return [
+            'global_mentions_enabled' => (string) self::getAddon()->getConfig('global_mentions_enabled', ''),
+            'global_mentions_definition' => (string) self::getAddon()->getConfig('global_mentions_definition', ''),
+            'global_sprog_enabled' => (string) self::getAddon()->getConfig('global_sprog_enabled', ''),
+            'global_sprog_mention_definition' => (string) self::getAddon()->getConfig('global_sprog_mention_definition', ''),
+            'global_ytable_enabled' => (string) self::getAddon()->getConfig('global_ytable_enabled', ''),
+            'global_ytable_definition' => (string) self::getAddon()->getConfig('global_ytable_definition', ''),
+            'global_media_enabled' => (string) self::getAddon()->getConfig('global_media_enabled', ''),
+            'global_mediatypes' => (string) self::getAddon()->getConfig('global_mediatypes', ''),
+            'global_mediatype' => (string) self::getAddon()->getConfig('global_mediatype', ''),
+            'global_mediapath' => (string) self::getAddon()->getConfig('global_mediapath', ''),
+            'global_font_family_default' => (string) self::getAddon()->getConfig('global_font_family_default', ''),
+            'global_font_families' => (string) self::getAddon()->getConfig('global_font_families', ''),
+        ];
+    }
+
+    /**
+     * @param array<string,mixed> $settings
+     * @return array<int,mixed>
+     */
+    private static function decodeGlobalJsonList(array $settings, string $key): array
+    {
+        if (!isset($settings[$key]) || !is_string($settings[$key]) || '' === trim($settings[$key])) {
+            return [];
+        }
+
+        $decoded = json_decode($settings[$key], true);
+        return is_array($decoded) ? array_values($decoded) : [];
+    }
+
+    /**
+     * @param array<string,mixed> $settings
+     */
+    private static function isGlobalSettingEnabled(array $settings, string $key): bool
+    {
+        if (!isset($settings[$key])) {
+            return false;
+        }
+
+        $value = (string) $settings[$key];
+        return '' !== trim($value);
+    }
+
+    /**
+     * @param array<int,mixed> $base
+     * @param array<int,mixed> $override
+     * @return array<int,mixed>
+     */
+    private static function mergeConfigLists(array $base, array $override): array
+    {
+        $mergedByKey = [];
+        $order = [];
+
+        foreach ($base as $item) {
+            $key = self::configListItemKey($item);
+            if (!isset($mergedByKey[$key])) {
+                $order[] = $key;
+            }
+            $mergedByKey[$key] = $item;
+        }
+
+        foreach ($override as $item) {
+            $key = self::configListItemKey($item);
+            if (!isset($mergedByKey[$key])) {
+                $order[] = $key;
+            }
+            // Override base entries with profile-specific ones where keys match.
+            $mergedByKey[$key] = $item;
+        }
+
+        $merged = [];
+        foreach ($order as $key) {
+            if (isset($mergedByKey[$key])) {
+                $merged[] = $mergedByKey[$key];
+            }
+        }
+
+        return $merged;
+    }
+
+    /**
+     * @param mixed $item
+     */
+    private static function configListItemKey($item): string
+    {
+        if (is_array($item)) {
+            if (isset($item['sprog_key']) && is_string($item['sprog_key']) && '' !== $item['sprog_key']) {
+                return 'sprog:' . $item['sprog_key'];
+            }
+            if (isset($item['table']) && is_string($item['table']) && isset($item['column']) && is_string($item['column'])) {
+                return 'ytable:' . $item['table'] . '|' . $item['column'];
+            }
+            if (isset($item['marker']) && is_string($item['marker'])) {
+                $feed = isset($item['feed']) ? (is_string($item['feed']) ? $item['feed'] : json_encode($item['feed'])) : '';
+                return 'mention:' . $item['marker'] . '|' . (string) $feed;
+            }
+            return 'json:' . (string) json_encode($item);
+        }
+
+        return 'scalar:' . (string) $item;
+    }
+
+    /**
+     * @param array<string,mixed> $jsonProfile
+     * @return array<string,mixed>
+     */
 
     /**
      * @return rex_addon_interface|rex_addon
@@ -972,7 +1467,52 @@ class Cke5ProfilesCreator
      */
     private static function getHighlight(array $keys): array
     {
-        return self::getReturnValues($keys,self::HIGHLIGHTS);
+        $highlights = [
+            'yellowMarker' => [
+                'model' => 'yellowMarker',
+                'class' => 'marker-yellow',
+                'title' => 'Yellow Marker',
+                'color' => 'var(--ck-highlight-marker-yellow)',
+                'type' => 'marker',
+            ],
+            'greenMarker' => [
+                'model' => 'greenMarker',
+                'class' => 'marker-green',
+                'title' => 'Green Marker',
+                'color' => 'var(--ck-highlight-marker-green)',
+                'type' => 'marker',
+            ],
+            'pinkMarker' => [
+                'model' => 'pinkMarker',
+                'class' => 'marker-pink',
+                'title' => 'Pink Marker',
+                'color' => 'var(--ck-highlight-marker-pink)',
+                'type' => 'marker',
+            ],
+            'blueMarker' => [
+                'model' => 'blueMarker',
+                'class' => 'marker-blue',
+                'title' => 'Blue Marker',
+                'color' => 'var(--ck-highlight-marker-blue)',
+                'type' => 'marker',
+            ],
+            'redPen' => [
+                'model' => 'redPen',
+                'class' => 'pen-red',
+                'title' => 'Red pen',
+                'color' => 'var(--ck-highlight-pen-red)',
+                'type' => 'pen',
+            ],
+            'greenPen' => [
+                'model' => 'greenPen',
+                'class' => 'pen-green',
+                'title' => 'Green pen',
+                'color' => 'var(--ck-highlight-pen-green)',
+                'type' => 'pen',
+            ],
+        ];
+
+        return self::getReturnValues($keys, $highlights);
     }
 
     /**
