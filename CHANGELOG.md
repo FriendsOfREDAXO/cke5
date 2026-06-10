@@ -16,12 +16,25 @@
 * Image-Resize-Verhalten modernisiert: Handles pro Profil schaltbar, Toolbar-Resize-Optionen bleiben nutzbar
 * Runtime robuster gemacht (u. a. Soft-Hyphen-Postfixer gegen visuelle Link-Splits)
 * Vendor-Asset-Handling bereinigt: SourceMap-Referenzen werden entfernt, unnötige `.map`-Requests entfallen
+* Upload-/Asset-Handling für Editor-Dateien erweitert: `.js` und `.js.map` werden sauber verarbeitet
 * Neue Entwicklerdokumentation `dev.md` (ersetzt `PLUGIN_DEVELOPMENT.md`) und als Backend-Seite eingebunden
 * Neue Skripte für den Entwickler-Workflow:
   * `pnpm run demo:variant` für schnelle Demo-Profilvarianten
   * `pnpm run content-styles:update` für aktuelles CKEditor-Frontend-CSS aus npm
 * Legacy-Altlasten und verwaiste Vendor-Dateien bereinigt
-* Video-Handling, Profil-Defaults und Backend-Konfiguration weiter stabilisiert
+* Markdown-Paste als Profiloption integriert (`markdown_paste`) inkl. Toolbar-Toggle (`redaxoMarkdownPasteToggle`)
+* Minimap als Profiloption integriert (`minimap`) inkl. Toolbar-Toggle (`redaxoMinimapToggle`) und Layout-Verbesserungen
+* Video-Widget-Workflow überarbeitet (`for_video_widget_test`): Dialog-UX, Medienpool-Übernahme und Breiten-/Figure-Handling stabilisiert
+* Mapping alter Toolbar-Konfigurationen (`for_video`) auf den Widget-Button (`for_video_widget_test`) für abwärtskompatible Profile
+* Profilmanager-UX erweitert: eigener Balloon-Toolbar-Schalter inkl. konfigurierbarer `balloon_toolbar`-Items
+* Neuer Editor-Modus `classic_balloon` (Classic + Balloon-Toolbar kombiniert) mit stabiler Runtime-Normalisierung
+* Block-/Balloon-Toolbar-Handling verbessert: konfigurierbar, validiert und mit sinnvollen Fallback-Items (inkl. `style` und Video-Widget)
+* Neue Defaults-Unterseite `profiles/customise/global` für globale Voreinstellungen (Mentions, Sprog, yTables, Medien, Schriftfamilie)
+* Globale Einstellungen werden beim Profil-Mapping gezielt als Fallback gemerged (Profilwerte behalten Vorrang)
+* Globales Schriftfamilien-Fallback ergänzt (`global_font_families`) und Logik für `global_font_family_default` korrigiert
+* Widget-Initialisierung für die Defaults-Seite ergänzt (inkl. robustem `rex:ready`- und Collapse-Fallback)
+* Sprog-MultiInput stabilisiert: fehlerhafte `undefined`-Placeholder behoben und Attribut-Fallbacks ergänzt
+* Mention-Felder um JSON-Beispielhinweise erweitert (Profil und globale Defaults)
 
 ## Version 6.4.2
 
