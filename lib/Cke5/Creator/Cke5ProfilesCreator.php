@@ -848,26 +848,30 @@ class Cke5ProfilesCreator
             $jsonProfile['mediaEmbed']['styles'] = $mediaEmbedStyles;
         }
 
-        $videoStyles = self::getVideoStyles($profile);
-        if ($videoStyles !== []) {
-            $jsonProfile['redaxoVideo']['styles'] = $videoStyles;
-        }
+        if ($requiresCustomHtml) {
+            $videoStyles = self::getVideoStyles($profile);
+            if ($videoStyles !== []) {
+                $jsonProfile['redaxoVideo']['styles'] = $videoStyles;
+            }
 
-        $videoWidthStyles = self::getVideoWidthStyles($profile);
-        if ($videoWidthStyles !== []) {
-            $jsonProfile['redaxoVideo']['widthStyles'] = $videoWidthStyles;
-        }
+            $videoWidthStyles = self::getVideoWidthStyles($profile);
+            if ($videoWidthStyles !== []) {
+                $jsonProfile['redaxoVideo']['widthStyles'] = $videoWidthStyles;
+            }
 
-        $jsonProfile['redaxoVideo']['defaults'] = [
-            'controls' => self::profileFlagEnabled($profile, 'video_controls_default', true),
-            'autoplay' => self::profileFlagEnabled($profile, 'video_autoplay_default', false),
-            'muted' => self::profileFlagEnabled($profile, 'video_muted_default', false),
-            'loop' => self::profileFlagEnabled($profile, 'video_loop_default', false),
-            'playsinline' => self::profileFlagEnabled($profile, 'video_playsinline_default', true),
-        ];
+            $jsonProfile['redaxoVideo']['defaults'] = [
+                'controls' => self::profileFlagEnabled($profile, 'video_controls_default', true),
+                'autoplay' => self::profileFlagEnabled($profile, 'video_autoplay_default', false),
+                'muted' => self::profileFlagEnabled($profile, 'video_muted_default', false),
+                'loop' => self::profileFlagEnabled($profile, 'video_loop_default', false),
+                'playsinline' => self::profileFlagEnabled($profile, 'video_playsinline_default', true),
+            ];
 
-        if ($jsonProfile['redaxoVideo']['defaults']['autoplay'] && !$jsonProfile['redaxoVideo']['defaults']['muted']) {
-            $jsonProfile['redaxoVideo']['defaults']['muted'] = true;
+            if ($jsonProfile['redaxoVideo']['defaults']['autoplay'] && !$jsonProfile['redaxoVideo']['defaults']['muted']) {
+                $jsonProfile['redaxoVideo']['defaults']['muted'] = true;
+            }
+        } else {
+            $jsonProfile['removePlugins'][] = 'RedaxoMediaVideo';
         }
 
         if (in_array('rexImage', $toolbar, true)) {
