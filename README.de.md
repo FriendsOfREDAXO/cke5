@@ -2,6 +2,8 @@
 
 CKEditor-5-Integration für REDAXO mit profilbasierter Konfiguration, REDAXO-Medien- und Link-Dialogen, Snippets, Style-Management und Import/Export-Workflows.
 
+![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/cke5/assets/cke5.png)
+
 ## Version
 
 Aktuelle Entwicklungsversion: `7.0.0-dev`
