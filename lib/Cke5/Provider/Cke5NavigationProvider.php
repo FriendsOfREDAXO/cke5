@@ -21,11 +21,13 @@ class Cke5NavigationProvider
         );
         return '
             <header class="cke5-header">
-                <picture>
-                    <img src="/assets/addons/cke5/images/header-patrick-fore-357913-unsplash.jpg">
-                </picture>
-                <div class="header-content">
-                    <h1>' . rex_i18n::msg('cke5_subnavigation_header_title') . '</h1>
+                <div class="header-inner">
+                    <div class="header-logo">
+                        <img src="/assets/addons/cke5/images/cke5_white.svg" alt="CKEditor Logo" class="cke5-logo-img">
+                    </div>
+                    <div class="header-content">
+                        <h1>' . rex_i18n::msg('cke5_subnavigation_header_title') . '</h1>
+                    </div>
                 </div>
                 <div class="photoinfo"><span>' . $photoBy . '</span></div>
             </header>

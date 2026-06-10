@@ -69,70 +69,69 @@
 
 .cke5-header {
     position: relative;
-    display: block;
+    display: flex;
+    align-items: center;
+    padding: 0 1.5rem;
     background-size: cover;
     background-position: center top;
     background-color: #000;
     background-image: url(../images/header-patrick-fore-357913-unsplash.jpg);
     background-repeat: no-repeat;
     color: #fff;
-    text-align: center;
     margin-bottom: 12px;
-    min-height: 150px;
+    min-height: 60px;
+    gap: 1rem;
 }
 
-.cke5-header picture img {
-    max-width: 100%;
-    min-height: 150px;
-    max-height: 190px;
-    opacity: 0;
+.cke5-header .header-inner {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    width: 100%;
+    z-index: 99;
+}
+
+.cke5-header .header-logo {
+    flex-shrink: 0;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cke5-header .cke5-logo-img {
+    width: 100%;
+    height: 100%;
 }
 
 .panel-body > .cke5-header {
     margin-left: -15px;
     margin-right: -15px;
     margin-top: -15px;
+    padding-left: 0;
+    padding-right: 0;
+    padding: 0.75rem 0;
 }
 
 .cke5-header .header-content {
-    width: 100%;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 99;
-    transition: transform .2s ease-in-out;
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
 }
 
 .cke5-header h1 {
-    padding-top: 36px;
+    padding: 0;
+    margin: 0;
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
-    font-size: 24px;
+    font-size: 22px;
     color: #fff;
-    line-height: 1.1em;
-}
-
-@media (min-width: 768px) {
-    .cke5-header h1:before {
-        width: 72px;
-        height: 72px;
-        margin-left: 7px;
-    }
+    line-height: 1.2em;
 }
 
 .cke5-header h1:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 50%;
-    width: 72px;
-    height: 72px;
-    transform: translateX(-50%);
-    background: url(../images/cke5_white.svg) no-repeat;
-    background-size: contain;
+    display: none;
 }
 
 .cke5-header .photoinfo {
