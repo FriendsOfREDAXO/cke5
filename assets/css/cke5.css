@@ -80,7 +80,7 @@
     background: radial-gradient(ellipse 150% 250% at 8% 60%, #12063a 0%, #080d1a 45%, #0a1e38 100%);
     color: #e8f0f7;
     margin-bottom: 12px;
-    min-height: 80px;
+    min-height: 100px;
     gap: 1rem;
     overflow: hidden;
 }
@@ -100,19 +100,19 @@
     z-index: 1;
 }
 
-/* Logo-Geist: schwebt rechts, sanfter Glüh-Drift */
+/* Logo-Geist: dreht und schwebt rechts */
 .cke5-header::after {
     content: '';
     position: absolute;
     top: 50%;
-    right: 1%;
-    width: 200px;
-    height: 200px;
+    right: 2%;
+    width: 160px;
+    height: 160px;
     background: url(../images/cke5_white.svg) no-repeat center / contain;
-    opacity: 0.08;
-    transform: translateY(-50%) scale(1) rotate(-5deg);
-    animation: cke5-logo-drift 22s ease-in-out infinite;
-    filter: drop-shadow(0 0 18px rgba(56, 189, 248, 0.35));
+    opacity: 0.18;
+    transform: translateY(-50%) rotate(0deg);
+    animation: cke5-logo-spin 18s linear infinite, cke5-logo-float 7s ease-in-out infinite;
+    filter: drop-shadow(0 0 14px rgba(56, 189, 248, 0.5));
     pointer-events: none;
     z-index: 2;
 }
@@ -132,26 +132,26 @@
     }
 }
 
-@keyframes cke5-logo-drift {
+@keyframes cke5-logo-spin {
+    from { transform: translateY(-50%) rotate(0deg); }
+    to   { transform: translateY(-50%) rotate(360deg); }
+}
+
+@keyframes cke5-logo-float {
     0%, 100% {
-        transform: translateY(-50%) scale(1) rotate(-5deg);
-        opacity: 0.08;
-        filter: drop-shadow(0 0 18px rgba(56, 189, 248, 0.3));
+        margin-top: 0px;
+        opacity: 0.18;
+        filter: drop-shadow(0 0 14px rgba(56, 189, 248, 0.5));
     }
-    25% {
-        transform: translateY(-56%) scale(1.12) rotate(1deg);
-        opacity: 0.14;
-        filter: drop-shadow(0 0 28px rgba(56, 189, 248, 0.55));
+    35% {
+        margin-top: -12px;
+        opacity: 0.28;
+        filter: drop-shadow(0 0 22px rgba(56, 189, 248, 0.7));
     }
-    55% {
-        transform: translateY(-45%) scale(1.06) rotate(-9deg);
-        opacity: 0.07;
-        filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.3));
-    }
-    80% {
-        transform: translateY(-52%) scale(0.96) rotate(-3deg);
-        opacity: 0.11;
-        filter: drop-shadow(0 0 22px rgba(20, 184, 166, 0.4));
+    70% {
+        margin-top: 8px;
+        opacity: 0.13;
+        filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.4));
     }
 }
 
