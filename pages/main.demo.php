@@ -85,17 +85,10 @@ $content .= Cke5NavigationProvider::getMainSubNavigationHeader() .
                             <tr>
                                 <td>Schwanheim</td>
                                 <td>Wohnen &amp; Natur</td>
-                                <td>Niddaauen, Mainufer, Streuobstwiesen – Lieblingsort von <a href="https://github.com/skerbis" target="_blank" rel="noopener">Thomas Skerbis</a></td>
+                                <td>Niddaauen, Mainufer, Streuobstwiesen</td>
                             </tr>
                         </tbody>
                     </table>
-
-                    <p>
-                        <figure class="image image-style-align-left" style="width:80px; margin: 0 1.2rem 0.5rem 0;">
-                            <img src="/assets/addons/cke5/images/skerbis.jpg" alt="Thomas Skerbis" style="border-radius:50%;">
-                        </figure>
-                        <a href="https://github.com/skerbis" target="_blank" rel="noopener"><strong>Thomas Skerbis</strong></a> hat einen Lieblingsort in Schwanheim und ist einer der aktivsten Köpfe hinter Friends of REDAXO. Als langjähriger Core-Contributor pflegt er Addons, schreibt Dokumentation und treibt das Ökosystem rund um REDAXO voran.
-                    </p>
 
                     <blockquote>
                         <p><strong>Empfehlung:</strong> Erst Styles/Klassen nutzen. Eigene Block-Widgets nur dann bauen, wenn echte Struktur- oder Validierungslogik notwendig ist.</p>
