@@ -30,15 +30,25 @@ if ($func === 'clone') {
 
 
 if ($func === 'delete') {
-    $message = Cke5ListHelper::deleteData($profileTable, $id);
-    rex_extension::registerPoint(new rex_extension_point('CKE5_PROFILE_DELETE', $id));
+    $profileName = (string) rex_sql::factory()->getValue(
+        'SELECT name FROM ' . $profileTable . ' WHERE id = :id LIMIT 1',
+        ['id' => $id]
+    );
+
+    if ($profileName === 'demo_default') {
+        $message = rex_view::error('Das Profil "demo_default" ist geschützt und kann nicht gelöscht werden.');
+    } else {
+        $message = Cke5ListHelper::deleteData($profileTable, $id);
+        rex_extension::registerPoint(new rex_extension_point('CKE5_PROFILE_DELETE', $id));
+    }
+
     $func = '';
 }
 
 if ($func === '') {
     // Profil-Infos vorab laden (außerhalb rex_list, um Spalten-Konflikte zu vermeiden)
     $profileInfos = [];
-    foreach (rex_sql::factory()->getArray("SELECT id, toolbar, height_default, upload_default, mediaembed, emoji, table_color_default, html_preview, text_part_language, rexlink FROM $profileTable") as $row) {
+    foreach (rex_sql::factory()->getArray("SELECT id, editor_type, balloon_toolbar_custom, paste_plain_text_default, markdown_paste, lang, ytable, document_title FROM $profileTable") as $row) {
         $profileInfos[(int)$row['id']] = $row;
     }
 
@@ -78,61 +88,63 @@ if ($func === '') {
         $id   = (int) $list->getValue('id');
         $info = $profileInfos[$id] ?? [];
 
+        $isEnabled = static function ($value): bool {
+            $v = trim((string) $value);
+            if ($v === '') {
+                return false;
+            }
+
+            // Platzhalterwerte wie |default_height| gelten nicht als aktiv.
+            if (str_starts_with($v, '|') && str_ends_with($v, '|')) {
+                return false;
+            }
+
+            $normalized = strtolower($v);
+            return in_array($normalized, ['1', 'true', 'yes', 'on', 'enabled'], true)
+                || !in_array($normalized, ['0', 'false', 'no', 'off', 'disabled'], true);
+        };
+
         $out = '<div>';
         if ($desc !== '') {
             $out .= '<div style="margin-bottom:5px;">' . rex_escape($desc) . '</div>';
         }
 
-        // Toolbar-Vorschau
-        $toolbar = (string)($info['toolbar'] ?? '');
-        if ($toolbar !== '') {
-            $items = array_values(array_filter(
-                array_map('trim', explode(',', $toolbar)),
-                fn($t) => $t !== '' && $t !== '|' && $t !== '-'
-            ));
-            $preview = implode(' · ', array_slice($items, 0, 10));
-            if (count($items) > 10) {
-                $preview .= ' <span class="text-muted">+' . (count($items) - 10) . '</span>';
-            }
-            $out .= '<div style="font-size:11px;color:#888;margin-bottom:4px;font-family:monospace;">' . rex_escape($preview) . '</div>';
-        }
-
-        // Feature-Badges
+        // Relevante Profil-Infos als Badges
         $badges = [];
 
-        $height = (string)($info['height_default'] ?? '');
-        if ($height !== '' && $height !== '|default_height|' && is_numeric($height)) {
-            $badges[] = '<span class="label label-default"><i class="rex-icon fa-arrows-v"></i> ' . (int)$height . 'px</span>';
+        $editorType = trim((string) ($info['editor_type'] ?? ''));
+        if ($editorType !== '') {
+            $badges[] = '<span class="label label-primary"><i class="rex-icon fa-pencil"></i> Editor-Typ: ' . rex_escape($editorType) . '</span>';
         }
 
-        if (!empty($info['upload_default'])) {
-            $badges[] = '<span class="label label-info"><i class="rex-icon fa-upload"></i> Upload</span>';
+        $hasBalloonCustom = trim((string) ($info['balloon_toolbar_custom'] ?? '')) !== '';
+        if ($hasBalloonCustom) {
+            $badges[] = '<span class="label label-success"><i class="rex-icon fa-list-alt"></i> Eigene Balloon-Toolbar</span>';
         }
 
-        $mediaembed = (string)($info['mediaembed'] ?? '');
-        if ($mediaembed !== '') {
-            $count = count(array_filter(explode(',', $mediaembed)));
-            $badges[] = '<span class="label label-info"><i class="rex-icon fa-film"></i> Embed ×' . $count . '</span>';
+        $pastePlainText = $isEnabled($info['paste_plain_text_default'] ?? null);
+        if ($pastePlainText) {
+            $badges[] = '<span class="label label-success"><i class="rex-icon fa-paste"></i> Unformatiert einfügen</span>';
         }
 
-        if (!empty($info['emoji'])) {
-            $badges[] = '<span class="label label-default"><i class="rex-icon fa-smile-o"></i> Emoji</span>';
+        $markdownPaste = $isEnabled($info['markdown_paste'] ?? null);
+        if ($markdownPaste) {
+            $badges[] = '<span class="label label-success"><i class="rex-icon fa-markdown"></i> Markdown beim Einfügen</span>';
         }
 
-        if (!empty($info['table_color_default'])) {
-            $badges[] = '<span class="label label-default"><i class="rex-icon fa-table"></i> Tabellenfarben</span>';
+        $lang = trim((string) ($info['lang'] ?? ''));
+        if ($lang !== '' && strtolower($lang) !== 'auto') {
+            $badges[] = '<span class="label label-info"><i class="rex-icon fa-language"></i> UI-Sprache: ' . rex_escape(strtoupper($lang)) . '</span>';
         }
 
-        if ((string)($info['html_preview'] ?? '') === '1') {
-            $badges[] = '<span class="label label-warning"><i class="rex-icon fa-code"></i> HTML-Vorschau</span>';
+        $hasYtable = trim((string) ($info['ytable'] ?? '')) !== '';
+        if ($hasYtable) {
+            $badges[] = '<span class="label label-success"><i class="rex-icon fa-table"></i> yTables</span>';
         }
 
-        if (!empty($info['text_part_language'])) {
-            $badges[] = '<span class="label label-default"><i class="rex-icon fa-language"></i> Sprache</span>';
-        }
-
-        if (!empty($info['rexlink'])) {
-            $badges[] = '<span class="label label-success"><i class="rex-icon fa-link"></i> REX-Link</span>';
+        $hasDocumentTitle = $isEnabled($info['document_title'] ?? null);
+        if ($hasDocumentTitle) {
+            $badges[] = '<span class="label label-warning"><i class="rex-icon fa-header"></i> Dokumenttitel-Plugin</span>';
         }
 
         if ($badges !== []) {
@@ -161,9 +173,13 @@ if ($func === '') {
         $btnGroup .= '<ul class="dropdown-menu dropdown-menu-right">';
         $btnGroup .= '<li><a href="' . $cloneUrl . '" data-confirm="' . rex_i18n::msg('cke5_clone') . ' ?">'
             . '<i class="rex-icon fa-clone"></i> ' . rex_i18n::msg('cke5_clone') . '</a></li>';
-        $btnGroup .= '<li class="divider"></li>';
-        $btnGroup .= '<li><a href="' . $deleteUrl . '" data-confirm="' . rex_i18n::msg('delete') . ' ?">'
-            . '<i class="rex-icon rex-icon-delete"></i> ' . rex_i18n::msg('delete') . '</a></li>';
+
+        if ($name !== 'demo_default') {
+            $btnGroup .= '<li class="divider"></li>';
+            $btnGroup .= '<li><a href="' . $deleteUrl . '" data-confirm="' . rex_i18n::msg('delete') . ' ?">'
+                . '<i class="rex-icon rex-icon-delete"></i> ' . rex_i18n::msg('delete') . '</a></li>';
+        }
+
         $btnGroup .= '</ul></div>';
 
         return $btnGroup;
