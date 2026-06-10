@@ -111,7 +111,9 @@
     background: url(../images/ckeditor.svg) no-repeat center / contain;
     opacity: 0.35;
     transform: translateY(-50%) rotate(0deg);
-    animation: cke5-logo-spin 18s linear infinite, cke5-logo-float 7s ease-in-out infinite;
+    animation: cke5-logo-enter 1.5s ease-out both,
+               cke5-logo-spin 18s linear 1.5s infinite,
+               cke5-logo-float 7s ease-in-out 1.5s infinite;
     filter: drop-shadow(0 0 14px rgba(119, 27, 255, 0.4));
     pointer-events: none;
     z-index: 2;
@@ -129,6 +131,17 @@
     65% {
         opacity: 0.9;
         transform: scale(0.97) translate(2%, 1%);
+    }
+}
+
+@keyframes cke5-logo-enter {
+    from {
+        right: -200px;
+        opacity: 0;
+    }
+    to {
+        right: 2%;
+        opacity: 0.35;
     }
 }
 
