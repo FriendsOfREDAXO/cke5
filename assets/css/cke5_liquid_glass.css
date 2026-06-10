@@ -240,6 +240,10 @@ body.rex-theme-dark .ck-reset_all {
 
 /* ==========================================================================
    Balloon Panels (schwebende Toolbars, Link-Popups, Mentions …)
+
+   WICHTIG: CKEditor nutzt ::before und ::after für die Pfeil-Dreiecke.
+   Deshalb kein ::after-Overlay hier — stattdessen Specular nur über border-top.
+   overflow:hidden MUSS weg, sonst wird der Pfeil abgeschnitten.
    ========================================================================== */
 .ck.ck-balloon-panel {
     background: var(--lg-bg-panel) !important;
@@ -247,27 +251,19 @@ body.rex-theme-dark .ck-reset_all {
     border-top-color: var(--lg-border-top) !important;
     border-radius: var(--lg-radius) !important;
     box-shadow: var(--lg-shadow-panel), var(--lg-shadow-inset) !important;
-    overflow: hidden;
+    /* kein overflow:hidden — würde die Pfeil-Dreiecke abschneiden */
     position: relative;
 }
 
-/* Specular Highlight auch im Balloon */
-.ck.ck-balloon-panel::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: var(--lg-specular);
-    pointer-events: none;
-    border-radius: inherit;
-    opacity: 0.55;
-    mix-blend-mode: screen;
-}
-
-/* Balloon-Pfeil */
+/* Balloon-Pfeil (::before = Rahmen, ::after = Füllfarbe) */
 .ck.ck-balloon-panel[class*="arrow_n"]::before { border-bottom-color: var(--lg-border-top) !important; }
 .ck.ck-balloon-panel[class*="arrow_s"]::before { border-top-color:    var(--lg-border-top) !important; }
+.ck.ck-balloon-panel[class*="arrow_e"]::before { border-left-color:   var(--lg-border-top) !important; }
+.ck.ck-balloon-panel[class*="arrow_w"]::before { border-right-color:  var(--lg-border-top) !important; }
 .ck.ck-balloon-panel[class*="arrow_n"]::after  { border-bottom-color: var(--lg-bg-panel)    !important; }
 .ck.ck-balloon-panel[class*="arrow_s"]::after  { border-top-color:    var(--lg-bg-panel)    !important; }
+.ck.ck-balloon-panel[class*="arrow_e"]::after  { border-left-color:   var(--lg-bg-panel)    !important; }
+.ck.ck-balloon-panel[class*="arrow_w"]::after  { border-right-color:  var(--lg-bg-panel)    !important; }
 
 /* ==========================================================================
    Dropdown-Panels
