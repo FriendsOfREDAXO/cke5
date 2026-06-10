@@ -108,11 +108,11 @@
     right: 2%;
     width: 160px;
     height: 160px;
-    background: url(../images/cke5_white.svg) no-repeat center / contain;
-    opacity: 0.18;
+    background: url(../images/ckeditor.svg) no-repeat center / contain;
+    opacity: 0.35;
     transform: translateY(-50%) rotate(0deg);
     animation: cke5-logo-spin 18s linear infinite, cke5-logo-float 7s ease-in-out infinite;
-    filter: drop-shadow(0 0 14px rgba(56, 189, 248, 0.5));
+    filter: drop-shadow(0 0 14px rgba(119, 27, 255, 0.4));
     pointer-events: none;
     z-index: 2;
 }
@@ -140,18 +140,18 @@
 @keyframes cke5-logo-float {
     0%, 100% {
         margin-top: 0px;
-        opacity: 0.18;
-        filter: drop-shadow(0 0 14px rgba(56, 189, 248, 0.5));
+        opacity: 0.35;
+        filter: drop-shadow(0 0 14px rgba(119, 27, 255, 0.4));
     }
     35% {
         margin-top: -12px;
-        opacity: 0.28;
-        filter: drop-shadow(0 0 22px rgba(56, 189, 248, 0.7));
+        opacity: 0.5;
+        filter: drop-shadow(0 0 22px rgba(175, 226, 41, 0.6));
     }
     70% {
         margin-top: 8px;
-        opacity: 0.13;
-        filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.4));
+        opacity: 0.25;
+        filter: drop-shadow(0 0 10px rgba(119, 27, 255, 0.5));
     }
 }
 
@@ -165,8 +165,8 @@
 
 .cke5-header .header-logo {
     flex-shrink: 0;
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
