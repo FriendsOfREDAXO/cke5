@@ -8,11 +8,11 @@ Aktuelle Entwicklungsversion: `7.0.0-dev`
 
 ## Voraussetzungen
 
-- REDAXO: `>= 5.12`
-- PHP: `>= 7.2, < 9`
+- REDAXO: `>= 5.19`
+- PHP: `>= 8.1, < 9`
 - Konflikte:
-  - `mblock < 3.4.0`
-  - `mform < 6.1.0`
+  - `mblock < 4.3.0`
+  - `mform < 7.0.0`
 
 ## Neu in 7.0.0-dev
 
@@ -24,8 +24,12 @@ Aktuelle Entwicklungsversion: `7.0.0-dev`
   - style_groups
   - styles
   - snippets
-- Neue Plugin-/Build-Dokumentation in `PLUGIN_DEVELOPMENT.md`
+- Neue Entwicklerdokumentation in `dev.md`
 - Bereinigung von Legacy- und verwaisten Vendor-/Runtime-Dateien
+- Neue globale Defaults-Seite (`Profiles > Defaults > Global settings`) für Mentions, Sprog-Ersetzungen, yTables, Medien-Defaults und Schriftfamilien-Defaults
+- Neuer Editor-Typ `classic_balloon` sowie konfigurierbare Balloon-Toolbar im Profilmanager
+- Verbesserte Merge-/Fallback-Logik zwischen Profilwerten und globalen Defaults
+- UX-Fixes im Profil-/Defaults-Widget-Handling (Mention-Beispiele, stabile Placeholder, robuste Toggle-/Collapse-Initialisierung)
 
 ## Funktionsüberblick
 
@@ -63,9 +67,11 @@ Aktuelle Entwicklungsversion: `7.0.0-dev`
 - Native Addon-Plugins zur Laufzeit:
   - `RedaxoLinkIntegration`
   - `RedaxoMediaImage`
-  - `RedaxoMediaVideo`
   - `RedaxoSnippets`
   - `RedaxoPastePlainTextToggle`
+  - `RedaxoMarkdownPasteToggle`
+  - `RedaxoMinimapToggle`
+  - `RedaxoVideoWidgetTest`
 - Unterstützung externer Plugins über Registry und JS-Konfiguration
 - Toolbar-Alias-Transformationen für externe Plugins
 

@@ -3,7 +3,7 @@
 
 use Cke5\Handler\Cke5DefaultDataService;
 use Cke5\Handler\Cke5ExtensionHandler;
-use Cke5\Handler\Cke5CssHandler;
+use Cke5\Utils\Cke5CssHandler;
 
 include_once(__DIR__ . '/db.php');
 

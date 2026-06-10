@@ -134,7 +134,7 @@ class Cke5ProfilesCreator
     ];
     const EDITOR_SETTINGS = [
         /* todo: specialCharacters not work because : https://github.com/ckeditor/ckeditor5/issues/6160 */
-        'cktypes' => ['heading', 'fontSize', 'mediaEmbed', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable', 'fontBackgroundColor', 'fontColor', 'codeBlock', 'bulletedList', 'numberedList', 'htmlEmbed'/*, 'emoji'*/, 'sourceEditing', 'textPartLanguage'/*, 'specialCharacters' */, 'style', 'snippets', 'for_video'],
+        'cktypes' => ['heading', 'fontSize', 'mediaEmbed', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable', 'fontBackgroundColor', 'fontColor', 'codeBlock', 'bulletedList', 'numberedList', 'htmlEmbed'/*, 'emoji'*/, 'sourceEditing', 'textPartLanguage'/*, 'specialCharacters' */, 'style', 'snippets', 'for_video_widget_test'],
         'ckimgtypes' => ['rexImage', 'imageUpload'],
         'cklinktypes' => ['ytable', 'media', 'internal'],
         'cktabletypes' => ['tableProperties', 'tableCellProperties']
@@ -243,7 +243,8 @@ class Cke5ProfilesCreator
     ];
     const DEFAULTS = self::DEFAULT_VALUES;
     const ALLOWED_FIELDS = [
-        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll', 'specialCharacters', 'pastePlainText', 'htmlEmbed', 'sourceEditing', 'textPartLanguage', 'findAndReplace', 'style', 'snippets', 'for_video', 'showBlocks', 'bookmark', 'accessibilityHelp'],
+        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll', 'specialCharacters', 'pastePlainText', 'redaxoMarkdownPasteToggle', 'redaxoMinimapToggle', 'htmlEmbed', 'sourceEditing', 'textPartLanguage', 'findAndReplace', 'style', 'snippets', 'for_video', 'for_video_widget_test', 'showBlocks', 'bookmark', 'accessibilityHelp'],
+        'balloon_toolbar' => ['style', '|', 'paragraph', 'heading', 'bulletedList', 'numberedList', 'todoList', 'outdent', 'indent', 'blockQuote', 'insertTable', 'mediaEmbed', 'for_video', 'for_video_widget_test', 'codeBlock', 'link', 'horizontalLine', 'specialCharacters', 'removeFormat', 'undo', 'redo'],
         'alignment' => ['left', 'right', 'center', 'justify'],
         'table_toolbar' => ['|', 'tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties', 'toggleTableCaption'],
         'heading' => ['paragraph', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
@@ -264,6 +265,12 @@ class Cke5ProfilesCreator
         'providers' => ['dailymotion', 'spotify', 'youtube', 'vimeo', 'instagram', 'twitter', 'googleMaps', 'flickr', 'facebook'],
         'code_block' => ['plaintext', 'c', 'cs', 'cpp', 'css', 'diff', 'html', 'java', 'javascript', 'php', 'python', 'ruby', 'typescript', 'xml'],
         'special_characters' => ['currency', 'mathematical', 'latin', 'arrows', 'text']
+    ];
+
+    const EDITOR_TYPES = [
+        'classic' => 'classic',
+        'classic_balloon' => 'classic_balloon',
+        'balloon_block' => 'balloon_block',
     ];
 
     /** @api array<string,array<string,string>> */
@@ -431,22 +438,73 @@ class Cke5ProfilesCreator
         }
 
         $toolbar = self::toArray($profile['toolbar']);
+        $balloonToolbar = self::toArray(isset($profile['balloon_toolbar']) ? $profile['balloon_toolbar'] : null);
         $linkToolbar = self::toArray($profile['rexlink']);
         $tableToolbar = self::toArray($profile['table_toolbar']);
+        $globalSettings = self::getGlobalProfileSettings();
+        $globalMentions = self::isGlobalSettingEnabled($globalSettings, 'global_mentions_enabled') ? self::decodeGlobalJsonList($globalSettings, 'global_mentions_definition') : [];
+        $globalSprogMentions = self::isGlobalSettingEnabled($globalSettings, 'global_sprog_enabled') ? self::decodeGlobalJsonList($globalSettings, 'global_sprog_mention_definition') : [];
+        $globalYtables = self::isGlobalSettingEnabled($globalSettings, 'global_ytable_enabled') ? self::decodeGlobalJsonList($globalSettings, 'global_ytable_definition') : [];
+
+        if (self::isGlobalSettingEnabled($globalSettings, 'global_media_enabled') && (isset($profile['mediatypes']) && '' === trim((string) $profile['mediatypes']) || !isset($profile['mediatypes'])) && isset($globalSettings['global_mediatypes']) && '' !== trim((string) $globalSettings['global_mediatypes'])) {
+            $profile['mediatypes'] = trim((string) $globalSettings['global_mediatypes']);
+        }
+
+        if (self::isGlobalSettingEnabled($globalSettings, 'global_media_enabled') && (isset($profile['mediatype']) && '' === trim((string) $profile['mediatype']) || !isset($profile['mediatype'])) && isset($globalSettings['global_mediatype']) && '' !== trim((string) $globalSettings['global_mediatype'])) {
+            $profile['mediatype'] = trim((string) $globalSettings['global_mediatype']);
+        }
+
+        if (self::isGlobalSettingEnabled($globalSettings, 'global_media_enabled') && (isset($profile['mediapath']) && '' === trim((string) $profile['mediapath']) || !isset($profile['mediapath'])) && isset($globalSettings['global_mediapath']) && '' !== trim((string) $globalSettings['global_mediapath'])) {
+            $profile['mediapath'] = trim((string) $globalSettings['global_mediapath']);
+        }
+
+        $profileHasFontFamilyDefault = isset($profile['font_family_default']) && '' !== trim((string) $profile['font_family_default']);
+        $profileHasCustomFontFamilies = isset($profile['font_families']) && '' !== trim((string) $profile['font_families']);
+
+        if (self::isGlobalSettingEnabled($globalSettings, 'global_font_family_default') && !$profileHasFontFamilyDefault && !$profileHasCustomFontFamilies) {
+            $profile['font_family_default'] = 'default_font_family';
+        }
+
+        if (!self::isGlobalSettingEnabled($globalSettings, 'global_font_family_default') && !$profileHasCustomFontFamilies && '' !== trim((string) $globalSettings['global_font_families'])) {
+            $profile['font_families'] = trim((string) $globalSettings['global_font_families']);
+        }
+
         $jsonProfile = ['toolbar' => ['items' => $toolbar, 'shouldNotGroupWhenFull' => (!(isset($profile['group_when_full']) && $profile['group_when_full'] !== ''))]];
         $jsonSubOption = [];
         $jsonProfile['removePlugins'] = [];
         $sprogDefinition = [];
 
+        $jsonProfile['redaxoEditorType'] = self::normalizeEditorType(isset($profile['editor_type']) && is_string($profile['editor_type']) ? $profile['editor_type'] : '');
+
+        if (isset($profile['balloon_toolbar_custom']) && '' !== $profile['balloon_toolbar_custom'] && count($balloonToolbar) > 0) {
+            $jsonProfile['balloonToolbar'] = $balloonToolbar;
+            $jsonProfile['blockToolbar'] = $balloonToolbar;
+        }
+
         if (isset($profile['paste_plain_text_default']) && $profile['paste_plain_text_default'] !== '') {
             $jsonProfile['pastePlainTextDefault'] = true;
+        }
+
+        $jsonProfile['redaxoMarkdownPasteEnabled'] = self::profileFlagEnabled($profile, 'markdown_paste', false);
+        $jsonProfile['redaxoMinimapEnabled'] = self::profileFlagEnabled($profile, 'minimap', false);
+
+        if ($jsonProfile['redaxoMarkdownPasteEnabled'] && !in_array('redaxoMarkdownPasteToggle', $jsonProfile['toolbar']['items'], true)) {
+            $jsonProfile['toolbar']['items'][] = 'redaxoMarkdownPasteToggle';
+        }
+
+        if ($jsonProfile['redaxoMinimapEnabled'] && !in_array('redaxoMinimapToggle', $jsonProfile['toolbar']['items'], true)) {
+            $jsonProfile['toolbar']['items'][] = 'redaxoMinimapToggle';
         }
 
         if (in_array('link', $toolbar, true) && count($linkToolbar) > 0) {
             $jsonProfile['link'] = ['rexlink' => $linkToolbar];
 
-            if (in_array('ytable', $linkToolbar, true) && isset($profile['ytable']) && $profile['ytable'] !== '') {
-                $jsonProfile['link']['ytable'] = json_decode($profile['ytable'], true);
+            if (in_array('ytable', $linkToolbar, true)) {
+                $profileYtables = isset($profile['ytable']) && '' !== $profile['ytable'] ? (array) json_decode($profile['ytable'], true) : [];
+                $mergedYtables = self::mergeConfigLists($globalYtables, $profileYtables);
+                if (count($mergedYtables) > 0) {
+                    $jsonProfile['link']['ytable'] = $mergedYtables;
+                }
             }
         }
 
@@ -565,6 +623,7 @@ class Cke5ProfilesCreator
                 foreach ($definition as $item) {
                     $jsonProfile['link']['decorators'] = array_merge($jsonProfile['link']['decorators'], $item);
                 }
+                $jsonProfile['link']['decorators'] = self::normalizeLinkDecorators($jsonProfile['link']['decorators']);
             }
         }
 
@@ -657,7 +716,7 @@ class Cke5ProfilesCreator
             $jsonProfile['removePlugins'][] = 'Style';
         }
 
-        $requiresCustomHtml = in_array('for_video', $toolbar, true);
+        $requiresCustomHtml = in_array('for_video', $toolbar, true) || in_array('for_video_widget_test', $toolbar, true);
         if (!in_array('sourceEditing', $toolbar, true) && !in_array('style', $toolbar, true) && !$requiresCustomHtml) {
             $jsonProfile['removePlugins'][] = 'GeneralHtmlSupport';
         }
@@ -821,7 +880,12 @@ class Cke5ProfilesCreator
             if (isset($profile['mediatype']) && $profile['mediatype'] !== '') {
                 $ckFinderUrl .= '&media_type=' . $profile['mediatype'];
             } else {
-                $ckFinderUrl .= '&media_path=' . $profile['mediapath'];
+                $mediaPath = 'media';
+                if (isset($profile['mediapath']) && is_string($profile['mediapath']) && trim($profile['mediapath']) !== '') {
+                    $mediaPath = trim($profile['mediapath']);
+                }
+
+                $ckFinderUrl .= '&media_path=' . rawurlencode(trim($mediaPath, '/'));
             }
 
             if (isset($profile['upload_mediacategory']) && $profile['upload_mediacategory'] !== '') {
@@ -875,7 +939,7 @@ class Cke5ProfilesCreator
             }
         }
 
-        if (in_array('for_video', $toolbar, true)) {
+        if (in_array('for_video', $toolbar, true) || in_array('for_video_widget_test', $toolbar, true)) {
             $jsonProfile = self::addVideoHtmlSupport($jsonProfile);
         }
 
@@ -890,22 +954,34 @@ class Cke5ProfilesCreator
             }
         }
 
+        $profileSprogMentions = [];
         if (isset($profile['sprog_mention']) && $profile['sprog_mention'] !== '' && isset($profile['sprog_mention_definition']) && $profile['sprog_mention_definition'] !== '') {
             $definition = json_decode($profile['sprog_mention_definition'], true);
             if (is_array($definition)) {
-                $sprogDefinition = $definition;
-                $jsonProfile['mention']['feeds'][] = ['marker' => '{', 'feed' => 'getSprogFeedItems' . $profile['name'], 'itemRenderer' => 'sprogItemRenderer', 'minimumCharacters' => 1];
+                $profileSprogMentions = $definition;
             }
         }
 
+        $mergedSprogMentions = self::mergeConfigLists($globalSprogMentions, $profileSprogMentions);
+        if (count($mergedSprogMentions) > 0) {
+            $sprogDefinition = $mergedSprogMentions;
+            $jsonProfile['mention']['feeds'][] = ['marker' => '{', 'feed' => 'getSprogFeedItems' . $profile['name'], 'itemRenderer' => 'sprogItemRenderer', 'minimumCharacters' => 1];
+        }
+
+        $profileMentions = [];
         if (isset($profile['mentions']) && $profile['mentions'] !== '' && isset($profile['mentions_definition']) && $profile['mentions_definition'] !== '') {
             $definition = json_decode($profile['mentions_definition'], true);
             if (is_array($definition)) {
-                if (!isset($jsonProfile['mention']['feeds']) || !is_array($jsonProfile['mention']['feeds'])) {
-                    $jsonProfile['mention']['feeds'] = [];
-                }
-                $jsonProfile['mention']['feeds'] = array_merge($jsonProfile['mention']['feeds'], $definition);
+                $profileMentions = $definition;
             }
+        }
+
+        $mergedMentions = self::mergeConfigLists($globalMentions, $profileMentions);
+        if (count($mergedMentions) > 0) {
+            if (!isset($jsonProfile['mention']['feeds']) || !is_array($jsonProfile['mention']['feeds'])) {
+                $jsonProfile['mention']['feeds'] = [];
+            }
+            $jsonProfile['mention']['feeds'] = self::mergeConfigLists($jsonProfile['mention']['feeds'], $mergedMentions);
         }
 
         // licence
@@ -1119,6 +1195,192 @@ class Cke5ProfilesCreator
         ];
 
         return $jsonProfile;
+    }
+
+    /**
+     * Normalize custom link decorators to CKEditor-compatible structure.
+     *
+     * @param mixed $decorators
+     * @return array<string,array<string,mixed>>
+     */
+    private static function normalizeLinkDecorators($decorators): array
+    {
+        if (!is_array($decorators)) {
+            return [];
+        }
+
+        $normalized = [];
+
+        foreach ($decorators as $name => $config) {
+            if (!is_string($name) || trim($name) === '') {
+                continue;
+            }
+
+            if (!is_array($config)) {
+                continue;
+            }
+
+            $mode = isset($config['mode']) && is_string($config['mode']) ? trim($config['mode']) : '';
+            if (!in_array($mode, ['manual', 'automatic'], true)) {
+                continue;
+            }
+
+            $entry = ['mode' => $mode];
+
+            if (isset($config['label']) && is_string($config['label']) && trim($config['label']) !== '') {
+                $entry['label'] = trim($config['label']);
+            }
+
+            if ($mode === 'manual') {
+                if (!isset($config['attributes']) || !is_array($config['attributes']) || $config['attributes'] === []) {
+                    continue;
+                }
+                $entry['attributes'] = $config['attributes'];
+            }
+
+            if ($mode === 'automatic') {
+                if (isset($config['attributes']) && is_array($config['attributes']) && $config['attributes'] !== []) {
+                    $entry['attributes'] = $config['attributes'];
+                }
+                if (isset($config['callback']) && is_string($config['callback']) && trim($config['callback']) !== '') {
+                    $entry['callback'] = trim($config['callback']);
+                }
+                if (!isset($entry['attributes']) && !isset($entry['callback'])) {
+                    continue;
+                }
+            }
+
+            $normalized[$name] = $entry;
+        }
+
+        return $normalized;
+    }
+
+    private static function normalizeEditorType(string $editorType): string
+    {
+        $normalized = trim(strtolower($editorType));
+
+        if (in_array($normalized, ['classic_balloon', 'classic-balloon', 'classic_with_balloon', 'classic-with-balloon', 'hybrid', 'combo'], true)) {
+            return self::EDITOR_TYPES['classic_balloon'];
+        }
+
+        if (in_array($normalized, ['balloon_block', 'balloon-block', 'balloon', 'balloon_block_editor', 'balloon-block-editor'], true)) {
+            return self::EDITOR_TYPES['balloon_block'];
+        }
+
+        return self::EDITOR_TYPES['classic'];
+    }
+
+    /**
+     * @return array<string,mixed>
+     */
+    private static function getGlobalProfileSettings(): array
+    {
+        $settings = self::getAddon()->getConfig('global_profile_settings');
+        if (is_array($settings)) {
+            return $settings;
+        }
+
+        return [
+            'global_mentions_enabled' => (string) self::getAddon()->getConfig('global_mentions_enabled', ''),
+            'global_mentions_definition' => (string) self::getAddon()->getConfig('global_mentions_definition', ''),
+            'global_sprog_enabled' => (string) self::getAddon()->getConfig('global_sprog_enabled', ''),
+            'global_sprog_mention_definition' => (string) self::getAddon()->getConfig('global_sprog_mention_definition', ''),
+            'global_ytable_enabled' => (string) self::getAddon()->getConfig('global_ytable_enabled', ''),
+            'global_ytable_definition' => (string) self::getAddon()->getConfig('global_ytable_definition', ''),
+            'global_media_enabled' => (string) self::getAddon()->getConfig('global_media_enabled', ''),
+            'global_mediatypes' => (string) self::getAddon()->getConfig('global_mediatypes', ''),
+            'global_mediatype' => (string) self::getAddon()->getConfig('global_mediatype', ''),
+            'global_mediapath' => (string) self::getAddon()->getConfig('global_mediapath', ''),
+            'global_font_family_default' => (string) self::getAddon()->getConfig('global_font_family_default', ''),
+            'global_font_families' => (string) self::getAddon()->getConfig('global_font_families', ''),
+        ];
+    }
+
+    /**
+     * @param array<string,mixed> $settings
+     * @return array<int,mixed>
+     */
+    private static function decodeGlobalJsonList(array $settings, string $key): array
+    {
+        if (!isset($settings[$key]) || !is_string($settings[$key]) || '' === trim($settings[$key])) {
+            return [];
+        }
+
+        $decoded = json_decode($settings[$key], true);
+        return is_array($decoded) ? array_values($decoded) : [];
+    }
+
+    /**
+     * @param array<string,mixed> $settings
+     */
+    private static function isGlobalSettingEnabled(array $settings, string $key): bool
+    {
+        if (!isset($settings[$key])) {
+            return false;
+        }
+
+        $value = (string) $settings[$key];
+        return '' !== trim($value);
+    }
+
+    /**
+     * @param array<int,mixed> $base
+     * @param array<int,mixed> $override
+     * @return array<int,mixed>
+     */
+    private static function mergeConfigLists(array $base, array $override): array
+    {
+        $mergedByKey = [];
+        $order = [];
+
+        foreach ($base as $item) {
+            $key = self::configListItemKey($item);
+            if (!isset($mergedByKey[$key])) {
+                $order[] = $key;
+            }
+            $mergedByKey[$key] = $item;
+        }
+
+        foreach ($override as $item) {
+            $key = self::configListItemKey($item);
+            if (!isset($mergedByKey[$key])) {
+                $order[] = $key;
+            }
+            // Override base entries with profile-specific ones where keys match.
+            $mergedByKey[$key] = $item;
+        }
+
+        $merged = [];
+        foreach ($order as $key) {
+            if (isset($mergedByKey[$key])) {
+                $merged[] = $mergedByKey[$key];
+            }
+        }
+
+        return $merged;
+    }
+
+    /**
+     * @param mixed $item
+     */
+    private static function configListItemKey($item): string
+    {
+        if (is_array($item)) {
+            if (isset($item['sprog_key']) && is_string($item['sprog_key']) && '' !== $item['sprog_key']) {
+                return 'sprog:' . $item['sprog_key'];
+            }
+            if (isset($item['table']) && is_string($item['table']) && isset($item['column']) && is_string($item['column'])) {
+                return 'ytable:' . $item['table'] . '|' . $item['column'];
+            }
+            if (isset($item['marker']) && is_string($item['marker'])) {
+                $feed = isset($item['feed']) ? (is_string($item['feed']) ? $item['feed'] : json_encode($item['feed'])) : '';
+                return 'mention:' . $item['marker'] . '|' . (string) $feed;
+            }
+            return 'json:' . (string) json_encode($item);
+        }
+
+        return 'scalar:' . (string) $item;
     }
 
     /**

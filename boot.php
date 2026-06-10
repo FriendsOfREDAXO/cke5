@@ -26,6 +26,25 @@ if (rex::isBackend() && is_object(rex::getUser())) {
     Cke5AssetsProvider::provideCke5BaseData();
     Cke5AssetsProvider::provideCke5CustomData();
 
+    if (
+        rex_be_controller::getCurrentPagePart(1) === 'cke5'
+        && rex_be_controller::getCurrentPagePart(2) === 'profiles'
+        && rex_be_controller::getCurrentPagePart(3) === 'customise'
+        && rex_be_controller::getCurrentPagePart(4) === 'global'
+    ) {
+        $hasGlobalWidgetJs = false;
+        foreach (rex_view::getJsFiles() as $jsFile) {
+            if (strpos($jsFile, 'cke5customise_global') !== false) {
+                $hasGlobalWidgetJs = true;
+                break;
+            }
+        }
+
+        if (!$hasGlobalWidgetJs) {
+            rex_view::addJsFile($this->getAssetsUrl('js/cke5customise_global.js'));
+        }
+    }
+
     // Check REDAXO version
     if (rex_version::compare(rex::getVersion(), '5.13.0-dev', '>=')) {
         rex_view::addCssFile($this->getAssetsUrl('css/cke5_dark.css'));
@@ -33,7 +52,7 @@ if (rex::isBackend() && is_object(rex::getUser())) {
 
         // get user settings for theme
         $themeType = $user->getValue('theme');
-        $theme = (!is_null($themeType) && $themeType !== '') ? $themeType : 'auto';
+        $theme = $themeType !== '' ? $themeType : 'auto';
 
         if (rex::getProperty('theme') === 'light') {
             $theme = 'light';

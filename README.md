@@ -8,11 +8,11 @@ Current development version: `7.0.0-dev`
 
 ## Requirements
 
-- REDAXO: `>= 5.12`
-- PHP: `>= 7.2, < 9`
+- REDAXO: `>= 5.19`
+- PHP: `>= 8.1, < 9`
 - Conflicts:
-  - `mblock < 3.4.0`
-  - `mform < 6.1.0`
+  - `mblock < 4.3.0`
+  - `mform < 7.0.0`
 
 ## What Is New in 7.0.0-dev
 
@@ -24,8 +24,12 @@ Current development version: `7.0.0-dev`
   - style groups
   - styles
   - snippets
-- New plugin/build documentation in `PLUGIN_DEVELOPMENT.md`
+- New developer documentation in `dev.md`
 - Cleanup of legacy and orphaned vendor/runtime files
+- New global defaults page (`Profiles > Defaults > Global settings`) for mentions, Sprog replacements, yTables, media defaults, and font defaults
+- New editor type `classic_balloon` and configurable balloon toolbar in profile manager
+- Improved merge/fallback behavior between profile settings and global defaults
+- UX fixes in profile/default widgets (mentions examples, stable placeholders, robust toggle/collapse init)
 
 ## Feature Overview
 
@@ -63,9 +67,11 @@ Current development version: `7.0.0-dev`
 - Native addon plugins loaded at runtime:
   - `RedaxoLinkIntegration`
   - `RedaxoMediaImage`
-  - `RedaxoMediaVideo`
   - `RedaxoSnippets`
   - `RedaxoPastePlainTextToggle`
+  - `RedaxoMarkdownPasteToggle`
+  - `RedaxoMinimapToggle`
+  - `RedaxoVideoWidgetTest`
 - External plugin registry support via addon API and JS config
 - Toolbar alias transformations for external plugins
 
