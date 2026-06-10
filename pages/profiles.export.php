@@ -92,7 +92,7 @@ if (rex_request::post('_csrf_token', 'string', '') !== '') {
         ];
 
         // create filename and export the data set
-        $names = (strlen(implode('_', $exportNames)) > 100) ? implode('_', $exportNames) : substr(implode('_', $exportNames), 0, 100) . '_etc_';
+        $names = (strlen(implode('_', $exportNames)) > 100) ? substr(implode('_', $exportNames), 0, 100) . '_etc_' : implode('_', $exportNames);
         $fileName = 'cke5_export_' . $names . '_' . date('YmdHis') . '.json';
         header('Content-Disposition: attachment; filename="' . $fileName . '"; charset=utf-8'); // create header info
         rex_response::sendContent((string) json_encode($exportData, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT), 'application/octetstream'); // stream it out

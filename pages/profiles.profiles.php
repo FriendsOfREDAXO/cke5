@@ -27,6 +27,7 @@ if ($func === 'clone') {
     $func = '';
 }
 
+
 if ($func === 'delete') {
     $message = Cke5ListHelper::deleteData($profileTable, $id);
     rex_extension::registerPoint(new rex_extension_point('CKE5_PROFILE_DELETE', $id));
@@ -195,7 +196,7 @@ if ($func === '') {
             $field->setLabel(rex_i18n::msg('cke5_paste_plain_text_default'));
             $field->addOption(rex_i18n::msg('cke5_paste_plain_text_default_description'), 'paste_plain_text_default');
             if ($default_value) {
-                $field->setValue('');
+                $field->setValue('paste_plain_text_default');
             }
 
             // text part lang
@@ -975,4 +976,3 @@ if ($func === '') {
     $fragment->setVar('body', $content, false);
     echo $fragment->parse('core/page/section.php');
 }
-
