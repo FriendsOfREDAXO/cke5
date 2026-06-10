@@ -38,9 +38,11 @@ $content .= Cke5NavigationProvider::getMainSubNavigationHeader() .
                         <figcaption>Frankfurt am Main – Foto von <a href="https://pixabay.com/users/leonhard_niederwimmer-1131094/" target="_blank" rel="noopener">Leonhard_Niederwimmer</a> auf <a href="https://pixabay.com/photos/building-horizon-city-skyscraper-7092747/" target="_blank" rel="noopener">Pixabay</a> (Pixabay Content License)</figcaption>
                     </figure>
 
-                    <h2>Frankfurt – Finanzplatz und Kulturstadt</h2>
+                    <h2>Frankfurt – Finanzplatz, Kulturstadt und REDAXO-Heimat</h2>
 
                     <p>Frankfurt am Main ist mit rund 760.000 Einwohnern die fünftgrößte Stadt Deutschlands und das bedeutendste Finanzzentrum des Euroraums. Die charakteristische Skyline mit ihren Hochhäusern – im Volksmund auch „Mainhattan" genannt – ist das unverwechselbare Gesicht der Stadt.</p>
+
+                    <p>Frankfurt ist außerdem die Heimat von <a href="https://www.yakamara.de" target="_blank" rel="noopener"><strong>Yakamara</strong></a> – der Agentur hinter REDAXO. Aus Frankfurt heraus wird das Open-Source-CMS entwickelt und gepflegt, das heute von tausenden Websites und Agenturen weltweit eingesetzt wird.</p>
 
                     <p><strong>Die wichtigsten Institutionen auf einen Blick:</strong></p>
                     <ul>
