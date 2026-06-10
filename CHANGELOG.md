@@ -35,6 +35,9 @@
 * Widget-Initialisierung für die Defaults-Seite ergänzt (inkl. robustem `rex:ready`- und Collapse-Fallback)
 * Sprog-MultiInput stabilisiert: fehlerhafte `undefined`-Placeholder behoben und Attribut-Fallbacks ergänzt
 * Mention-Felder um JSON-Beispielhinweise erweitert (Profil und globale Defaults)
+* CSS-Regeneration gehärtet: keine Abhängigkeit mehr von `cke5_templates` auf frischen Installationen ohne Template-Tabelle
+* Profil-Import abwärtskompatibel gemacht: ältere Exportdateien ohne `media_embed_width_styles_definition` werden wieder akzeptiert
+* Merge-Konflikt mit `main` in `package.yml` aufgelöst; `7.0.0-dev` als Zielstand für die laufende Entwicklungsreihe fixiert
 
 ## Version 6.4.2
 
