@@ -16,11 +16,6 @@ $content .= Cke5NavigationProvider::getMainSubNavigationHeader() .
 
                     <p>Diese Demo ist bewusst wie ein echter Inhaltsartikel aufgebaut: längerer Fließtext, Bild mit Credits, Zitat, Listen, Tabelle und ein hervorgehobener Abschnitt. Die Style-Bar ist dafür gedacht, solche Muster sauber und ohne Spezial-Block zu markieren.</p>
 
-                    <figure class="image">
-                        <img src="/assets/addons/cke5/images/frankfurt_skyline.jpg" alt="Frankfurt am Main Skyline">
-                        <figcaption>Frankfurt am Main – Foto von <a href="https://pixabay.com/users/leonhard_niederwimmer-1131094/" target="_blank" rel="noopener">Leonhard_Niederwimmer</a> auf <a href="https://pixabay.com/photos/building-horizon-city-skyscraper-7092747/" target="_blank" rel="noopener">Pixabay</a> (Pixabay Content License)</figcaption>
-                    </figure>
-
                     <section class="for-section-highlight panel panel-info">
                         <div class="panel-heading">
                             <h2 class="panel-title">Über Friends of REDAXO</h2>
@@ -37,6 +32,11 @@ $content .= Cke5NavigationProvider::getMainSubNavigationHeader() .
                             </p>
                         </div>
                     </section>
+
+                    <figure class="image">
+                        <img src="/assets/addons/cke5/images/frankfurt_skyline.jpg" alt="Frankfurt am Main Skyline">
+                        <figcaption>Frankfurt am Main – Foto von <a href="https://pixabay.com/users/leonhard_niederwimmer-1131094/" target="_blank" rel="noopener">Leonhard_Niederwimmer</a> auf <a href="https://pixabay.com/photos/building-horizon-city-skyscraper-7092747/" target="_blank" rel="noopener">Pixabay</a> (Pixabay Content License)</figcaption>
+                    </figure>
 
                     <h2>Frankfurt – Finanzplatz und Kulturstadt</h2>
 
