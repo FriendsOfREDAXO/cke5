@@ -36,53 +36,139 @@ if ($func === 'delete') {
 }
 
 if ($func === '') {
+    // Profil-Infos vorab laden (außerhalb rex_list, um Spalten-Konflikte zu vermeiden)
+    $profileInfos = [];
+    foreach (rex_sql::factory()->getArray("SELECT id, toolbar, height_default, upload_default, mediaembed, emoji, table_color_default, html_preview, text_part_language, rexlink FROM $profileTable") as $row) {
+        $profileInfos[(int)$row['id']] = $row;
+    }
+
     // instance list
     $list = rex_list::factory("SELECT id, name, description FROM $profileTable ORDER BY id");
     $list->addTableAttribute('class', 'table-striped');
 
-    // column with
-    $list->addTableColumnGroup(array(40, '*', '*', 100, 90, 120));
+    $list->addTableColumnGroup([40, 180, '*', 150]);
 
-    // hide column
     $list->removeColumn('id');
 
-    // action add/edit
     $thIcon = '<a href="' . $list->getUrl(['func' => 'add']) . '" title="' . rex_i18n::msg('cke5_add_profile') . '"><i class="rex-icon rex-icon-add-action"></i></a>';
     $tdIcon = '<i class="rex-icon fa-cube"></i>';
 
     $list->addColumn($thIcon, $tdIcon, 0, ['<th class="rex-table-icon">###VALUE###</th>', '<td class="rex-table-icon">###VALUE###</td>']);
-    $list->setColumnParams($thIcon, ['func' => 'edit', 'profile' => '###name###']);
-
-    // name
-    $list->setColumnLabel('name', rex_i18n::msg('cke5_name'));
-    $list->setColumnParams('name', ['func' => 'edit', 'profile' => '###name###', 'start' => $start]);
-
-    // description
-    $list->setColumnLabel('description', rex_i18n::msg('cke5_description'));
-
-    // edit
-    $list->addColumn('edit', '<i class="rex-icon fa-pencil-square-o"></i> ' . rex_i18n::msg('edit'), -1, ['', '<td>###VALUE###</td>']);
-    $list->setColumnLabel('edit', rex_i18n::msg('cke5_list_function'));
-    $list->setColumnLayout('edit', array('<th colspan="3">###VALUE###</th>', '<td>###VALUE###</td>'));
-    $list->setColumnParams('edit', ['func' => 'edit', 'profile' => '###name###', 'start' => $start]);
-
-    // delete
-    $list->addColumn('delete', '');
-    $list->setColumnLayout('delete', array('', '<td>###VALUE###</td>'));
-    $list->setColumnParams('delete', ['func' => 'delete', 'id' => '###id###', 'start' => $start]);
-    $list->setColumnFormat('delete', 'custom', function ($params) {
+    $list->setColumnFormat($thIcon, 'custom', static function ($params) use ($start) {
         $list = $params['list'];
-        return $list->getColumnLink($params['params']['name'], "<span class=\"{$params['params']['icon_type']}\"><i class=\"rex-icon {$params['params']['icon']}\"></i> {$params['params']['msg']}</span>");
+        $name = (string) $list->getValue('name');
+        $url = $list->getUrl(['func' => 'edit', 'profile' => $name, 'start' => $start]);
 
-    }, array('list' => $list, 'name' => 'delete', 'icon' => 'rex-icon-delete', 'icon_type' => 'rex-offline', 'msg' => rex_i18n::msg('delete')));
-    $list->addLinkAttribute('delete', 'data-confirm', rex_i18n::msg('delete') . ' ?');
+        return '<a href="' . $url . '" title="' . rex_i18n::msg('edit') . '"><i class="rex-icon fa-cube"></i></a>';
+    });
 
-    // clone
-    $list->addColumn('clone', '<i class="rex-icon fa-clone"></i> ' . rex_i18n::msg('cke5_clone'), -1, ['', '<td>###VALUE###</td>']);
-    $list->setColumnParams('clone', ['func' => 'clone', 'id' => '###id###', 'start' => $start]);
-    $list->addLinkAttribute('clone', 'data-confirm', rex_i18n::msg('cke5_clone') . ' ?');
+    $list->setColumnLabel('name', rex_i18n::msg('cke5_name'));
+    $list->setColumnFormat('name', 'custom', static function ($params) use ($start) {
+        $list = $params['list'];
+        $name = (string) $list->getValue('name');
+        $url = $list->getUrl(['func' => 'edit', 'profile' => $name, 'start' => $start]);
 
-    // show
+        return '<a href="' . $url . '">' . rex_escape($name) . '</a>';
+    });
+
+    $list->setColumnLabel('description', rex_i18n::msg('cke5_description'));
+    $list->setColumnFormat('description', 'custom', static function ($params) use ($profileInfos) {
+        $list = $params['list'];
+        $desc = (string) $list->getValue('description');
+        $id   = (int) $list->getValue('id');
+        $info = $profileInfos[$id] ?? [];
+
+        $out = '<div>';
+        if ($desc !== '') {
+            $out .= '<div style="margin-bottom:5px;">' . rex_escape($desc) . '</div>';
+        }
+
+        // Toolbar-Vorschau
+        $toolbar = (string)($info['toolbar'] ?? '');
+        if ($toolbar !== '') {
+            $items = array_values(array_filter(
+                array_map('trim', explode(',', $toolbar)),
+                fn($t) => $t !== '' && $t !== '|' && $t !== '-'
+            ));
+            $preview = implode(' · ', array_slice($items, 0, 10));
+            if (count($items) > 10) {
+                $preview .= ' <span class="text-muted">+' . (count($items) - 10) . '</span>';
+            }
+            $out .= '<div style="font-size:11px;color:#888;margin-bottom:4px;font-family:monospace;">' . rex_escape($preview) . '</div>';
+        }
+
+        // Feature-Badges
+        $badges = [];
+
+        $height = (string)($info['height_default'] ?? '');
+        if ($height !== '' && $height !== '|default_height|' && is_numeric($height)) {
+            $badges[] = '<span class="label label-default"><i class="rex-icon fa-arrows-v"></i> ' . (int)$height . 'px</span>';
+        }
+
+        if (!empty($info['upload_default'])) {
+            $badges[] = '<span class="label label-info"><i class="rex-icon fa-upload"></i> Upload</span>';
+        }
+
+        $mediaembed = (string)($info['mediaembed'] ?? '');
+        if ($mediaembed !== '') {
+            $count = count(array_filter(explode(',', $mediaembed)));
+            $badges[] = '<span class="label label-info"><i class="rex-icon fa-film"></i> Embed ×' . $count . '</span>';
+        }
+
+        if (!empty($info['emoji'])) {
+            $badges[] = '<span class="label label-default"><i class="rex-icon fa-smile-o"></i> Emoji</span>';
+        }
+
+        if (!empty($info['table_color_default'])) {
+            $badges[] = '<span class="label label-default"><i class="rex-icon fa-table"></i> Tabellenfarben</span>';
+        }
+
+        if ((string)($info['html_preview'] ?? '') === '1') {
+            $badges[] = '<span class="label label-warning"><i class="rex-icon fa-code"></i> HTML-Vorschau</span>';
+        }
+
+        if (!empty($info['text_part_language'])) {
+            $badges[] = '<span class="label label-default"><i class="rex-icon fa-language"></i> Sprache</span>';
+        }
+
+        if (!empty($info['rexlink'])) {
+            $badges[] = '<span class="label label-success"><i class="rex-icon fa-link"></i> REX-Link</span>';
+        }
+
+        if ($badges !== []) {
+            $out .= '<div style="margin-top:3px;line-height:1.8;">' . implode(' ', $badges) . '</div>';
+        }
+
+        $out .= '</div>';
+        return $out;
+    });
+
+    // kompakte Aktionsspalte: Edit-Button + Dropdown (Clone / Delete)
+    $list->addColumn('actions', '', -1, ['', '<td>###VALUE###</td>']);
+    $list->setColumnLabel('actions', rex_i18n::msg('cke5_list_function'));
+    $list->setColumnFormat('actions', 'custom', static function ($params) use ($start) {
+        $list = $params['list'];
+        $id   = $list->getValue('id');
+        $name = $list->getValue('name');
+
+        $editUrl   = $list->getUrl(['func' => 'edit',   'profile' => $name, 'start' => $start]);
+        $cloneUrl  = $list->getUrl(['func' => 'clone',  'id' => $id,        'start' => $start]);
+        $deleteUrl = $list->getUrl(['func' => 'delete', 'id' => $id,        'start' => $start]);
+
+        $btnGroup  = '<div class="btn-group">';
+        $btnGroup .= '<a class="btn btn-xs btn-default" href="' . $editUrl . '"><i class="rex-icon fa-pencil-square-o"></i> ' . rex_i18n::msg('edit') . '</a>';
+        $btnGroup .= '<button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></button>';
+        $btnGroup .= '<ul class="dropdown-menu dropdown-menu-right">';
+        $btnGroup .= '<li><a href="' . $cloneUrl . '" data-confirm="' . rex_i18n::msg('cke5_clone') . ' ?">'
+            . '<i class="rex-icon fa-clone"></i> ' . rex_i18n::msg('cke5_clone') . '</a></li>';
+        $btnGroup .= '<li class="divider"></li>';
+        $btnGroup .= '<li><a href="' . $deleteUrl . '" data-confirm="' . rex_i18n::msg('delete') . ' ?">'
+            . '<i class="rex-icon rex-icon-delete"></i> ' . rex_i18n::msg('delete') . '</a></li>';
+        $btnGroup .= '</ul></div>';
+
+        return $btnGroup;
+    }, []);
+
     $content = $list->get();
     $fragment = new rex_fragment();
     $fragment->setVar('title', rex_i18n::msg('cke5_list_profiles'));
