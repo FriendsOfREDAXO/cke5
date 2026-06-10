@@ -18,6 +18,7 @@ cke5_editor_preview_shop_profile_settings = Show profile-settings
 
 # heading
 cke5_subnavigation_header_title = CKEditor 5 for Redaxo 5
+cke5_subnavigation_header_credit = Created by <a href="https://friendsofredaxo.github.io" target="_blank">Friends of REDAXO</a>
 cke5_subnavigation_header_photo = Photo by %s on %s
 
 # profiles list & form

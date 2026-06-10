@@ -15,10 +15,7 @@ class Cke5NavigationProvider
 {
     public static function getMainSubNavigationHeader(): string
     {
-        $photoBy = sprintf(rex_i18n::msg('cke5_subnavigation_header_photo'),
-            '<a href="https://unsplash.com/photos/mMcqMYJfopo?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Patrick Fore</a>',
-            '<a href="https://unsplash.com/search/photos/stars?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a>'
-        );
+        $createdBy = rex_i18n::msg('cke5_subnavigation_header_credit');
         return '
             <header class="cke5-header">
                 <div class="header-inner">
@@ -29,7 +26,7 @@ class Cke5NavigationProvider
                         <h1>' . rex_i18n::msg('cke5_subnavigation_header_title') . '</h1>
                     </div>
                 </div>
-                <div class="photoinfo"><span>' . $photoBy . '</span></div>
+                <div class="photoinfo"><span>' . $createdBy . '</span></div>
             </header>
         ';
     }
