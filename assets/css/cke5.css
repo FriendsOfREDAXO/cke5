@@ -72,15 +72,79 @@
     display: flex;
     align-items: center;
     padding: 0 1.5rem;
-    background-size: cover;
-    background-position: center top;
-    background-color: #000;
-    background-image: url(../images/header-patrick-fore-357913-unsplash.jpg);
-    background-repeat: no-repeat;
-    color: #fff;
+    background: linear-gradient(135deg, #e8f0f7 0%, #d0e1f0 50%, #c5d9e8 100%);
+    color: #1a3a52;
     margin-bottom: 12px;
     min-height: 60px;
     gap: 1rem;
+    overflow: hidden;
+}
+
+.cke5-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(74, 144, 226, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 50%, rgba(156, 39, 176, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 40% 0%, rgba(100, 181, 246, 0.06) 0%, transparent 60%);
+    animation: cke5-header-glow 8s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes cke5-header-glow {
+    0%, 100% {
+        opacity: 0.8;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+/* Light Theme (default) */
+body.rex-theme-light .cke5-header,
+body:not(.rex-has-theme) .cke5-header {
+    background: linear-gradient(135deg, #e8f0f7 0%, #d0e1f0 50%, #c5d9e8 100%);
+    color: #1a3a52;
+}
+
+body.rex-theme-light .cke5-header::before,
+body:not(.rex-has-theme) .cke5-header::before {
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(74, 144, 226, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 50%, rgba(156, 39, 176, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 40% 0%, rgba(100, 181, 246, 0.06) 0%, transparent 60%);
+}
+
+/* Dark Theme (explicit) */
+body.rex-theme-dark .cke5-header {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1a2940 100%);
+    color: #e8f0f7;
+}
+
+body.rex-theme-dark .cke5-header::before {
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 50%, rgba(167, 139, 250, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 0%, rgba(96, 165, 250, 0.12) 0%, transparent 60%);
+}
+
+/* Auto Dark Theme (prefers-color-scheme) */
+@media (prefers-color-scheme: dark) {
+    body.rex-has-theme:not(.rex-theme-light) .cke5-header {
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1a2940 100%);
+        color: #e8f0f7;
+    }
+    
+    body.rex-has-theme:not(.rex-theme-light) .cke5-header::before {
+        background: 
+            radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+            radial-gradient(circle at 80% 50%, rgba(167, 139, 250, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 40% 0%, rgba(96, 165, 250, 0.12) 0%, transparent 60%);
+    }
 }
 
 .cke5-header .header-inner {
