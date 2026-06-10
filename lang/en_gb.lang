@@ -384,3 +384,7 @@ cke5_style_group_description_placeholder = Description
 
 cke5_template_group_name_placeholder = Template-Groups
 cke5_template_group_description_placeholder = Description
+
+# Glassy Look
+cke5_glassy_look = Enable Glassy Look
+cke5_glassy_look_info = Enables a translucent glass effect for the editor toolbar, popups and buttons (Liquid Glass). Recommended for modern browsers.
