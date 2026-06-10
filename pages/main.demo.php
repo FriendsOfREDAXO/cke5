@@ -82,6 +82,11 @@ $content .= Cke5NavigationProvider::getMainSubNavigationHeader() .
                                 <td>Geschichte &amp; Tourismus</td>
                                 <td>Historisches Rathaus, Paulskirche</td>
                             </tr>
+                            <tr>
+                                <td>Schwanheim</td>
+                                <td>Wohnen &amp; Natur</td>
+                                <td>Niddaauen, Mainufer, Streuobstwiesen</td>
+                            </tr>
                         </tbody>
                     </table>
 
