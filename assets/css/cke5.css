@@ -136,11 +136,11 @@
 
 @keyframes cke5-logo-enter {
     from {
-        right: -200px;
+        transform: translateY(-50%) translateX(-150vw);
         opacity: 0;
     }
     to {
-        right: 2%;
+        transform: translateY(-50%) translateX(0);
         opacity: 0.35;
     }
 }
