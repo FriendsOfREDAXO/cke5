@@ -111,9 +111,9 @@
     background: url(../images/ckeditor.svg) no-repeat center / contain;
     opacity: 0.35;
     transform: translateY(-50%) rotate(0deg);
-    animation: cke5-logo-enter 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) both,
-               cke5-logo-spin 18s linear 2s infinite,
-               cke5-logo-float 7s ease-in-out 2s infinite;
+    animation: cke5-logo-enter 2.8s ease-in-out both,
+               cke5-logo-spin 18s linear 2.8s infinite,
+               cke5-logo-float 7s ease-in-out 2.8s infinite;
     filter: drop-shadow(0 0 14px rgba(119, 27, 255, 0.4));
     pointer-events: none;
     z-index: 2;
@@ -136,20 +136,34 @@
 
 @keyframes cke5-logo-enter {
     0%   {
-        transform: translateY(calc(-50% - 100px)) translateX(-150vw);
+        transform: translateY(calc(-50% - 60px)) translateX(-130vw);
         opacity: 0;
+        animation-timing-function: ease-in;
     }
-    40%  {
-        transform: translateY(calc(-50% + 50px)) translateX(-15vw);
-        opacity: 0.28;
+    20%  {
+        transform: translateY(calc(-50% + 15px)) translateX(-80vw);
+        opacity: 0.1;
+        animation-timing-function: ease-in-out;
     }
-    70%  {
-        transform: translateY(calc(-50% - 25px)) translateX(3vw);
-        opacity: 0.4;
+    45%  {
+        transform: translateY(calc(-50% + 28px)) translateX(-35vw);
+        opacity: 0.22;
+        animation-timing-function: ease-in-out;
     }
-    88%  {
-        transform: translateY(calc(-50% + 8px)) translateX(-0.5vw);
+    65%  {
+        transform: translateY(calc(-50% + 10px)) translateX(-8vw);
+        opacity: 0.32;
+        animation-timing-function: ease-out;
+    }
+    82%  {
+        transform: translateY(calc(-50% - 6px)) translateX(1.5vw);
+        opacity: 0.36;
+        animation-timing-function: ease-in-out;
+    }
+    93%  {
+        transform: translateY(calc(-50% + 3px)) translateX(-0.3vw);
         opacity: 0.35;
+        animation-timing-function: ease-out;
     }
     100% {
         transform: translateY(-50%) translateX(0);
