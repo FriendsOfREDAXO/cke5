@@ -91,12 +91,6 @@ $field = $form->addInputField('text', 'license_code', null, ['class' => 'form-co
 $field->setLabel($this->i18n('license_code'));
 $field->setNotice($this->i18n('license_code_info'));
 
-// Glassy Look
-$field = $form->addCheckboxField('glassy_look');
-$field->setLabel($this->i18n('cke5_glassy_look'));
-$field->addOption($this->i18n('cke5_glassy_look'), 1);
-$field->setNotice($this->i18n('cke5_glassy_look_info'));
-
 // Ausgabe des Formulars
 $fragment = new rex_fragment();
 $fragment->setVar('class', 'edit', false);
