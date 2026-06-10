@@ -464,13 +464,42 @@ Für Build-Quellen, Runtime-Plugin-Architektur und Einbindung externer Plugins s
 
 ## Lizenz
 
-Siehe `LICENSE.md`.
+[MIT Lizenz](LICENSE.md)
 
-## Bildnachweise
+## Credits
+
+**Projekt-Lead**
+
+[Joachim Dörr](https://github.com/joachimdoerr)
+
+[Thomas Skerbis](https://github.com/skerbis)
+
+---
+
+Danke an alle [Contributors](https://github.com/FriendsOfREDAXO/cke5/graphs/contributors), die CKEditor 5 für REDAXO über die Jahre mitgestaltet haben!
+
+**Top Contributors**
+
+| | Contributor |
+|---|---|
+| 1 | [crydotsnake](https://github.com/crydotsnake) |
+| 2 | [interweave-media](https://github.com/interweave-media) |
+| 3 | [staabm](https://github.com/staabm) |
+| 4 | [nandes2062](https://github.com/nandes2062) |
+| 5 | [TobiasKrais](https://github.com/TobiasKrais) |
+| 6 | [schuer](https://github.com/schuer) |
+| 7 | [marcohanke](https://github.com/marcohanke) |
+| 8 | [eaCe](https://github.com/eaCe) |
+
+Ein herzliches Dankeschön auch an [aeberhard](https://github.com/aeberhard), [Bio-GitHub](https://github.com/Bio-GitHub), [dergel](https://github.com/dergel), [V-Simos](https://github.com/V-Simos), [VIEWSION](https://github.com/VIEWSION), [ynamite](https://github.com/ynamite) und [ischfr](https://github.com/ischfr).
+
+**Bildnachweise**
 
 Demo-Inhalt Bild: [Frankfurt am Main Skyline](https://pixabay.com/photos/building-horizon-city-skyscraper-7092747/) von [Leonhard_Niederwimmer](https://pixabay.com/users/leonhard_niederwimmer-1131094/) auf [Pixabay](https://pixabay.com/) — kostenlos nutzbar unter der [Pixabay Content License](https://pixabay.com/service/license-summary/).
 
 Friends of REDAXO Logo: [friendsofredaxo.github.io](https://friendsofredaxo.github.io) — © Friends of REDAXO.
+
+**Ein Projekt von [Friends Of REDAXO](https://github.com/FriendsOfREDAXO)**
 
 ## Support
 
