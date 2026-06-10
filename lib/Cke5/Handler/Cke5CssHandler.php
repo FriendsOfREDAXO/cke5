@@ -8,6 +8,7 @@ use rex_path;
 use rex_file;
 use rex_logger;
 use rex_sql;
+use rex_sql_table;
 use Cke5\Handler\Cke5DatabaseHandler;
 
 class Cke5CssHandler
@@ -44,12 +45,15 @@ class Cke5CssHandler
                 " WHERE css_definition != '' ORDER BY name"
             );
 
-            // Hole auch alle CSS-Definitionen aus Templates
-            $sqlTemplates = rex_sql::factory();
-            $templateResults = $sqlTemplates->getArray(
-                "SELECT title, css_definition FROM " . rex::getTable(Cke5DatabaseHandler::CKE5_TEMPLATES) .
-                " WHERE css_definition != '' ORDER BY title"
-            );
+            $templateResults = [];
+            if (self::templatesTableExists()) {
+                // Hole auch alle CSS-Definitionen aus Templates
+                $sqlTemplates = rex_sql::factory();
+                $templateResults = $sqlTemplates->getArray(
+                    "SELECT title, css_definition FROM " . rex::getTable(Cke5DatabaseHandler::CKE5_TEMPLATES) .
+                    " WHERE css_definition != '' ORDER BY title"
+                );
+            }
 
             // Erstelle den CSS-Inhalt
             $cssContent = "/**\n * Auto-generierte CKEditor 5 Styles für das Backend\n * Generiert am: " . date('Y-m-d H:i:s') . "\n */\n\n";
@@ -61,7 +65,7 @@ class Cke5CssHandler
                     $cssContent .= "/* Style: {$style['name']} */\n";
 
                     // Füge auch automatisch generierte CSS für die definierten Klassen hinzu
-                    if (!empty($style['element']) && !empty($style['classes'])) {
+                    if (!empty($style['element']) && !empty($style['classes']) && is_string($style['classes'])) {
                         $classes = explode(',', $style['classes']);
                         foreach ($classes as $class) {
                             $class = trim($class);
@@ -110,7 +114,7 @@ class Cke5CssHandler
 
     /**
      * Lädt externe CSS-Dateien und gibt sie als Array zurück
-     * @return array
+        * @return list<string>
      */
     public static function getExternalCssFiles(): array
     {
@@ -131,28 +135,31 @@ class Cke5CssHandler
                 " WHERE css_path != ''"
             );
 
-            // Hole auch alle CSS-Pfade aus Templates
-            $sqlTemplates = rex_sql::factory();
-            $templateResults = $sqlTemplates->getArray(
-                "SELECT css_path FROM " . rex::getTable(Cke5DatabaseHandler::CKE5_TEMPLATES) .
-                " WHERE css_path != ''"
-            );
+            $templateResults = [];
+            if (self::templatesTableExists()) {
+                // Hole auch alle CSS-Pfade aus Templates
+                $sqlTemplates = rex_sql::factory();
+                $templateResults = $sqlTemplates->getArray(
+                    "SELECT css_path FROM " . rex::getTable(Cke5DatabaseHandler::CKE5_TEMPLATES) .
+                    " WHERE css_path != ''"
+                );
+            }
 
             // Sammle die Pfade
             foreach ($styleResults as $style) {
-                if (!empty($style['css_path']) && !in_array($style['css_path'], $files)) {
+                if (isset($style['css_path']) && is_string($style['css_path']) && $style['css_path'] !== '' && !in_array($style['css_path'], $files, true)) {
                     $files[] = $style['css_path'];
                 }
             }
 
             foreach ($groupResults as $group) {
-                if (!empty($group['css_path']) && !in_array($group['css_path'], $files)) {
+                if (isset($group['css_path']) && is_string($group['css_path']) && $group['css_path'] !== '' && !in_array($group['css_path'], $files, true)) {
                     $files[] = $group['css_path'];
                 }
             }
 
             foreach ($templateResults as $template) {
-                if (!empty($template['css_path']) && !in_array($template['css_path'], $files)) {
+                if (isset($template['css_path']) && is_string($template['css_path']) && $template['css_path'] !== '' && !in_array($template['css_path'], $files, true)) {
                     $files[] = $template['css_path'];
                 }
             }
@@ -162,5 +169,10 @@ class Cke5CssHandler
             rex_logger::logException($e);
             return [];
         }
+    }
+
+    private static function templatesTableExists(): bool
+    {
+        return rex_sql_table::get(rex::getTable(Cke5DatabaseHandler::CKE5_TEMPLATES))->exists();
     }
 }
