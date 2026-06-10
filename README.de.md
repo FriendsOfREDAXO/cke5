@@ -6,14 +6,6 @@ CKEditor-5-Integration für REDAXO mit profilbasierter Konfiguration, REDAXO-Med
 
 Aktuelle Entwicklungsversion: `7.0.0-dev`
 
-## Voraussetzungen
-
-- REDAXO: `>= 5.19`
-- PHP: `>= 8.1, < 9`
-- Konflikte:
-  - `mblock < 4.3.0`
-  - `mform < 7.0.0`
-
 ## Neu in 7.0.0-dev
 
 - Umstellung auf den offiziellen CKEditor-5-Build als Basis

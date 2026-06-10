@@ -6,14 +6,6 @@ CKEditor 5 integration for REDAXO with profile-based configuration, REDAXO media
 
 Current development version: `7.0.0-dev`
 
-## Requirements
-
-- REDAXO: `>= 5.19`
-- PHP: `>= 8.1, < 9`
-- Conflicts:
-  - `mblock < 4.3.0`
-  - `mform < 7.0.0`
-
 ## What Is New in 7.0.0-dev
 
 - Switched to the official CKEditor 5 build as addon base
