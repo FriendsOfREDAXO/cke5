@@ -474,6 +474,12 @@ For build sources, runtime plugin architecture, and external plugin integration,
 
 See `LICENSE.md`.
 
+## Credits
+
+Demo content image: [Frankfurt am Main Skyline](https://pixabay.com/photos/building-horizon-city-skyscraper-7092747/) by [Leonhard_Niederwimmer](https://pixabay.com/users/leonhard_niederwimmer-1131094/) on [Pixabay](https://pixabay.com/) — free to use under the [Pixabay Content License](https://pixabay.com/service/license-summary/).
+
+Friends of REDAXO logo: [friendsofredaxo.github.io](https://friendsofredaxo.github.io) — © Friends of REDAXO.
+
 ## Support
 
 - Issues: https://github.com/FriendsOfREDAXO/cke5/issues
