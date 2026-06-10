@@ -806,6 +806,9 @@
               }
             });
           }
+          if (options.title !== null && typeof options.title === "object" && typeof window.CKEDITOR.Title === "function" && !options.plugins.includes(window.CKEDITOR.Title)) {
+            options.plugins.push(window.CKEDITOR.Title);
+          }
           options = cke5_register_native_redaxo_plugins(options);
           options = cke5_apply_resize_handle_mode(options);
           options = cke5_apply_native_redaxo_toolbar(options);
