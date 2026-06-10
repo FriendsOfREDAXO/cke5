@@ -24,7 +24,7 @@ class Cke5NavigationProvider
                 <div class="cke5-scan"></div>
                 <div class="header-inner">
                     <div class="header-logo">
-                        <img src="/assets/addons/cke5/images/cke5_color.svg" alt="CKEditor Logo" class="cke5-logo-img">
+                        <img src="/assets/addons/cke5/images/cke5_white.svg" alt="CKEditor Logo" class="cke5-logo-img">
                     </div>
                     <div class="header-content">
                         <h1>' . rex_i18n::msg('cke5_subnavigation_header_title') . '</h1>

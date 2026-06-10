@@ -80,7 +80,7 @@
     background: radial-gradient(ellipse 150% 250% at 8% 60%, #12063a 0%, #080d1a 45%, #0a1e38 100%);
     color: #e8f0f7;
     margin-bottom: 12px;
-    min-height: 120px;
+    min-height: 80px;
     gap: 1rem;
     overflow: hidden;
 }
