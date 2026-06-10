@@ -52,7 +52,7 @@ if (rex::isBackend() && is_object(rex::getUser())) {
 
         // get user settings for theme
         $themeType = $user->getValue('theme');
-        $theme = $themeType !== '' ? $themeType : 'auto';
+        $theme = ($themeType !== null && $themeType !== '') ? $themeType : 'auto';
 
         if (rex::getProperty('theme') === 'light') {
             $theme = 'light';
@@ -63,7 +63,7 @@ if (rex::isBackend() && is_object(rex::getUser())) {
 
         // set theme properties
         rex_view::setJsProperty('cke5theme', $theme);
-        rex_view::setJsProperty('cke5darkcss', rex_url::addonAssets('cke5') . 'css/dark.css');
+        rex_view::setJsProperty('cke5darkcss', rex_url::addonAssets('cke5') . 'css/dark.css?buster=' . $this->getVersion());
     } else {
         rex_view::setJsProperty('cke5theme', 'notheme');
     }

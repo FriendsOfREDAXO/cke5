@@ -1,8 +1,9 @@
 :root {
     /* Overrides the border radius setting in the theme. */
     --ck-border-radius: 4px;
-    --ck-color-base-background: #000;
-    --ck-color-base-border: #333;
+    --ck-color-base-background: #1f2933;
+    --ck-color-base-border: #3a4654;
+    --ck-color-base-text: hsl(0, 0%, 98%);
     /* Overrides the default font size in the theme. */
     --ck-font-size-base: 14px;
 
@@ -106,9 +107,10 @@
     --ck-color-link-default: hsl(190, 100%, 75%);
 }
 .ck.ck-editor__main>.ck-editor__editable {
-background: var(--ck-color-base-background);
-border-radius: 0;
-border-color: #999;
+    background: var(--ck-color-base-background);
+    color: var(--ck-color-base-text);
+    border-radius: 0;
+    border-color: #3a4654;
 }
 
 .ck-content .image > figcaption, .ck-content blockquote {
