@@ -52,5 +52,5 @@ requires:
         version: '>=8.1, <9'
 conflicts:
     packages:
-        mblock: '>=4.3.0'
-        mform: '>=7.0.0'
+        mblock: '<4.3.0'
+        mform: '<7.0.0'

@@ -21,6 +21,7 @@ class Cke5NavigationProvider
         );
         return '
             <header class="cke5-header">
+                <div class="cke5-scan"></div>
                 <div class="header-inner">
                     <div class="header-logo">
                         <img src="/assets/addons/cke5/images/cke5_white.svg" alt="CKEditor Logo" class="cke5-logo-img">

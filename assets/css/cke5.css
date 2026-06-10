@@ -100,18 +100,19 @@
     z-index: 1;
 }
 
-/* Logo-Geist: groß, ghosted, leise rotierend */
+/* Logo-Geist: schwebt rechts, sanfter Glüh-Drift */
 .cke5-header::after {
     content: '';
     position: absolute;
     top: 50%;
-    right: 2%;
+    right: 1%;
     width: 200px;
     height: 200px;
     background: url(../images/cke5_white.svg) no-repeat center / contain;
-    opacity: 0.07;
+    opacity: 0.08;
     transform: translateY(-50%) scale(1) rotate(-5deg);
-    animation: cke5-logo-drift 28s ease-in-out infinite;
+    animation: cke5-logo-drift 22s ease-in-out infinite;
+    filter: drop-shadow(0 0 18px rgba(56, 189, 248, 0.35));
     pointer-events: none;
     z-index: 2;
 }
@@ -134,15 +135,23 @@
 @keyframes cke5-logo-drift {
     0%, 100% {
         transform: translateY(-50%) scale(1) rotate(-5deg);
-        opacity: 0.07;
-    }
-    40% {
-        transform: translateY(-54%) scale(1.1) rotate(0deg);
-        opacity: 0.12;
-    }
-    70% {
-        transform: translateY(-47%) scale(1.05) rotate(-8deg);
         opacity: 0.08;
+        filter: drop-shadow(0 0 18px rgba(56, 189, 248, 0.3));
+    }
+    25% {
+        transform: translateY(-56%) scale(1.12) rotate(1deg);
+        opacity: 0.14;
+        filter: drop-shadow(0 0 28px rgba(56, 189, 248, 0.55));
+    }
+    55% {
+        transform: translateY(-45%) scale(1.06) rotate(-9deg);
+        opacity: 0.07;
+        filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.3));
+    }
+    80% {
+        transform: translateY(-52%) scale(0.96) rotate(-3deg);
+        opacity: 0.11;
+        filter: drop-shadow(0 0 22px rgba(20, 184, 166, 0.4));
     }
 }
 
@@ -187,13 +196,53 @@
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
     font-size: 24px;
-    color: #fff;
     line-height: 1.2em;
-    text-shadow: 0 1px 20px rgba(56, 189, 248, 0.4);
+    /* Shimmer-Licht-Effekt */
+    background: linear-gradient(90deg,
+        #e8f0f7 0%,
+        #38bdf8 30%,
+        #a855f7 52%,
+        #14b8a6 72%,
+        #e8f0f7 100%);
+    background-size: 250% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: cke5-title-shimmer 7s linear infinite;
 }
 
 .cke5-header h1:before {
     display: none;
+}
+
+@keyframes cke5-title-shimmer {
+    0%   { background-position: 150% center; }
+    100% { background-position: -50% center; }
+}
+
+/* Scan-Lichtstrahl */
+.cke5-scan {
+    position: absolute;
+    top: 0;
+    left: -15%;
+    width: 80px;
+    height: 100%;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(56, 189, 248, 0.12) 40%,
+        rgba(255, 255, 255, 0.08) 50%,
+        rgba(56, 189, 248, 0.12) 60%,
+        transparent 100%);
+    animation: cke5-scan-move 9s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 3;
+}
+
+@keyframes cke5-scan-move {
+    0%   { left: -15%; opacity: 0; }
+    8%   { opacity: 1; }
+    88%  { opacity: 1; }
+    100% { left: 108%; opacity: 0; }
 }
 
 .cke5-header .photoinfo {
