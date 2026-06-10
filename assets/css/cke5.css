@@ -67,146 +67,82 @@
     background-image: url(../images/cke5_black.svg);
 }
 
+/* =============================================================
+   cke5-header — einheitliches self-contained Design
+   Immer dunkel, unabhängig vom REDAXO-Theme der Seite.
+   ============================================================= */
 .cke5-header {
     position: relative;
     display: flex;
     align-items: center;
-    padding: 0 1.5rem;
-    background: linear-gradient(135deg, #e8f0f7 0%, #d0e1f0 50%, #c5d9e8 100%);
-    color: #1a3a52;
+    padding: 0 2rem 0 2.5rem;
+    /* Deep-space base: stets dunkel */
+    background: radial-gradient(ellipse 150% 250% at 8% 60%, #12063a 0%, #080d1a 45%, #0a1e38 100%);
+    color: #e8f0f7;
     margin-bottom: 12px;
-    min-height: 60px;
+    min-height: 80px;
     gap: 1rem;
     overflow: hidden;
 }
 
-/* Animated background with logo and abstract shapes */
+/* Aurora-Blobs: weiche, leuchtende Farbflächen im Hintergrund */
 .cke5-header::before {
     content: '';
     position: absolute;
-    top: 50%;
-    right: -20%;
-    width: 300px;
-    height: 300px;
-    background: url(../images/cke5_white.svg) no-repeat center;
-    background-size: 200%;
-    opacity: 0.04;
-    transform: translate(0, -50%);
-    animation: cke5-logo-float 20s ease-in-out infinite;
+    inset: -30%;
+    background:
+        radial-gradient(ellipse 55% 80% at 15% 50%, rgba(56, 189, 248, 0.28) 0%, transparent 55%),
+        radial-gradient(ellipse 40% 70% at 82% 25%, rgba(168, 85, 247, 0.22) 0%, transparent 55%),
+        radial-gradient(ellipse 35% 60% at 55% 110%, rgba(20, 184, 166, 0.18) 0%, transparent 50%);
+    filter: blur(28px);
+    animation: cke5-aurora 16s ease-in-out infinite;
     pointer-events: none;
+    z-index: 1;
 }
 
+/* Logo-Geist: groß, ghosted, leise rotierend */
 .cke5-header::after {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: 
-        radial-gradient(ellipse 400px 200px at 10% 30%, rgba(74, 144, 226, 0.15) 0%, transparent 40%),
-        radial-gradient(circle 250px at 85% 80%, rgba(100, 181, 246, 0.1) 0%, transparent 50%),
-        radial-gradient(ellipse 350px 180px at 50% -10%, rgba(156, 39, 176, 0.08) 0%, transparent 50%);
-    animation: cke5-header-flow 12s ease-in-out infinite, cke5-header-pulse 8s ease-in-out infinite;
+    top: 50%;
+    right: 2%;
+    width: 200px;
+    height: 200px;
+    background: url(../images/cke5_white.svg) no-repeat center / contain;
+    opacity: 0.07;
+    transform: translateY(-50%) scale(1) rotate(-5deg);
+    animation: cke5-logo-drift 28s ease-in-out infinite;
     pointer-events: none;
+    z-index: 2;
 }
 
-@keyframes cke5-logo-float {
+@keyframes cke5-aurora {
     0%, 100% {
-        transform: translate(0, -50%) scale(1);
-        opacity: 0.04;
+        opacity: 0.85;
+        transform: scale(1) translate(0, 0);
     }
-    50% {
-        transform: translate(-30px, -50%) scale(1.1);
-        opacity: 0.08;
+    30% {
+        opacity: 1;
+        transform: scale(1.06) translate(-3%, -2%);
     }
-}
-
-@keyframes cke5-header-flow {
-    0% {
-        background-position: 0 0;
-    }
-    25% {
-        background-position: -50px -30px;
-    }
-    50% {
-        background-position: -100px 0;
-    }
-    75% {
-        background-position: -50px 30px;
-    }
-    100% {
-        background-position: 0 0;
+    65% {
+        opacity: 0.9;
+        transform: scale(0.97) translate(2%, 1%);
     }
 }
 
-@keyframes cke5-header-pulse {
+@keyframes cke5-logo-drift {
     0%, 100% {
-        opacity: 0.6;
-        filter: blur(0px);
+        transform: translateY(-50%) scale(1) rotate(-5deg);
+        opacity: 0.07;
     }
-    50% {
-        opacity: 0.8;
-        filter: blur(1px);
+    40% {
+        transform: translateY(-54%) scale(1.1) rotate(0deg);
+        opacity: 0.12;
     }
-}
-
-/* Light Theme (default) */
-body.rex-theme-light .cke5-header,
-body:not(.rex-has-theme) .cke5-header {
-    background: linear-gradient(135deg, #e8f0f7 0%, #d0e1f0 50%, #c5d9e8 100%);
-    color: #1a3a52;
-}
-
-body.rex-theme-light .cke5-header::before,
-body:not(.rex-has-theme) .cke5-header::before {
-    background-image: url(../images/cke5_black.svg);
-    opacity: 0.05;
-}
-
-body.rex-theme-light .cke5-header::after,
-body:not(.rex-has-theme) .cke5-header::after {
-    background: 
-        radial-gradient(ellipse 400px 200px at 10% 30%, rgba(74, 144, 226, 0.15) 0%, transparent 40%),
-        radial-gradient(circle 250px at 85% 80%, rgba(100, 181, 246, 0.1) 0%, transparent 50%),
-        radial-gradient(ellipse 350px 180px at 50% -10%, rgba(156, 39, 176, 0.08) 0%, transparent 50%);
-}
-
-/* Dark Theme (explicit) */
-body.rex-theme-dark .cke5-header {
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1a2940 100%);
-    color: #e8f0f7;
-}
-
-body.rex-theme-dark .cke5-header::before {
-    background-image: url(../images/cke5_white.svg);
-    opacity: 0.08;
-}
-
-body.rex-theme-dark .cke5-header::after {
-    background: 
-        radial-gradient(ellipse 400px 200px at 10% 30%, rgba(59, 130, 246, 0.2) 0%, transparent 40%),
-        radial-gradient(circle 250px at 85% 80%, rgba(96, 165, 250, 0.12) 0%, transparent 50%),
-        radial-gradient(ellipse 350px 180px at 50% -10%, rgba(167, 139, 250, 0.15) 0%, transparent 50%);
-}
-
-/* Auto Dark Theme (prefers-color-scheme) */
-@media (prefers-color-scheme: dark) {
-    body.rex-has-theme:not(.rex-theme-light) .cke5-header {
-        background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1a2940 100%);
-        color: #e8f0f7;
-    }
-    
-    body.rex-has-theme:not(.rex-theme-light) .cke5-header::before {
-        background-image: url(../images/cke5_white.svg);
+    70% {
+        transform: translateY(-47%) scale(1.05) rotate(-8deg);
         opacity: 0.08;
-    }
-    
-    body.rex-has-theme:not(.rex-theme-light) .cke5-header::after {
-        background: 
-            radial-gradient(ellipse 400px 200px at 10% 30%, rgba(59, 130, 246, 0.2) 0%, transparent 40%),
-            radial-gradient(circle 250px at 85% 80%, rgba(96, 165, 250, 0.12) 0%, transparent 50%),
-            radial-gradient(ellipse 350px 180px at 50% -10%, rgba(167, 139, 250, 0.15) 0%, transparent 50%);
     }
 }
 
@@ -252,9 +188,10 @@ body.rex-theme-dark .cke5-header::after {
     margin: 0;
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
-    font-size: 22px;
+    font-size: 24px;
     color: #fff;
     line-height: 1.2em;
+    text-shadow: 0 1px 20px rgba(56, 189, 248, 0.4);
 }
 
 .cke5-header h1:before {
@@ -264,14 +201,27 @@ body.rex-theme-dark .cke5-header::after {
 .cke5-header .photoinfo {
     position: absolute;
     z-index: 98;
-    bottom: 6px;
-    right: 15px;
-    font-size: 12px;
+    bottom: 7px;
+    right: 18px;
+    font-size: 11px;
+    opacity: 0.55;
+    transition: opacity 0.2s ease;
+}
+
+.cke5-header .photoinfo:hover {
+    opacity: 0.9;
 }
 
 .cke5-header .photoinfo a {
+    color: #a5c8f0;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(165, 200, 240, 0.4);
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.cke5-header .photoinfo a:hover {
     color: #fff;
-    border-bottom: 1px solid #fff;
+    border-bottom-color: rgba(255, 255, 255, 0.7);
 }
 
 .cke5-demo {
