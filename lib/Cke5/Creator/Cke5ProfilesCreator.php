@@ -732,6 +732,14 @@ class Cke5ProfilesCreator
             $jsonProfile['heading'] = ['options' => self::getHeadings(self::toArray($profile['heading']))];
         }
 
+        if (self::profileFlagEnabled($profile, 'document_title', false)) {
+            $jsonProfile['title'] = [
+                'placeholder' => rex_i18n::msg('cke5_document_title_placeholder'),
+            ];
+        } else {
+            $jsonProfile['removePlugins'][] = 'Title';
+        }
+
         if (in_array('bulletedList', $toolbar, true) || in_array('numberedList', $toolbar)) {
             $jsonProfile['list']['properties'] = [
                 'styles' => (isset($profile['list_style']) && $profile['list_style'] !== ''),
