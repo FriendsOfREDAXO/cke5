@@ -30,6 +30,14 @@ try {
 
     try {
         rex_sql::factory()->setQuery('DROP TABLE IF EXISTS ' . rex::getTablePrefix() . 'cke5_mblock_demo');
+
+        // Legacy-Tabellen aus älteren Versionen aufräumen
+        if (rex_sql_table::get(rex::getTable('cke5_templates'))->exists()) {
+            rex_sql::factory()->setQuery('DROP TABLE IF EXISTS ' . rex::getTablePrefix() . 'cke5_templates');
+        }
+        if (rex_sql_table::get(rex::getTable('cke5_template_groups'))->exists()) {
+            rex_sql::factory()->setQuery('DROP TABLE IF EXISTS ' . rex::getTablePrefix() . 'cke5_template_groups');
+        }
     } catch (rex_sql_exception $e) {
         rex_logger::logException($e);
     }
