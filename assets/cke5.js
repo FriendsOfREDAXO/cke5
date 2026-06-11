@@ -254,6 +254,7 @@
             if (typeof options.licenseKey === "undefined" || options.licenseKey === null || options.licenseKey === "") {
               options.licenseKey = "GPL";
             }
+            options = cke5_remove_unsupported_toolbar_items(options);
             options = cke5_prepare_link_decorator_exclusive_groups(options);
             options = cke5_apply_external_profile_transforms(options, element);
             if (ckeditors[unique_id] === void 0) {
@@ -303,6 +304,37 @@
             return "balloon_block";
           }
           return "classic";
+        }
+        function cke5_remove_unsupported_toolbar_items(options) {
+          if (!options || typeof options !== "object") {
+            return options;
+          }
+          const removeItem = function(items, itemName) {
+            if (!Array.isArray(items)) {
+              return items;
+            }
+            return items.filter(function(entry) {
+              return entry !== itemName;
+            });
+          };
+          const stripBookmarkItems = function(items) {
+            if (!Array.isArray(items)) {
+              return items;
+            }
+            return items.filter(function(entry) {
+              return entry !== "bookmark" && entry !== "for_bookmarks";
+            });
+          };
+          if (options.toolbar && Array.isArray(options.toolbar.items)) {
+            options.toolbar.items = cke5_normalize_toolbar_items(stripBookmarkItems(options.toolbar.items));
+          }
+          if (Array.isArray(options.balloonToolbar)) {
+            options.balloonToolbar = cke5_normalize_toolbar_items(stripBookmarkItems(options.balloonToolbar));
+          }
+          if (Array.isArray(options.blockToolbar)) {
+            options.blockToolbar = cke5_normalize_toolbar_items(removeItem(stripBookmarkItems(options.blockToolbar), "bookmark"));
+          }
+          return options;
         }
         function cke5_get_editor_constructor(options) {
           const editorType = cke5_normalize_editor_type(options && typeof options === "object" ? options.redaxoEditorType : "");
@@ -655,8 +687,7 @@
             "ShowBlocks",
             "AccessibilityHelp",
             "Style",
-            "RemoveFormat",
-            "Bookmark"
+            "RemoveFormat"
           ];
             return pluginNames.map((name) => cke[name]).filter((plugin) => typeof plugin === "function");
         }
@@ -1020,6 +1051,7 @@
               const target = form.querySelector(".ck-link-form__provider-list") || form;
               target.insertBefore(row, target.firstChild);
             }
+
           });
           observer.observe(document.body, { childList: true, subtree: true });
         }
@@ -1173,6 +1205,9 @@
             }
             if (item === "for_clear_widget") {
               return "for_clear";
+            }
+            if (item === "bookmark" || item === "for_bookmarks") {
+              return null;
             }
             return item;
           });

@@ -50,7 +50,7 @@ class Cke5FormHelper
     public static function potentialRemoveLicenseItems(array $items, array $licenseItemsToRemove): array
     {
         $licenseCode = (string) rex_addon::get('cke5')->getConfig('license_code', '');
-        if ($licenseCode === '') {
+        if (trim($licenseCode) === '' || strtolower(trim($licenseCode)) === 'gpl') {
             foreach ($items as $key => $item) {
                 foreach ($licenseItemsToRemove as $lItem) {
                     if ($item == $lItem) {

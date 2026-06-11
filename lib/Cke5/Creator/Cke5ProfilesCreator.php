@@ -304,11 +304,11 @@ class Cke5ProfilesCreator
 }',
     ];
     const LICENSE_FIELDS = [
-        'toolbar' => []
+        'toolbar' => ['bookmark']
     ];
     const DEFAULTS = self::DEFAULT_VALUES;
     const ALLOWED_FIELDS = [
-        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll', 'specialCharacters', 'pastePlainText', 'redaxoMarkdownPasteToggle', 'redaxoMinimapToggle', 'htmlEmbed', 'sourceEditing', 'textPartLanguage', 'findAndReplace', 'style', 'snippets', 'for_video', 'for_clear', 'showBlocks', 'bookmark', 'accessibilityHelp'],
+        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll', 'specialCharacters', 'pastePlainText', 'redaxoMarkdownPasteToggle', 'redaxoMinimapToggle', 'htmlEmbed', 'sourceEditing', 'textPartLanguage', 'findAndReplace', 'style', 'snippets', 'for_video', 'for_clear', 'showBlocks', 'accessibilityHelp'],
         'balloon_toolbar' => ['style', '|', 'paragraph', 'heading', 'bulletedList', 'numberedList', 'todoList', 'outdent', 'indent', 'blockQuote', 'insertTable', 'mediaEmbed', 'for_video', 'for_clear', 'codeBlock', 'link', 'horizontalLine', 'specialCharacters', 'removeFormat', 'undo', 'redo'],
         'alignment' => ['left', 'right', 'center', 'justify'],
         'table_toolbar' => ['|', 'tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties', 'toggleTableCaption'],
@@ -503,6 +503,7 @@ class Cke5ProfilesCreator
         }
 
         $toolbar = self::toArray($profile['toolbar']);
+        $toolbar = self::filterLicenseRestrictedItems($toolbar, self::LICENSE_FIELDS['toolbar']);
         $balloonToolbar = self::toArray(isset($profile['balloon_toolbar']) ? $profile['balloon_toolbar'] : null);
         $linkToolbar = self::toArray($profile['rexlink']);
         $tableToolbar = self::toArray($profile['table_toolbar']);
@@ -1078,6 +1079,28 @@ class Cke5ProfilesCreator
         }
 
         return ['suboptions' => $jsonSubOption, 'profile' => $jsonProfile, 'sprog_mention' => $sprogDefinition];
+    }
+
+    /**
+     * @param array<int,string> $items
+     * @param array<int,string> $licenseItemsToRemove
+     * @return array<int,string>
+     */
+    private static function filterLicenseRestrictedItems(array $items, array $licenseItemsToRemove): array
+    {
+        if (!self::isGplOrMissingLicense() || count($licenseItemsToRemove) === 0) {
+            return $items;
+        }
+
+        return array_values(array_filter($items, static function (string $item) use ($licenseItemsToRemove): bool {
+            return !in_array($item, $licenseItemsToRemove, true);
+        }));
+    }
+
+    private static function isGplOrMissingLicense(): bool
+    {
+        $licenseCode = trim((string) self::getAddon()->getConfig('license_code', ''));
+        return $licenseCode === '' || strtolower($licenseCode) === 'gpl';
     }
 
     /**
