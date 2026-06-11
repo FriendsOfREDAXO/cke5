@@ -4,9 +4,9 @@ CKEditor 5 integration for REDAXO with profile-based configuration, REDAXO media
 
 ## Version
 
-Current development version: `7.0.0-dev`
+Current beta version: `7.0.0-beta1`
 
-## What Is New in 7.0.0-dev
+## What Is New in 7.0.0-beta1
 
 - Switched to the official CKEditor 5 build as addon base
 - New native runtime plugins and updated editor dialogs

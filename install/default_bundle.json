@@ -108,6 +108,7 @@
       "alignment": "left,right,center,justify",
       "image_toolbar": "imageTextAlternative,toggleImageCaption,|,linkImage,alignLeft,alignRight,alignCenter,block,|,inline,side,|,alignBlockLeft,alignBlockRight",
       "image_resize_unit": "%",
+      "image_resize_handles": "|default_resize_handles|",
       "image_resize_options": "|default_resize_options|",
       "image_resize_group_options": "|default_resize_group_options|",
       "image_resize_options_definition_data": [
@@ -181,6 +182,7 @@
       "toolbar": "bold,italic,bulletedList,numberedList,undo,redo,link,pastePlainText",
       "alignment": "left,right,center",
       "image_resize_unit": "%",
+      "image_resize_handles": "|default_resize_handles|",
       "rexlink": "internal",
       "height_default": "|default_height|",
       "min_height": 0,
@@ -213,6 +215,7 @@
       "alignment": "left,right,center,justify",
       "image_toolbar": "imageTextAlternative,toggleImageCaption,|,linkImage,alignLeft,alignRight,alignCenter,block,|,inline,side,|,alignBlockLeft,alignBlockRight",
       "image_resize_unit": "%",
+      "image_resize_handles": "|default_resize_handles|",
       "image_resize_options": "|default_resize_options|",
       "image_resize_group_options": "|default_resize_group_options|",
       "fontsize": "default,tiny,small,big,huge",

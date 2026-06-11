@@ -4,9 +4,9 @@ CKEditor-5-Integration für REDAXO mit profilbasierter Konfiguration, REDAXO-Med
 
 ## Version
 
-Aktuelle Entwicklungsversion: `7.0.0-dev`
+Aktuelle Beta-Version: `7.0.0-beta1`
 
-## Neu in 7.0.0-dev
+## Neu in 7.0.0-beta1
 
 - Umstellung auf den offiziellen CKEditor-5-Build als Basis
 - Neue native Runtime-Plugins und überarbeitete Dialoge

@@ -149,6 +149,7 @@ class Cke5ProfilesCreator
         'special_characters' => 'currency,mathematical,latin,arrows,text',
         'table_toolbar' => '|,tableColumn,tableRow,mergeTableCells,tableProperties,tableCellProperties,toggleTableCaption',
         'image_toolbar' => '|,imageTextAlternative,block,inline,side,alignLeft,alignCenter,alignRight,alignBlockLeft,alignBlockRight,linkImage,toggleImageCaption',
+        'image_resize_handles' => 'default_resize_handles',
         'fontsize' => 'default,tiny,small,big,huge',
         'rexlink' => 'internal,media,email,phone,ytable',
         'min_height' => ['"none"', '"100px"', '"200px"', '"300px"', '"400px"', '"500px"', '"600px"'],
@@ -602,7 +603,7 @@ class Cke5ProfilesCreator
             $jsonProfile['image']['resizeUnit'] = $profile['image_resize_unit'];
         }
 
-        $jsonProfile['redaxoImageResizeHandles'] = false;
+        $jsonProfile['redaxoImageResizeHandles'] = !isset($profile['image_resize_handles']) || $profile['image_resize_handles'] !== '';
 
         if (isset($profile['image_resize_options']) && $profile['image_resize_options'] !== '' && isset($profile['image_resize_options_definition']) && $profile['image_resize_options_definition'] !== '') {
             /** @var array<string,array<string,string>> $resizeOptions */

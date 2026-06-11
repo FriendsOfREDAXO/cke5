@@ -510,6 +510,14 @@ if ($func === '') {
                 $auto_sel->addOption(rex_i18n::msg('cke5_image_resize_unit_px'), 'px');
                 $field->setSelect($auto_sel);
 
+                // image resize handles
+                $field = $form->addCheckboxField('image_resize_handles');
+                $field->setAttribute('id', 'cke5image-resize-handles-input');
+                $field->setAttribute('data-toggle', 'toggle');
+                $field->setLabel(rex_i18n::msg('cke5_image_resize_handles'));
+                $field->addOption(rex_i18n::msg('cke5_image_resize_handles_description'), 'default_resize_handles');
+                if ($default_value) $field->setValue(Cke5ProfilesCreator::DEFAULTS['image_resize_handles']);
+
                 // image resize options
                 $field = $form->addCheckboxField('image_resize_options');
                 $field->setAttribute('id', 'cke5image-resize-option-input');

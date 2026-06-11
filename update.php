@@ -16,6 +16,17 @@ $this->setConfig('restore_files', true);
 try {
     Cke5DefaultDataService::importBundle($this->getPath('install/default_bundle.json'), ['demo_default', 'demo_light', 'demo_full_expert']);
 
+    if ($this->getConfig('image_resize_handles_restored') !== true) {
+        rex_sql::factory()->setQuery(
+            'UPDATE ' . rex::getTable('cke5_profiles') . ' SET image_resize_handles = :image_resize_handles WHERE image_resize_handles IS NULL OR image_resize_handles = :empty_value',
+            [
+                'image_resize_handles' => '|default_resize_handles|',
+                'empty_value' => '',
+            ]
+        );
+        $this->setConfig('image_resize_handles_restored', true);
+    }
+
     if (!file_exists(rex_path::assets('addons/cke5_custom_data'))) {
         mkdir(rex_path::assets('addons/cke5_custom_data'));
     }

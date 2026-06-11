@@ -1,67 +1,48 @@
 # Changelog
 
-## Version 7.0.0-dev
+## Version 7.0.0-beta1
 
-* Mehrfach-/Fehl-Initialisierung von Editoren bei doppelten DOM-IDs behoben: Editoren mit identischer `id` (z. B. in dynamisch geladenen Gridblock-Spalten, MBlock-Klonen oder MForm-Repeatern) erhielten bisher mehrere Editor-Instanzen auf demselben Feld bzw. gar keine in Folgeblöcken. CKE5 erzwingt nun bei Bedarf eindeutige IDs (`cke5_ensure_unique_element_id`), bevor die ID als Registry-Key bzw. Selektor verwendet wird
-* `cke5_create_editor_instance` verwendet jetzt das tatsächliche DOM-Element statt `document.querySelector('#id')`, damit doppelte IDs nicht mehr fälschlich auf das erste Element zeigen
-* Neue globale API `window.cke5_get_editors()` ergänzt: liefert die Editor-Registry (u. a. von MBlock genutzt, um beim Kopieren den aktuellen Editor-Inhalt auszulesen)
-* Dark-Theme-Verhalten für CKEditor stabilisiert: Auto-Theme berücksichtigt nun System-Darkmode zuverlässig (inkl. robuster Theme-Fallbacks im Bootstrapping)
-* Dark-CSS für den Editor korrigiert: bessere Lesbarkeit in Editierflächen und konsistente Farbwerte im dunklen Modus
-* Branding aktualisiert: neues CKEditor-SVG-Logo in Header/Icon-Bereichen eingebunden
-* Header- und Logo-Darstellung überarbeitet: Animationen, Größenverhältnisse und visuelle Balance verbessert
-* Profilmanager-Liste modernisiert (TinyMCE-ähnlicher Look): kompaktere Aktionen und klarere Darstellung relevanter Profilinformationen
-* Profil-Badges in der Liste verfeinert: Anzeige fokussiert auf aktive/gesetzte Einstellungen
-* Löschschutz für `demo_default` ergänzt (UI + serverseitige Absicherung)
-* Umbenennschutz für `demo_default` ergänzt (Readonly im Formular + serverseitige Absicherung)
-* Profil-Klonen vergibt jetzt immer einen eindeutigen Profil-Key (`*_copy`, `*_copy_2`, ...), um Namenskollisionen zu vermeiden
-* Uninstall bereinigt jetzt zusätzlich die Tabelle `rex_cke5_snippets`
-* Update bereinigt Legacy-Tabellen `rex_cke5_templates` und `rex_cke5_template_groups`, falls vorhanden
-* Utils-Refactoring ohne Verhaltensänderung:
-  * `Cke5ListHelper`: SQL-Toggle robuster gemacht (Identifier-Handling, Spaltenprüfung), konsistente Typisierung
-  * `Cke5Lang`: robustere Fallbacks bei fehlendem User/Clang-Kontext
-  * `Cke5FormHelper`: vereinfachte Tab-Logik, präzisere Typen
-  * `Cke5PreviewHelper`: JSON-Detailausgabe bereinigt und Inline-JavaScript entfernt
-* JSON-Preview-Initialisierung zentralisiert im Asset-JavaScript statt Inline-Script im PHP-Output
+### Neu
 
-* Umstellung auf den offiziellen CKEditor-5-Build als Basis des Addons
-* Vendor-Update auf CKEditor 5 `48.2.0` (npm-Paket `ckeditor5`)
-* Plugin-System grundlegend neu aufgestellt: native Plugins als Runtime-Registry und externe Plugins offiziell integrierbar
-* Neue native Plugins und überarbeitete Dialoge für den aktuellen Editor-Workflow
-* Templates entfernt und durch Snippets ersetzt
-* Profil-Seeding auf JSON-Bundle umgestellt (`install/default_bundle.json`) statt SQL-Seed-Datei
-* `data.sql` entfernt; Install/Update importiert die Demo-Profile jetzt zentral aus dem Bundle
-* Demo-Profile auf `demo_*` standardisiert (`demo_default`, `demo_light`, `demo_full_expert`)
-* Demo-Profile werden bei Install/Update bewusst überschrieben, damit Demos reproduzierbar bleiben
-* `demo_default` enthält Bootstrap-3-Link-Decoratoren und exklusive Decorator-Gruppen (`redaxoExclusiveGroup`)
-* Link-Decorator-Handling erweitert: pro Gruppe kann nur ein manueller Decorator gleichzeitig aktiv sein
-* Image-Resize-Verhalten modernisiert: Handles pro Profil schaltbar, Toolbar-Resize-Optionen bleiben nutzbar
-* Runtime robuster gemacht (u. a. Soft-Hyphen-Postfixer gegen visuelle Link-Splits)
-* Vendor-Asset-Handling bereinigt: SourceMap-Referenzen werden entfernt, unnötige `.map`-Requests entfallen
-* Upload-/Asset-Handling für Editor-Dateien erweitert: `.js` und `.js.map` werden sauber verarbeitet
-* Neue Entwicklerdokumentation `dev.md` (ersetzt `PLUGIN_DEVELOPMENT.md`) und als Backend-Seite eingebunden
-* Neue Skripte für den Entwickler-Workflow:
-  * `pnpm run demo:variant` für schnelle Demo-Profilvarianten
-  * `pnpm run content-styles:update` für aktuelles CKEditor-Frontend-CSS aus npm
-* Legacy-Altlasten und verwaiste Vendor-Dateien bereinigt
-* Markdown-Paste als Profiloption integriert (`markdown_paste`) inkl. Toolbar-Toggle (`redaxoMarkdownPasteToggle`)
-* Minimap als Profiloption integriert (`minimap`) inkl. Toolbar-Toggle (`redaxoMinimapToggle`) und Layout-Verbesserungen
-* Video-Widget-Workflow überarbeitet (`for_video_widget_test`): Dialog-UX, Medienpool-Übernahme und Breiten-/Figure-Handling stabilisiert
-* Mapping alter Toolbar-Konfigurationen (`for_video`) auf den Widget-Button (`for_video_widget_test`) für abwärtskompatible Profile
-* Profilmanager-UX erweitert: eigener Balloon-Toolbar-Schalter inkl. konfigurierbarer `balloon_toolbar`-Items
-* Neuer Editor-Modus `classic_balloon` (Classic + Balloon-Toolbar kombiniert) mit stabiler Runtime-Normalisierung
-* Block-/Balloon-Toolbar-Handling verbessert: konfigurierbar, validiert und mit sinnvollen Fallback-Items (inkl. `style` und Video-Widget)
-* Neue Defaults-Unterseite `profiles/customise/global` für globale Voreinstellungen (Mentions, Sprog, yTables, Medien, Schriftfamilie)
-* Globale Einstellungen werden beim Profil-Mapping gezielt als Fallback gemerged (Profilwerte behalten Vorrang)
-* Globales Schriftfamilien-Fallback ergänzt (`global_font_families`) und Logik für `global_font_family_default` korrigiert
-* Widget-Initialisierung für die Defaults-Seite ergänzt (inkl. robustem `rex:ready`- und Collapse-Fallback)
-* QuickEdit-Befehlsmenü ergänzt: `/` öffnet im Editor eine kontextnahe Befehlsliste für aktivierte Toolbar-Funktionen wie Überschriften, Listen, Tabellen, Medienpool-Bilder und Clear-Widget
-* QuickEdit ist global über `profiles/customise/global` schaltbar; die REDAXO-Standardwerte aus `rex_config_form` (`|1|`, `null`, leer) werden zentral wie bei anderen globalen Optionen ausgewertet
-* QuickEdit kann von anderen AddOns über `window.CKE5_QUICKEDIT_COMMANDS` erweitert werden; zusätzliche Befehle können an Toolbar-Einträge und CKEditor-Commands gekoppelt oder per eigener `execute(editor)`-Funktion ausgeführt werden
-* Sprog-MultiInput stabilisiert: fehlerhafte `undefined`-Placeholder behoben und Attribut-Fallbacks ergänzt
-* Mention-Felder um JSON-Beispielhinweise erweitert (Profil und globale Defaults)
-* CSS-Regeneration gehärtet: keine Abhängigkeit mehr von `cke5_templates` auf frischen Installationen ohne Template-Tabelle
-* Profil-Import abwärtskompatibel gemacht: ältere Exportdateien ohne `media_embed_width_styles_definition` werden wieder akzeptiert
-* Merge-Konflikt mit `main` in `package.yml` aufgelöst; `7.0.0-dev` als Zielstand für die laufende Entwicklungsreihe fixiert
+* Umstellung auf den offiziellen CKEditor-5-Build als Basis des AddOns mit CKEditor 5 `48.2.0`
+* Neues Runtime-Plugin-System für native und externe CKEditor-Plugins
+* Neue Snippets-Verwaltung als Ersatz für die bisherigen Templates
+* Neues JSON-Bundle für Demo-Profile und Seed-Daten (`install/default_bundle.json`)
+* Neue Demo-Profile `demo_default`, `demo_light` und `demo_full_expert`
+* Neuer Editor-Modus `classic_balloon` mit kombinierter Classic- und Balloon-Toolbar
+* QuickEdit-Befehlsmenü im Editor, global konfigurierbar und über `window.CKE5_QUICKEDIT_COMMANDS` erweiterbar
+* Markdown-Paste und Minimap als Profiloptionen mit Toolbar-Toggles
+* Globale Profil-Voreinstellungen für Mentions, Sprog, yTables, Medien und Schriftfamilien
+* Entwicklerdokumentation `dev.md` als Backend-Seite
+
+### Geändert
+
+* Profilmanager überarbeitet: kompaktere Liste, bessere Profil-Badges, stabileres Klonen und Schutz für `demo_default`
+* Profil-Erzeugung und Demo-Datenimport vereinheitlicht; Demo-Profile werden bei Install/Update reproduzierbar aktualisiert
+* Link-Decoratoren unterstützen exklusive Gruppen, sodass pro Gruppe nur ein manueller Decorator aktiv ist
+* Image-Resize-Handling modernisiert: Resize-Handles sind wieder pro Profil schaltbar, Toolbar-Resize-Optionen bleiben nutzbar
+* Video-Widget-Workflow überarbeitet: Dialog, Medienpool-Auswahl und Figure-/Breitenhandling stabilisiert
+* Block- und Balloon-Toolbar-Konfiguration validiert und mit robusten Fallbacks versehen
+* Dark-Theme-Unterstützung und Editor-Lesbarkeit im dunklen Modus verbessert
+* Backend-Branding, Header- und Logo-Darstellung aktualisiert
+* Vendor-Asset-Handling bereinigt; unnötige SourceMap-Requests entfallen
+
+### Behoben
+
+* Mehrfach- und Fehl-Initialisierung von Editoren bei doppelten DOM-IDs behoben
+* Editor-Registry über `window.cke5_get_editors()` verfügbar gemacht
+* Bildverlinkung stabilisiert: verlinkte oder im Linkdialog ausgewählte Bilder behalten ihre konfigurierte Breite
+* Sprog-MultiInput stabilisiert und Placeholder-Fallbacks ergänzt
+* CSS-Regeneration ohne Abhängigkeit zu alten Template-Tabellen gehärtet
+* Profil-Import für ältere Exportdateien robuster gemacht
+* Inline-JavaScript aus der JSON-Preview entfernt und in Asset-JavaScript zentralisiert
+
+### Entfernt
+
+* Alte Template-Verwaltung zugunsten der Snippets entfernt
+* Legacy-Tabellen `rex_cke5_templates` und `rex_cke5_template_groups` werden beim Update bereinigt
+* Verwaiste Legacy- und Vendor-Dateien bereinigt
+* Suchen/Ersetzen wird nicht mehr in den Standard-Profilen aktiviert
 
 ## Version 6.4.2
 
