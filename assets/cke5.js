@@ -2,14 +2,22 @@
   (() => {
     (() => {
       (() => {
+        if (window.__cke5RuntimeInitialized === true) {
+          return;
+        }
+        window.__cke5RuntimeInitialized = true;
         let ckeditors = {};
         let cke5BalloonBindings = {};
         let cke5MinimapBindings = {};
         let ckareas = ".cke5-editor";
         let cke5MblockCallbackRegistered = false;
+        let cke5DynamicObserver = null;
+        let cke5DynamicInitScheduled = false;
         $(document).on("rex:ready", function(e, container) {
-          cke5_init_ready(container.find(ckareas));
-          cke5_init_json_previews(container);
+          const scope = container && typeof container.find === "function" ? container : $(document);
+          cke5_init_ready(scope.find(ckareas));
+          cke5_init_json_previews(scope);
+          cke5_ensure_dynamic_observer();
           // Register mblock reindex_end callback once, as early as possible (mblock may not be
           // available on DOM-ready but is always ready before the first rex:ready fires)
           if (!cke5MblockCallbackRegistered && typeof mblock_module === "object" && typeof mblock_module.registerCallback === "function") {
@@ -27,6 +35,7 @@
         });
         $(document).on("ready", function() {
           cke5_init_json_previews($(document));
+          cke5_ensure_dynamic_observer();
           // Fallback: register mblock callback if mblock loaded after rex:ready
           if (!cke5MblockCallbackRegistered && typeof mblock_module === "object" && typeof mblock_module.registerCallback === "function") {
             cke5MblockCallbackRegistered = true;
@@ -41,6 +50,97 @@
             });
           }
         });
+        function cke5_schedule_dynamic_init() {
+          if (cke5DynamicInitScheduled) {
+            return;
+          }
+          cke5DynamicInitScheduled = true;
+          window.setTimeout(function() {
+            cke5DynamicInitScheduled = false;
+            cke5_init_ready($(ckareas));
+          }, 0);
+        }
+        function cke5_ensure_dynamic_observer() {
+          if (cke5DynamicObserver || typeof MutationObserver !== "function" || !document.body) {
+            return;
+          }
+          cke5DynamicObserver = new MutationObserver(function(mutations) {
+            for (let i = 0; i < mutations.length; i += 1) {
+              const mutation = mutations[i];
+              if (!mutation.addedNodes || mutation.addedNodes.length === 0) {
+                continue;
+              }
+              for (let j = 0; j < mutation.addedNodes.length; j += 1) {
+                const node = mutation.addedNodes[j];
+                if (!node || node.nodeType !== 1) {
+                  continue;
+                }
+                const $node = $(node);
+                if ($node.is(ckareas) || $node.find(ckareas).length > 0) {
+                  cke5_schedule_dynamic_init();
+                  return;
+                }
+              }
+            }
+          });
+          cke5DynamicObserver.observe(document.body, { childList: true, subtree: true });
+        }
+        function cke5_generate_unique_id() {
+          return "cke5_" + Math.random().toString(16).slice(2) + Date.now().toString(16);
+        }
+        function cke5_ensure_unique_element_id(element) {
+          const node = element && element.length ? element.get(0) : null;
+          if (!node) {
+            return;
+          }
+          let currentId = element.attr("id");
+          // repeater_cke verwaltet seine IDs selbst – nicht anfassen.
+          if (element.attr("repeater_cke") === "1" && currentId) {
+            return;
+          }
+          let needsNewId = false;
+          if (!currentId) {
+            needsNewId = true;
+          } else {
+            const sameId = document.querySelectorAll('[id="' + (window.CSS && CSS.escape ? CSS.escape(currentId) : currentId) + '"]');
+            if (sameId.length > 1) {
+              needsNewId = true;
+            } else if (Object.prototype.hasOwnProperty.call(ckeditors, currentId)) {
+              const existing = ckeditors[currentId];
+              const existingSource = existing && existing.sourceElement ? existing.sourceElement : null;
+              if (existingSource && existingSource !== node) {
+                needsNewId = true;
+              }
+            }
+          }
+          if (!needsNewId) {
+            return;
+          }
+          let newId = cke5_generate_unique_id();
+          while (document.getElementById(newId) || Object.prototype.hasOwnProperty.call(ckeditors, newId)) {
+            newId = cke5_generate_unique_id();
+          }
+          element.attr("id", newId);
+        }
+        function cke5_normalize_elements(elements) {
+          if (!elements) {
+            return $();
+          }
+          if (elements.jquery) {
+            return elements;
+          }
+          if (Array.isArray(elements)) {
+            let collection = $();
+            elements.forEach(function(item) {
+              if (!item) {
+                return;
+              }
+              collection = collection.add(item.jquery ? item : $(item));
+            });
+            return collection;
+          }
+          return $(elements);
+        }
         function cke5_init_json_previews(scope) {
           if (typeof $.fn.rainbowJSON !== "function") {
             return;
@@ -86,10 +186,21 @@
         }
         function cke5_init(element) {
           let initState = element.attr("data-cke5-init-state");
-          if (initState === "pending" || initState === "ready") {
+          if (initState === "pending") {
             return;
           }
+          if (initState === "ready") {
+            const nextElement = element.next();
+            if (nextElement.length && nextElement.hasClass("ck")) {
+              return;
+            }
+            element.removeAttr("data-cke5-init-state");
+          }
           if (!element.next().length || !element.next().hasClass("ck")) {
+            // Doppelte/leere IDs absichern: CKE5 nutzt die DOM-ID als Registry-Key und als
+            // Selektor fuer create(). Mehrere Bloecke (z. B. in Gridblock) koennen identische
+            // Textarea-IDs liefern, was zu Mehrfach-Initialisierung auf demselben Element fuehrt.
+            cke5_ensure_unique_element_id(element);
             let unique_id = element.attr("id") || "ck" + Math.random().toString(16).slice(2), options = {}, sub_options = {}, profile_set = element.attr("data-profile"), min_height = element.attr("data-min-height"), max_height = element.attr("data-max-height"), lang = { "ui": "", "content": "" }, ui_lang = element.attr("data-lang"), content_lang = element.attr("data-content-lang"), repeater_cke = element.attr("repeater_cke") === "1";
             if (repeater_cke) {
               unique_id = element.attr("id");
@@ -448,7 +559,13 @@
           return hostElement;
         }
         function cke5_create_editor_instance(editorConstructor, element, unique_id, options) {
-          const sourceElement = document.querySelector("#" + unique_id);
+          // Das tatsaechliche Element bevorzugen. document.querySelector("#id") wuerde bei
+          // doppelten IDs immer das erste Element treffen und so Mehrfach-Initialisierung
+          // auf demselben Knoten ausloesen.
+          let sourceElement = element && element.length ? element.get(0) : null;
+          if (!sourceElement || !sourceElement.isConnected) {
+            sourceElement = document.querySelector("#" + unique_id);
+          }
           if (!sourceElement) {
             return Promise.reject(new Error("cke5: source element not found for " + unique_id));
           }
@@ -1544,6 +1661,27 @@
           let event = jQuery.Event("rex:cke5IsInit");
           jQuery(window).trigger(event, [editor, unique_id]);
         }
+        window.cke5_init_ready = function(elements) {
+          const $elements = cke5_normalize_elements(elements);
+          if ($elements.length) {
+            cke5_init_ready($elements);
+          }
+        };
+        window.cke5_init_all = function(elements) {
+          const $elements = cke5_normalize_elements(elements);
+          if ($elements.length) {
+            cke5_init_all($elements);
+          }
+        };
+        window.cke5_destroy = function(elements) {
+          const $elements = cke5_normalize_elements(elements);
+          if ($elements.length) {
+            cke5_destroy($elements);
+          }
+        };
+        window.cke5_get_editors = function() {
+          return ckeditors;
+        };
       })();
     })();
   })();
