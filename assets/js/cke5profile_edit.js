@@ -174,6 +174,22 @@ function cke5_init_edit(element) {
   cke5_bootstrapToggle_collapse(balloon_toolbar_custom, true);
 
   if (name.length) {
+    let currentProfileName = String(name.val() || '').trim().toLowerCase();
+    if (currentProfileName === 'demo_default') {
+      name.prop('readonly', true);
+      name.prop('disabled', true);
+
+      let hiddenProtectedName = element.find('input[type="hidden"][data-cke5-protected-name="1"]');
+      if (!hiddenProtectedName.length) {
+        $('<input>', {
+          type: 'hidden',
+          name: name.attr('name'),
+          value: 'demo_default',
+          'data-cke5-protected-name': '1'
+        }).appendTo(element);
+      }
+    }
+
     name.alphanum({
       allowSpace: false,
       allowUpper: false,

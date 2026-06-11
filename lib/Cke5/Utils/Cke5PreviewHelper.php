@@ -74,11 +74,16 @@ class Cke5PreviewHelper
      */
     public static function getYFormJsonCode(array $profile): string
     {
+        $profileName = (string) ($profile['name'] ?? 'default');
+        $userLang = (string) Cke5Lang::getUserLang();
+        $outputLang = (string) Cke5Lang::getOutputLang();
+
         $data = [
             'style' => 'max-width: 843',
             'class' => 'form-control cke5-editor',
-            'data-profile' => 'default',
-            'data-lang' => 'de',
+            'data-profile' => $profileName,
+            'data-lang' => $userLang,
+            'data-content-lang' => $outputLang,
         ];
 
         return self::renderCodeSample(
@@ -95,17 +100,17 @@ class Cke5PreviewHelper
     {
         /** @var array<string,string> $profile */
         $result = Cke5ProfilesCreator::mapProfile($profile);
+        $json = json_encode($result['profile'], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        if (!is_string($json) || $json === '') {
+            $json = '{}';
+        }
+
+        $profileId = (string) ($profile['id'] ?? '0');
+
         return '<a href="#profile' . $profile['id'] . '" data-toggle="collapse">' . rex_i18n::msg('cke5_editor_preview_shop_profile_settings') . '</a>
             <div id="profile' . $profile['id'] . '" class="collapse">
-                <pre class="json_id_' . $profile['id'] . '">
-                    ' . print_r(json_encode($result['profile'], JSON_PRETTY_PRINT), true) . '
-                </pre>
-            </div>
-            <script>
-            $(document).ready(function(){
-                $(\'.json_id_' . $profile['id'] . '\').rainbowJSON();
-            });
-            </script>';
+                <pre class="cke5-json-preview" data-cke5-json-preview="' . htmlspecialchars($profileId, ENT_QUOTES) . '">' . htmlspecialchars($json, ENT_QUOTES) . '</pre>
+            </div>';
     }
 
     /**

@@ -22,6 +22,11 @@ $stylesTable = rex::getTable(Cke5DatabaseHandler::CKE5_STYLES);
 $snippetsTable = rex::getTable(Cke5DatabaseHandler::CKE5_SNIPPETS);
 $message = '';
 
+$protectedDemoDefaultId = (int) rex_sql::factory()->getValue(
+    'SELECT id FROM ' . $profileTable . ' WHERE name = ? ORDER BY id ASC LIMIT 1',
+    ['demo_default']
+);
+
 if ($func === 'clone') {
     $message = Cke5ListHelper::cloneData($profileTable, $id);
     rex_extension::registerPoint(new rex_extension_point('CKE5_PROFILE_CLONE', $id));
@@ -31,11 +36,11 @@ if ($func === 'clone') {
 
 if ($func === 'delete') {
     $profileName = (string) rex_sql::factory()->getValue(
-        'SELECT name FROM ' . $profileTable . ' WHERE id = :id LIMIT 1',
-        ['id' => $id]
+        'SELECT name FROM ' . $profileTable . ' WHERE id = ? LIMIT 1',
+        [$id]
     );
 
-    if ($profileName === 'demo_default') {
+    if ($profileName === 'demo_default' && $id === $protectedDemoDefaultId) {
         $message = rex_view::error('Das Profil "demo_default" ist geschützt und kann nicht gelöscht werden.');
     } else {
         $message = Cke5ListHelper::deleteData($profileTable, $id);
@@ -48,8 +53,13 @@ if ($func === 'delete') {
 if ($func === '') {
     // Profil-Infos vorab laden (außerhalb rex_list, um Spalten-Konflikte zu vermeiden)
     $profileInfos = [];
-    foreach (rex_sql::factory()->getArray("SELECT id, editor_type, balloon_toolbar_custom, paste_plain_text_default, markdown_paste, lang, ytable, document_title FROM $profileTable") as $row) {
+    $profileIdByName = [];
+    foreach (rex_sql::factory()->getArray("SELECT id, name, editor_type, balloon_toolbar_custom, paste_plain_text_default, markdown_paste, lang, ytable, document_title FROM $profileTable") as $row) {
         $profileInfos[(int)$row['id']] = $row;
+        $profileName = (string) ($row['name'] ?? '');
+        if ($profileName !== '') {
+            $profileIdByName[$profileName] = (int) $row['id'];
+        }
     }
 
     // instance list
@@ -64,19 +74,35 @@ if ($func === '') {
     $tdIcon = '<i class="rex-icon fa-cube"></i>';
 
     $list->addColumn($thIcon, $tdIcon, 0, ['<th class="rex-table-icon">###VALUE###</th>', '<td class="rex-table-icon">###VALUE###</td>']);
-    $list->setColumnFormat($thIcon, 'custom', static function ($params) use ($start) {
+    $list->setColumnFormat($thIcon, 'custom', static function ($params) use ($start, $profileIdByName) {
         $list = $params['list'];
         $name = (string) $list->getValue('name');
-        $url = $list->getUrl(['func' => 'edit', 'profile' => $name, 'start' => $start]);
+        $id = $profileIdByName[$name] ?? 0;
+        $urlParams = ['func' => 'edit', 'start' => $start];
+        if ($id > 0) {
+            $urlParams['id'] = $id;
+            $urlParams['profile'] = $name;
+        } else {
+            $urlParams['profile'] = $name;
+        }
+        $url = $list->getUrl($urlParams);
 
         return '<a href="' . $url . '" title="' . rex_i18n::msg('edit') . '"><i class="rex-icon fa-cube"></i></a>';
     });
 
     $list->setColumnLabel('name', rex_i18n::msg('cke5_name'));
-    $list->setColumnFormat('name', 'custom', static function ($params) use ($start) {
+    $list->setColumnFormat('name', 'custom', static function ($params) use ($start, $profileIdByName) {
         $list = $params['list'];
         $name = (string) $list->getValue('name');
-        $url = $list->getUrl(['func' => 'edit', 'profile' => $name, 'start' => $start]);
+        $id = $profileIdByName[$name] ?? 0;
+        $urlParams = ['func' => 'edit', 'start' => $start];
+        if ($id > 0) {
+            $urlParams['id'] = $id;
+            $urlParams['profile'] = $name;
+        } else {
+            $urlParams['profile'] = $name;
+        }
+        $url = $list->getUrl($urlParams);
 
         return '<a href="' . $url . '">' . rex_escape($name) . '</a>';
     });
@@ -158,12 +184,19 @@ if ($func === '') {
     // kompakte Aktionsspalte: Edit-Button + Dropdown (Clone / Delete)
     $list->addColumn('actions', '', -1, ['', '<td>###VALUE###</td>']);
     $list->setColumnLabel('actions', rex_i18n::msg('cke5_list_function'));
-    $list->setColumnFormat('actions', 'custom', static function ($params) use ($start) {
+    $list->setColumnFormat('actions', 'custom', static function ($params) use ($start, $protectedDemoDefaultId, $profileIdByName) {
         $list = $params['list'];
-        $id   = $list->getValue('id');
-        $name = $list->getValue('name');
+        $name = (string) $list->getValue('name');
+        $id = $profileIdByName[$name] ?? 0;
 
-        $editUrl   = $list->getUrl(['func' => 'edit',   'profile' => $name, 'start' => $start]);
+        $editParams = ['func' => 'edit', 'start' => $start];
+        if ($id > 0) {
+            $editParams['id'] = $id;
+            $editParams['profile'] = $name;
+        } else {
+            $editParams['profile'] = $name;
+        }
+        $editUrl = $list->getUrl($editParams);
         $cloneUrl  = $list->getUrl(['func' => 'clone',  'id' => $id,        'start' => $start]);
         $deleteUrl = $list->getUrl(['func' => 'delete', 'id' => $id,        'start' => $start]);
 
@@ -171,10 +204,12 @@ if ($func === '') {
         $btnGroup .= '<a class="btn btn-xs btn-default" href="' . $editUrl . '"><i class="rex-icon fa-pencil-square-o"></i> ' . rex_i18n::msg('edit') . '</a>';
         $btnGroup .= '<button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></button>';
         $btnGroup .= '<ul class="dropdown-menu dropdown-menu-right">';
-        $btnGroup .= '<li><a href="' . $cloneUrl . '" data-confirm="' . rex_i18n::msg('cke5_clone') . ' ?">'
-            . '<i class="rex-icon fa-clone"></i> ' . rex_i18n::msg('cke5_clone') . '</a></li>';
+        if ($id > 0) {
+            $btnGroup .= '<li><a href="' . $cloneUrl . '" data-confirm="' . rex_i18n::msg('cke5_clone') . ' ?">'
+                . '<i class="rex-icon fa-clone"></i> ' . rex_i18n::msg('cke5_clone') . '</a></li>';
+        }
 
-        if ($name !== 'demo_default') {
+        if ($id > 0 && ($name !== 'demo_default' || $id !== $protectedDemoDefaultId)) {
             $btnGroup .= '<li class="divider"></li>';
             $btnGroup .= '<li><a href="' . $deleteUrl . '" data-confirm="' . rex_i18n::msg('delete') . ' ?">'
                 . '<i class="rex-icon rex-icon-delete"></i> ' . rex_i18n::msg('delete') . '</a></li>';
@@ -198,11 +233,16 @@ if ($func === '') {
     $resolvedProfileRow = null;
 
     if ($func === 'edit') {
-        if ($profileKey !== '') {
-            $profileRows = rex_sql::factory()->getArray(
-                'SELECT id FROM ' . $profileTable . ' WHERE name = :name LIMIT 1',
-                ['name' => $profileKey]
-            );
+        // Backward compatibility for older links using ?profile=<name>
+        if ($id <= 0 && $profileKey !== '') {
+            try {
+                $profileRows = rex_sql::factory()->getArray(
+                    'SELECT id FROM ' . $profileTable . ' WHERE name = ? LIMIT 1',
+                    [$profileKey]
+                );
+            } catch (rex_sql_exception $e) {
+                $profileRows = [];
+            }
 
             if (!isset($profileRows[0]['id'])) {
                 echo rex_view::error('Das gewünschte Profil wurde nicht gefunden (Key: ' . htmlspecialchars($profileKey) . '). Bitte öffne die Profil-Liste erneut.');
@@ -210,11 +250,6 @@ if ($func === '') {
             }
 
             $id = (int) $profileRows[0]['id'];
-            $profileKey = (string) $profileKey;
-            $resolvedProfileRow = rex_sql::factory()->getArray(
-                'SELECT * FROM ' . $profileTable . ' WHERE name = :name LIMIT 1',
-                ['name' => $profileKey]
-            );
         }
 
         if ($id <= 0) {
@@ -222,16 +257,56 @@ if ($func === '') {
             return;
         }
 
-        if ($resolvedProfileRow === null) {
-            $profileExists = (int) rex_sql::factory()->getValue(
-                'SELECT COUNT(*) FROM ' . $profileTable . ' WHERE id = :id',
-                ['id' => $id]
+        $rowsById = rex_sql::factory()->getArray(
+            'SELECT * FROM ' . $profileTable . ' WHERE id = ? LIMIT 1',
+            [$id]
+        );
+
+        if (isset($rowsById[0]) && is_array($rowsById[0])) {
+            $resolvedProfileRow = $rowsById[0];
+            $profileKey = (string) ($resolvedProfileRow['name'] ?? $profileKey);
+        } elseif ($profileKey !== '') {
+            $rowsByName = rex_sql::factory()->getArray(
+                'SELECT * FROM ' . $profileTable . ' WHERE name = ? LIMIT 1',
+                [$profileKey]
             );
 
-            if ($profileExists !== 1) {
-                echo rex_view::error('Das gewünschte Profil wurde nicht gefunden (ID: ' . $id . '). Bitte öffne die Profil-Liste erneut.');
-                return;
+            if (isset($rowsByName[0]) && is_array($rowsByName[0])) {
+                $resolvedProfileRow = $rowsByName[0];
+                $id = (int) ($resolvedProfileRow['id'] ?? 0);
             }
+        } else {
+            $rowsDefault = rex_sql::factory()->getArray(
+                'SELECT * FROM ' . $profileTable . ' WHERE name = ? LIMIT 1',
+                ['demo_default']
+            );
+
+            if (isset($rowsDefault[0]) && is_array($rowsDefault[0])) {
+                $resolvedProfileRow = $rowsDefault[0];
+                $id = (int) ($resolvedProfileRow['id'] ?? 0);
+                $profileKey = (string) ($resolvedProfileRow['name'] ?? '');
+            }
+
+            if (!is_array($resolvedProfileRow) || $id <= 0) {
+                $rowsFirst = rex_sql::factory()->getArray(
+                    'SELECT * FROM ' . $profileTable . ' ORDER BY id ASC LIMIT 1'
+                );
+
+                if (isset($rowsFirst[0]) && is_array($rowsFirst[0])) {
+                    $resolvedProfileRow = $rowsFirst[0];
+                    $id = (int) ($resolvedProfileRow['id'] ?? 0);
+                    $profileKey = (string) ($resolvedProfileRow['name'] ?? '');
+                }
+            }
+        }
+
+        if (!is_array($resolvedProfileRow) || $id <= 0) {
+            if ($profileKey !== '') {
+                echo rex_view::error('Das gewünschte Profil wurde nicht gefunden (Key: ' . htmlspecialchars($profileKey) . '). Bitte öffne die Profil-Liste erneut.');
+            } else {
+                echo rex_view::error('Das gewünschte Profil wurde nicht gefunden (ID: ' . $id . '). Bitte öffne die Profil-Liste erneut.');
+            }
+            return;
         }
     }
 
@@ -243,35 +318,28 @@ if ($func === '') {
     $prefix = '';
 
     if ($func === 'edit') {
-        if ($profileKey !== '') {
-            $form->addParam('profile', $profileKey);
-        } else {
-            $form->addParam('id', $id);
-        }
+        $form->addParam('id', $id);
         $result = rex_request::post($form->getName(), 'array', 'null');
 
-        if (!is_array($result)) {
-            if (is_array($resolvedProfileRow) && isset($resolvedProfileRow[0]) && is_array($resolvedProfileRow[0])) {
-                $result = $resolvedProfileRow[0];
-                $prefix = rex::getTable('cke5_profiles') . '.';
+        if ($send && $id === $protectedDemoDefaultId && is_array($result)) {
+            $postedName = trim((string) ($result['name'] ?? ''));
+            if ($postedName !== '' && $postedName !== 'demo_default') {
+                $result['name'] = 'demo_default';
+
+                $formName = $form->getName();
+                if (isset($_POST[$formName]) && is_array($_POST[$formName])) {
+                    $_POST[$formName]['name'] = 'demo_default';
+                }
             }
+        }
 
-            if (is_array($result)) {
-                // Profil wurde bereits über den Key geladen.
-            } else {
-            $rows = $form->getSql()->getArray(
-                'SELECT * FROM ' . $profileTable . ' WHERE id = :id LIMIT 1',
-                ['id' => $id]
-            );
-
-            if (!isset($rows[0]) || !is_array($rows[0])) {
+        if (!is_array($result)) {
+            $result = is_array($resolvedProfileRow) ? $resolvedProfileRow : [];
+            if ([] === $result) {
                 echo rex_view::error('Das gewünschte Profil wurde nicht gefunden (ID: ' . $id . '). Bitte öffne die Profil-Liste erneut.');
                 return;
             }
-
-            $result = $rows[0];
             $prefix = rex::getTable('cke5_profiles') . '.';
-            }
         }
     }
 
@@ -287,6 +355,7 @@ if ($func === '') {
     $min_height = is_array($result) ? intval((string) ($resultValue($result, 'min_height', $prefix) ?? '0')) : 0;
     $max_height = is_array($result) ? intval((string) ($resultValue($result, 'max_height', $prefix) ?? '0')) : 0;
     $profile = is_array($result) ? (string) ($resultValue($result, 'name', $prefix) ?? '') : '';
+    $isProtectedDemoDefault = $func === 'edit' && strtolower($profile) === 'demo_default';
 
     $mediaPathValue = is_array($result) ? $resultValue($result, 'mediapath', $prefix) : null;
     $mediaPath = is_string($mediaPathValue) && '' !== $mediaPathValue ? $mediaPathValue : str_replace(['../', '/'], '', rex_url::media());
@@ -302,6 +371,14 @@ if ($func === '') {
         $field->setLabel(rex_i18n::msg('cke5_name'));
         $field->setAttribute('placeholder', rex_i18n::msg('cke5_name_placeholder'));
         $field->getValidator()->add('notEmpty', rex_i18n::msg('cke5_profile_name_empty_error'));
+        if ($isProtectedDemoDefault) {
+            $field->setAttribute('readonly', 'readonly');
+            $field->setAttribute('disabled', 'disabled');
+            $field->setNotice('Das Profil "demo_default" ist geschützt und kann nicht umbenannt werden.');
+
+            $hiddenNameField = $form->addHiddenField('name');
+            $hiddenNameField->setValue('demo_default');
+        }
 
         // description
         $field = $form->addTextField('description');

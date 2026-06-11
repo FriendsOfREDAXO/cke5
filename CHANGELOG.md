@@ -2,6 +2,24 @@
 
 ## Version 7.0.0-dev
 
+* Dark-Theme-Verhalten für CKEditor stabilisiert: Auto-Theme berücksichtigt nun System-Darkmode zuverlässig (inkl. robuster Theme-Fallbacks im Bootstrapping)
+* Dark-CSS für den Editor korrigiert: bessere Lesbarkeit in Editierflächen und konsistente Farbwerte im dunklen Modus
+* Branding aktualisiert: neues CKEditor-SVG-Logo in Header/Icon-Bereichen eingebunden
+* Header- und Logo-Darstellung überarbeitet: Animationen, Größenverhältnisse und visuelle Balance verbessert
+* Profilmanager-Liste modernisiert (TinyMCE-ähnlicher Look): kompaktere Aktionen und klarere Darstellung relevanter Profilinformationen
+* Profil-Badges in der Liste verfeinert: Anzeige fokussiert auf aktive/gesetzte Einstellungen
+* Löschschutz für `demo_default` ergänzt (UI + serverseitige Absicherung)
+* Umbenennschutz für `demo_default` ergänzt (Readonly im Formular + serverseitige Absicherung)
+* Profil-Klonen vergibt jetzt immer einen eindeutigen Profil-Key (`*_copy`, `*_copy_2`, ...), um Namenskollisionen zu vermeiden
+* Uninstall bereinigt jetzt zusätzlich die Tabelle `rex_cke5_snippets`
+* Update bereinigt Legacy-Tabellen `rex_cke5_templates` und `rex_cke5_template_groups`, falls vorhanden
+* Utils-Refactoring ohne Verhaltensänderung:
+  * `Cke5ListHelper`: SQL-Toggle robuster gemacht (Identifier-Handling, Spaltenprüfung), konsistente Typisierung
+  * `Cke5Lang`: robustere Fallbacks bei fehlendem User/Clang-Kontext
+  * `Cke5FormHelper`: vereinfachte Tab-Logik, präzisere Typen
+  * `Cke5PreviewHelper`: JSON-Detailausgabe bereinigt und Inline-JavaScript entfernt
+* JSON-Preview-Initialisierung zentralisiert im Asset-JavaScript statt Inline-Script im PHP-Output
+
 * Umstellung auf den offiziellen CKEditor-5-Build als Basis des Addons
 * Vendor-Update auf CKEditor 5 `48.2.0` (npm-Paket `ckeditor5`)
 * Plugin-System grundlegend neu aufgestellt: native Plugins als Runtime-Registry und externe Plugins offiziell integrierbar

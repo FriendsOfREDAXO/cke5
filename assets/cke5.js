@@ -8,8 +8,10 @@
         let ckareas = ".cke5-editor";
         $(document).on("rex:ready", function(e, container) {
           cke5_init_ready(container.find(ckareas));
+          cke5_init_json_previews(container);
         });
         $(document).on("ready", function() {
+          cke5_init_json_previews($(document));
           if (typeof mblock_module === "object") {
             mblock_module.registerCallback("reindex_end", function() {
               if ($(ckareas).length) {
@@ -21,6 +23,20 @@
             });
           }
         });
+        function cke5_init_json_previews(scope) {
+          if (typeof $.fn.rainbowJSON !== "function") {
+            return;
+          }
+          let root = scope && scope.length ? scope : $(document);
+          root.find(".cke5-json-preview").each(function() {
+            let preview = $(this);
+            if (preview.data("cke5-json-initialized") === true) {
+              return;
+            }
+            preview.data("cke5-json-initialized", true);
+            preview.rainbowJSON();
+          });
+        }
         function cke5_init_ready(cke_areas) {
           $.each(cke_areas, function(key, editor) {
             cke5_init($(editor));

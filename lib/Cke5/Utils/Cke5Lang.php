@@ -8,30 +8,27 @@ use rex_clang;
 use rex_i18n;
 use rex_sql_column;
 use rex_sql_table;
-use rex_user;
-
 class Cke5Lang
 {
     public static function getUserLang(): string
     {
-        /** @var rex_user $user */
         $user = rex::getUser();
-        $userLang = $user->getLanguage();
-        if ($userLang !== '') {
-            $lang = $userLang;
-        } else {
-            $lang = rex_i18n::getLocale();
-        }
-        return strtolower(substr($lang, 0, 2));
+        $lang = $user && $user->getLanguage() !== ''
+            ? $user->getLanguage()
+            : rex_i18n::getLocale();
+
+        return strtolower(substr((string) $lang, 0, 2));
     }
 
     public static function getOutputLang(): string
     {
-        if (strlen(rex_clang::getCurrent()->getCode()) === 2) {
-            return rex_clang::getCurrent()->getCode();
-        } else {
+        $current = rex_clang::getCurrent();
+        if (!$current) {
             return 'en';
         }
+
+        $code = (string) $current->getCode();
+        return strlen($code) === 2 ? $code : 'en';
     }
 
     public static function addPlaceholderLangColumns(): void
