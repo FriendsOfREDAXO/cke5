@@ -2,6 +2,9 @@
 
 ## Version 7.0.0-dev
 
+* Mehrfach-/Fehl-Initialisierung von Editoren bei doppelten DOM-IDs behoben: Editoren mit identischer `id` (z. B. in dynamisch geladenen Gridblock-Spalten, MBlock-Klonen oder MForm-Repeatern) erhielten bisher mehrere Editor-Instanzen auf demselben Feld bzw. gar keine in Folgeblöcken. CKE5 erzwingt nun bei Bedarf eindeutige IDs (`cke5_ensure_unique_element_id`), bevor die ID als Registry-Key bzw. Selektor verwendet wird
+* `cke5_create_editor_instance` verwendet jetzt das tatsächliche DOM-Element statt `document.querySelector('#id')`, damit doppelte IDs nicht mehr fälschlich auf das erste Element zeigen
+* Neue globale API `window.cke5_get_editors()` ergänzt: liefert die Editor-Registry (u. a. von MBlock genutzt, um beim Kopieren den aktuellen Editor-Inhalt auszulesen)
 * Dark-Theme-Verhalten für CKEditor stabilisiert: Auto-Theme berücksichtigt nun System-Darkmode zuverlässig (inkl. robuster Theme-Fallbacks im Bootstrapping)
 * Dark-CSS für den Editor korrigiert: bessere Lesbarkeit in Editierflächen und konsistente Farbwerte im dunklen Modus
 * Branding aktualisiert: neues CKEditor-SVG-Logo in Header/Icon-Bereichen eingebunden
