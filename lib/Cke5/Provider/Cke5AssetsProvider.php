@@ -98,6 +98,7 @@ class Cke5AssetsProvider
                 'plugins/redax-widget-video.js',
                 'plugins/redaxo-clear-widget.js',
                 'plugins/redaxo-snippets.js',
+                'plugins/redaxo-quickedit.js',
                 'plugins/redaxo-paste-plain-text-toggle.js',
                 'plugins/redaxo-markdown-paste-toggle.js',
                 'plugins/redaxo-minimap-toggle.js',

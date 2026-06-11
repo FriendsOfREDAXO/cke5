@@ -1163,7 +1163,7 @@
           }
           const cke = window.CKEDITOR;
           const registry = typeof window.CKE5_NATIVE_PLUGINS === "object" && window.CKE5_NATIVE_PLUGINS !== null ? window.CKE5_NATIVE_PLUGINS : {};
-          const pluginNames = ["RedaxoLinkIntegration", "RedaxoMediaImage", "RedaxWidgetVideo", "RedaxoClearWidget", "RedaxoSnippets", "RedaxoPastePlainTextToggle", "RedaxoMarkdownPasteToggle", "RedaxoMinimapToggle"];
+          const pluginNames = ["RedaxoLinkIntegration", "RedaxoMediaImage", "RedaxWidgetVideo", "RedaxoClearWidget", "RedaxoSnippets", "RedaxoQuickEdit", "RedaxoPastePlainTextToggle", "RedaxoMarkdownPasteToggle", "RedaxoMinimapToggle"];
           const plugins = [];
           pluginNames.forEach((pluginName) => {
             const factory = registry[pluginName];

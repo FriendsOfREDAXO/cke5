@@ -565,6 +565,7 @@ class Cke5ProfilesCreator
 
         $jsonProfile['redaxoMarkdownPasteEnabled'] = self::profileFlagEnabled($profile, 'markdown_paste', false);
         $jsonProfile['redaxoMinimapEnabled'] = self::profileFlagEnabled($profile, 'minimap', false);
+        $jsonProfile['redaxoQuickEditEnabled'] = self::isGlobalSettingEnabled($globalSettings, 'global_quickedit_enabled');
 
         if ($jsonProfile['redaxoMarkdownPasteEnabled'] && !in_array('redaxoMarkdownPasteToggle', $jsonProfile['toolbar']['items'], true)) {
             $jsonProfile['toolbar']['items'][] = 'redaxoMarkdownPasteToggle';
@@ -1384,27 +1385,35 @@ class Cke5ProfilesCreator
      */
     private static function getGlobalProfileSettings(): array
     {
-        $settings = self::getAddon()->getConfig('global_profile_settings');
+        $addon = self::getAddon();
+        $quickEditEnabled = $addon->hasConfig('global_quickedit_enabled')
+            ? (string) ($addon->getConfig('global_quickedit_enabled') ?? '')
+            : '1';
+
+        $fallback = [
+            'global_quickedit_enabled' => $quickEditEnabled,
+            'global_mentions_enabled' => (string) $addon->getConfig('global_mentions_enabled', ''),
+            'global_mentions_definition' => (string) $addon->getConfig('global_mentions_definition', ''),
+            'global_sprog_enabled' => (string) $addon->getConfig('global_sprog_enabled', ''),
+            'global_sprog_mention_definition' => (string) $addon->getConfig('global_sprog_mention_definition', ''),
+            'global_ytable_enabled' => (string) $addon->getConfig('global_ytable_enabled', ''),
+            'global_ytable_definition' => (string) $addon->getConfig('global_ytable_definition', ''),
+            'global_media_enabled' => (string) $addon->getConfig('global_media_enabled', ''),
+            'global_mediatypes' => (string) $addon->getConfig('global_mediatypes', ''),
+            'global_mediatype' => (string) $addon->getConfig('global_mediatype', ''),
+            'global_mediapath' => (string) $addon->getConfig('global_mediapath', ''),
+            'global_font_family_default' => (string) $addon->getConfig('global_font_family_default', ''),
+            'global_font_families' => (string) $addon->getConfig('global_font_families', ''),
+            'global_clear_widget_enabled' => (string) $addon->getConfig('global_clear_widget_enabled', ''),
+            'global_clear_widget_definition' => (string) $addon->getConfig('global_clear_widget_definition', self::DEFAULT_VALUES['global_clear_widget_definition']),
+        ];
+
+        $settings = $addon->getConfig('global_profile_settings');
         if (is_array($settings)) {
-            return $settings;
+            return array_replace($fallback, $settings);
         }
 
-        return [
-            'global_mentions_enabled' => (string) self::getAddon()->getConfig('global_mentions_enabled', ''),
-            'global_mentions_definition' => (string) self::getAddon()->getConfig('global_mentions_definition', ''),
-            'global_sprog_enabled' => (string) self::getAddon()->getConfig('global_sprog_enabled', ''),
-            'global_sprog_mention_definition' => (string) self::getAddon()->getConfig('global_sprog_mention_definition', ''),
-            'global_ytable_enabled' => (string) self::getAddon()->getConfig('global_ytable_enabled', ''),
-            'global_ytable_definition' => (string) self::getAddon()->getConfig('global_ytable_definition', ''),
-            'global_media_enabled' => (string) self::getAddon()->getConfig('global_media_enabled', ''),
-            'global_mediatypes' => (string) self::getAddon()->getConfig('global_mediatypes', ''),
-            'global_mediatype' => (string) self::getAddon()->getConfig('global_mediatype', ''),
-            'global_mediapath' => (string) self::getAddon()->getConfig('global_mediapath', ''),
-            'global_font_family_default' => (string) self::getAddon()->getConfig('global_font_family_default', ''),
-            'global_font_families' => (string) self::getAddon()->getConfig('global_font_families', ''),
-            'global_clear_widget_enabled' => (string) self::getAddon()->getConfig('global_clear_widget_enabled', ''),
-            'global_clear_widget_definition' => (string) self::getAddon()->getConfig('global_clear_widget_definition', self::DEFAULT_VALUES['global_clear_widget_definition']),
-        ];
+        return $fallback;
     }
 
     /**
@@ -1455,8 +1464,38 @@ class Cke5ProfilesCreator
             return false;
         }
 
-        $value = (string) $settings[$key];
-        return '' !== trim($value);
+        $raw = $settings[$key];
+        if (is_bool($raw)) {
+            return $raw;
+        }
+
+        if (is_int($raw) || is_float($raw)) {
+            return 1 === (int) $raw;
+        }
+
+        if (is_array($raw)) {
+            foreach ($raw as $entry) {
+                if ('1' === trim((string) $entry)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        $value = strtolower(trim((string) $raw));
+        if ('' === $value) {
+            return false;
+        }
+
+        if (preg_match('/(^|\|)1(\||$)/', $value) === 1) {
+            return true;
+        }
+
+        if (preg_match('/(^|\|)0(\||$)/', $value) === 1) {
+            return false;
+        }
+
+        return in_array($value, ['1', 'true', 'on', 'yes'], true);
     }
 
     /**

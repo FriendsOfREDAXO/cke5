@@ -11,6 +11,15 @@ $defaultMediaPath = str_replace(['../', '/'], '', rex_url::media());
 $form = rex_config_form::factory('cke5');
 $form->addFieldset($this->i18n('cke5_global_settings'));
 
+$field = $form->addCheckboxField('global_quickedit_enabled');
+$field->setAttribute('id', 'cke5global-quickedit-enabled-input');
+$field->setAttribute('data-toggle', 'toggle');
+$field->setLabel($this->i18n('cke5_global_quickedit_enabled'));
+$field->addOption($this->i18n('cke5_global_quickedit_enabled_notice'), '1');
+if (!array_key_exists('global_quickedit_enabled', $this->getConfig())) {
+    $field->setValue('1');
+}
+
 $field = $form->addCheckboxField('global_mentions_enabled');
 $field->setAttribute('id', 'cke5global-mentions-enabled-input');
 $field->setAttribute('data-toggle', 'toggle');

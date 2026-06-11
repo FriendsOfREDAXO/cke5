@@ -1701,3 +1701,89 @@ Note: CK only uses the sticky panel at the top, when editor has focus and the to
         margin-top: 50px;
     }
 }
+
+/* ── CKE5 QuickEdit (/-Trigger) ───────────────────────────────────── */
+.cke5-quickedit-menu {
+    --cke5-qe-bg:           #ffffff;
+    --cke5-qe-border:       #d0d5dd;
+    --cke5-qe-text:         #1a2332;
+    --cke5-qe-text-active:  #1a5cc8;
+    --cke5-qe-hover:        #eef3fb;
+    --cke5-qe-icon-bg:      #f0f4fa;
+    --cke5-qe-icon-color:   #3a6bc8;
+
+    position: fixed;
+    z-index: 99999;
+    background: var(--cke5-qe-bg);
+    border: 1px solid var(--cke5-qe-border);
+    border-radius: 6px;
+    box-shadow: 0 4px 18px rgba(0,0,0,.13), 0 1px 4px rgba(0,0,0,.07);
+    min-width: 200px;
+    max-width: 260px;
+    max-height: 320px;
+    overflow-y: auto;
+    padding: 4px;
+    font-size: 13px;
+    font-family: inherit;
+}
+
+.cke5-qe-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    color: var(--cke5-qe-text);
+    user-select: none;
+    transition: background .08s, color .08s;
+}
+
+.cke5-qe-item:hover,
+.cke5-qe-item.is-active {
+    background: var(--cke5-qe-hover);
+    color: var(--cke5-qe-text-active);
+}
+
+.cke5-qe-icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    background: var(--cke5-qe-icon-bg);
+    border-radius: 4px;
+    color: var(--cke5-qe-icon-color);
+}
+
+.cke5-qe-label {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+body.rex-theme-dark .cke5-quickedit-menu {
+    --cke5-qe-bg:           #1e2633;
+    --cke5-qe-border:       #3a4654;
+    --cke5-qe-text:         #e0e8f4;
+    --cke5-qe-text-active:  #7db8f7;
+    --cke5-qe-hover:        #253040;
+    --cke5-qe-icon-bg:      #2a3546;
+    --cke5-qe-icon-color:   #7db8f7;
+}
+
+@media (prefers-color-scheme: dark) {
+    body.rex-has-theme:not(.rex-theme-light) .cke5-quickedit-menu {
+        --cke5-qe-bg:           #1e2633;
+        --cke5-qe-border:       #3a4654;
+        --cke5-qe-text:         #e0e8f4;
+        --cke5-qe-text-active:  #7db8f7;
+        --cke5-qe-hover:        #253040;
+        --cke5-qe-icon-bg:      #2a3546;
+        --cke5-qe-icon-color:   #7db8f7;
+    }
+}

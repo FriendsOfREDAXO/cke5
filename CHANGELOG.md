@@ -54,6 +54,9 @@
 * Globale Einstellungen werden beim Profil-Mapping gezielt als Fallback gemerged (Profilwerte behalten Vorrang)
 * Globales Schriftfamilien-Fallback ergänzt (`global_font_families`) und Logik für `global_font_family_default` korrigiert
 * Widget-Initialisierung für die Defaults-Seite ergänzt (inkl. robustem `rex:ready`- und Collapse-Fallback)
+* QuickEdit-Befehlsmenü ergänzt: `/` öffnet im Editor eine kontextnahe Befehlsliste für aktivierte Toolbar-Funktionen wie Überschriften, Listen, Tabellen, Medienpool-Bilder und Clear-Widget
+* QuickEdit ist global über `profiles/customise/global` schaltbar; die REDAXO-Standardwerte aus `rex_config_form` (`|1|`, `null`, leer) werden zentral wie bei anderen globalen Optionen ausgewertet
+* QuickEdit kann von anderen AddOns über `window.CKE5_QUICKEDIT_COMMANDS` erweitert werden; zusätzliche Befehle können an Toolbar-Einträge und CKEditor-Commands gekoppelt oder per eigener `execute(editor)`-Funktion ausgeführt werden
 * Sprog-MultiInput stabilisiert: fehlerhafte `undefined`-Placeholder behoben und Attribut-Fallbacks ergänzt
 * Mention-Felder um JSON-Beispielhinweise erweitert (Profil und globale Defaults)
 * CSS-Regeneration gehärtet: keine Abhängigkeit mehr von `cke5_templates` auf frischen Installationen ohne Template-Tabelle

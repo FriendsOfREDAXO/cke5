@@ -35,6 +35,7 @@ $(document).on('rex:ready', function (event, container) {
     });
   }
 
+  let quickEdit = root.find('input[id^="cke5global-quickedit-enabled-input"]');
   let mentions = root.find('input[id^="cke5global-mentions-enabled-input"]');
   let sprog = root.find('input[id^="cke5global-sprog-enabled-input"]');
   let ytable = root.find('input[id^="cke5global-ytable-enabled-input"]');
@@ -43,6 +44,7 @@ $(document).on('rex:ready', function (event, container) {
   let clearWidget = root.find('input[id^="cke5global-clear-widget-enabled-input"]');
 
   if (typeof cke5_bootstrapToggle_collapse === 'function') {
+    cke5_bootstrapToggle_collapse(quickEdit);
     cke5_bootstrapToggle_collapse(mentions, true);
     cke5_bootstrapToggle_collapse(sprog, true);
     cke5_bootstrapToggle_collapse(ytable, true);
@@ -50,6 +52,7 @@ $(document).on('rex:ready', function (event, container) {
     cke5_bootstrapToggle_collapse(fontFamilyDefault);
     cke5_bootstrapToggle_collapse(clearWidget, true);
   } else {
+    initLocalCollapse(quickEdit);
     initLocalCollapse(mentions);
     initLocalCollapse(sprog);
     initLocalCollapse(ytable);

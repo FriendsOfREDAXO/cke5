@@ -22,6 +22,7 @@ Current development version: `7.0.0-dev`
 - New editor type `classic_balloon` and configurable balloon toolbar in profile manager
 - Improved merge/fallback behavior between profile settings and global defaults
 - UX fixes in profile/default widgets (mentions examples, stable placeholders, robust toggle/collapse init)
+- New QuickEdit command menu via `/`, globally configurable and extensible by other addons
 
 ## Feature Overview
 
@@ -59,6 +60,8 @@ Current development version: `7.0.0-dev`
 - Native addon plugins loaded at runtime:
   - `RedaxoLinkIntegration`
   - `RedaxoMediaImage`
+  - `RedaxoClearWidget`
+  - `RedaxoQuickEdit`
   - `RedaxoSnippets`
   - `RedaxoPastePlainTextToggle`
   - `RedaxoMarkdownPasteToggle`
@@ -66,6 +69,58 @@ Current development version: `7.0.0-dev`
   - `RedaxoVideoWidgetTest`
 - External plugin registry support via addon API and JS config
 - Toolbar alias transformations for external plugins
+
+### QuickEdit Command Menu
+
+QuickEdit opens an inline command menu at the cursor position when typing `/` in the editor. It only lists commands that fit the active profile configuration, for example enabled heading levels or media/widget actions whose toolbar item is present in the profile.
+
+The feature can be disabled globally in `CKEditor 5 > Profiles > Defaults > Global settings`. It uses the normal `rex_config_form` storage format: `|1|` enables QuickEdit, `null` or an empty value disables it. If the config key does not exist yet, QuickEdit defaults to enabled for compatibility.
+
+Other addons can add menu entries by loading a JavaScript file before editor instances are created. The recommended way is to register that file via the CKE5 plugin registry in the addon `boot.php`:
+
+```php
+<?php
+
+use Cke5\PluginRegistry;
+
+if (rex::isBackend() && rex_addon::get('cke5')->isAvailable()) {
+    PluginRegistry::addPlugin(
+        'my_quickedit_commands',
+        rex_url::addonAssets('my_addon', 'js/cke5-quickedit-commands.js')
+    );
+}
+```
+
+The loaded JavaScript file extends `window.CKE5_QUICKEDIT_COMMANDS`:
+
+```javascript
+window.CKE5_QUICKEDIT_COMMANDS = window.CKE5_QUICKEDIT_COMMANDS || [];
+
+window.CKE5_QUICKEDIT_COMMANDS.push({
+  id: 'myQuickAction',
+  label: 'My action',
+  keys: ['my', 'action'],
+  icon: 'M',
+  toolbarItem: 'link',
+  execute: function (editor) {
+    editor.execute('link', 'https://redaxo.org');
+  }
+});
+```
+
+Supported properties:
+
+- `id`: unique technical command name.
+- `label`: text shown in the QuickEdit menu.
+- `keys`: optional search aliases for filtering after `/...`.
+- `icon`: short text/icon for the leading column.
+- `toolbarItem`: toolbar item that must be present in the active profile.
+- `toolbarAny`: alternative toolbar items; at least one must be present.
+- `command`: CKEditor command to execute.
+- `commandArgs`: optional arguments for `editor.execute(command, commandArgs)`.
+- `execute(editor)`: custom execution logic if a regular CKEditor command is not enough.
+
+An entry is shown only if its `toolbarItem` or one of its `toolbarAny` items exists in the active profile. When `command` is used, that CKEditor command must also be registered.
 
 ## Installation
 
