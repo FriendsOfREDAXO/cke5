@@ -46,7 +46,6 @@ $importKeys = [
     "alignment",
     "image_toolbar",
     "image_resize_unit",
-    "image_resize_handles",
     "image_resize_options",
     "image_resize_group_options",
     "image_resize_options_definition",

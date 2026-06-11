@@ -169,6 +169,16 @@
   width:100%;
 }
 
+.ck-content .image.image_resized > a{
+  display:block;
+  max-width:100%;
+}
+
+.ck-content .image.image_resized > a > img,
+.ck-content .image.image_resized > a > picture > img{
+  width:100%;
+}
+
 .ck-content .image.image_resized > figcaption{
   display:block;
 }
@@ -253,6 +263,20 @@
 }
 
 .ck-content .image img{
+  min-width:100%;
+  max-width:100%;
+  height:auto;
+  margin:0 auto;
+  display:block;
+}
+
+.ck-content .image > a{
+  display:inline-block;
+  max-width:100%;
+}
+
+.ck-content .image > a > img,
+.ck-content .image > a > picture > img{
   min-width:100%;
   max-width:100%;
   height:auto;

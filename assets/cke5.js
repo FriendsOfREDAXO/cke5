@@ -322,7 +322,7 @@
               return items;
             }
             return items.filter(function(entry) {
-              return entry !== "bookmark" && entry !== "for_bookmarks";
+              return entry !== "bookmark" && entry !== "for_bookmarks" && entry !== "findAndReplace" && entry !== "menuBar:findAndReplace";
             });
           };
           if (options.toolbar && Array.isArray(options.toolbar.items)) {
@@ -672,7 +672,6 @@
             "CodeBlock",
             "HorizontalLine",
             "PageBreak",
-            "FindAndReplace",
             "SelectAll",
             "Mention",
             "TextTransformation",

@@ -554,8 +554,16 @@
     display: none !important;
 }
 
-.ck .ck-fake-link-selection {
+.ck .ck-fake-link-selection:not(figure.image) {
     display: contents !important;
+}
+
+.ck .ck-content figure.image.ck-fake-link-selection {
+    display: table !important;
+}
+
+.ck .ck-content figure.image.image_resized.ck-fake-link-selection {
+    display: block !important;
 }
 
 /* CKEditor can split selected links into adjacent segments; merge btn segments visually. */
