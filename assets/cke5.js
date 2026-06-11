@@ -6,18 +6,36 @@
         let cke5BalloonBindings = {};
         let cke5MinimapBindings = {};
         let ckareas = ".cke5-editor";
+        let cke5MblockCallbackRegistered = false;
         $(document).on("rex:ready", function(e, container) {
           cke5_init_ready(container.find(ckareas));
           cke5_init_json_previews(container);
+          // Register mblock reindex_end callback once, as early as possible (mblock may not be
+          // available on DOM-ready but is always ready before the first rex:ready fires)
+          if (!cke5MblockCallbackRegistered && typeof mblock_module === "object" && typeof mblock_module.registerCallback === "function") {
+            cke5MblockCallbackRegistered = true;
+            mblock_module.registerCallback("reindex_end", function() {
+              if (mblock_module.lastAction === "add_item" && mblock_module.affectedItem) {
+                const areas = mblock_module.affectedItem.find(ckareas);
+                if (areas.length) {
+                  cke5_destroy(areas);
+                  cke5_init_all(areas);
+                }
+              }
+            });
+          }
         });
         $(document).on("ready", function() {
           cke5_init_json_previews($(document));
-          if (typeof mblock_module === "object") {
+          // Fallback: register mblock callback if mblock loaded after rex:ready
+          if (!cke5MblockCallbackRegistered && typeof mblock_module === "object" && typeof mblock_module.registerCallback === "function") {
+            cke5MblockCallbackRegistered = true;
             mblock_module.registerCallback("reindex_end", function() {
-              if ($(ckareas).length) {
-                if (mblock_module.lastAction === "add_item") {
-                  cke5_destroy(mblock_module.affectedItem.find(ckareas));
-                  cke5_init_all(mblock_module.affectedItem.find(ckareas));
+              if (mblock_module.lastAction === "add_item" && mblock_module.affectedItem) {
+                const areas = mblock_module.affectedItem.find(ckareas);
+                if (areas.length) {
+                  cke5_destroy(areas);
+                  cke5_init_all(areas);
                 }
               }
             });
