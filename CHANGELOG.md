@@ -1,6 +1,6 @@
 # Changelog
 
-## Version 7.0.0-beta1
+## Version 7.0.0
 
 ### Neu
 
