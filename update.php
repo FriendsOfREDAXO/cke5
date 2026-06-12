@@ -9,6 +9,11 @@ spl_autoload_register(static function (string $class): void {
     $relativeClass = str_replace('\\', '/', substr($class, 5));
     $classFile = __DIR__ . '/lib/Cke5/' . $relativeClass . '.php';
 
+    // Legacy-Dateipfad: Cke5\Utils\Cke5CssHandler liegt im Handler-Verzeichnis.
+    if (!is_file($classFile) && $class === 'Cke5\\Utils\\Cke5CssHandler') {
+        $classFile = __DIR__ . '/lib/Cke5/Handler/Cke5CssHandler.php';
+    }
+
     if (is_file($classFile)) {
         require_once $classFile;
     }
