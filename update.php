@@ -1,6 +1,19 @@
 <?php
 /** @var rex_addon $this */
 
+spl_autoload_register(static function (string $class): void {
+    if (strncmp($class, 'Cke5\\', 5) !== 0) {
+        return;
+    }
+
+    $relativeClass = str_replace('\\', '/', substr($class, 5));
+    $classFile = __DIR__ . '/lib/Cke5/' . $relativeClass . '.php';
+
+    if (is_file($classFile)) {
+        require_once $classFile;
+    }
+});
+
 use Cke5\Handler\Cke5DefaultDataService;
 use Cke5\Handler\Cke5ExtensionHandler;
 
