@@ -189,6 +189,16 @@
           if (initState === "pending") {
             return;
           }
+          const currentId = element.attr("id");
+          const currentNode = element.length ? element.get(0) : null;
+          if (currentId && currentNode) {
+            const existingEditor = ckeditors[currentId];
+            const existingSource = existingEditor && existingEditor.sourceElement ? existingEditor.sourceElement : null;
+            if (existingSource === currentNode) {
+              element.attr("data-cke5-init-state", "ready");
+              return;
+            }
+          }
           if (initState === "ready") {
             const nextElement = element.next();
             if (nextElement.length && nextElement.hasClass("ck")) {
@@ -288,7 +298,7 @@
               }
             } else {
               element.attr("data-cke5-init-state", "ready");
-              console.log("editor already exist: " + unique_id);
+              return;
             }
           }
         }

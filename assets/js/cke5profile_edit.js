@@ -14,6 +14,42 @@
 let ckedit = '.cke5_profile_edit',
   cktypes, ckimgtypes, cktabletypes, imageDragDrop, cklinktypes, CKEDIT_DEBUG = false;
 
+function cke5_parse_slider_value(value) {
+  let normalized = String(value || '').trim().toLowerCase();
+
+  if (normalized === '' || normalized === 'none' || normalized === 'nan') {
+    return 0;
+  }
+
+  normalized = normalized.replace('px', '');
+  let parsed = parseInt(normalized, 10);
+
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function cke5_parse_slider_json_list(value) {
+  try {
+    let parsed = JSON.parse(value || '[]');
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function cke5_parse_slider_ticks(element) {
+  return cke5_parse_slider_json_list(element.attr('data-range-values')).map(function (tick) {
+    return cke5_parse_slider_value(tick);
+  });
+}
+
+function cke5_parse_slider_labels(element) {
+  let labels = cke5_parse_slider_json_list(element.attr('data-range'));
+  if (labels.length) {
+    return labels;
+  }
+  return cke5_parse_slider_json_list(element.attr('data-range-values'));
+}
+
 
 $(document).on('rex:ready', function (event, container) {
   if (container.find(ckedit).length) {
@@ -273,37 +309,45 @@ function cke5_init_edit(element) {
   }
 
   if (minheight.length) {
-    let $minval = minheight.val();
+    let minSliderValue = cke5_parse_slider_value(minheight.val());
+    let minTicks = cke5_parse_slider_ticks(minheight);
+    let minTickLabels = cke5_parse_slider_labels(minheight);
+    let minSliderMax = minTicks.length ? minTicks[minTicks.length - 1] : 600;
+
     // Prüfen, ob der Slider bereits initialisiert wurde
     if (!minheight.hasClass('slider-initialized')) {
       minheight.bootstrapSlider({
         tooltip: 'show',
         min: 0,
-        max: 600,
+        max: minSliderMax,
         step: 10,
-        ticks: JSON.parse(minheight.attr('data-range-values')),
-        ticks_labels: JSON.parse(minheight.attr('data-range')),
+        ticks: minTicks,
+        ticks_labels: minTickLabels,
       });
       minheight.addClass('slider-initialized');
-      minheight.bootstrapSlider('setValue', $minval);
     }
+    minheight.bootstrapSlider('setValue', minSliderValue);
   }
 
   if (maxheight.length) {
-    let $maxval = maxheight.val();
+    let maxSliderValue = cke5_parse_slider_value(maxheight.val());
+    let maxTicks = cke5_parse_slider_ticks(maxheight);
+    let maxTickLabels = cke5_parse_slider_labels(maxheight);
+    let maxSliderMax = maxTicks.length ? maxTicks[maxTicks.length - 1] : 1200;
+
     // Prüfen, ob der Slider bereits initialisiert wurde
     if (!maxheight.hasClass('slider-initialized')) {
       maxheight.bootstrapSlider({
         tooltip: 'show',
         min: 0,
-        max: 600,
+        max: maxSliderMax,
         step: 10,
-        ticks: JSON.parse(maxheight.attr('data-range-values')),
-        ticks_labels: JSON.parse(maxheight.attr('data-range')),
+        ticks: maxTicks,
+        ticks_labels: maxTickLabels,
       });
       maxheight.addClass('slider-initialized');
-      maxheight.bootstrapSlider('setValue', $maxval);
     }
+    maxheight.bootstrapSlider('setValue', maxSliderValue);
   }
 
   if (imageDragDrop.length) {
