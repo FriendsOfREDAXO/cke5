@@ -1,12 +1,5 @@
 # Changelog
 
-## Version 7.0.0-beta5
-
-### Behoben
-
-* Profil-Editor: Slider für Textarea-Mindest- und Maximal-Höhe sind wieder zuverlässig per Maus und Tastatur bedienbar
-* Fehlerursache `NaN` bei der Slider-Initialisierung behoben (Werte-/Tick-Normalisierung für `none`/`px`-Werte)
-* Maximal-Höhen-Slider auf korrekte Wertebereiche bis `1200px` stabilisiert
 
 ## Version 7.0.0
 
@@ -44,6 +37,10 @@
 * CSS-Regeneration ohne Abhängigkeit zu alten Template-Tabellen gehärtet
 * Profil-Import für ältere Exportdateien robuster gemacht
 * Inline-JavaScript aus der JSON-Preview entfernt und in Asset-JavaScript zentralisiert
+* Profil-Editor: Slider für Textarea-Mindest- und Maximal-Höhe sind wieder zuverlässig per Maus und Tastatur bedienbar
+* Fehlerursache `NaN` bei der Slider-Initialisierung behoben (Werte-/Tick-Normalisierung für `none`/`px`-Werte)
+* Maximal-Höhen-Slider auf korrekte Wertebereiche bis `1200px` stabilisiert
+
 
 ### Entfernt
 
