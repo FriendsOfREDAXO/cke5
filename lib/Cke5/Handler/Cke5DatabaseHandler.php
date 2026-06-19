@@ -12,6 +12,7 @@ use rex_extension_point;
 use rex_logger;
 use rex_sql;
 use rex_sql_exception;
+use rex_sql_table;
 use rex_user;
 
 class Cke5DatabaseHandler
@@ -35,9 +36,26 @@ class Cke5DatabaseHandler
             $sql = rex_sql::factory();
             $sql->setTable(rex::getTable(Cke5DatabaseHandler::CKE5_PROFILES));
 
+            // Determine the columns that actually exist in the destination
+            // table, so the import is robust against schema differences
+            // (e.g. locale-specific `placeholder_*` columns or columns
+            // added/removed between versions).
+            $allowedColumns = self::getProfileTableColumns();
+
             foreach ($profile as $key => $value) {
-                if ($key === 'id') continue;
-                $sql->setValue($key, $value);
+                if ($key === 'id') {
+                    continue;
+                }
+
+                if ($allowedColumns !== [] && !isset($allowedColumns[(string) $key])) {
+                    continue;
+                }
+
+                if (is_array($value)) {
+                    $value = (string) json_encode($value, JSON_UNESCAPED_UNICODE);
+                }
+
+                $sql->setValue((string) $key, $value);
             }
 
             $sql->setValue('createuser', self::getLogin())
@@ -46,7 +64,7 @@ class Cke5DatabaseHandler
                 ->setValue('updatedate', $now->format(DateTimeInterface::ATOM));
 
             if (is_array($loadedProfile = self::loadProfile($profile['name']))) {
-                $sql->setWhere('id=:id', ['id' => $loadedProfile['rex_cke5_profiles.id']]);
+                $sql->setWhere('id=:id', ['id' => (int) $loadedProfile['id']]);
                 $sql->update();
                 rex_extension::registerPoint(new rex_extension_point('CKE5_PROFILE_UPDATE', '', $profile, true));
             } else {
@@ -57,6 +75,28 @@ class Cke5DatabaseHandler
         } catch (Exception $e) {
             rex_logger::logException($e);
             return false;
+        }
+    }
+
+    /**
+     * Returns the column names of the profiles table as an associative array
+     * (column name => true) for fast lookup. Empty array if the table is not
+     * yet available.
+     *
+     * @return array<string,true>
+     */
+    private static function getProfileTableColumns(): array
+    {
+        try {
+            $table = rex_sql_table::get(rex::getTable(self::CKE5_PROFILES));
+            $columns = [];
+            foreach ($table->getColumns() as $column) {
+                $columns[$column->getName()] = true;
+            }
+            return $columns;
+        } catch (Exception $e) {
+            rex_logger::logException($e);
+            return [];
         }
     }
 
