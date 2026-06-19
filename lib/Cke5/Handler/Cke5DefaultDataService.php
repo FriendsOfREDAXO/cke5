@@ -27,12 +27,12 @@ class Cke5DefaultDataService
                 return;
             }
 
-            self::importNamedRows(Cke5DatabaseHandler::CKE5_STYLE_GROUPS, self::getRows($data, 'style_groups'), true);
+            $styleGroupMap = self::importNamedRows(Cke5DatabaseHandler::CKE5_STYLE_GROUPS, self::getRows($data, 'style_groups'), true);
             $styleMap = self::importNamedRows(Cke5DatabaseHandler::CKE5_STYLES, self::getRows($data, 'styles'), true);
             $snippetMap = self::importNamedRows(Cke5DatabaseHandler::CKE5_SNIPPETS, self::getRows($data, 'snippets'), true);
 
             foreach (self::getRows($data, 'profiles') as $profile) {
-                $profile = self::normalizeProfileRow($profile, $styleMap, $snippetMap);
+                $profile = self::normalizeProfileRow($profile, $styleGroupMap, $styleMap, $snippetMap);
                 $name = isset($profile['name']) && is_string($profile['name']) ? trim($profile['name']) : '';
                 if ($name === '') {
                     continue;
@@ -117,12 +117,18 @@ class Cke5DefaultDataService
 
     /**
      * @param array<string,mixed> $profile
+     * @param array<string,int> $styleGroupMap
      * @param array<string,int> $styleMap
      * @param array<string,int> $snippetMap
      * @return array<string,mixed>
      */
-    private static function normalizeProfileRow(array $profile, array $styleMap, array $snippetMap): array
+    private static function normalizeProfileRow(array $profile, array $styleGroupMap, array $styleMap, array $snippetMap): array
     {
+        if (isset($profile['group_styles_ref']) && is_array($profile['group_styles_ref'])) {
+            $profile['group_styles'] = self::resolveReferences($profile['group_styles_ref'], $styleGroupMap);
+            unset($profile['group_styles_ref']);
+        }
+
         if (isset($profile['styles_ref']) && is_array($profile['styles_ref'])) {
             $profile['styles'] = self::resolveReferences($profile['styles_ref'], $styleMap);
             unset($profile['styles_ref']);

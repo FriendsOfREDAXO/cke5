@@ -216,7 +216,7 @@ cke5_profiles_export = Profile export
 cke5_profiles_import = Profile import
 cke5_profiles_import_file = upload JSON file
 cke5_profiles_select = Profile
-cke5_profiles_import_msg = Attention: profiles with identical IDs will be completely overwritten!
+cke5_profiles_import_msg = Attention: profiles with identical name/key will be updated during import!
 
 # style editor
 cke5_style_element = Element

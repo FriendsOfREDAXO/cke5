@@ -47,6 +47,42 @@ $loadRows = static function (string $tableName, array $ids): array {
     return is_array($rows) ? $rows : [];
 };
 
+/**
+ * @param array<int,array<string,string>> $rows
+ * @return array<int,string>
+ */
+$createIdNameMap = static function (array $rows): array {
+    $map = [];
+    foreach ($rows as $row) {
+        $id = isset($row['id']) ? (int) $row['id'] : 0;
+        $name = isset($row['name']) ? trim((string) $row['name']) : '';
+        if ($id <= 0 || $name === '') {
+            continue;
+        }
+
+        $map[$id] = $name;
+    }
+
+    return $map;
+};
+
+/**
+ * @param array<string,string> $profile
+ * @param string $fieldName
+ * @param array<int,string> $idNameMap
+ * @return array<int,string>
+ */
+$resolveRefNames = static function (array $profile, string $fieldName, array $idNameMap) use ($collectIds): array {
+    $names = [];
+    foreach ($collectIds($profile, $fieldName) as $id) {
+        if (isset($idNameMap[$id])) {
+            $names[] = $idNameMap[$id];
+        }
+    }
+
+    return array_values(array_unique($names));
+};
+
 // action
 if (rex_request::post('_csrf_token', 'string', '') !== '') {
     try {
@@ -57,26 +93,31 @@ if (rex_request::post('_csrf_token', 'string', '') !== '') {
             throw new LengthException();
         }
 
-        // get the export id's
-        $exportIds = $exportIds['profiles'];
+        $exportIds = array_values(array_unique(array_filter(array_map('intval', $exportIds['profiles']), static function (int $id): bool {
+            return $id > 0;
+        })));
+        if ($exportIds === []) {
+            throw new LengthException();
+        }
+
         $exportProfiles = [];
         $exportNames = [];
         $styleGroupIds = [];
         $styleIds = [];
         $snippetIds = [];
 
-        // and use the loaded profiles
         if (!is_null($profiles)) {
             foreach ($profiles as $profile) {
-                foreach ($exportIds as $exportId) {
-                    if ($exportId == $profile['id']) {
-                        $exportProfiles[] = $profile; // to get the entire stuff
-                        $exportNames[] = $profile['name']; // and to get the file name
-                        $styleGroupIds = array_merge($styleGroupIds, $collectIds($profile, 'group_styles'));
-                        $styleIds = array_merge($styleIds, $collectIds($profile, 'styles'));
-                        $snippetIds = array_merge($snippetIds, $collectIds($profile, 'snippets'));
-                    }
+                $profileId = isset($profile['id']) ? (int) $profile['id'] : 0;
+                if (!in_array($profileId, $exportIds, true)) {
+                    continue;
                 }
+
+                $exportProfiles[] = $profile;
+                $exportNames[] = (string) ($profile['name'] ?? 'profile');
+                $styleGroupIds = array_merge($styleGroupIds, $collectIds($profile, 'group_styles'));
+                $styleIds = array_merge($styleIds, $collectIds($profile, 'styles'));
+                $snippetIds = array_merge($snippetIds, $collectIds($profile, 'snippets'));
             }
         }
 
@@ -84,19 +125,35 @@ if (rex_request::post('_csrf_token', 'string', '') !== '') {
         $exportStyles = $loadRows(Cke5DatabaseHandler::CKE5_STYLES, array_values(array_unique($styleIds)));
         $exportSnippets = $loadRows(Cke5DatabaseHandler::CKE5_SNIPPETS, array_values(array_unique($snippetIds)));
 
+        $styleGroupMap = $createIdNameMap($exportStyleGroups);
+        $styleMap = $createIdNameMap($exportStyles);
+        $snippetMap = $createIdNameMap($exportSnippets);
+
+        foreach ($exportProfiles as &$exportProfile) {
+            $exportProfile['group_styles_ref'] = $resolveRefNames($exportProfile, 'group_styles', $styleGroupMap);
+            $exportProfile['styles_ref'] = $resolveRefNames($exportProfile, 'styles', $styleMap);
+            $exportProfile['snippets_ref'] = $resolveRefNames($exportProfile, 'snippets', $snippetMap);
+        }
+        unset($exportProfile);
+
         $exportData = [
+            '_meta' => [
+                'schema_version' => 2,
+                'reference_mode' => 'name-first',
+                'exported_at' => date(DATE_ATOM),
+            ],
             'profiles' => $exportProfiles,
             'style_groups' => $exportStyleGroups,
             'styles' => $exportStyles,
             'snippets' => $exportSnippets,
         ];
 
-        // create filename and export the data set
-        $names = (strlen(implode('_', $exportNames)) > 100) ? substr(implode('_', $exportNames), 0, 100) . '_etc_' : implode('_', $exportNames);
+        $joinedNames = implode('_', $exportNames);
+        $names = (strlen($joinedNames) > 100) ? substr($joinedNames, 0, 100) . '_etc_' : $joinedNames;
         $fileName = 'cke5_export_' . $names . '_' . date('YmdHis') . '.json';
-        header('Content-Disposition: attachment; filename="' . $fileName . '"; charset=utf-8'); // create header info
-        rex_response::sendContent((string) json_encode($exportData, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT), 'application/octetstream'); // stream it out
-        exit; // stop process
+        header('Content-Disposition: attachment; filename="' . $fileName . '"; charset=utf-8');
+        rex_response::sendContent((string) json_encode($exportData, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT), 'application/json');
+        exit;
     } catch (LengthException $e) {
         $message = rex_view::error($this->i18n('profiles_export_missing_input_error', $e->getMessage()));
         $func = 'error';
