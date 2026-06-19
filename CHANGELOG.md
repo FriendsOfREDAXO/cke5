@@ -1,6 +1,21 @@
 # Changelog
 
 
+## Version 7.0.1
+
+### Geändert
+
+* Profil-Import/Export auf stabile name/key-basierte Zuordnung erweitert, um installationsabhängige ID-Unterschiede sauber zu behandeln
+* Exporte enthalten nun zusätzlich referenzierbare Namenslisten für Style-Gruppen, Styles und Snippets (`group_styles_ref`, `styles_ref`, `snippets_ref`)
+* Import von Style-Gruppen, Styles und Snippets nutzt Upsert über `name` statt ID-basierter Überschreibung
+
+### Behoben
+
+* Profil-Update beim Import korrigiert: bestehende Profile werden wieder zuverlässig aktualisiert
+* Schema-Drift beim Import abgefangen: unbekannte bzw. nicht vorhandene Spalten werden robust ignoriert
+* Referenzen in Profilen werden beim Import name-first aufgelöst, Legacy-ID-Felder bleiben als Fallback kompatibel
+
+
 ## Version 7.0.0
 
 ### Neu
