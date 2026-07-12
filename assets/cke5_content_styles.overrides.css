@@ -1,0 +1,36 @@
+/* REDAXO cke5 custom list output overrides */
+.ck-content ol[style*="decimal-leading-zero"] {
+  list-style-type: decimal-leading-zero !important;
+}
+
+.ck-content ol[style*="decimal-leading-zero"] > li::marker {
+  content: counter(list-item, decimal-leading-zero) '. ';
+}
+
+.ck-content ol ol,
+.ck-content ol ol ol,
+.ck-content ol ol ol ol,
+.ck-content ol ol ol ol ol {
+  list-style-type: decimal;
+}
+
+.ck-content ol:not([style*="list-style-type"]),
+.ck-content ol[style*="list-style-type: decimal"]:not([style*="decimal-leading-zero"]),
+.ck-content ol[style*="list-style-type:decimal"]:not([style*="decimal-leading-zero"]),
+.ck-content ol[type="1"] {
+  counter-reset: ck-hier;
+}
+
+.ck-content ol:not([style*="list-style-type"]) > li,
+.ck-content ol[style*="list-style-type: decimal"]:not([style*="decimal-leading-zero"]) > li,
+.ck-content ol[style*="list-style-type:decimal"]:not([style*="decimal-leading-zero"]) > li,
+.ck-content ol[type="1"] > li {
+  counter-increment: ck-hier;
+}
+
+.ck-content ol:not([style*="list-style-type"]) > li::marker,
+.ck-content ol[style*="list-style-type: decimal"]:not([style*="decimal-leading-zero"]) > li::marker,
+.ck-content ol[style*="list-style-type:decimal"]:not([style*="decimal-leading-zero"]) > li::marker,
+.ck-content ol[type="1"] > li::marker {
+  content: counters(ck-hier, '.') '. ';
+}

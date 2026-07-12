@@ -61,8 +61,8 @@ class Cke5AssetsProvider
             $translationsUrl = rex_url::base(($translationsPath != '') ? $translationsPath : 'assets/addons/cke5/vendor/ckeditor5-modern/translations/');
 
             // add cke5 editor and translation
-            rex_view::addCssFile(self::getAddon()->getAssetsUrl('css/cke5.css'));
             rex_view::addCssFile(rex_url::base('assets/addons/cke5/vendor/ckeditor5-modern/ckeditor.css'));
+            rex_view::addCssFile(self::getAddon()->getAssetsUrl('css/cke5.css'));
             rex_view::addJsFile($editorFile);
 
             $sql = rex_sql::factory();

@@ -1,3 +1,25 @@
 /* to add your custom frontend styles for your cke5 editor view */
 .ck.ck-editor__editable_inline p {
 }
+
+/* Hierarchische Nummerierung im Frontend: 1 / 1.1 / 1.1.1 */
+ol:not([style*="list-style-type"]),
+ol[style*="list-style-type: decimal"]:not([style*="decimal-leading-zero"]),
+ol[style*="list-style-type:decimal"]:not([style*="decimal-leading-zero"]),
+ol[type="1"] {
+	counter-reset: ck-hier;
+}
+
+ol:not([style*="list-style-type"]) > li,
+ol[style*="list-style-type: decimal"]:not([style*="decimal-leading-zero"]) > li,
+ol[style*="list-style-type:decimal"]:not([style*="decimal-leading-zero"]) > li,
+ol[type="1"] > li {
+	counter-increment: ck-hier;
+}
+
+ol:not([style*="list-style-type"]) > li::marker,
+ol[style*="list-style-type: decimal"]:not([style*="decimal-leading-zero"]) > li::marker,
+ol[style*="list-style-type:decimal"]:not([style*="decimal-leading-zero"]) > li::marker,
+ol[type="1"] > li::marker {
+	content: counters(ck-hier, '.') '. ';
+}

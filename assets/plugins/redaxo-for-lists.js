@@ -9,6 +9,8 @@
       buttonWithValuePrefix: 'List style: ',
       ariaLabel: 'List styles',
       promptTitle: 'Choose list style (enter value):',
+      startIndexLabel: 'Start index',
+      startIndexPromptTitle: 'Choose start index for numbered list (>= 1):',
       defaultKeyword: 'default',
       groupLabels: { default: 'Default', numbered: 'Numbered', bulleted: 'Bulleted' },
       styles: [
@@ -29,6 +31,8 @@
       buttonWithValuePrefix: 'Listenstil: ',
       ariaLabel: 'Listenstile',
       promptTitle: 'Listenstil wählen (Wert eingeben):',
+      startIndexLabel: 'Startindex',
+      startIndexPromptTitle: 'Startindex für nummerierte Liste wählen (>= 1):',
       defaultKeyword: 'standard',
       groupLabels: { default: 'Standard', numbered: 'Nummeriert', bulleted: 'Aufzählung' },
       styles: [
@@ -49,6 +53,8 @@
       buttonWithValuePrefix: 'Estilo de lista: ',
       ariaLabel: 'Estilos de lista',
       promptTitle: 'Elegir estilo de lista (introducir valor):',
+      startIndexLabel: 'Índice inicial',
+      startIndexPromptTitle: 'Elegir índice inicial para lista numerada (>= 1):',
       defaultKeyword: 'predeterminado',
       groupLabels: { default: 'Predeterminado', numbered: 'Numerado', bulleted: 'Viñetas' },
       styles: [
@@ -69,6 +75,8 @@
       buttonWithValuePrefix: 'Liststil: ',
       ariaLabel: 'Liststilar',
       promptTitle: 'Välj liststil (ange värde):',
+      startIndexLabel: 'Startindex',
+      startIndexPromptTitle: 'Välj startindex för numrerad lista (>= 1):',
       defaultKeyword: 'standard',
       groupLabels: { default: 'Standard', numbered: 'Numrerad', bulleted: 'Punktlista' },
       styles: [
@@ -193,6 +201,21 @@
     var html = '';
     var visibleStyles = getVisibleListStyles(editor, command);
     var currentType = getCurrentListType(editor, command);
+    var listStartCommand = editor && editor.commands && typeof editor.commands.get === 'function'
+      ? editor.commands.get('listStart')
+      : null;
+    var canEditStartIndex = currentType === 'numbered' && !!(listStartCommand && listStartCommand.isEnabled);
+    var currentStartIndex = getCurrentListStartIndex(editor, listStartCommand);
+
+    if (canEditStartIndex) {
+      html += '<div class="ck-for-lists-actions">'
+        + '<button type="button" class="ck ck-button ck-for-lists-action" data-for-list-action="start-index" '
+        + 'title="' + escapeHtml(i18n.startIndexLabel) + '" '
+        + 'aria-label="' + escapeHtml(i18n.startIndexLabel) + '">'
+        + escapeHtml(i18n.startIndexLabel + ': ' + String(currentStartIndex))
+        + '</button>'
+        + '</div>';
+    }
 
     visibleStyles.forEach(function (style) {
       var styleValue = normalizeStyleValue(style.value || '');
@@ -225,6 +248,49 @@
         dropdown.isOpen = false;
       });
     });
+
+    Array.from(panel.querySelectorAll('[data-for-list-action="start-index"]')).forEach(function (button) {
+      button.addEventListener('click', function () {
+        if (!listStartCommand || !listStartCommand.isEnabled || typeof window.prompt !== 'function') {
+          return;
+        }
+
+        var rawInput = window.prompt(i18n.startIndexPromptTitle, String(getCurrentListStartIndex(editor, listStartCommand)));
+        if (typeof rawInput !== 'string') {
+          return;
+        }
+
+        var normalized = rawInput.trim();
+        if (normalized === '') {
+          normalized = '1';
+        }
+
+        var parsed = parseInt(normalized, 10);
+        if (!Number.isFinite(parsed) || parsed < 1) {
+          return;
+        }
+
+        editor.execute('listStart', { startIndex: parsed });
+        editor.editing.view.focus();
+        dropdown.isOpen = false;
+      });
+    });
+  }
+
+  function getCurrentListStartIndex(editor, listStartCommand) {
+    if (listStartCommand && typeof listStartCommand.value === 'number' && Number.isFinite(listStartCommand.value) && listStartCommand.value >= 1) {
+      return listStartCommand.value;
+    }
+
+    var firstBlock = getFirstSelectedListBlock(editor);
+    if (firstBlock) {
+      var attrValue = Number(firstBlock.getAttribute('listStart') || 0);
+      if (Number.isFinite(attrValue) && attrValue >= 1) {
+        return attrValue;
+      }
+    }
+
+    return 1;
   }
 
   var ORDERED_STYLE_TO_TYPE = {

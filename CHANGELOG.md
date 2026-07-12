@@ -1,6 +1,19 @@
 # Changelog
 
 
+## Version 7.1.1
+
+### Behoben
+
+* Verschachtelte dezimale Nummerierung korrigiert: Unterebenen werden wieder als `1.1` / `1.1.1` ausgegeben
+* Nummerierungsstil `01.` (`decimal-leading-zero`) bleibt erhalten und wird nicht mehr durch Hierarchie-Regeln überschrieben
+* CSS-Reihenfolge für den Editor angepasst, damit Addon-Overrides zuverlässig nach Vendor-Styles greifen
+
+### Geändert
+
+* Build-Skript `content-styles:update` erweitert: REDAXO-Listen-Overrides werden bei jedem Rebuild automatisch in `cke5_content_styles.css` angehängt
+
+
 ## Version 7.1.0
 
 ### Neu
@@ -12,6 +25,7 @@
 
 * Listenstil-UI für `for_lists` überarbeitet: kompaktere Dropdown-Ansicht, gruppierte Optionen und aktuelle Listenfilterung
 * Listenstil-Auswahl unterstützt die aktuelle Listentype-Konfiguration statt aller Optionen auf einmal
+* `for_lists` unterstützt für nummerierte Listen jetzt direkt den Startindex (z. B. für 1, 1.1, 1.2-Gliederungen)
 * CKEditor-5-Vendor auf `48.3.0` angehoben
 
 ### Behoben
