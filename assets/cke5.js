@@ -276,6 +276,7 @@
               }
               options = cke5_apply_modern_constructor_fallback(options, editorConstructor);
               options = cke5_ensure_image_link_toolbar(options);
+              options = cke5_cleanup_empty_widget_toolbars(options);
               element.attr("data-cke5-init-state", "pending");
               try {
                 cke5_create_editor_instance(editorConstructor, element, unique_id, options).then((editor) => {
@@ -1520,6 +1521,60 @@
           }
 
           options.image.toolbar = cke5_normalize_toolbar_items(toolbarItems);
+          return options;
+        }
+        function cke5_parse_toolbar_config_items(value) {
+          if (Array.isArray(value)) {
+            return cke5_normalize_toolbar_items(value);
+          }
+          if (typeof value === "string") {
+            return cke5_normalize_toolbar_items(value.split(",").map((item) => item.trim()));
+          }
+          return [];
+        }
+        function cke5_cleanup_empty_widget_toolbars(options) {
+          if (!options || typeof options !== "object") {
+            return options;
+          }
+
+          if (options.image && typeof options.image === "object" && Object.prototype.hasOwnProperty.call(options.image, "toolbar")) {
+            const imageToolbar = cke5_parse_toolbar_config_items(options.image.toolbar);
+            if (imageToolbar.length > 0) {
+              options.image.toolbar = imageToolbar;
+            } else {
+              delete options.image.toolbar;
+            }
+          }
+
+          if (options.table && typeof options.table === "object") {
+            if (Object.prototype.hasOwnProperty.call(options.table, "contentToolbar")) {
+              const contentToolbar = cke5_parse_toolbar_config_items(options.table.contentToolbar);
+              if (contentToolbar.length > 0) {
+                options.table.contentToolbar = contentToolbar;
+              } else {
+                delete options.table.contentToolbar;
+              }
+            }
+
+            if (Object.prototype.hasOwnProperty.call(options.table, "tableToolbar")) {
+              const tableToolbar = cke5_parse_toolbar_config_items(options.table.tableToolbar);
+              if (tableToolbar.length > 0) {
+                options.table.tableToolbar = tableToolbar;
+              } else {
+                delete options.table.tableToolbar;
+              }
+            }
+          }
+
+          if (options.mediaEmbed && typeof options.mediaEmbed === "object" && Object.prototype.hasOwnProperty.call(options.mediaEmbed, "toolbar")) {
+            const mediaToolbar = cke5_parse_toolbar_config_items(options.mediaEmbed.toolbar);
+            if (mediaToolbar.length > 0) {
+              options.mediaEmbed.toolbar = mediaToolbar;
+            } else {
+              delete options.mediaEmbed.toolbar;
+            }
+          }
+
           return options;
         }
         function cke5_normalize_toolbar_items(items) {

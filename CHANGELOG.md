@@ -18,6 +18,7 @@
 
 * Listenstil-UI im Editor-Bereich kompakter und verständlicher gestaltet
 * Vendor-Update-Workflow so angepasst, dass `public/assets/addons/cke5/vendor/ckeditor5-modern` automatisch mit synchronisiert wird
+* JS-Warnung `widget-toolbar-no-items` bei kleiner Profilkonfiguration behoben (leere Widget-Toolbars werden vor Initialisierung entfernt)
 
 
 ## Version 7.0.1
