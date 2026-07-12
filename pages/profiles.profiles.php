@@ -606,29 +606,13 @@ if ($func === '') {
                 if ($default_value) $field->setValue(Cke5ProfilesCreator::DEFAULTS['alignment']);
             $form->addRawField('</div>');
 
-            // liststyle
-            $form->addRawField('<div class="collapse" id="cke5liststyle-collapse">');
-                $field = $form->addCheckboxField('list_style');
-                $field->setAttribute('id', 'cke5liststyle-input');
-                $field->setAttribute('data-toggle', 'toggle');
-                $field->setLabel(rex_i18n::msg('cke5_liststyle'));
-                $field->addOption(rex_i18n::msg('cke5_liststyle_description'), 'liststyle');
-                if ($default_value) $field->setValue('liststyle');
-            $form->addRawField('</div>');
-
-            // number list
+            // numbered list: optional start index support
             $form->addRawField('<div class="collapse" id="cke5numberedList-collapse">');
                 $field = $form->addCheckboxField('list_start_index');
                 $field->setAttribute('id', 'cke5liststartindex-input');
                 $field->setAttribute('data-toggle', 'toggle');
                 $field->setLabel(rex_i18n::msg('cke5_liststartindex'));
                 $field->addOption(rex_i18n::msg('cke5_liststartindex_description'), 'liststartindex');
-
-                $field = $form->addCheckboxField('list_reversed');
-                $field->setAttribute('id', 'cke5listreversed-input');
-                $field->setAttribute('data-toggle', 'toggle');
-                $field->setLabel(rex_i18n::msg('cke5_listreversed'));
-                $field->addOption(rex_i18n::msg('cke5_listreversed_description'), 'listreversed');
             $form->addRawField('</div>');
 
             // code block

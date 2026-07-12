@@ -1,6 +1,25 @@
 # Changelog
 
 
+## Version 7.1.0
+
+### Neu
+
+* Neues Listenstil-Feature `for_lists` im Editor-Toolbar-Workflow integriert
+* `for_lists` direkt in den Demo-Profilen enthalten, damit die Funktion sofort sichtbar und testbar ist
+
+### Geändert
+
+* Listenstil-UI für `for_lists` überarbeitet: kompaktere Dropdown-Ansicht, gruppierte Optionen und aktuelle Listenfilterung
+* Listenstil-Auswahl unterstützt die aktuelle Listentype-Konfiguration statt aller Optionen auf einmal
+* CKEditor-5-Vendor auf `48.3.0` angehoben
+
+### Behoben
+
+* Listenstil-UI im Editor-Bereich kompakter und verständlicher gestaltet
+* Vendor-Update-Workflow so angepasst, dass `public/assets/addons/cke5/vendor/ckeditor5-modern` automatisch mit synchronisiert wird
+
+
 ## Version 7.0.1
 
 ### Geändert

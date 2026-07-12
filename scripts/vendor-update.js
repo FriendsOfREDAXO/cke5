@@ -9,6 +9,7 @@ const distRoot = path.join(addonRoot, 'node_modules', 'ckeditor5', 'dist');
 const browserRoot = path.join(distRoot, 'browser');
 const translationsRoot = path.join(distRoot, 'translations');
 const modernRoot = path.join(addonRoot, 'assets', 'vendor', 'ckeditor5-modern');
+const publicModernRoot = path.resolve(addonRoot, '../../../../assets/addons/cke5/vendor/ckeditor5-modern');
 
 async function ensureDir(dir) {
   await fsp.mkdir(dir, { recursive: true });
@@ -37,6 +38,15 @@ async function recreateDir(dir) {
   await ensureDir(dir);
 }
 
+async function syncDirectory(sourceDir, targetDir) {
+  await recreateDir(targetDir);
+  const files = await fg(['**/*'], { cwd: sourceDir, onlyFiles: true, dot: true });
+
+  for (const file of files) {
+    await copyFile(path.join(sourceDir, file), path.join(targetDir, file));
+  }
+}
+
 async function main() {
   if (!fs.existsSync(browserRoot)) {
     throw new Error('ckeditor5/dist/browser fehlt. Erst pnpm install ausführen.');
@@ -63,7 +73,10 @@ async function main() {
     }
   }
 
+  await syncDirectory(modernRoot, publicModernRoot);
+
   console.log('[vendor-update] Updated assets/vendor/ckeditor5-modern');
+  console.log('[vendor-update] Synced public/assets/addons/cke5/vendor/ckeditor5-modern');
 }
 
 main().catch((err) => {

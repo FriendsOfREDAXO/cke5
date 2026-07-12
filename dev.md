@@ -79,10 +79,36 @@ pnpm run demo:variant -- --name demo_example --desc "Demo Beispiel"
 
 ## 5. Build und Synchronisation
 
-Vendor aktualisieren:
+### Vendor aktualisieren
+
+Der Vendor-Update läuft reproduzierbar über das Addon-`package.json`:
 
 ```bash
+cd public/redaxo/src/addons/cke5
+pnpm install
 pnpm run vendor:update
+```
+
+Aktueller Vendor-Stand:
+
+1. CKEditor 5 `48.3.0`
+2. generated runtime assets under `assets/vendor/ckeditor5-modern`
+
+Das Script aktualisiert anschließend beide Stände:
+
+1. `public/redaxo/src/addons/cke5/assets/vendor/ckeditor5-modern`
+2. `public/assets/addons/cke5/vendor/ckeditor5-modern`
+
+Hinweis für neue Plugins oder Runtime-Anpassungen:
+
+1. Änderungen zuerst in `public/redaxo/src/addons/cke5/assets/...` vornehmen.
+2. Wenn nötig die ausgelieferte Kopie unter `public/assets/addons/cke5/...` nachziehen oder per Build-Script synchronisieren.
+3. Danach `pnpm run check:runtime` ausführen.
+
+Wenn du die ausgelieferten Runtime-Dateien ebenfalls neu bauen musst, danach zusätzlich:
+
+```bash
+pnpm run check:runtime
 ```
 
 Content-Styles synchronisieren:

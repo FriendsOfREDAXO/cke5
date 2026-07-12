@@ -13,9 +13,9 @@
 }
 /* montserrat-700 - latin */
 @font-face {
-    font-family: 'Montserrat';
-    font-style: normal;
-    font-weight: 700;
+    min-width: 17.5rem;
+    max-width: 25rem;
+    padding: .75rem .8rem .85rem;
     src: url('../fonts/montserrat-v14-latin-700.eot'); /* IE9 Compat Modes */
     src: local('Montserrat Bold'), local('Montserrat-Bold'),
     url('../fonts/montserrat-v14-latin-700.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
@@ -50,13 +50,12 @@
     width: 20px;
     height: 20px;
     margin-left: -25px;
-    background: url(../images/cke5.svg) no-repeat 0 0;
+    background: url(../images/ckeditor.svg) no-repeat 0 0;
     background-size: 18px 18px;
-    vertical-align: middle;
 }
 
 .active .cke5-icon-logo {
-    background-image: url(../images/cke5_white.svg);
+    background-image: url(../images/ckeditor.svg);
 }
 
 .page-header .cke5-icon-logo {
@@ -1794,4 +1793,141 @@ body.rex-theme-dark .cke5-quickedit-menu {
         --cke5-qe-icon-bg:      #2a3546;
         --cke5-qe-icon-color:   #7db8f7;
     }
+}
+
+/* Ensure numbered list style variants are visible in editor preview. */
+.ck-content ol[style*="decimal-leading-zero"] {
+    list-style-type: decimal-leading-zero !important;
+}
+
+.ck-content ol[style*="decimal-leading-zero"] > li::marker {
+    content: counter(list-item, decimal-leading-zero) '. ';
+}
+
+.ck-dropdown__panel .ck-for-lists-panel {
+    min-width: 16rem;
+    max-width: 24rem;
+    padding: .6rem .65rem .7rem;
+}
+
+.ck-dropdown__panel .ck-for-lists-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    min-width: 16rem;
+    max-width: 24rem;
+    padding: .6rem .65rem .7rem;
+.ck-dropdown__panel .ck-for-lists-tile {
+    display: flex;
+    align-items: flex-start;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .35rem .6rem;
+    padding: .3rem .25rem;
+    text-align: left;
+    white-space: normal;
+    border-radius: .35rem;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: .35rem;
+    min-height: 2.55rem;
+    padding: .3rem .25rem;
+    text-align: left;
+    min-height: 1.55rem;
+    border-radius: .35rem;
+    font-weight: 600;
+    line-height: 1;
+    flex: 0 0 auto;
+}
+
+.ck-dropdown__panel .ck-for-lists-tile__preview {
+    min-width: 2.1rem;
+    min-height: 1.55rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+    min-width: 2.5rem;
+    flex: 0 0 auto;
+    padding-top: .25rem;
+}
+.ck-dropdown__panel .ck-for-lists-tile__preview {
+    display: grid;
+    flex: 1 1 auto;
+    align-content: center;
+    gap: .2rem;
+    min-width: 2.5rem;
+    padding-top: .25rem;
+}
+
+.ck-dropdown__panel .ck-for-lists-tile__preview span {
+    display: block;
+    height: .24rem;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, .14);
+}
+
+.ck-dropdown__panel .ck-for-lists-tile.ck-on .ck-for-lists-tile__preview span {
+    background: rgba(80, 136, 255, .28);
+}
+
+.ck-dropdown__panel .ck-for-lists-tile:hover .ck-for-lists-tile__preview span {
+    background: rgba(0, 0, 0, .18);
+}
+
+.ck-dropdown__panel .ck-for-lists-panel {
+    min-width: 17.5rem;
+    max-width: 25rem;
+    padding: .75rem .8rem .85rem;
+}
+
+.ck-dropdown__panel .ck-for-lists-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .45rem .75rem;
+}
+
+.ck-dropdown__panel .ck-for-lists-tile {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: .45rem;
+    min-height: 2.7rem;
+    padding: .35rem .35rem;
+    text-align: left;
+    white-space: normal;
+    border-radius: .4rem;
+}
+
+.ck-dropdown__panel .ck-for-lists-tile__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.2rem;
+    min-height: 1.7rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1;
+    flex: 0 0 auto;
+}
+
+.ck-dropdown__panel .ck-for-lists-tile__preview {
+    display: grid;
+    flex: 1 1 auto;
+    align-content: center;
+    gap: .2rem;
+    min-width: 2.8rem;
+    padding-top: .2rem;
+}
+
+.ck-dropdown__panel .ck-for-lists-tile__preview span {
+    display: block;
+    height: .28rem;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, .14);
+}
+
+.ck-dropdown__panel .ck-for-lists-tile.ck-on .ck-for-lists-tile__preview span {
+    background: rgba(80, 136, 255, .28);
+}
+
+.ck-dropdown__panel .ck-for-lists-tile:hover .ck-for-lists-tile__preview span {
+    background: rgba(0, 0, 0, .18);
 }

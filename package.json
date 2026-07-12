@@ -2,7 +2,7 @@
   "name": "redaxo-cke5-addon",
   "private": true,
   "dependencies": {
-    "ckeditor5": "^48.2.0"
+    "ckeditor5": "^48.3.0"
   },
   "devDependencies": {
     "fast-glob": "^3.3.3"

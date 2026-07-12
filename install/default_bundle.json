@@ -3,7 +3,7 @@
     {
       "name": "demo_default",
       "description": "Demo Default Profile",
-      "toolbar": "heading,|,bold,italic,underline,strikethrough,blockQuote,|,subscript,superscript,|,bulletedList,numberedList,|,insertTable,|,outdent,indent,alignment,|,link,redaxoMedia,|,style,redo,undo,|,removeFormat,selectAll,|,specialCharacters,pastePlainText",
+      "toolbar": "heading,|,bold,italic,underline,strikethrough,blockQuote,|,subscript,superscript,|,bulletedList,numberedList,for_lists,|,insertTable,|,outdent,indent,alignment,|,link,redaxoMedia,|,style,redo,undo,|,removeFormat,selectAll,|,specialCharacters,pastePlainText",
       "code_block": "css,html,javascript,php,plaintext,c,cs,cpp,diff,java,python,ruby,typescript,xml",
       "table_color_default": "|default_table_color|",
       "table_color_data": [
@@ -179,7 +179,7 @@
     {
       "name": "demo_light",
       "description": "Demo Light Profile",
-      "toolbar": "bold,italic,bulletedList,numberedList,undo,redo,link,pastePlainText",
+      "toolbar": "bold,italic,bulletedList,numberedList,for_lists,undo,redo,link,pastePlainText",
       "alignment": "left,right,center",
       "image_resize_unit": "%",
       "image_resize_handles": "|default_resize_handles|",
@@ -192,7 +192,7 @@
     {
       "name": "demo_full_expert",
       "description": "Demo Full Profile",
-      "toolbar": "heading,|,bold,italic,underline,strikethrough,blockQuote,|,subscript,superscript,|,bulletedList,numberedList,todoList,|,insertTable,|,outdent,indent,alignment,|,link,redaxoMedia,mediaEmbed,|,redo,undo,|,removeFormat,|,sourceEditing,|,textPartLanguage,specialCharacters,|,fontSize,fontFamily,fontColor,fontBackgroundColor,|,code,codeBlock,htmlEmbed,|,highlight,|,pageBreak,horizontalLine,|,selectAll,pastePlainText,snippets,for_video",
+      "toolbar": "heading,|,bold,italic,underline,strikethrough,blockQuote,|,subscript,superscript,|,bulletedList,numberedList,for_lists,todoList,|,insertTable,|,outdent,indent,alignment,|,link,redaxoMedia,mediaEmbed,|,redo,undo,|,removeFormat,|,sourceEditing,|,textPartLanguage,specialCharacters,|,fontSize,fontFamily,fontColor,fontBackgroundColor,|,code,codeBlock,htmlEmbed,|,highlight,|,pageBreak,horizontalLine,|,selectAll,pastePlainText,snippets,for_video",
       "code_block": "css,html,javascript,php,plaintext,c,cs,cpp,diff,java,python,ruby,typescript,xml",
       "blank_to_external": "|blank_to_external|",
       "link_downloadable": "|link_downloadable|",

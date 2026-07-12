@@ -4,25 +4,14 @@ CKEditor 5 integration for REDAXO with profile-based configuration, REDAXO media
 
 ## Version
 
-Current beta version: `7.0.0-beta1`
+Current version: `7.1.0`
 
-## What Is New in 7.0.0-beta1
+## What Is New in 7.1.0
 
-- Switched to the official CKEditor 5 build as addon base
-- New native runtime plugins and updated editor dialogs
-- Templates replaced by snippets
-- Extended profile export/import with bundled dependencies:
-  - profiles
-  - style groups
-  - styles
-  - snippets
-- New developer documentation in `dev.md`
-- Cleanup of legacy and orphaned vendor/runtime files
-- New global defaults page (`Profiles > Defaults > Global settings`) for mentions, Sprog replacements, yTables, media defaults, and font defaults
-- New editor type `classic_balloon` and configurable balloon toolbar in profile manager
-- Improved merge/fallback behavior between profile settings and global defaults
-- UX fixes in profile/default widgets (mentions examples, stable placeholders, robust toggle/collapse init)
-- New QuickEdit command menu via `/`, globally configurable and extensible by other addons
+- New FOR feature: `for_lists` list-style dropdown in the toolbar
+- `for_lists` is included in demo profiles so the feature is visible directly after installation
+- Refined `for_lists` UX with compact, filtered style selection based on current list type
+- Current CKEditor 5 vendor: `48.3.0`
 
 ## Feature Overview
 
@@ -128,6 +117,18 @@ An entry is shown only if its `toolbarItem` or one of its `toolbarAny` items exi
 2. Run REDAXO update/install routine.
 3. Open `CKEditor 5 > Profiles` and configure at least one profile.
 4. Use the profile in your textarea via `data-profile`.
+
+## Maintenance
+
+For regular CKEditor vendor updates, use the addon-local workflow:
+
+```bash
+cd public/redaxo/src/addons/cke5
+pnpm install
+pnpm run vendor:update
+```
+
+This regenerates the vendor under `assets/vendor/ckeditor5-modern` and synchronizes the shipped copy under `public/assets/addons/cke5/vendor/ckeditor5-modern`.
 
 ## Basic Usage
 

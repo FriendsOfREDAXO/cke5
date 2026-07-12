@@ -134,7 +134,7 @@ class Cke5ProfilesCreator
     ];
     const EDITOR_SETTINGS = [
         /* todo: specialCharacters not work because : https://github.com/ckeditor/ckeditor5/issues/6160 */
-        'cktypes' => ['heading', 'fontSize', 'mediaEmbed', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable', 'fontBackgroundColor', 'fontColor', 'codeBlock', 'bulletedList', 'numberedList', 'htmlEmbed'/*, 'emoji'*/, 'sourceEditing', 'textPartLanguage'/*, 'specialCharacters' */, 'style', 'snippets', 'for_video', 'for_clear'],
+        'cktypes' => ['heading', 'fontSize', 'mediaEmbed', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable', 'fontBackgroundColor', 'fontColor', 'codeBlock', 'bulletedList', 'numberedList', 'for_lists', 'htmlEmbed'/*, 'emoji'*/, 'sourceEditing', 'textPartLanguage'/*, 'specialCharacters' */, 'style', 'snippets', 'for_video', 'for_clear'],
         'ckimgtypes' => ['rexImage', 'imageUpload'],
         'cklinktypes' => ['ytable', 'media', 'internal'],
         'cktabletypes' => ['tableProperties', 'tableCellProperties']
@@ -309,8 +309,8 @@ class Cke5ProfilesCreator
     ];
     const DEFAULTS = self::DEFAULT_VALUES;
     const ALLOWED_FIELDS = [
-        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll', 'specialCharacters', 'pastePlainText', 'redaxoMarkdownPasteToggle', 'redaxoMinimapToggle', 'htmlEmbed', 'sourceEditing', 'textPartLanguage', 'style', 'snippets', 'for_video', 'for_clear', 'showBlocks', 'accessibilityHelp'],
-        'balloon_toolbar' => ['style', '|', 'paragraph', 'heading', 'bulletedList', 'numberedList', 'todoList', 'outdent', 'indent', 'blockQuote', 'insertTable', 'mediaEmbed', 'for_video', 'for_clear', 'codeBlock', 'link', 'horizontalLine', 'specialCharacters', 'removeFormat', 'undo', 'redo'],
+        'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'for_lists', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll', 'specialCharacters', 'pastePlainText', 'redaxoMarkdownPasteToggle', 'redaxoMinimapToggle', 'htmlEmbed', 'sourceEditing', 'textPartLanguage', 'style', 'snippets', 'for_video', 'for_clear', 'showBlocks', 'accessibilityHelp'],
+        'balloon_toolbar' => ['style', '|', 'paragraph', 'heading', 'bulletedList', 'numberedList', 'for_lists', 'todoList', 'outdent', 'indent', 'blockQuote', 'insertTable', 'mediaEmbed', 'for_video', 'for_clear', 'codeBlock', 'link', 'horizontalLine', 'specialCharacters', 'removeFormat', 'undo', 'redo'],
         'alignment' => ['left', 'right', 'center', 'justify'],
         'table_toolbar' => ['|', 'tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties', 'toggleTableCaption'],
         'heading' => ['paragraph', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
@@ -821,11 +821,41 @@ class Cke5ProfilesCreator
         }
 
         if (in_array('bulletedList', $toolbar, true) || in_array('numberedList', $toolbar)) {
+            $stylesEnabled = in_array('for_lists', $toolbar, true)
+                || (isset($profile['list_style']) && $profile['list_style'] !== '');
+
             $jsonProfile['list']['properties'] = [
-                'styles' => (isset($profile['list_style']) && $profile['list_style'] !== ''),
+                'styles' => $stylesEnabled,
                 'startIndex' => (isset($profile['list_start_index']) && $profile['list_start_index'] !== ''),
-                'reversed' => (isset($profile['list_reversed']) && $profile['list_reversed'] !== ''),
+                // Reversed wird bewusst nicht mehr als Profiloption exponiert.
+                'reversed' => false,
             ];
+
+            if ($stylesEnabled && !in_array('for_lists', $jsonProfile['toolbar']['items'], true)) {
+                $insertAfter = array_search('numberedList', $jsonProfile['toolbar']['items'], true);
+                if (false !== $insertAfter) {
+                    array_splice($jsonProfile['toolbar']['items'], $insertAfter + 1, 0, 'for_lists');
+                } else {
+                    $jsonProfile['toolbar']['items'][] = 'for_lists';
+                }
+            }
+
+            if ($stylesEnabled && isset($jsonProfile['balloonToolbar']) && is_array($jsonProfile['balloonToolbar']) && !in_array('for_lists', $jsonProfile['balloonToolbar'], true)) {
+                $insertAfter = array_search('numberedList', $jsonProfile['balloonToolbar'], true);
+                if (false !== $insertAfter) {
+                    array_splice($jsonProfile['balloonToolbar'], $insertAfter + 1, 0, 'for_lists');
+                } else {
+                    $jsonProfile['balloonToolbar'][] = 'for_lists';
+                }
+                if (isset($jsonProfile['blockToolbar']) && is_array($jsonProfile['blockToolbar']) && !in_array('for_lists', $jsonProfile['blockToolbar'], true)) {
+                    $blockInsertAfter = array_search('numberedList', $jsonProfile['blockToolbar'], true);
+                    if (false !== $blockInsertAfter) {
+                        array_splice($jsonProfile['blockToolbar'], $blockInsertAfter + 1, 0, 'for_lists');
+                    } else {
+                        $jsonProfile['blockToolbar'][] = 'for_lists';
+                    }
+                }
+            }
         }
 
         /*if (in_array('emoji', $toolbar, true) && isset($profile['emoji']) && $profile['emoji'] !== '') {

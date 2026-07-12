@@ -1172,7 +1172,7 @@
           }
           const cke = window.CKEDITOR;
           const registry = typeof window.CKE5_NATIVE_PLUGINS === "object" && window.CKE5_NATIVE_PLUGINS !== null ? window.CKE5_NATIVE_PLUGINS : {};
-          const pluginNames = ["RedaxoLinkIntegration", "RedaxoMediaImage", "RedaxWidgetVideo", "RedaxoClearWidget", "RedaxoSnippets", "RedaxoQuickEdit", "RedaxoPastePlainTextToggle", "RedaxoMarkdownPasteToggle", "RedaxoMinimapToggle"];
+          const pluginNames = ["RedaxoLinkIntegration", "RedaxoMediaImage", "RedaxoForLists", "RedaxWidgetVideo", "RedaxoClearWidget", "RedaxoSnippets", "RedaxoQuickEdit", "RedaxoPastePlainTextToggle", "RedaxoMarkdownPasteToggle", "RedaxoMinimapToggle"];
           const plugins = [];
           pluginNames.forEach((pluginName) => {
             const factory = registry[pluginName];
@@ -1214,6 +1214,9 @@
             }
             if (item === "for_clear_widget") {
               return "for_clear";
+            }
+            if (item === "listStyle" || item === "listProperties") {
+              return "for_lists";
             }
             if (item === "bookmark" || item === "for_bookmarks") {
               return null;
@@ -1329,6 +1332,7 @@
             "heading",
             "bulletedList",
             "numberedList",
+            "for_lists",
             "todoList",
             "outdent",
             "indent",
@@ -1366,6 +1370,7 @@
             "|",
             "bulletedList",
             "numberedList",
+            "for_lists",
             "todoList",
             "|",
             "outdent",
