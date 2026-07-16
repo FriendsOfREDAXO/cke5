@@ -2,20 +2,6 @@
 
 CKEditor 5 integration for REDAXO with profile-based configuration, REDAXO media/link dialogs, snippets, style management, and import/export workflows.
 
-## Version
-
-Current version: `7.1.1`
-
-## What Is New in 7.1.1
-
-- New FOR feature: `for_lists` list-style dropdown in the toolbar
-- `for_lists` is included in demo profiles so the feature is visible directly after installation
-- Refined `for_lists` UX with compact, filtered style selection based on current list type
-- `for_lists` now includes start-index support for numbered lists (useful for structured 1 / 1.1 / 1.2 flows)
-- Fixed nested decimal numbering output (`1 / 1.1 / 1.1.1`) while keeping `01.` (`decimal-leading-zero`) intact
-- `content-styles:update` now appends REDAXO list overrides automatically on every rebuild
-- Current CKEditor 5 vendor: `48.3.0`
-
 ## Feature Overview
 
 ### Editor and UX

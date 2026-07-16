@@ -1,5 +1,26 @@
 # Changelog
 
+## Version 7.2.0
+
+### Neu
+
+* Neues internes Tabellen-Plugin `for_table` als GPL-kompatibler Ersatz für Tabellen-Eigenschaften
+* Eigenschaften für Tabelle, Spalte, Zeile und Zelle über eigene Toolbar-Dropdowns
+* Klassen-Auswahl für Tabelle, Spalte, Zeile und Zelle inklusive Übernahme in den Editor-Output
+* Globale Tabellenstil-Definitionen in den Global Settings (`cke5/profiles/customise/global`) als Fallback für alle Profile
+* Globale und profilspezifische Klassen werden gemerged; Profilwerte überschreiben globale Einträge mit gleicher CSS-Klasse
+
+### Geändert
+
+* Tabellen-Properties-UI auf kompakte native Dropdown-Panels umgestellt und in der Breite optimiert
+* Fokus-Markierung aktiver Tabellenzellen über sichtbaren Glow statt überdeckender Flächenfarbe
+* Theme-aware Fokusfarben für Light/Dark/Auto sowie reduzierte Bewegung via `prefers-reduced-motion`
+
+### Behoben
+
+* Lesbarkeitskonflikte bei aktiven Zellen mit eigenen Hintergrund-/Text-Klassen reduziert
+* Konsistente Anzeige von Klassenoptionen im Tabellenkontext für alle Property-Modi (Table/Column/Row/Cell)
+
 
 ## Version 7.1.1
 

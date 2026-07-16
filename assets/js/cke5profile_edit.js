@@ -50,6 +50,89 @@ function cke5_parse_slider_labels(element) {
   return cke5_parse_slider_json_list(element.attr('data-range-values'));
 }
 
+function cke5_get_textarea_fit_label() {
+  let lang = String(document.documentElement.lang || '').toLowerCase();
+  return lang.indexOf('de') === 0 ? 'An Inhalt anpassen' : 'Fit to content';
+}
+
+function cke5_fit_textarea_to_content(textarea, minHeightPx, maxHeightPx) {
+  textarea.css('height', 'auto');
+  let target = Math.min(Math.max(textarea[0].scrollHeight + 2, minHeightPx), maxHeightPx);
+  textarea.css('height', target + 'px');
+}
+
+function cke5_attach_textarea_controls(textarea, minHeightPx, maxHeightPx) {
+  if (textarea.data('cke5-fit-control-init') === true) {
+    return;
+  }
+  textarea.data('cke5-fit-control-init', true);
+
+  let controls = $('<div class="cke5-textarea-controls" style="margin-top:6px;display:flex;justify-content:flex-end;gap:8px;">'),
+    fitButton = $('<button type="button" class="btn btn-xs btn-default"></button>').text(cke5_get_textarea_fit_label());
+
+  fitButton.on('click', function () {
+    cke5_fit_textarea_to_content(textarea, minHeightPx, maxHeightPx);
+  });
+
+  controls.append(fitButton);
+  textarea.after(controls);
+}
+
+function cke5_prepare_profile_textareas(element) {
+  element.find('textarea').each(function () {
+    let textarea = $(this),
+      rows = parseInt(String(textarea.attr('rows') || ''), 10),
+      lineHeight = parseFloat(String(textarea.css('line-height') || '20').replace('px', '')),
+      safeLineHeight = Number.isFinite(lineHeight) && lineHeight > 0 ? lineHeight : 20,
+      minHeightPx = Math.round(safeLineHeight * 5 + 24),
+      maxHeightPx = Math.max(minHeightPx * 6, 560);
+
+    if (!Number.isFinite(rows) || rows < 5) {
+      textarea.attr('rows', '5');
+    }
+
+    textarea.css({
+      resize: 'vertical',
+      overflowY: 'auto',
+      minHeight: minHeightPx + 'px',
+      maxHeight: maxHeightPx + 'px'
+    });
+
+    cke5_attach_textarea_controls(textarea, minHeightPx, maxHeightPx);
+  });
+}
+
+function cke5_normalize_table_toolbar_tags(tags) {
+  if (!Array.isArray(tags)) {
+    return [];
+  }
+
+  let alias = {
+    tableProperties: 'forTableProperties',
+    tableColumnProperties: 'forTableColumnProperties',
+    tableRowProperties: 'forTableRowProperties',
+    tableCellProperties: 'forTableCellProperties'
+  };
+
+  let normalized = tags.map(function (item) {
+    if (typeof item !== 'string') {
+      return item;
+    }
+    return alias[item] || item;
+  });
+
+  if ($.inArray('forTableProperties', normalized) !== -1) {
+    if ($.inArray('forTableColumnProperties', normalized) === -1) {
+      normalized.push('forTableColumnProperties');
+    }
+    if ($.inArray('forTableRowProperties', normalized) === -1) {
+      normalized.push('forTableRowProperties');
+    }
+  }
+
+  return normalized;
+}
+
 
 $(document).on('rex:ready', function (event, container) {
   if (container.find(ckedit).length) {
@@ -151,8 +234,8 @@ function cke5_init_edit(element) {
     mediapath_hidden = element.find('#cke5mediapath-hidden'),
     mediapath_collapse = element.find('#cke5insertMediapath-collapse'),
     mediatype = element.find('#cke5mediatype-select'),
-    tablecolor_area = element.find('#cke5tablecolor-area'),
-    tablecolor_default = element.find('#cke5table-color-default-input-default-table-color'),
+    table_classes_area = element.find('#cke5table-classes-definition'),
+    table_cell_classes_area = element.find('#cke5table-cell-classes-definition'),
     fontcolor_area = element.find('#cke5fontcolor-area'),
     fontcolor_default = element.find('#cke5font-color-default-input-default-font-color'),
     fontbgcolor_area = element.find('#cke5fontbgcolor-area'),
@@ -177,14 +260,10 @@ function cke5_init_edit(element) {
 
   imageDragDrop = element.find('#cke5uploaddefault-input-default-upload');
 
-  autosize($('#cke5expertDefinition-collapse textarea'));
-  autosize($('#cke5extraDefinition-collapse textarea'));
-  autosize($('#cke5mentionsDefinition-collapse textarea'));
-  autosize($('#cke5linkDecoratorsDefinition-collapse textarea'));
-  autosize($('#cke5transformationDefinition-collapse textarea'));
-  autosize($('#cke5sourceEditing-collapse textarea'));
+  cke5_prepare_profile_textareas(element);
 
-  cke5_addColorFields(tablecolor_area);
+  cke5_addLabelClassFields(table_classes_area);
+  cke5_addLabelClassFields(table_cell_classes_area);
   cke5_addColorFields(fontcolor_area);
   cke5_addColorFields(fontbgcolor_area);
   cke5_addFromToFields(transformation_extra_area);
@@ -196,7 +275,6 @@ function cke5_init_edit(element) {
   cke5_addLabelClassFields(video_styles_area);
   cke5_addLabelClassFields(video_width_styles_area);
   cke5_addResizeOptionsFields(imgresizeoptions_area);
-  cke5_bootstrapToggle_collapse(tablecolor_default);
   cke5_bootstrapToggle_collapse(fontcolor_default);
   cke5_bootstrapToggle_collapse(fontbgcolor_default);
   cke5_bootstrapToggle_collapse(fontfamily_default);
@@ -255,6 +333,17 @@ function cke5_init_edit(element) {
         toggle_collapse('insertMediapath', 'hide');
       }
     });
+  }
+
+  if (table_toolbar.length) {
+    let normalizedTableToolbar = cke5_normalize_table_toolbar_tags(String(table_toolbar.val() || '').split(','))
+      .filter(function (item) {
+        return String(item || '').trim() !== '';
+      })
+      .join(',');
+    if (normalizedTableToolbar !== String(table_toolbar.val() || '')) {
+      table_toolbar.val(normalizedTableToolbar);
+    }
   }
 
   if (taginputs.length) {
@@ -809,6 +898,9 @@ function cke5_addFontFamiliesFields(element) {
 }
 
 function cke5_toolbar_create_tag(typename, tags) {
+  if (typename === 'table_toolbar') {
+    tags = cke5_normalize_table_toolbar_tags(tags);
+  }
   cktypes.forEach(function (type) {
     if ($.inArray(type, tags) !== -1 && (typename === 'toolbar' || typename === 'balloon_toolbar')) {
       switch (type) {
@@ -852,9 +944,9 @@ function cke5_toolbar_create_tag(typename, tags) {
       if (CKEDIT_DEBUG) console.log(tags);
       if (CKEDIT_DEBUG) console.log('#########');
       switch (type) {
-        case 'tableProperties':
-        case 'tableCellProperties':
-          toggle_collapse('tableColor', 'show', false, true);
+        case 'forTableProperties':
+        case 'forTableCellProperties':
+          toggle_collapse('tableAdvanced', 'show', false, true);
           break;
       }
     }
@@ -862,6 +954,9 @@ function cke5_toolbar_create_tag(typename, tags) {
 }
 
 function cke5_toolbar_destroy_tag(typename, tags) {
+  if (typename === 'table_toolbar') {
+    tags = cke5_normalize_table_toolbar_tags(tags);
+  }
   let imghide = 0,
     liststylehide = 0,
     fonthide = 0,
@@ -939,8 +1034,8 @@ function cke5_toolbar_destroy_tag(typename, tags) {
     } else {
       if (typename === 'table_toolbar') {
         tabhide++;
-        if (tabhide === 2) {
-          toggle_collapse('tableColor', 'hide');
+        if (tabhide === cktabletypes.length) {
+          toggle_collapse('tableAdvanced', 'hide');
         }
       }
     }

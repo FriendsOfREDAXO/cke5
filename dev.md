@@ -340,3 +340,45 @@ pnpm run content-styles:update
 pnpm run check:runtime
 pnpm run demo:variant -- --name demo_example --desc "Demo Beispiel"
 ```
+
+## 15. Learnings aus for_table (wichtig)
+
+Diese Punkte sind aus der praktischen Nacharbeit am Tabellen-Feature entstanden und gelten ab jetzt als verbindliche Leitplanken.
+
+### 15.1 CKEditor UI Library beachten
+
+1. Für neue UI-Komponenten im Dropdown grundsätzlich die CKEditor-UI-Patterns aus der offiziellen Doku nutzen (Views, Template-Binding, Fokus-Handling).
+2. Direkte DOM-Manipulation über fremde Elemente vermeiden. Wenn DOM nötig ist, dann nur innerhalb der eigenen View-Struktur.
+3. Dropdown-Inhalte müssen in einen eigenen Content-Wrapper mit definiertem Sizing, damit Inputs/Selects nicht aus dem Panel laufen.
+4. Aktionen im Panel müssen nach Ausführung immer den Editor fokussieren (`editor.editing.view.focus()`).
+
+### 15.2 Tabellen-Klassen und Conversion
+
+1. Reines `attributeToAttribute` auf `class` reicht nicht immer, wenn andere Features ebenfalls Klassen setzen.
+2. Für Tabellen-/Zellklassen eigene Downcast-Handler verwenden, die Klassen-Tokens mergen statt Klassen komplett zu überschreiben.
+3. Tabellenstil-Klasse auf `figure.table` und auf das innere `table` spiegeln, damit bestehende CSS-Selektoren in Projekten sofort greifen.
+4. Nach jeder Änderung über `editor.getData()` prüfen, ob die erwarteten Klassen tatsächlich im Output landen.
+
+### 15.3 Profil-/Toolbar-Kompatibilität
+
+1. Legacy-Tokens weiter unterstützen:
+   1. `tableProperties` -> `forTableProperties`
+   2. `tableColumnProperties` -> `forTableColumnProperties`
+   3. `tableRowProperties` -> `forTableRowProperties`
+   4. `tableCellProperties` -> `forTableCellProperties`
+2. Wenn `forTableProperties` in bestehenden Profilen gesetzt ist, Row/Column-Properties automatisch ergänzen, damit Altprofile ohne manuelle Migration funktionieren.
+
+### 15.4 Synchronisation Quelle -> Auslieferung ist Pflicht
+
+1. Änderungen immer zuerst unter `public/redaxo/src/addons/cke5/assets/...` vornehmen.
+2. Danach die ausgelieferten Dateien unter `public/assets/addons/cke5/...` synchronisieren.
+3. Ohne diesen Schritt zeigt der Browser oft alten Code, obwohl die Quell-Datei korrekt ist.
+
+### 15.5 Zusätzliche QA für Tabellen-UI
+
+Vor Commit gezielt prüfen:
+
+1. Dialog-Breiten auf Desktop und Mobile (kein Überlauf, kein gequetschtes Zweispalten-Layout).
+2. Apply/Reset-Verhalten für Tabelle, Spalte, Zeile, Zelle.
+3. Klassenwirkung visuell im Editor und technisch im HTML-Output.
+4. Verhalten mit und ohne definierte `table_classes_definition` / `table_cell_classes_definition`.

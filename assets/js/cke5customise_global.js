@@ -39,6 +39,7 @@ $(document).on('rex:ready', function (event, container) {
   let mentions = root.find('input[id^="cke5global-mentions-enabled-input"]');
   let sprog = root.find('input[id^="cke5global-sprog-enabled-input"]');
   let ytable = root.find('input[id^="cke5global-ytable-enabled-input"]');
+  let forTable = root.find('input[id^="cke5global-for-table-enabled-input"]');
   let media = root.find('input[id^="cke5global-media-enabled-input"]');
   let fontFamilyDefault = root.find('input[id^="cke5global-font-family-default-input"]');
   let clearWidget = root.find('input[id^="cke5global-clear-widget-enabled-input"]');
@@ -48,6 +49,7 @@ $(document).on('rex:ready', function (event, container) {
     cke5_bootstrapToggle_collapse(mentions, true);
     cke5_bootstrapToggle_collapse(sprog, true);
     cke5_bootstrapToggle_collapse(ytable, true);
+    cke5_bootstrapToggle_collapse(forTable, true);
     cke5_bootstrapToggle_collapse(media, true);
     cke5_bootstrapToggle_collapse(fontFamilyDefault);
     cke5_bootstrapToggle_collapse(clearWidget, true);
@@ -56,9 +58,21 @@ $(document).on('rex:ready', function (event, container) {
     initLocalCollapse(mentions);
     initLocalCollapse(sprog);
     initLocalCollapse(ytable);
+    initLocalCollapse(forTable);
     initLocalCollapse(media);
     initLocalCollapse(fontFamilyDefault);
     initLocalCollapse(clearWidget);
+  }
+
+  let globalTableClassesArea = root.find('#cke5-global-table-classes-definition');
+  let globalTableColumnClassesArea = root.find('#cke5-global-table-column-classes-definition');
+  let globalTableRowClassesArea = root.find('#cke5-global-table-row-classes-definition');
+  let globalTableCellClassesArea = root.find('#cke5-global-table-cell-classes-definition');
+  if (typeof cke5_addLabelClassFields === 'function') {
+    cke5_addLabelClassFields(globalTableClassesArea);
+    cke5_addLabelClassFields(globalTableColumnClassesArea);
+    cke5_addLabelClassFields(globalTableRowClassesArea);
+    cke5_addLabelClassFields(globalTableCellClassesArea);
   }
 
   let fontFamilyArea = root.find('#cke5-global-fontfamily-area');
