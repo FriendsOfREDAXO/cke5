@@ -79,21 +79,29 @@ $field = $form->addTextAreaField('global_table_classes_definition');
 $field->setLabel($this->i18n('cke5_table_classes_definition'));
 $field->setNotice($this->i18n('cke5_table_classes_definition_description'));
 $field->setAttribute('id', 'cke5-global-table-classes-definition');
+$field->setAttribute('data-label-placeholder', $this->i18n('cke5_table_class_label_placeholder'));
+$field->setAttribute('data-class-placeholder', $this->i18n('cke5_table_class_name_placeholder'));
 
 $field = $form->addTextAreaField('global_table_column_classes_definition');
 $field->setLabel($this->i18n('cke5_table_column_classes_definition'));
 $field->setNotice($this->i18n('cke5_table_column_classes_definition_description'));
 $field->setAttribute('id', 'cke5-global-table-column-classes-definition');
+$field->setAttribute('data-label-placeholder', $this->i18n('cke5_table_class_label_placeholder'));
+$field->setAttribute('data-class-placeholder', $this->i18n('cke5_table_class_name_placeholder'));
 
 $field = $form->addTextAreaField('global_table_row_classes_definition');
 $field->setLabel($this->i18n('cke5_table_row_classes_definition'));
 $field->setNotice($this->i18n('cke5_table_row_classes_definition_description'));
 $field->setAttribute('id', 'cke5-global-table-row-classes-definition');
+$field->setAttribute('data-label-placeholder', $this->i18n('cke5_table_class_label_placeholder'));
+$field->setAttribute('data-class-placeholder', $this->i18n('cke5_table_class_name_placeholder'));
 
 $field = $form->addTextAreaField('global_table_cell_classes_definition');
 $field->setLabel($this->i18n('cke5_table_cell_classes_definition'));
 $field->setNotice($this->i18n('cke5_table_cell_classes_definition_description'));
 $field->setAttribute('id', 'cke5-global-table-cell-classes-definition');
+$field->setAttribute('data-label-placeholder', $this->i18n('cke5_table_class_label_placeholder'));
+$field->setAttribute('data-class-placeholder', $this->i18n('cke5_table_class_name_placeholder'));
 $form->addRawField('</div>');
 
 $field = $form->addCheckboxField('global_media_enabled');
