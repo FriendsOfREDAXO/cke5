@@ -1105,6 +1105,8 @@
         registerStyleAttributeConversion(editor, 'forTableStyle', 'table', true);
         editor.conversion.for('downcast').attributeToAttribute({ model: 'forTableCellStyle', view: 'style' });
 
+        editor.conversion.for('upcast').attributeToAttribute({ view: { name: 'figure', classes: 'table', key: 'class' }, model: 'forTableClass' });
+        editor.conversion.for('upcast').attributeToAttribute({ view: { name: 'figure', classes: 'table', key: 'style' }, model: 'forTableStyle' });
         editor.conversion.for('upcast').attributeToAttribute({ view: { name: 'table', key: 'class' }, model: 'forTableClass' });
         editor.conversion.for('upcast').attributeToAttribute({ view: { name: 'table', key: 'style' }, model: 'forTableStyle' });
         editor.conversion.for('upcast').attributeToAttribute({ view: { name: 'td', key: 'class' }, model: 'forTableCellClass' });
