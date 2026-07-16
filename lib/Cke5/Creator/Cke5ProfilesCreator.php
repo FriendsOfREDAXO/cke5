@@ -1787,6 +1787,15 @@ class Cke5ProfilesCreator
             array_pop($normalized);
         }
 
+        if (in_array('forTableProperties', $normalized, true)) {
+            if (!in_array('forTableColumnProperties', $normalized, true)) {
+                $normalized[] = 'forTableColumnProperties';
+            }
+            if (!in_array('forTableRowProperties', $normalized, true)) {
+                $normalized[] = 'forTableRowProperties';
+            }
+        }
+
         return $normalized;
     }
 

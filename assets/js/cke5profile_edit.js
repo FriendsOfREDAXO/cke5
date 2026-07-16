@@ -235,6 +235,8 @@ function cke5_init_edit(element) {
     mediapath_collapse = element.find('#cke5insertMediapath-collapse'),
     mediatype = element.find('#cke5mediatype-select'),
     table_classes_area = element.find('#cke5table-classes-definition'),
+    table_column_classes_area = element.find('#cke5table-column-classes-definition'),
+    table_row_classes_area = element.find('#cke5table-row-classes-definition'),
     table_cell_classes_area = element.find('#cke5table-cell-classes-definition'),
     fontcolor_area = element.find('#cke5fontcolor-area'),
     fontcolor_default = element.find('#cke5font-color-default-input-default-font-color'),
@@ -263,6 +265,8 @@ function cke5_init_edit(element) {
   cke5_prepare_profile_textareas(element);
 
   cke5_addLabelClassFields(table_classes_area);
+  cke5_addLabelClassFields(table_column_classes_area);
+  cke5_addLabelClassFields(table_row_classes_area);
   cke5_addLabelClassFields(table_cell_classes_area);
   cke5_addColorFields(fontcolor_area);
   cke5_addColorFields(fontbgcolor_area);

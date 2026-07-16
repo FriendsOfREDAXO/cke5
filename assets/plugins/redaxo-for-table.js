@@ -503,6 +503,53 @@
     });
   }
 
+  function applyStyleTokensToView(writer, viewElement, oldValue, newValue) {
+    if (!writer || !viewElement) {
+      return;
+    }
+
+    var oldStyles = parseStyleString(String(oldValue || ''));
+    var newStyles = parseStyleString(String(newValue || ''));
+
+    Object.keys(oldStyles).forEach(function (name) {
+      writer.removeStyle(name, viewElement);
+    });
+
+    Object.keys(newStyles).forEach(function (name) {
+      writer.setStyle(name, newStyles[name], viewElement);
+    });
+  }
+
+  function registerStyleAttributeConversion(editor, modelAttribute, modelElementName, mirrorToInnerTable) {
+    if (!editor || !editor.conversion) {
+      return;
+    }
+
+    var eventName = 'attribute:' + modelAttribute + ':' + modelElementName;
+
+    editor.conversion.for('editingDowncast').add(function (dispatcher) {
+      dispatcher.on(eventName, function (evt, data, conversionApi) {
+        var viewElement = conversionApi.mapper.toViewElement(data.item);
+        applyStyleTokensToView(conversionApi.writer, viewElement, data.attributeOldValue, data.attributeNewValue);
+        if (mirrorToInnerTable === true) {
+          var innerTable = findInnerTableViewElement(viewElement);
+          applyStyleTokensToView(conversionApi.writer, innerTable, data.attributeOldValue, data.attributeNewValue);
+        }
+      });
+    });
+
+    editor.conversion.for('dataDowncast').add(function (dispatcher) {
+      dispatcher.on(eventName, function (evt, data, conversionApi) {
+        var viewElement = conversionApi.mapper.toViewElement(data.item);
+        applyStyleTokensToView(conversionApi.writer, viewElement, data.attributeOldValue, data.attributeNewValue);
+        if (mirrorToInnerTable === true) {
+          var innerTable = findInnerTableViewElement(viewElement);
+          applyStyleTokensToView(conversionApi.writer, innerTable, data.attributeOldValue, data.attributeNewValue);
+        }
+      });
+    });
+  }
+
   function ensureStyles() {
     if (typeof document === 'undefined') {
       return;
@@ -532,7 +579,7 @@
       + '@keyframes for-table-cell-glow-pulse{0%{box-shadow:inset 0 0 0 2px rgba(255,153,51,.98),0 0 0 3px rgba(255,153,51,.34);}38%{box-shadow:inset 0 0 0 2px rgba(255,210,92,.98),0 0 0 3px rgba(255,210,92,.30);}72%{box-shadow:inset 0 0 0 2px rgba(95,196,255,.92),0 0 0 3px rgba(95,196,255,.28);}100%{box-shadow:inset 0 0 0 2px rgba(255,153,51,.98),0 0 0 3px rgba(255,153,51,.34);}}'
       + '.ck .ck-content .table td.ck-editor__nested-editable.ck-editor__nested-editable_focused,.ck .ck-content .table th.ck-editor__nested-editable.ck-editor__nested-editable_focused{background-color:transparent!important;box-shadow:inset 0 0 0 2px var(--for-table-cell-glow-strong),0 0 0 3px var(--for-table-cell-glow-soft)!important;animation:for-table-cell-glow-pulse 2.6s ease-in-out infinite;}'
       + '@media (prefers-reduced-motion: reduce){.ck .ck-content .table td.ck-editor__nested-editable.ck-editor__nested-editable_focused,.ck .ck-content .table th.ck-editor__nested-editable.ck-editor__nested-editable_focused{animation:none!important;}}'
-      + '.ck-for-table-dialog-host{padding:12px 14px!important;box-sizing:border-box!important;min-width:34rem;max-width:min(42rem,calc(100vw - 32px));}'
+      + '.ck-for-table-dialog-host{padding:12px 14px!important;box-sizing:border-box!important;width:min(42rem,calc(100vw - 32px));max-width:min(42rem,calc(100vw - 32px));}'
       + '.ck-for-table-dialog-content{display:flex!important;flex-direction:column!important;gap:12px!important;padding:0!important;}'
       + '.ck-for-table-dialog-content .ck-for-table-panel__grid{display:grid!important;grid-template-columns:1fr!important;gap:12px!important;}'
       + '.ck-for-table-dialog-content .ck-for-table-panel__field{width:100%!important;max-width:30rem!important;}'
@@ -1055,7 +1102,7 @@
           allowAttributes: ['forTableCellClass', 'forTableCellStyle']
         });
 
-        editor.conversion.for('downcast').attributeToAttribute({ model: 'forTableStyle', view: 'style' });
+        registerStyleAttributeConversion(editor, 'forTableStyle', 'table', true);
         editor.conversion.for('downcast').attributeToAttribute({ model: 'forTableCellStyle', view: 'style' });
 
         editor.conversion.for('upcast').attributeToAttribute({ view: { name: 'table', key: 'class' }, model: 'forTableClass' });
