@@ -775,6 +775,20 @@ if ($func === '') {
                 $field->setAttribute('data-label-placeholder', rex_i18n::msg('cke5_table_class_label_placeholder'));
                 $field->setAttribute('data-class-placeholder', rex_i18n::msg('cke5_table_class_name_placeholder'));
 
+                $field = $form->addTextAreaField('table_column_classes_definition');
+                $field->setLabel(rex_i18n::msg('cke5_table_column_classes_definition'));
+                $field->setNotice(rex_i18n::msg('cke5_table_column_classes_definition_description'));
+                $field->setAttribute('id', 'cke5table-column-classes-definition');
+                $field->setAttribute('data-label-placeholder', rex_i18n::msg('cke5_table_class_label_placeholder'));
+                $field->setAttribute('data-class-placeholder', rex_i18n::msg('cke5_table_class_name_placeholder'));
+
+                $field = $form->addTextAreaField('table_row_classes_definition');
+                $field->setLabel(rex_i18n::msg('cke5_table_row_classes_definition'));
+                $field->setNotice(rex_i18n::msg('cke5_table_row_classes_definition_description'));
+                $field->setAttribute('id', 'cke5table-row-classes-definition');
+                $field->setAttribute('data-label-placeholder', rex_i18n::msg('cke5_table_class_label_placeholder'));
+                $field->setAttribute('data-class-placeholder', rex_i18n::msg('cke5_table_class_name_placeholder'));
+
                 $field = $form->addTextAreaField('table_cell_classes_definition');
                 $field->setLabel(rex_i18n::msg('cke5_table_cell_classes_definition'));
                 $field->setNotice(rex_i18n::msg('cke5_table_cell_classes_definition_description'));
