@@ -399,13 +399,13 @@ if ($func === '') {
             $field = $form->addTextAreaField('expert_definition');
             $field->setAttribute('id', 'cke5-expert-definition-area');
             $field->setAttribute('class', 'rex-code');
-            $field->setAttribute('rows', '2');
+            $field->setAttribute('rows', '5');
             $field->setLabel(rex_i18n::msg('cke5_expert_definition_area'));
             // text area
             $field = $form->addTextAreaField('expert_suboption');
             $field->setAttribute('id', 'cke5-expert-suboption-area');
             $field->setAttribute('class', 'rex-code');
-            $field->setAttribute('rows', '2');
+            $field->setAttribute('rows', '5');
             $field->setLabel(rex_i18n::msg('cke5_expert_suboption_area'));
         // end collapse
         $form->addRawField('</div>');
@@ -747,14 +747,14 @@ if ($func === '') {
             // text area
             $field = $form->addTextAreaField('html_support_allow');
             $field->setAttribute('id', 'cke5-html-support-allow');
-            $field->setAttribute('rows', '2');
+            $field->setAttribute('rows', '5');
             $field->setLabel(rex_i18n::msg('cke5_html_support_allow'));
             if ($default_value) $field->setValue(Cke5ProfilesCreator::DEFAULT_VALUES['html_support_allow']);
 
             // text area
             $field = $form->addTextAreaField('html_support_disallow');
             $field->setAttribute('id', 'cke5-html-support-disallow');
-            $field->setAttribute('rows', '2');
+            $field->setAttribute('rows', '5');
             $field->setLabel(rex_i18n::msg('cke5_html_support_disallow'));
         $form->addRawField('</fieldset></div>');
 
@@ -767,26 +767,20 @@ if ($func === '') {
             $field->setLabel(rex_i18n::msg('cke5_table_toolbar'));
             if ($default_value) $field->setValue(Cke5ProfilesCreator::DEFAULTS['table_toolbar']);
 
-            // table color
-            $form->addRawField('<div class="collapse" id="cke5tableColor-collapse">');
-                // default font color
-                $field = $form->addCheckboxField('table_color_default');
-                $field->setAttribute('id', 'cke5table-color-default-input');
-                $field->setAttribute('data-toggle', 'toggle');
-                $field->setAttribute('data-collapse-target', 'customTableColor');
-                $field->setLabel(rex_i18n::msg('cke5_table_color_default'));
-                $field->addOption(rex_i18n::msg('cke5_table_color_default_description'), 'default_table_color');
-                if ($default_value) $field->setValue('default_table_color');
+            $form->addRawField('<div class="collapse" id="cke5tableAdvanced-collapse">');
+                $field = $form->addTextAreaField('table_classes_definition');
+                $field->setLabel(rex_i18n::msg('cke5_table_classes_definition'));
+                $field->setNotice(rex_i18n::msg('cke5_table_classes_definition_description'));
+                $field->setAttribute('id', 'cke5table-classes-definition');
+                $field->setAttribute('data-label-placeholder', rex_i18n::msg('cke5_table_class_label_placeholder'));
+                $field->setAttribute('data-class-placeholder', rex_i18n::msg('cke5_table_class_name_placeholder'));
 
-                // custom table color
-                $form->addRawField('<div class="collapse" id="cke5customTableColor-collapse">');
-                    $field = $form->addTextAreaField('table_color');
-                    $field->setLabel(rex_i18n::msg('cke5_table_color'));
-                    $field->setAttribute('id', 'cke5tablecolor-area');
-                    $field->setAttribute('data-color-placeholder', rex_i18n::msg('cke5_color_placeholder'));
-                    $field->setAttribute('data-color-name-placeholder', rex_i18n::msg('cke5_color_name_placeholder'));
-                    $field->setAttribute('data-has-border-label', rex_i18n::msg('cke5_has_border_label'));
-                $form->addRawField('</div>');
+                $field = $form->addTextAreaField('table_cell_classes_definition');
+                $field->setLabel(rex_i18n::msg('cke5_table_cell_classes_definition'));
+                $field->setNotice(rex_i18n::msg('cke5_table_cell_classes_definition_description'));
+                $field->setAttribute('id', 'cke5table-cell-classes-definition');
+                $field->setAttribute('data-label-placeholder', rex_i18n::msg('cke5_table_class_label_placeholder'));
+                $field->setAttribute('data-class-placeholder', rex_i18n::msg('cke5_table_class_name_placeholder'));
             $form->addRawField('</div>');
         $form->addRawField('</fieldset></div>');
 
@@ -1093,7 +1087,7 @@ if ($func === '') {
             $form->addRawField('<div class="collapse" id="cke5linkDecoratorsDefinition-collapse">');
                 $field = $form->addTextAreaField('link_decorators_definition');
                 $field->setAttribute('id', 'cke5-link-decorators-definition-area');
-                $field->setAttribute('rows', '2');
+                $field->setAttribute('rows', '5');
                 $field->setLabel(rex_i18n::msg('cke5_link_decorators_definition_area'));
                 $field->setNotice('CKEditor API: JSON-Objekt mit Decorator-Key => Konfiguration, z. B. {"isDownloadable":{"mode":"manual","label":"Download","attributes":{"download":"download"}}}');
             $form->addRawField('</div>');
@@ -1125,7 +1119,7 @@ if ($func === '') {
             $form->addRawField('<div class="collapse" id="cke5mentionsDefinition-collapse">');
             $field = $form->addTextAreaField('mentions_definition');
             $field->setAttribute('id', 'cke5-mentions-area');
-            $field->setAttribute('rows', '2');
+            $field->setAttribute('rows', '5');
             $field->setLabel(rex_i18n::msg('cke5_mentions_definition_area'));
             $field->setNotice(rex_i18n::msg('cke5_mentions_definition_example'));
             $form->addRawField('</div>');
@@ -1240,7 +1234,7 @@ if ($func === '') {
             $form->addRawField('<div class="collapse" id="cke5extraDefinition-collapse">');
                 $field = $form->addTextAreaField('extra_definition');
                 $field->setAttribute('id', 'cke5-extra-area');
-                $field->setAttribute('rows', '2');
+                $field->setAttribute('rows', '5');
                 $field->setLabel(rex_i18n::msg('cke5_extra_definition_area'));
             $form->addRawField('</div>');
 

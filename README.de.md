@@ -2,28 +2,6 @@
 
 CKEditor-5-Integration für REDAXO mit profilbasierter Konfiguration, REDAXO-Medien- und Link-Dialogen, Snippets, Style-Management und Import/Export-Workflows.
 
-## Version
-
-Aktuelle Beta-Version: `7.0.0-beta1`
-
-## Neu in 7.0.0-beta1
-
-- Umstellung auf den offiziellen CKEditor-5-Build als Basis
-- Neue native Runtime-Plugins und überarbeitete Dialoge
-- Templates durch Snippets ersetzt
-- Erweiterter Profil-Export/Import inklusive abhängiger Daten:
-  - profiles
-  - style_groups
-  - styles
-  - snippets
-- Neue Entwicklerdokumentation in `dev.md`
-- Bereinigung von Legacy- und verwaisten Vendor-/Runtime-Dateien
-- Neue globale Defaults-Seite (`Profiles > Defaults > Global settings`) für Mentions, Sprog-Ersetzungen, yTables, Medien-Defaults und Schriftfamilien-Defaults
-- Neuer Editor-Typ `classic_balloon` sowie konfigurierbare Balloon-Toolbar im Profilmanager
-- Verbesserte Merge-/Fallback-Logik zwischen Profilwerten und globalen Defaults
-- UX-Fixes im Profil-/Defaults-Widget-Handling (Mention-Beispiele, stabile Placeholder, robuste Toggle-/Collapse-Initialisierung)
-- Neues QuickEdit-Befehlsmenü über `/`, global schaltbar und über andere AddOns erweiterbar
-
 ## Funktionsüberblick
 
 ### Editor und Bedienung

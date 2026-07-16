@@ -137,7 +137,7 @@ class Cke5ProfilesCreator
         'cktypes' => ['heading', 'fontSize', 'mediaEmbed', 'fontFamily', 'alignment', 'link', 'highlight', 'insertTable', 'fontBackgroundColor', 'fontColor', 'codeBlock', 'bulletedList', 'numberedList', 'for_lists', 'htmlEmbed'/*, 'emoji'*/, 'sourceEditing', 'textPartLanguage'/*, 'specialCharacters' */, 'style', 'snippets', 'for_video', 'for_clear'],
         'ckimgtypes' => ['rexImage', 'imageUpload'],
         'cklinktypes' => ['ytable', 'media', 'internal'],
-        'cktabletypes' => ['tableProperties', 'tableCellProperties']
+        'cktabletypes' => ['forTableProperties', 'forTableColumnProperties', 'forTableRowProperties', 'forTableCellProperties']
     ];
     const DEFAULT_VALUES = [
         'toolbar' => 'bold,italic,bulletedList,numberedList,undo,redo,link,pastePlainText',
@@ -147,7 +147,7 @@ class Cke5ProfilesCreator
         'code_block' => 'plaintext,c,cs,cpp,css,diff,html,java,javascript,php,python,ruby,typescript,xml',
         'mediaembed' => 'dailymotion,spotify,youtube,vimeo,instagram,twitter,googleMaps,flickr,facebook',
         'special_characters' => 'currency,mathematical,latin,arrows,text',
-        'table_toolbar' => '|,tableColumn,tableRow,mergeTableCells,tableProperties,tableCellProperties,toggleTableCaption',
+        'table_toolbar' => '|,tableColumn,tableRow,mergeTableCells,forTableProperties,forTableColumnProperties,forTableRowProperties,forTableCellProperties,toggleTableCaption',
         'image_toolbar' => '|,imageTextAlternative,block,inline,side,alignLeft,alignCenter,alignRight,alignBlockLeft,alignBlockRight,linkImage,toggleImageCaption',
         'image_resize_handles' => 'default_resize_handles',
         'fontsize' => 'default,tiny,small,big,huge',
@@ -312,7 +312,7 @@ class Cke5ProfilesCreator
         'toolbar' => ['|', 'heading', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'alignment', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'insertTable', 'code', 'codeBlock', 'link', 'rexImage', 'imageUpload', 'mediaEmbed', 'bulletedList', 'numberedList', 'for_lists', 'blockQuote', 'undo', 'redo', 'highlight', 'emoji', 'removeFormat', 'outdent', 'indent', 'horizontalLine', 'todoList', 'pageBreak', 'selectAll', 'specialCharacters', 'pastePlainText', 'redaxoMarkdownPasteToggle', 'redaxoMinimapToggle', 'htmlEmbed', 'sourceEditing', 'textPartLanguage', 'style', 'snippets', 'for_video', 'for_clear', 'showBlocks', 'accessibilityHelp'],
         'balloon_toolbar' => ['style', '|', 'paragraph', 'heading', 'bulletedList', 'numberedList', 'for_lists', 'todoList', 'outdent', 'indent', 'blockQuote', 'insertTable', 'mediaEmbed', 'for_video', 'for_clear', 'codeBlock', 'link', 'horizontalLine', 'specialCharacters', 'removeFormat', 'undo', 'redo'],
         'alignment' => ['left', 'right', 'center', 'justify'],
-        'table_toolbar' => ['|', 'tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties', 'toggleTableCaption'],
+        'table_toolbar' => ['|', 'tableColumn', 'tableRow', 'mergeTableCells', 'forTableProperties', 'forTableColumnProperties', 'forTableRowProperties', 'forTableCellProperties', 'toggleTableCaption'],
         'heading' => ['paragraph', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
         //'emoji' => ['EmojiPeople', 'EmojiNature', 'EmojiPlaces', 'EmojiFood', 'EmojiActivity', 'EmojiObjects', 'EmojiSymbols', 'EmojiFlags'],
         'highlight' => ['yellowMarker', 'greenMarker', 'pinkMarker', 'blueMarker', 'redPen', 'greenPen'],
@@ -507,11 +507,15 @@ class Cke5ProfilesCreator
         $toolbar = self::filterLicenseRestrictedItems($toolbar, self::LICENSE_FIELDS['toolbar']);
         $balloonToolbar = self::toArray(isset($profile['balloon_toolbar']) ? $profile['balloon_toolbar'] : null);
         $linkToolbar = self::toArray($profile['rexlink']);
-        $tableToolbar = self::toArray($profile['table_toolbar']);
+        $tableToolbar = self::normalizeTableToolbar(self::toArray($profile['table_toolbar']));
         $globalSettings = self::getGlobalProfileSettings();
         $globalMentions = self::isGlobalSettingEnabled($globalSettings, 'global_mentions_enabled') ? self::decodeGlobalJsonList($globalSettings, 'global_mentions_definition') : [];
         $globalSprogMentions = self::isGlobalSettingEnabled($globalSettings, 'global_sprog_enabled') ? self::decodeGlobalJsonList($globalSettings, 'global_sprog_mention_definition') : [];
         $globalYtables = self::isGlobalSettingEnabled($globalSettings, 'global_ytable_enabled') ? self::decodeGlobalJsonList($globalSettings, 'global_ytable_definition') : [];
+        $globalTableClasses = self::isGlobalSettingEnabled($globalSettings, 'global_for_table_enabled') ? self::getLabelClassStylesFromConfig($globalSettings, 'global_table_classes_definition') : [];
+        $globalColumnClasses = self::isGlobalSettingEnabled($globalSettings, 'global_for_table_enabled') ? self::getLabelClassStylesFromConfig($globalSettings, 'global_table_column_classes_definition') : [];
+        $globalRowClasses = self::isGlobalSettingEnabled($globalSettings, 'global_for_table_enabled') ? self::getLabelClassStylesFromConfig($globalSettings, 'global_table_row_classes_definition') : [];
+        $globalCellClasses = self::isGlobalSettingEnabled($globalSettings, 'global_for_table_enabled') ? self::getLabelClassStylesFromConfig($globalSettings, 'global_table_cell_classes_definition') : [];
 
         if (self::isGlobalSettingEnabled($globalSettings, 'global_media_enabled') && (isset($profile['mediatypes']) && '' === trim((string) $profile['mediatypes']) || !isset($profile['mediatypes'])) && isset($globalSettings['global_mediatypes']) && '' !== trim((string) $globalSettings['global_mediatypes'])) {
             $profile['mediatypes'] = trim((string) $globalSettings['global_mediatypes']);
@@ -641,14 +645,26 @@ class Cke5ProfilesCreator
         if (in_array('insertTable', $toolbar, true) && isset($profile['table_toolbar']) && $profile['table_toolbar'] !== '') {
             $jsonProfile['table'] = ['contentToolbar' => $tableToolbar];
 
-            foreach (self::EDITOR_SETTINGS['cktabletypes'] as $ckKey) {
-                if (in_array($ckKey, $tableToolbar, true) && isset($profile['table_color']) && $profile['table_color'] !== '' &&
-                    (isset($profile['table_color_default']) && $profile['table_color_default'] === '' or is_null($profile['table_color_default']))) {
-                    $jsonProfile['table'][$ckKey] = [
-                        'borderColors' => json_decode($profile['table_color'], true),
-                        'backgroundColors' => json_decode($profile['table_color'], true)
-                    ];
-                }
+            $tableClasses = self::getLabelClassStylesFromProfile($profile, 'table_classes_definition');
+            $columnClasses = self::getLabelClassStylesFromProfile($profile, 'table_column_classes_definition');
+            $rowClasses = self::getLabelClassStylesFromProfile($profile, 'table_row_classes_definition');
+            $cellClasses = self::getLabelClassStylesFromProfile($profile, 'table_cell_classes_definition');
+            $mergedTableClasses = self::mergeLabelClassStyles($globalTableClasses, $tableClasses);
+            $mergedColumnClasses = self::mergeLabelClassStyles($globalColumnClasses, $columnClasses);
+            $mergedRowClasses = self::mergeLabelClassStyles($globalRowClasses, $rowClasses);
+            $mergedCellClasses = self::mergeLabelClassStyles($globalCellClasses, $cellClasses);
+
+            if ($mergedTableClasses !== [] || $mergedColumnClasses !== [] || $mergedRowClasses !== [] || $mergedCellClasses !== []) {
+                $jsonProfile['forTable'] = [
+                    'tableClasses' => $mergedTableClasses,
+                    'columnClasses' => $mergedColumnClasses,
+                    'rowClasses' => $mergedRowClasses,
+                    'cellClasses' => $mergedCellClasses,
+                    'hideManualTableProperties' => $mergedTableClasses !== [],
+                    'hideManualColumnProperties' => $mergedColumnClasses !== [],
+                    'hideManualRowProperties' => $mergedRowClasses !== [],
+                    'hideManualCellProperties' => $mergedCellClasses !== [],
+                ];
             }
         }
 
@@ -1171,6 +1187,48 @@ class Cke5ProfilesCreator
      * @param array<string,string> $profile
      * @return array<int,array<string,string>>
      */
+    private static function getLabelClassStylesFromProfile(array $profile, string $fieldName): array
+    {
+        return self::getLabelClassStylesFromConfig($profile, $fieldName);
+    }
+
+    /**
+     * @param array<string,mixed> $config
+     * @return array<int,array<string,string>>
+     */
+    private static function getLabelClassStylesFromConfig(array $config, string $fieldName): array
+    {
+        if (!isset($config[$fieldName]) || !is_string($config[$fieldName]) || $config[$fieldName] === '') {
+            return [];
+        }
+
+        $decoded = json_decode($config[$fieldName], true);
+        if (!is_array($decoded)) {
+            return [];
+        }
+
+        $styles = [];
+        foreach ($decoded as $item) {
+            if (!is_array($item)) {
+                continue;
+            }
+
+            $label = isset($item['label']) && is_string($item['label']) ? trim($item['label']) : '';
+            $class = isset($item['class']) && is_string($item['class']) ? trim($item['class']) : '';
+            if ($label === '' || $class === '') {
+                continue;
+            }
+
+            $styles[] = ['label' => $label, 'class' => $class];
+        }
+
+        return $styles;
+    }
+
+    /**
+     * @param array<string,string> $profile
+     * @return array<int,array<string,string>>
+     */
     private static function getMediaEmbedWidthStyles(array $profile): array
     {
         $definition = $profile['media_embed_width_styles_definition'] ?? self::DEFAULT_VALUES['media_embed_width_styles_definition'];
@@ -1429,6 +1487,11 @@ class Cke5ProfilesCreator
             'global_sprog_mention_definition' => (string) $addon->getConfig('global_sprog_mention_definition', ''),
             'global_ytable_enabled' => (string) $addon->getConfig('global_ytable_enabled', ''),
             'global_ytable_definition' => (string) $addon->getConfig('global_ytable_definition', ''),
+            'global_for_table_enabled' => (string) $addon->getConfig('global_for_table_enabled', ''),
+            'global_table_classes_definition' => (string) $addon->getConfig('global_table_classes_definition', ''),
+            'global_table_column_classes_definition' => (string) $addon->getConfig('global_table_column_classes_definition', ''),
+            'global_table_row_classes_definition' => (string) $addon->getConfig('global_table_row_classes_definition', ''),
+            'global_table_cell_classes_definition' => (string) $addon->getConfig('global_table_cell_classes_definition', ''),
             'global_media_enabled' => (string) $addon->getConfig('global_media_enabled', ''),
             'global_mediatypes' => (string) $addon->getConfig('global_mediatypes', ''),
             'global_mediatype' => (string) $addon->getConfig('global_mediatype', ''),
@@ -1567,6 +1630,44 @@ class Cke5ProfilesCreator
     }
 
     /**
+     * @param array<int,array<string,string>> $base
+     * @param array<int,array<string,string>> $override
+     * @return array<int,array<string,string>>
+     */
+    private static function mergeLabelClassStyles(array $base, array $override): array
+    {
+        $merged = [];
+
+        foreach ($base as $item) {
+            if (!isset($item['class']) || !is_string($item['class'])) {
+                continue;
+            }
+
+            $classKey = trim(strtolower($item['class']));
+            if ('' === $classKey) {
+                continue;
+            }
+
+            $merged[$classKey] = $item;
+        }
+
+        foreach ($override as $item) {
+            if (!isset($item['class']) || !is_string($item['class'])) {
+                continue;
+            }
+
+            $classKey = trim(strtolower($item['class']));
+            if ('' === $classKey) {
+                continue;
+            }
+
+            $merged[$classKey] = $item;
+        }
+
+        return array_values($merged);
+    }
+
+    /**
      * @param mixed $item
      */
     private static function configListItemKey($item): string
@@ -1645,6 +1746,48 @@ class Cke5ProfilesCreator
     {
         if (!is_string($string)) return [];
         return array_filter(explode(',', $string));
+    }
+
+    /**
+     * @param array<int,string> $items
+     * @return array<int,string>
+     */
+    private static function normalizeTableToolbar(array $items): array
+    {
+        $alias = [
+            'tableProperties' => 'forTableProperties',
+            'tableColumnProperties' => 'forTableColumnProperties',
+            'tableRowProperties' => 'forTableRowProperties',
+            'tableCellProperties' => 'forTableCellProperties',
+        ];
+
+        $normalized = [];
+        foreach ($items as $item) {
+            if (!is_string($item)) {
+                continue;
+            }
+
+            $mapped = $alias[$item] ?? $item;
+            if ($mapped === '') {
+                continue;
+            }
+
+            if ($mapped === '|' && ($normalized === [] || end($normalized) === '|')) {
+                continue;
+            }
+
+            if (!in_array($mapped, self::ALLOWED_FIELDS['table_toolbar'], true) && $mapped !== '|') {
+                continue;
+            }
+
+            $normalized[] = $mapped;
+        }
+
+        while ($normalized !== [] && end($normalized) === '|') {
+            array_pop($normalized);
+        }
+
+        return $normalized;
     }
 
     /**s

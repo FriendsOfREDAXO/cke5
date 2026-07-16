@@ -67,6 +67,35 @@ $field->setAttribute('data-ytable-column-placeholder', $this->i18n('cke5_ytable_
 $field->setAttribute('data-ytable-title-placeholder', $this->i18n('cke5_ytable_title_placeholder'));
 $form->addRawField('</div>');
 
+$field = $form->addCheckboxField('global_for_table_enabled');
+$field->setAttribute('id', 'cke5global-for-table-enabled-input');
+$field->setAttribute('data-toggle', 'toggle');
+$field->setAttribute('data-collapse-target', 'globalForTable');
+$field->setLabel($this->i18n('cke5_global_for_table_definition'));
+$field->addOption($this->i18n('cke5_global_for_table_definition_notice'), '1');
+
+$form->addRawField('<div class="collapse" id="cke5globalForTable-collapse">');
+$field = $form->addTextAreaField('global_table_classes_definition');
+$field->setLabel($this->i18n('cke5_table_classes_definition'));
+$field->setNotice($this->i18n('cke5_table_classes_definition_description'));
+$field->setAttribute('id', 'cke5-global-table-classes-definition');
+
+$field = $form->addTextAreaField('global_table_column_classes_definition');
+$field->setLabel($this->i18n('cke5_table_column_classes_definition'));
+$field->setNotice($this->i18n('cke5_table_column_classes_definition_description'));
+$field->setAttribute('id', 'cke5-global-table-column-classes-definition');
+
+$field = $form->addTextAreaField('global_table_row_classes_definition');
+$field->setLabel($this->i18n('cke5_table_row_classes_definition'));
+$field->setNotice($this->i18n('cke5_table_row_classes_definition_description'));
+$field->setAttribute('id', 'cke5-global-table-row-classes-definition');
+
+$field = $form->addTextAreaField('global_table_cell_classes_definition');
+$field->setLabel($this->i18n('cke5_table_cell_classes_definition'));
+$field->setNotice($this->i18n('cke5_table_cell_classes_definition_description'));
+$field->setAttribute('id', 'cke5-global-table-cell-classes-definition');
+$form->addRawField('</div>');
+
 $field = $form->addCheckboxField('global_media_enabled');
 $field->setAttribute('id', 'cke5global-media-enabled-input');
 $field->setAttribute('data-toggle', 'toggle');

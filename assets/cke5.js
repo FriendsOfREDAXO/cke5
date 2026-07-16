@@ -1173,7 +1173,7 @@
           }
           const cke = window.CKEDITOR;
           const registry = typeof window.CKE5_NATIVE_PLUGINS === "object" && window.CKE5_NATIVE_PLUGINS !== null ? window.CKE5_NATIVE_PLUGINS : {};
-          const pluginNames = ["RedaxoLinkIntegration", "RedaxoMediaImage", "RedaxoForLists", "RedaxWidgetVideo", "RedaxoClearWidget", "RedaxoSnippets", "RedaxoQuickEdit", "RedaxoPastePlainTextToggle", "RedaxoMarkdownPasteToggle", "RedaxoMinimapToggle"];
+          const pluginNames = ["RedaxoLinkIntegration", "RedaxoMediaImage", "RedaxoForLists", "RedaxoForTable", "RedaxWidgetVideo", "RedaxoClearWidget", "RedaxoSnippets", "RedaxoQuickEdit", "RedaxoPastePlainTextToggle", "RedaxoMarkdownPasteToggle", "RedaxoMinimapToggle"];
           const plugins = [];
           pluginNames.forEach((pluginName) => {
             const factory = registry[pluginName];
@@ -1229,6 +1229,63 @@
             options.toolbar.items.splice(imageIndex + 1, 0, "redaxoMedia");
           }
           options.toolbar.items = cke5_normalize_toolbar_items(options.toolbar.items);
+          return options;
+        }
+        function cke5_apply_native_redaxo_table_toolbar(options) {
+          if (!options || typeof options !== "object") {
+            return options;
+          }
+          if (!options.table || typeof options.table !== "object") {
+            return options;
+          }
+
+          let contentToolbar = [];
+          if (Array.isArray(options.table.contentToolbar)) {
+            contentToolbar = options.table.contentToolbar.slice();
+          } else if (typeof options.table.contentToolbar === "string") {
+            contentToolbar = options.table.contentToolbar.split(",").map((item) => item.trim()).filter((item) => item !== "");
+          }
+
+          if (contentToolbar.length === 0) {
+            return options;
+          }
+
+          const aliasMap = {
+            tableProperties: "forTableProperties",
+            tableColumnProperties: "forTableColumnProperties",
+            tableRowProperties: "forTableRowProperties",
+            tableCellProperties: "forTableCellProperties"
+          };
+
+          options.table.contentToolbar = cke5_normalize_toolbar_items(contentToolbar.map((item) => {
+            if (typeof item !== "string") {
+              return item;
+            }
+            return aliasMap[item] || item;
+          }));
+
+          const normalizedToolbar = Array.isArray(options.table.contentToolbar) ? options.table.contentToolbar.slice() : [];
+          const hasTableProps = normalizedToolbar.includes("forTableProperties");
+          if (hasTableProps) {
+            if (!normalizedToolbar.includes("forTableColumnProperties")) {
+              const tableColumnIndex = normalizedToolbar.indexOf("tableColumn");
+              if (tableColumnIndex >= 0) {
+                normalizedToolbar.splice(tableColumnIndex + 1, 0, "forTableColumnProperties");
+              } else {
+                normalizedToolbar.push("forTableColumnProperties");
+              }
+            }
+            if (!normalizedToolbar.includes("forTableRowProperties")) {
+              const tableRowIndex = normalizedToolbar.indexOf("tableRow");
+              if (tableRowIndex >= 0) {
+                normalizedToolbar.splice(tableRowIndex + 1, 0, "forTableRowProperties");
+              } else {
+                normalizedToolbar.push("forTableRowProperties");
+              }
+            }
+            options.table.contentToolbar = cke5_normalize_toolbar_items(normalizedToolbar);
+          }
+
           return options;
         }
         function cke5_ensure_toolbar_item(options, itemName, referenceItem) {
@@ -1440,6 +1497,7 @@
           options = cke5_register_native_redaxo_plugins(options);
           options = cke5_apply_resize_handle_mode(options);
           options = cke5_apply_native_redaxo_toolbar(options);
+          options = cke5_apply_native_redaxo_table_toolbar(options);
           const editorType = cke5_normalize_editor_type(options.redaxoEditorType);
           if (editorType === "balloon_block" || editorType === "classic_balloon") {
             options = cke5_apply_balloon_block_mode(options);
