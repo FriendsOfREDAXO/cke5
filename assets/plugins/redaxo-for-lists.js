@@ -746,6 +746,38 @@
     return map;
   }
 
+  function collectModelListStartMap(editor) {
+    var map = {};
+    if (!editor || !editor.model || !editor.model.document || typeof editor.model.createRangeIn !== 'function') {
+      return map;
+    }
+
+    var root = editor.model.document.getRoot();
+    if (!root) {
+      return map;
+    }
+
+    for (var item of editor.model.createRangeIn(root).getItems()) {
+      if (!item || typeof item.getAttribute !== 'function') {
+        continue;
+      }
+
+      var listItemId = String(item.getAttribute('listItemId') || '').trim();
+      if (listItemId === '') {
+        continue;
+      }
+
+      var start = Number(item.getAttribute('listStart') || 0);
+      if (!Number.isFinite(start) || start < 1) {
+        continue;
+      }
+
+      map[listItemId] = start;
+    }
+
+    return map;
+  }
+
   function syncEditingDomListStyles(editor) {
     if (!editor || !editor.ui || typeof editor.ui.getEditableElement !== 'function') {
       return;
@@ -759,9 +791,12 @@
     // Vorherige Synchronisationen entfernen, damit keine veralteten Styles stehen bleiben.
     Array.from(editable.querySelectorAll('ol, ul')).forEach(function (list) {
       list.style.removeProperty('list-style-type');
+      list.style.removeProperty('--ck-list-start');
     });
 
     var styleMap = collectModelListStyleMap(editor);
+    var startMap = collectModelListStartMap(editor);
+
     Object.keys(styleMap).forEach(function (id) {
       var li = editable.querySelector('li[data-list-item-id="' + id + '"]');
       if (!li || !li.parentElement) {
@@ -773,6 +808,26 @@
         return;
       }
       list.style.listStyleType = styleMap[id];
+    });
+
+    Object.keys(startMap).forEach(function (id) {
+      var li = editable.querySelector('li[data-list-item-id="' + id + '"]');
+      if (!li || !li.parentElement) {
+        return;
+      }
+      var list = li.parentElement;
+      var tag = list.tagName ? list.tagName.toLowerCase() : '';
+      if (tag !== 'ol') {
+        return;
+      }
+
+      var startValue = Number(startMap[id]);
+      if (!Number.isFinite(startValue) || startValue <= 1) {
+        list.style.removeProperty('--ck-list-start');
+        return;
+      }
+
+      list.style.setProperty('--ck-list-start', String(startValue - 1));
     });
   }
 
@@ -899,6 +954,7 @@
         }
 
         var map = {};
+        var startMap = {};
         if (editor.model && editor.model.document && typeof editor.model.createRangeIn === 'function') {
           var root = editor.model.document.getRoot();
           if (root) {
@@ -913,6 +969,11 @@
               var style = normalizeStyleValue(String(item.getAttribute('forListStyle') || item.getAttribute('listStyle') || ''));
               if (style !== '') {
                 map[listItemId] = style;
+              }
+
+              var start = Number(item.getAttribute('listStart') || 0);
+              if (Number.isFinite(start) && start >= 1) {
+                startMap[listItemId] = start;
               }
             }
           }
@@ -941,6 +1002,13 @@
 
           if (tag === 'ol') {
             list.removeAttribute('type');
+
+            var startValue = Number(startMap[id] || 0);
+            if (Number.isFinite(startValue) && startValue > 1) {
+              list.style.setProperty('--ck-list-start', String(startValue - 1));
+            } else {
+              list.style.removeProperty('--ck-list-start');
+            }
           }
         });
 
