@@ -44,9 +44,24 @@ CKEditor-5-Integration für REDAXO mit profilbasierter Konfiguration, REDAXO-Med
   - `RedaxoPastePlainTextToggle`
   - `RedaxoMarkdownPasteToggle`
   - `RedaxoMinimapToggle`
+  - `RedaxoForLists`
+  - `RedaxoForTable`
   - `RedaxoVideoWidgetTest`
 - Unterstützung externer Plugins über Registry und JS-Konfiguration
 - Toolbar-Alias-Transformationen für externe Plugins
+
+### Tabellen und Listen
+
+- `for_table`-Eigenschaften für Tabelle, Spalte, Zeile und Zelle über native Dropdown-Panels
+- Optionale Klassen-Presets für Tabelle/Spalte/Zeile/Zelle in den Profileinstellungen
+- Globale Tabellen-Klassen-Defaults unter `Profiles > Defaults > Global settings`
+- Abwärtskompatible Toolbar-Normalisierung:
+  - `tableProperties` -> `forTableProperties`
+  - `tableColumnProperties` -> `forTableColumnProperties`
+  - `tableRowProperties` -> `forTableRowProperties`
+  - `tableCellProperties` -> `forTableCellProperties`
+- Wenn in Altprofilen `forTableProperties` gesetzt ist, werden Spalten-/Zeilen-Properties automatisch ergänzt
+- Einheitliche Nummerierungslogik für geordnete Listen über alle Browser (inklusive verschachtelter Dezimal-Ebenen und Startindex)
 
 ### QuickEdit-Befehlsmenü
 

@@ -7,6 +7,8 @@ Dieses Dokument beschreibt den aktuellen technischen Stand des AddOns, den Build
 1. Interne Video-Integration läuft als Widget.
 2. Der frühere Plugin-Pfad ist entfernt.
 3. Bestehende Profile mit altem Toolbar-Token bleiben kompatibel, weil das Runtime-Mapping alte Tokens auf das Widget umleitet.
+4. `for_table` ist als internes Plugin aktiv und deckt Table/Column/Row/Cell-Properties ab.
+5. Listen-Nummerierung nutzt einen einheitlichen Codepfad für alle Browser (inklusive Startindex und hierarchischer Dezimaldarstellung).
 
 Konsequenz für neue Entwicklungen:
 
@@ -322,6 +324,8 @@ body.rex-theme-dark .my-widget-dialog {
 4. Light- und Dark-Mode geprüft.
 5. Bestehende Profile mit Legacy-Tokens geprüft.
 6. Profilmanager und Defaults-Seite auf Widget-Placeholder und Toggle-/Collapse-Verhalten geprüft.
+7. Table-Advanced-Felder für Table/Column/Row/Cell im Profil-Editor geprüft.
+8. Nummerierte Listen auf Safari/Chromium/Firefox mit Startindex und verschachtelten Ebenen geprüft.
 
 ## 13. Release-Checkliste
 
@@ -381,4 +385,11 @@ Vor Commit gezielt prüfen:
 1. Dialog-Breiten auf Desktop und Mobile (kein Überlauf, kein gequetschtes Zweispalten-Layout).
 2. Apply/Reset-Verhalten für Tabelle, Spalte, Zeile, Zelle.
 3. Klassenwirkung visuell im Editor und technisch im HTML-Output.
-4. Verhalten mit und ohne definierte `table_classes_definition` / `table_cell_classes_definition`.
+4. Verhalten mit und ohne definierte `table_classes_definition`, `table_column_classes_definition`, `table_row_classes_definition`, `table_cell_classes_definition`.
+
+### 15.6 Learnings aus dem Follow-up nach PR #224
+
+1. Persistenz und UI müssen immer gemeinsam erweitert werden: neue Profilfelder gehören in DB-Schema, Formularseiten und Initialisierungs-JS.
+2. Für `forTableStyle` ist ein eigener Downcast-Handler robuster als ein reines `attributeToAttribute`, wenn Wrapper und inneres `table` konsistent dieselben Styles erhalten sollen.
+3. Dialog-Hosts ohne starre Mindestbreite bauen, damit mobile Viewports nicht horizontal überlaufen.
+4. Bei Listen-Bugs einen einheitlichen Browser-Codepfad bevorzugen, wenn dadurch Verhalten und Wartbarkeit stabiler werden.

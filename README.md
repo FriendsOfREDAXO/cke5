@@ -44,9 +44,24 @@ CKEditor 5 integration for REDAXO with profile-based configuration, REDAXO media
   - `RedaxoPastePlainTextToggle`
   - `RedaxoMarkdownPasteToggle`
   - `RedaxoMinimapToggle`
+  - `RedaxoForLists`
+  - `RedaxoForTable`
   - `RedaxoVideoWidgetTest`
 - External plugin registry support via addon API and JS config
 - Toolbar alias transformations for external plugins
+
+### Tables and Lists
+
+- `for_table` properties for table, column, row and cell via native dropdown panels
+- Optional class presets for table/column/row/cell in profile settings
+- Global table class defaults in `Profiles > Defaults > Global settings`
+- Backward-compatible toolbar normalization:
+  - `tableProperties` -> `forTableProperties`
+  - `tableColumnProperties` -> `forTableColumnProperties`
+  - `tableRowProperties` -> `forTableRowProperties`
+  - `tableCellProperties` -> `forTableCellProperties`
+- If `forTableProperties` is present in old profiles, column/row properties are auto-added
+- Unified ordered-list numbering logic across browsers (including nested decimal levels and start index)
 
 ### QuickEdit Command Menu
 
