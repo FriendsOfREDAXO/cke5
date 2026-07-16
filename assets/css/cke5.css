@@ -1809,7 +1809,7 @@ body.rex-theme-dark .cke5-quickedit-menu {
 .ck-content ol[style*="list-style-type: decimal"]:not([style*="decimal-leading-zero"]),
 .ck-content ol[style*="list-style-type:decimal"]:not([style*="decimal-leading-zero"]),
 .ck-content ol[type="1"] {
-    counter-reset: ck-hier;
+    counter-reset: ck-hier var(--ck-list-start, 0);
 }
 
 .ck-content ol:not([style*="list-style-type"]) > li,
@@ -1824,6 +1824,48 @@ body.rex-theme-dark .cke5-quickedit-menu {
 .ck-content ol[style*="list-style-type:decimal"]:not([style*="decimal-leading-zero"]) > li::marker,
 .ck-content ol[type="1"] > li::marker {
     content: counters(ck-hier, '.') '. ';
+}
+
+/* Einheitliche Fallback-Logik fuer alle Browser (kein Safari-Sonderpfad). */
+.ck-content ol:not([style*="list-style-type"]),
+.ck-content ol[style*="list-style-type: decimal"]:not([style*="decimal-leading-zero"]),
+.ck-content ol[style*="list-style-type:decimal"]:not([style*="decimal-leading-zero"]),
+.ck-content ol[type="1"],
+.ck-content ol[style*="decimal-leading-zero"] {
+    list-style-type: none !important;
+}
+
+.ck-content ol:not([style*="list-style-type"]) > li,
+.ck-content ol[style*="list-style-type: decimal"]:not([style*="decimal-leading-zero"]) > li,
+.ck-content ol[style*="list-style-type:decimal"]:not([style*="decimal-leading-zero"]) > li,
+.ck-content ol[type="1"] > li,
+.ck-content ol[style*="decimal-leading-zero"] > li {
+    padding-inline-start: 0;
+}
+
+.ck-content ol:not([style*="list-style-type"]) > li::marker,
+.ck-content ol[style*="list-style-type: decimal"]:not([style*="decimal-leading-zero"]) > li::marker,
+.ck-content ol[style*="list-style-type:decimal"]:not([style*="decimal-leading-zero"]) > li::marker,
+.ck-content ol[type="1"] > li::marker,
+.ck-content ol[style*="decimal-leading-zero"] > li::marker {
+    content: '';
+}
+
+.ck-content ol:not([style*="list-style-type"]) > li > :is(.ck-list-bogus-paragraph, p, div):first-child::before,
+.ck-content ol[style*="list-style-type: decimal"]:not([style*="decimal-leading-zero"]) > li > :is(.ck-list-bogus-paragraph, p, div):first-child::before,
+.ck-content ol[style*="list-style-type:decimal"]:not([style*="decimal-leading-zero"]) > li > :is(.ck-list-bogus-paragraph, p, div):first-child::before,
+.ck-content ol[type="1"] > li > :is(.ck-list-bogus-paragraph, p, div):first-child::before {
+    content: counters(ck-hier, '.') '. ';
+    margin-inline-end: .35em;
+    color: currentColor;
+    font-variant-numeric: tabular-nums;
+}
+
+.ck-content ol[style*="decimal-leading-zero"] > li > :is(.ck-list-bogus-paragraph, p, div):first-child::before {
+    content: counter(list-item, decimal-leading-zero) '. ';
+    margin-inline-end: .35em;
+    color: currentColor;
+    font-variant-numeric: tabular-nums;
 }
 
 .ck-dropdown__panel .ck-for-lists-panel {
