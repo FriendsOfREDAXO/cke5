@@ -1,5 +1,18 @@
 # Changelog
 
+## Version 7.2.1
+
+### Behoben
+
+* Update-Routine bereinigt: kein fehleranfälliger Metadaten-Check mehr auf Legacy-Tabellen `rex_cke5_templates` und `rex_cke5_template_groups`
+* Log-Fehler beim Update verhindert (`SHOW FULL COLUMNS FROM rex_cke5_templates` bei nicht vorhandener Tabelle)
+* Editor-Initialisierung erweitert: neben `cke5-editor` wird nun auch die Klasse `ckeditor` unterstützt
+
+### Entfernt
+
+* Verbleibende Legacy-Template-Codepfade aus der CSS-Regeneration entfernt
+* Verwaiste Backend-Seiten für Templates und Template-Gruppen entfernt
+
 ## Version 7.2.0
 
 ### Neu

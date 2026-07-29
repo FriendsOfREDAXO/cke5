@@ -9,7 +9,7 @@
         let ckeditors = {};
         let cke5BalloonBindings = {};
         let cke5MinimapBindings = {};
-        let ckareas = ".cke5-editor";
+        let ckareas = ".cke5-editor, .ckeditor";
         let cke5MblockCallbackRegistered = false;
         let cke5DynamicObserver = null;
         let cke5DynamicInitScheduled = false;

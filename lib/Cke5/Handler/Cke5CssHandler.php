@@ -8,7 +8,6 @@ use rex_path;
 use rex_file;
 use rex_logger;
 use rex_sql;
-use rex_sql_table;
 use Cke5\Handler\Cke5DatabaseHandler;
 
 class Cke5CssHandler
@@ -45,16 +44,6 @@ class Cke5CssHandler
                 " WHERE css_definition != '' ORDER BY name"
             );
 
-            $templateResults = [];
-            if (self::templatesTableExists()) {
-                // Hole auch alle CSS-Definitionen aus Templates
-                $sqlTemplates = rex_sql::factory();
-                $templateResults = $sqlTemplates->getArray(
-                    "SELECT title, css_definition FROM " . rex::getTable(Cke5DatabaseHandler::CKE5_TEMPLATES) .
-                    " WHERE css_definition != '' ORDER BY title"
-                );
-            }
-
             // Erstelle den CSS-Inhalt
             $cssContent = "/**\n * Auto-generierte CKEditor 5 Styles für das Backend\n * Generiert am: " . date('Y-m-d H:i:s') . "\n */\n\n";
 
@@ -87,15 +76,6 @@ class Cke5CssHandler
                 foreach ($groupResults as $group) {
                     $cssContent .= "/* Style Group: {$group['name']} */\n";
                     $cssContent .= $group['css_definition'] . "\n\n";
-                }
-            }
-
-            // Füge Template-Styles hinzu
-            if (count($templateResults) > 0) {
-                $cssContent .= "/* Template Styles */\n";
-                foreach ($templateResults as $template) {
-                    $cssContent .= "/* Template: {$template['title']} */\n";
-                    $cssContent .= $template['css_definition'] . "\n\n";
                 }
             }
 
@@ -135,16 +115,6 @@ class Cke5CssHandler
                 " WHERE css_path != ''"
             );
 
-            $templateResults = [];
-            if (self::templatesTableExists()) {
-                // Hole auch alle CSS-Pfade aus Templates
-                $sqlTemplates = rex_sql::factory();
-                $templateResults = $sqlTemplates->getArray(
-                    "SELECT css_path FROM " . rex::getTable(Cke5DatabaseHandler::CKE5_TEMPLATES) .
-                    " WHERE css_path != ''"
-                );
-            }
-
             // Sammle die Pfade
             foreach ($styleResults as $style) {
                 if (isset($style['css_path']) && is_string($style['css_path']) && $style['css_path'] !== '' && !in_array($style['css_path'], $files, true)) {
@@ -158,21 +128,10 @@ class Cke5CssHandler
                 }
             }
 
-            foreach ($templateResults as $template) {
-                if (isset($template['css_path']) && is_string($template['css_path']) && $template['css_path'] !== '' && !in_array($template['css_path'], $files, true)) {
-                    $files[] = $template['css_path'];
-                }
-            }
-
             return $files;
         } catch (Exception $e) {
             rex_logger::logException($e);
             return [];
         }
-    }
-
-    private static function templatesTableExists(): bool
-    {
-        return rex_sql_table::get(rex::getTable(Cke5DatabaseHandler::CKE5_TEMPLATES))->exists();
     }
 }
