@@ -6,6 +6,7 @@
 
 * Feldhilfe und Dokumentation für Link-Decorators an das offizielle CKEditor-Objektformat angepasst
 * Verwendung von `classes`, `attributes`, `styles`, `defaultValue` und der CKE5-Erweiterung `redaxoExclusiveGroup` ausführlich dokumentiert
+* Link-Decorators der Demo-Profile auf das offizielle Objektformat und Klassen-Arrays umgestellt
 
 ### Behoben
 

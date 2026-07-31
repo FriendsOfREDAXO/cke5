@@ -34,75 +34,59 @@
       "link_mediacategory": 0,
       "link_downloadable": "|link_downloadable|",
       "link_decorators": "|link_decorators_definition|",
-      "link_decorators_definition_data": [
-        {
-          "openInNewTab": {
-            "mode": "manual",
-            "label": "Open in a new tab",
-            "defaultValue": true,
-            "attributes": {
-              "target": "_blank",
-              "rel": "noopener noreferrer"
-            }
+      "link_decorators_definition_data": {
+        "openInNewTab": {
+          "mode": "manual",
+          "label": "Open in a new tab",
+          "defaultValue": true,
+          "attributes": {
+            "target": "_blank",
+            "rel": "noopener noreferrer"
           }
         },
-        {
-          "btnDefault": {
-            "mode": "manual",
-            "label": "Bootstrap 3 Button Default",
-            "classes": "btn btn-default",
-            "redaxoExclusiveGroup": "linkButtonStyle"
-          }
+        "btnDefault": {
+          "mode": "manual",
+          "label": "Bootstrap 3 Button Default",
+          "classes": ["btn", "btn-default"],
+          "redaxoExclusiveGroup": "linkButtonStyle"
         },
-        {
-          "btnPrimary": {
-            "mode": "manual",
-            "label": "Bootstrap 3 Button Primary",
-            "classes": "btn btn-primary",
-            "redaxoExclusiveGroup": "linkButtonStyle"
-          }
+        "btnPrimary": {
+          "mode": "manual",
+          "label": "Bootstrap 3 Button Primary",
+          "classes": ["btn", "btn-primary"],
+          "redaxoExclusiveGroup": "linkButtonStyle"
         },
-        {
-          "btnSuccess": {
-            "mode": "manual",
-            "label": "Bootstrap 3 Button Success",
-            "classes": "btn btn-success",
-            "redaxoExclusiveGroup": "linkButtonStyle"
-          }
+        "btnSuccess": {
+          "mode": "manual",
+          "label": "Bootstrap 3 Button Success",
+          "classes": ["btn", "btn-success"],
+          "redaxoExclusiveGroup": "linkButtonStyle"
         },
-        {
-          "btnInfo": {
-            "mode": "manual",
-            "label": "Bootstrap 3 Button Info",
-            "classes": "btn btn-info",
-            "redaxoExclusiveGroup": "linkButtonStyle"
-          }
+        "btnInfo": {
+          "mode": "manual",
+          "label": "Bootstrap 3 Button Info",
+          "classes": ["btn", "btn-info"],
+          "redaxoExclusiveGroup": "linkButtonStyle"
         },
-        {
-          "btnWarning": {
-            "mode": "manual",
-            "label": "Bootstrap 3 Button Warning",
-            "classes": "btn btn-warning",
-            "redaxoExclusiveGroup": "linkButtonStyle"
-          }
+        "btnWarning": {
+          "mode": "manual",
+          "label": "Bootstrap 3 Button Warning",
+          "classes": ["btn", "btn-warning"],
+          "redaxoExclusiveGroup": "linkButtonStyle"
         },
-        {
-          "btnDanger": {
-            "mode": "manual",
-            "label": "Bootstrap 3 Button Danger",
-            "classes": "btn btn-danger",
-            "redaxoExclusiveGroup": "linkButtonStyle"
-          }
+        "btnDanger": {
+          "mode": "manual",
+          "label": "Bootstrap 3 Button Danger",
+          "classes": ["btn", "btn-danger"],
+          "redaxoExclusiveGroup": "linkButtonStyle"
         },
-        {
-          "btnLink": {
-            "mode": "manual",
-            "label": "Bootstrap 3 Button Link",
-            "classes": "btn btn-link",
-            "redaxoExclusiveGroup": "linkButtonStyle"
-          }
+        "btnLink": {
+          "mode": "manual",
+          "label": "Bootstrap 3 Button Link",
+          "classes": ["btn", "btn-link"],
+          "redaxoExclusiveGroup": "linkButtonStyle"
         }
-      ],
+      },
       "text_part_language": "|en|fr|de|sl|tk|",
       "heading": "paragraph,h1,h2,h3,h4,h5,h6",
       "alignment": "left,right,center,justify",
@@ -197,19 +181,17 @@
       "blank_to_external": "|blank_to_external|",
       "link_downloadable": "|link_downloadable|",
       "link_decorators": "|link_decorators_definition|",
-      "link_decorators_definition_data": [
-        {
-          "openInNewTab": {
-            "mode": "manual",
-            "label": "Open in a new tab",
-            "defaultValue": true,
-            "attributes": {
-              "target": "_blank",
-              "rel": "noopener noreferrer"
-            }
+      "link_decorators_definition_data": {
+        "openInNewTab": {
+          "mode": "manual",
+          "label": "Open in a new tab",
+          "defaultValue": true,
+          "attributes": {
+            "target": "_blank",
+            "rel": "noopener noreferrer"
           }
         }
-      ],
+      },
       "text_part_language": "|en|fr|de|sl|tk|",
       "heading": "paragraph,h1,h2,h3,h4,h5,h6",
       "alignment": "left,right,center,justify",
