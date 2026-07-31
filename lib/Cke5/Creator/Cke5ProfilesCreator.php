@@ -512,6 +512,7 @@ class Cke5ProfilesCreator
         $globalMentions = self::isGlobalSettingEnabled($globalSettings, 'global_mentions_enabled') ? self::decodeGlobalJsonList($globalSettings, 'global_mentions_definition') : [];
         $globalSprogMentions = self::isGlobalSettingEnabled($globalSettings, 'global_sprog_enabled') ? self::decodeGlobalJsonList($globalSettings, 'global_sprog_mention_definition') : [];
         $globalYtables = self::isGlobalSettingEnabled($globalSettings, 'global_ytable_enabled') ? self::decodeGlobalJsonList($globalSettings, 'global_ytable_definition') : [];
+        $globalLinkDecorators = self::isGlobalSettingEnabled($globalSettings, 'global_link_decorators_enabled') ? self::decodeLinkDecoratorDefinition($globalSettings, 'global_link_decorators_definition') : [];
         $globalTableClasses = self::isGlobalSettingEnabled($globalSettings, 'global_for_table_enabled') ? self::getLabelClassStylesFromConfig($globalSettings, 'global_table_classes_definition') : [];
         $globalColumnClasses = self::isGlobalSettingEnabled($globalSettings, 'global_for_table_enabled') ? self::getLabelClassStylesFromConfig($globalSettings, 'global_table_column_classes_definition') : [];
         $globalRowClasses = self::isGlobalSettingEnabled($globalSettings, 'global_for_table_enabled') ? self::getLabelClassStylesFromConfig($globalSettings, 'global_table_row_classes_definition') : [];
@@ -710,6 +711,13 @@ class Cke5ProfilesCreator
             $jsonProfile['link']['decorators']['toggleDownloadable'] = ['mode' => 'manual', 'label' => 'Downloadable', 'attributes' => ['download' => 'file']];
         }
 
+        if (in_array('link', $toolbar, true) && $globalLinkDecorators !== []) {
+            $jsonProfile['link']['decorators'] = array_replace(
+                $globalLinkDecorators,
+                isset($jsonProfile['link']['decorators']) && is_array($jsonProfile['link']['decorators']) ? $jsonProfile['link']['decorators'] : [],
+            );
+        }
+
         if (isset($profile['link_decorators']) && $profile['link_decorators'] !== '' && isset($profile['link_decorators_definition']) && $profile['link_decorators_definition'] !== '') {
             $definition = json_decode($profile['link_decorators_definition'], true);
             if (!isset($jsonProfile['link']['decorators']) || !is_array($jsonProfile['link']['decorators'])) {
@@ -717,7 +725,7 @@ class Cke5ProfilesCreator
             }
             if (is_array($definition) && count($definition) > 0) {
                 $jsonProfile['link']['decorators'] = self::normalizeLinkDecoratorDefinition(
-                    array_merge($jsonProfile['link']['decorators'], self::flattenLinkDecoratorDefinition($definition)),
+                    array_replace($jsonProfile['link']['decorators'], self::flattenLinkDecoratorDefinition($definition)),
                 );
             }
         }
@@ -1519,6 +1527,8 @@ class Cke5ProfilesCreator
             'global_quickedit_enabled' => $quickEditEnabled,
             'global_mentions_enabled' => (string) $addon->getConfig('global_mentions_enabled', ''),
             'global_mentions_definition' => (string) $addon->getConfig('global_mentions_definition', ''),
+            'global_link_decorators_enabled' => (string) $addon->getConfig('global_link_decorators_enabled', ''),
+            'global_link_decorators_definition' => (string) $addon->getConfig('global_link_decorators_definition', ''),
             'global_sprog_enabled' => (string) $addon->getConfig('global_sprog_enabled', ''),
             'global_sprog_mention_definition' => (string) $addon->getConfig('global_sprog_mention_definition', ''),
             'global_ytable_enabled' => (string) $addon->getConfig('global_ytable_enabled', ''),
@@ -1583,6 +1593,24 @@ class Cke5ProfilesCreator
 
         $decoded = json_decode($settings[$key], true);
         return is_array($decoded) ? array_values($decoded) : [];
+    }
+
+    /**
+     * @param array<string,mixed> $settings
+     * @return array<string,array<string,mixed>>
+     */
+    private static function decodeLinkDecoratorDefinition(array $settings, string $key): array
+    {
+        if (!isset($settings[$key]) || !is_string($settings[$key]) || '' === trim($settings[$key])) {
+            return [];
+        }
+
+        $decoded = json_decode($settings[$key], true);
+        if (!is_array($decoded)) {
+            return [];
+        }
+
+        return self::normalizeLinkDecoratorDefinition(self::flattenLinkDecoratorDefinition($decoded));
     }
 
     /**

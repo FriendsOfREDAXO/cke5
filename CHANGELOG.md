@@ -1,6 +1,11 @@
 # Changelog
 
-## Version 7.2.2
+## Version 7.3.0
+
+### Neu
+
+* Globale Link-Decorators unter `Profiles > Defaults > Global settings` mit Aktivierungsschalter und JSON-Konfiguration
+* Globale Decorators gelten für alle Profile mit Link-Toolbar; profilspezifische Einträge überschreiben gleichnamige globale Keys
 
 ### Geändert
 
@@ -10,6 +15,7 @@
 
 ### Behoben
 
+* Aktivierungsschalter für globale Link-Decorators öffnet und schließt das zugehörige JSON-Feld zuverlässig
 * Offizielles CKEditor-Objektformat für `link_decorators_definition` wird nun korrekt verarbeitet; das bisherige Listenformat bleibt kompatibel
 * CSS-Klassen aus `classes` werden als native CKEditor-Decorator-Eigenschaft weitergegeben statt in `attributes.class` umgeschrieben
 * `styles`, Klassen-Arrays und `redaxoExclusiveGroup` bleiben bei der Profil-Normalisierung erhalten

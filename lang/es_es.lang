@@ -137,3 +137,6 @@ cke5_video_playsinline_default = Playsinline activado por defecto
 cke5_video_playsinline_default_description = Evita pantalla completa forzada en móviles
 cke5_global_for_table_definition = Table styles (global)
 cke5_global_for_table_definition_notice = Global table and cell classes as fallback for all profiles. Profile values override global entries with the same CSS class.
+cke5_global_link_decorators_definition = Link decorators (global)
+cke5_global_link_decorators_definition_notice = Global link decorators for all profiles with a link toolbar. Profile entries override global decorators with the same key.
+cke5_global_link_decorators_definition_example = CKEditor JSON object, e.g. {"btnPrimary":{"mode":"manual","label":"Button Primary","classes":["btn","btn-primary"]}}.

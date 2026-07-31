@@ -36,6 +36,22 @@ $field->setAttribute('data-codemirror-mode', 'application/json');
 $field->setNotice($this->i18n('cke5_mentions_definition_example'));
 $form->addRawField('</div>');
 
+$field = $form->addCheckboxField('global_link_decorators_enabled');
+$field->setAttribute('id', 'cke5global-link-decorators-enabled-input');
+$field->setAttribute('data-toggle', 'toggle');
+$field->setAttribute('data-collapse-target', 'globalLinkDecorators');
+$field->setLabel($this->i18n('cke5_global_link_decorators_definition'));
+$field->addOption($this->i18n('cke5_global_link_decorators_definition_notice'), '1');
+
+$form->addRawField('<div class="collapse" id="cke5globalLinkDecorators-collapse">');
+$field = $form->addTextAreaField('global_link_decorators_definition');
+$field->setLabel($this->i18n('cke5_global_link_decorators_definition'));
+$field->setAttribute('id', 'cke5-global-link-decorators-area');
+$field->setAttribute('class', 'rex-code');
+$field->setAttribute('data-codemirror-mode', 'application/json');
+$field->setNotice($this->i18n('cke5_global_link_decorators_definition_example'));
+$form->addRawField('</div>');
+
 $field = $form->addCheckboxField('global_sprog_enabled');
 $field->setAttribute('id', 'cke5global-sprog-enabled-input');
 $field->setAttribute('data-toggle', 'toggle');

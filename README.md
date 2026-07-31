@@ -334,6 +334,10 @@ CKEditor treats manual decorators independently by default. If multiple button v
 
 `redaxoExclusiveGroup` is not an official CKEditor option; it is an extension provided by this addon. When saving a link, CKE5 disables the other active decorators in the same group. A group therefore has an effect only when it contains at least two entries. Independent decorators such as `nofollow` can remain active at the same time.
 
+#### Global decorators
+
+Link decorators can be enabled centrally under `CKEditor 5 > Profiles > Defaults > Global settings` and stored as a JSON object for all profiles with a link toolbar. Profile-specific decorators are then merged by their technical key: a profile entry wins when the same key exists, while additional global and profile entries remain available together.
+
 #### Automatic decorators
 
 The official CKEditor API also supports `mode: "automatic"`. However, it requires an actual JavaScript function in `callback`, which cannot be stored as JSON. This profile field is therefore intended for manual decorators. The profile provides the `blank_to_external` option for automatically opening external links in a new tab.

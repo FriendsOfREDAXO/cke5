@@ -37,6 +37,7 @@ $(document).on('rex:ready', function (event, container) {
 
   let quickEdit = root.find('input[id^="cke5global-quickedit-enabled-input"]');
   let mentions = root.find('input[id^="cke5global-mentions-enabled-input"]');
+  let linkDecorators = root.find('input[id^="cke5global-link-decorators-enabled-input"]');
   let sprog = root.find('input[id^="cke5global-sprog-enabled-input"]');
   let ytable = root.find('input[id^="cke5global-ytable-enabled-input"]');
   let forTable = root.find('input[id^="cke5global-for-table-enabled-input"]');
@@ -47,6 +48,7 @@ $(document).on('rex:ready', function (event, container) {
   if (typeof cke5_bootstrapToggle_collapse === 'function') {
     cke5_bootstrapToggle_collapse(quickEdit);
     cke5_bootstrapToggle_collapse(mentions, true);
+    cke5_bootstrapToggle_collapse(linkDecorators, true);
     cke5_bootstrapToggle_collapse(sprog, true);
     cke5_bootstrapToggle_collapse(ytable, true);
     cke5_bootstrapToggle_collapse(forTable, true);
@@ -56,6 +58,7 @@ $(document).on('rex:ready', function (event, container) {
   } else {
     initLocalCollapse(quickEdit);
     initLocalCollapse(mentions);
+    initLocalCollapse(linkDecorators);
     initLocalCollapse(sprog);
     initLocalCollapse(ytable);
     initLocalCollapse(forTable);
