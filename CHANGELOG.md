@@ -1,5 +1,19 @@
 # Changelog
 
+## Version 7.2.2
+
+### Geändert
+
+* Feldhilfe und Dokumentation für Link-Decorators an das offizielle CKEditor-Objektformat angepasst
+* Verwendung von `classes`, `attributes`, `styles`, `defaultValue` und der CKE5-Erweiterung `redaxoExclusiveGroup` ausführlich dokumentiert
+
+### Behoben
+
+* Offizielles CKEditor-Objektformat für `link_decorators_definition` wird nun korrekt verarbeitet; das bisherige Listenformat bleibt kompatibel
+* CSS-Klassen aus `classes` werden als native CKEditor-Decorator-Eigenschaft weitergegeben statt in `attributes.class` umgeschrieben
+* `styles`, Klassen-Arrays und `redaxoExclusiveGroup` bleiben bei der Profil-Normalisierung erhalten
+* Exklusive Decorator-Gruppen funktionieren wieder, wenn mindestens zwei manuelle Decorators denselben Gruppennamen verwenden
+
 ## Version 7.2.1
 
 ### Behoben

@@ -222,81 +222,123 @@ Several profile fields expect JSON input. This section gives working starter exa
 
 ### 1) `link_decorators_definition`
 
-Use this to add manual link decorators. A practical use case is Bootstrap-like link buttons.
+This profile field defines manual link decorators. They appear as switches in the link dialog and add classes or attributes to the generated `<a>` element.
+
+#### Format
+
+Use the official CKEditor format: a JSON object whose keys are unique technical decorator names. Every entry contains at least `mode: "manual"`, a `label`, and output configuration through `classes`, `attributes`, or `styles`.
 
 ```json
-[
-  {
-    "btnPrimary": {
-      "mode": "manual",
-      "label": "Button Primary",
-      "attributes": {
-        "class": "btn btn-primary",
-        "role": "button"
-      }
+{
+  "btnPrimary": {
+    "mode": "manual",
+    "label": "Button Primary",
+    "classes": ["btn", "btn-primary"],
+    "attributes": {
+      "role": "button"
     }
   },
-  {
-    "btnOutline": {
-      "mode": "manual",
-      "label": "Button Outline",
-      "attributes": {
-        "class": "btn btn-outline-secondary",
-        "role": "button"
-      }
-    }
-  },
-  {
-    "nofollow": {
-      "mode": "manual",
-      "label": "Add nofollow",
-      "attributes": {
-        "rel": "nofollow"
-      }
+  "newWindow": {
+    "mode": "manual",
+    "label": "Open in a new window",
+    "attributes": {
+      "target": "_blank",
+      "rel": "noopener noreferrer"
     }
   }
-]
+}
 ```
 
-Tip: this JSON is merged into `link.decorators` of the generated CKEditor profile.
+The legacy format containing a list of individual objects is still accepted, but should not be used for new configurations.
 
-Exclusive decorator groups (only one active at a time):
+#### Properties
 
-If multiple manual decorators should be mutually exclusive (for example button variants, color variants, badge variants), set the same `redaxoExclusiveGroup` on those decorators.
+| Property | Type | Meaning |
+|---|---|---|
+| `mode` | String | Must be `"manual"` in this JSON field. |
+| `label` | String | Label of the switch in the link dialog. |
+| `classes` | String or string array | CSS classes applied to the link. An array such as `["btn", "btn-primary"]` is recommended. |
+| `attributes` | Object | HTML attributes such as `role`, `rel`, `target`, `download`, or `data-*`. |
+| `styles` | Object | Inline styles as property/value pairs. Use only when classes are insufficient. |
+| `defaultValue` | Boolean | When `true`, the decorator is enabled by default for new links. |
+| `redaxoExclusiveGroup` | String | Optional CKE5 extension for mutually exclusive manual decorators. |
 
-Example:
+#### Classes and attributes
+
+For CSS classes, `classes` is the official and recommended CKEditor property:
 
 ```json
-[
-  {
-    "btnPrimary": {
-      "mode": "manual",
-      "label": "Button Primary",
-      "classes": "btn btn-primary",
-      "redaxoExclusiveGroup": "linkButtonStyle"
-    }
-  },
-  {
-    "btnSuccess": {
-      "mode": "manual",
-      "label": "Button Success",
-      "classes": "btn btn-success",
-      "redaxoExclusiveGroup": "linkButtonStyle"
-    }
-  },
-  {
-    "nofollow": {
-      "mode": "manual",
-      "label": "Add nofollow",
-      "attributes": {
-        "rel": "nofollow"
-      }
-    }
-  }
-]
+"classes": ["btn", "btn-default"]
 ```
 
-Result: In the link dialog, only one decorator from `linkButtonStyle` can be active at the same time, while unrelated decorators (like `nofollow`) remain independent.
+CKEditor can also process `"attributes": {"class": "btn btn-default"}` as a regular HTML attribute. New configurations should still use `classes` because CKEditor then explicitly handles the values as class tokens. `"attributes": "classes"` is invalid because `attributes` must always be a JSON object.
+
+Compatible alternative using `class` inside `attributes`:
+
+```json
+{
+  "btnDefault": {
+    "mode": "manual",
+    "label": "Bootstrap 3 Button Default",
+    "attributes": {
+      "class": "btn btn-default",
+      "role": "button"
+    }
+  }
+}
+```
+
+Classes and additional attributes can be combined:
+
+```json
+{
+  "btnDefault": {
+    "mode": "manual",
+    "label": "Bootstrap 3 Button Default",
+    "classes": ["btn", "btn-default"],
+    "attributes": {
+      "role": "button",
+      "data-variant": "default"
+    }
+  }
+}
+```
+
+#### Exclusive groups
+
+CKEditor treats manual decorators independently by default. If multiple button variants must not be active at the same time, assign the same `redaxoExclusiveGroup` value to at least two decorators:
+
+```json
+{
+  "btnPrimary": {
+    "mode": "manual",
+    "label": "Button Primary",
+    "classes": ["btn", "btn-primary"],
+    "redaxoExclusiveGroup": "linkButtonStyle"
+  },
+  "btnSuccess": {
+    "mode": "manual",
+    "label": "Button Success",
+    "classes": ["btn", "btn-success"],
+    "redaxoExclusiveGroup": "linkButtonStyle"
+  },
+  "nofollow": {
+    "mode": "manual",
+    "label": "Add nofollow",
+    "attributes": {
+      "rel": "nofollow"
+    }
+  }
+}
+```
+
+`redaxoExclusiveGroup` is not an official CKEditor option; it is an extension provided by this addon. When saving a link, CKE5 disables the other active decorators in the same group. A group therefore has an effect only when it contains at least two entries. Independent decorators such as `nofollow` can remain active at the same time.
+
+#### Automatic decorators
+
+The official CKEditor API also supports `mode: "automatic"`. However, it requires an actual JavaScript function in `callback`, which cannot be stored as JSON. This profile field is therefore intended for manual decorators. The profile provides the `blank_to_external` option for automatically opening external links in a new tab.
+
+Official API reference: [CKEditor `LinkConfig#decorators`](https://ckeditor.com/docs/ckeditor5/latest/api/module_link_linkconfig-LinkConfig.html#member-decorators) and [`LinkDecoratorManualDefinition`](https://ckeditor.com/docs/ckeditor5/latest/api/module_link_linkconfig-LinkDecoratorManualDefinition.html).
 
 ### 2) `mentions_definition`
 

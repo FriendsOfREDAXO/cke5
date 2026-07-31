@@ -1103,7 +1103,7 @@ if ($func === '') {
                 $field->setAttribute('id', 'cke5-link-decorators-definition-area');
                 $field->setAttribute('rows', '5');
                 $field->setLabel(rex_i18n::msg('cke5_link_decorators_definition_area'));
-                $field->setNotice('CKEditor API: JSON-Objekt mit Decorator-Key => Konfiguration, z. B. {"isDownloadable":{"mode":"manual","label":"Download","attributes":{"download":"download"}}}');
+                $field->setNotice(rex_i18n::msg('cke5_link_decorators_definition_notice'));
             $form->addRawField('</div>');
         // close fieldset LINKS
         $form->addRawField('</fieldset></div>');

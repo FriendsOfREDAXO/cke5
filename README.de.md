@@ -210,81 +210,124 @@ Mehrere Profilfelder erwarten JSON-Eingaben. Hier sind funktionierende Startbeis
 
 ### 1) `link_decorators_definition`
 
-Damit definierst du manuelle Link-Decorator. Ein typischer Anwendungsfall sind Bootstrap-ähnliche Link-Buttons.
+Mit diesem Profilfeld definierst du manuelle Link-Decorators. Sie erscheinen im Link-Dialog als Schalter und ergänzen den erzeugten `<a>`-Tag beispielsweise um Klassen oder Attribute.
+
+#### Format
+
+Verwende das offizielle CKEditor-Format: ein JSON-Objekt, dessen Keys eindeutige technische Namen der Decorators sind. Jeder Eintrag enthält mindestens `mode: "manual"`, ein `label` und eine Ausgabedefinition über `classes`, `attributes` oder `styles`.
 
 ```json
-[
-  {
-    "btnPrimary": {
-      "mode": "manual",
-      "label": "Button Primary",
-      "attributes": {
-        "class": "btn btn-primary",
-        "role": "button"
-      }
+{
+  "btnPrimary": {
+    "mode": "manual",
+    "label": "Button Primary",
+    "classes": ["btn", "btn-primary"],
+    "attributes": {
+      "role": "button"
     }
   },
-  {
-    "btnOutline": {
-      "mode": "manual",
-      "label": "Button Outline",
-      "attributes": {
-        "class": "btn btn-outline-secondary",
-        "role": "button"
-      }
-    }
-  },
-  {
-    "nofollow": {
-      "mode": "manual",
-      "label": "Nofollow setzen",
-      "attributes": {
-        "rel": "nofollow"
-      }
+  "newWindow": {
+    "mode": "manual",
+    "label": "In neuem Fenster öffnen",
+    "attributes": {
+      "target": "_blank",
+      "rel": "noopener noreferrer"
     }
   }
-]
+}
 ```
 
-Hinweis: Dieses JSON wird in `link.decorators` des generierten CKEditor-Profils zusammengeführt.
+Das frühere Format als Liste einzelner Objekte wird weiterhin gelesen, sollte für neue Konfigurationen aber nicht mehr verwendet werden.
 
-Exklusive Decorator-Gruppen (immer nur einer gleichzeitig):
+#### Eigenschaften
 
-Wenn mehrere manuelle Decorators gegenseitig exklusiv sein sollen (z. B. Button-Varianten, Farb-Varianten, Badge-Varianten), gib ihnen denselben Wert in `redaxoExclusiveGroup`.
+| Eigenschaft | Typ | Bedeutung |
+|---|---|---|
+| `mode` | String | Muss in diesem JSON-Feld `"manual"` sein. |
+| `label` | String | Beschriftung des Schalters im Link-Dialog. |
+| `classes` | String oder String-Array | CSS-Klassen für den Link. Ein Array wie `["btn", "btn-primary"]` ist die empfohlene Schreibweise. |
+| `attributes` | Objekt | HTML-Attribute, z. B. `role`, `rel`, `target`, `download` oder `data-*`. |
+| `styles` | Objekt | Inline-Styles als Eigenschaft/Wert-Paare. Nur verwenden, wenn Klassen nicht ausreichen. |
+| `defaultValue` | Boolean | Mit `true` ist der Decorator bei neuen Links standardmäßig aktiviert. |
+| `redaxoExclusiveGroup` | String | Optionale CKE5-Erweiterung für gegenseitig ausschließende manuelle Decorators. |
 
-Beispiel:
+#### Klassen und Attribute
+
+Für CSS-Klassen ist `classes` die offizielle und empfohlene CKEditor-Eigenschaft:
 
 ```json
-[
-  {
-    "btnPrimary": {
-      "mode": "manual",
-      "label": "Button Primary",
-      "classes": "btn btn-primary",
-      "redaxoExclusiveGroup": "linkButtonStyle"
-    }
-  },
-  {
-    "btnSuccess": {
-      "mode": "manual",
-      "label": "Button Success",
-      "classes": "btn btn-success",
-      "redaxoExclusiveGroup": "linkButtonStyle"
-    }
-  },
-  {
-    "nofollow": {
-      "mode": "manual",
-      "label": "Nofollow setzen",
-      "attributes": {
-        "rel": "nofollow"
-      }
-    }
-  }
-]
+"classes": ["btn", "btn-default"]
 ```
 
-Ergebnis: Im Link-Dialog kann immer nur ein Decorator aus `linkButtonStyle` aktiv sein. Unabhängige Decorators wie `nofollow` bleiben parallel nutzbar.
+Auch `"attributes": {"class": "btn btn-default"}` kann von CKEditor als normales HTML-Attribut verarbeitet werden. Für neue Konfigurationen sollte dennoch `classes` verwendet werden, weil CKEditor die Klassennamen damit ausdrücklich als Klassen-Tokens behandelt. `"attributes": "classes"` ist ungültig, da `attributes` immer ein JSON-Objekt sein muss.
+
+Kompatible Alternative mit `class` innerhalb von `attributes`:
+
+```json
+{
+  "btnDefault": {
+    "mode": "manual",
+    "label": "Bootstrap 3 Button Default",
+    "attributes": {
+      "class": "btn btn-default",
+      "role": "button"
+    }
+  }
+}
+```
+
+Klassen und weitere Attribute können kombiniert werden:
+
+```json
+{
+  "btnDefault": {
+    "mode": "manual",
+    "label": "Bootstrap 3 Button Default",
+    "classes": ["btn", "btn-default"],
+    "attributes": {
+      "role": "button",
+      "data-variant": "default"
+    }
+  }
+}
+```
+
+#### Exklusive Gruppen
+
+CKEditor behandelt manuelle Decorators standardmäßig unabhängig. Sollen beispielsweise mehrere Button-Varianten nicht gleichzeitig aktiv sein, gib mindestens zwei Decorators denselben Wert in `redaxoExclusiveGroup`:
+
+
+```json
+{
+  "btnPrimary": {
+    "mode": "manual",
+    "label": "Button Primary",
+    "classes": ["btn", "btn-primary"],
+    "redaxoExclusiveGroup": "linkButtonStyle"
+  },
+  "btnSuccess": {
+    "mode": "manual",
+    "label": "Button Success",
+    "classes": ["btn", "btn-success"],
+    "redaxoExclusiveGroup": "linkButtonStyle"
+  },
+  "nofollow": {
+    "mode": "manual",
+    "label": "Nofollow setzen",
+    "attributes": {
+      "rel": "nofollow"
+    }
+  }
+}
+```
+
+`redaxoExclusiveGroup` ist keine offizielle CKEditor-Option, sondern eine Erweiterung dieses AddOns. Beim Speichern eines Links deaktiviert CKE5 die anderen aktiven Decorators derselben Gruppe. Eine Gruppe hat daher erst mit mindestens zwei Einträgen eine Wirkung. Unabhängige Decorators wie `nofollow` bleiben parallel nutzbar.
+
+#### Automatische Decorators
+
+Die offizielle CKEditor-API unterstützt auch `mode: "automatic"`. Dafür ist jedoch eine echte JavaScript-Funktion in `callback` erforderlich; eine solche Funktion kann nicht als JSON gespeichert werden. Dieses Profilfeld ist deshalb für manuelle Decorators vorgesehen. Für externe Links steht im Profil die Option zum automatischen Öffnen in einem neuen Tab (`blank_to_external`) bereit.
+
+Offizielle API-Referenz: [CKEditor `LinkConfig#decorators`](https://ckeditor.com/docs/ckeditor5/latest/api/module_link_linkconfig-LinkConfig.html#member-decorators) und [`LinkDecoratorManualDefinition`](https://ckeditor.com/docs/ckeditor5/latest/api/module_link_linkconfig-LinkDecoratorManualDefinition.html).
 
 ### 2) `mentions_definition`
 

@@ -151,6 +151,7 @@ cke5_link_downloadable_description = Enables you to mark links as downloadable
 cke5_link_decorators_definition = Link decorators
 cke5_link_decorators_definition_description = Enables the creation of custom link decorators
 cke5_link_decorators_definition_area = Custom link decorators
+cke5_link_decorators_definition_notice = CKEditor JSON object, e.g. {"btnDefault":{"mode":"manual","label":"Button Default","classes":"btn btn-default","redaxoExclusiveGroup":"linkButtonStyle"}}. "classes" is the official CKEditor property; "redaxoExclusiveGroup" is a CKE5 extension.
 cke5_group_when_full_default = Toolbar group
 cke5_group_when_full_description = Groups toolbar elements. Allows you to place many toolbar elements in only one toolbar line.
 cke5_paste_plain_text_default = Paste plain text enabled by default

@@ -716,10 +716,9 @@ class Cke5ProfilesCreator
                 $jsonProfile['link']['decorators'] = [];
             }
             if (is_array($definition) && count($definition) > 0) {
-                foreach ($definition as $item) {
-                    $jsonProfile['link']['decorators'] = array_merge($jsonProfile['link']['decorators'], $item);
-                }
-                $jsonProfile['link']['decorators'] = self::normalizeLinkDecorators($jsonProfile['link']['decorators']);
+                $jsonProfile['link']['decorators'] = self::normalizeLinkDecoratorDefinition(
+                    array_merge($jsonProfile['link']['decorators'], self::flattenLinkDecoratorDefinition($definition)),
+                );
             }
         }
 
@@ -1396,12 +1395,33 @@ class Cke5ProfilesCreator
     }
 
     /**
+     * Accept the CKEditor object format and the legacy list of decorator objects.
+     *
+     * @param array<mixed> $definition
+     * @return array<string,array<mixed>>
+     */
+    private static function flattenLinkDecoratorDefinition(array $definition): array
+    {
+        $decorators = [];
+
+        foreach ($definition as $name => $item) {
+            if (is_string($name) && is_array($item) && isset($item['mode'])) {
+                $decorators[$name] = $item;
+            } elseif (is_array($item)) {
+                $decorators = array_merge($decorators, $item);
+            }
+        }
+
+        return $decorators;
+    }
+
+    /**
      * Normalize custom link decorators to CKEditor-compatible structure.
      *
      * @param mixed $decorators
      * @return array<string,array<string,mixed>>
      */
-    private static function normalizeLinkDecorators($decorators): array
+    private static function normalizeLinkDecoratorDefinition($decorators): array
     {
         if (!is_array($decorators)) {
             return [];
@@ -1429,11 +1449,27 @@ class Cke5ProfilesCreator
                 $entry['label'] = trim($config['label']);
             }
 
+            if (isset($config['defaultValue']) && is_bool($config['defaultValue'])) {
+                $entry['defaultValue'] = $config['defaultValue'];
+            }
+
+            if (isset($config['redaxoExclusiveGroup']) && is_string($config['redaxoExclusiveGroup']) && trim($config['redaxoExclusiveGroup']) !== '') {
+                $entry['redaxoExclusiveGroup'] = trim($config['redaxoExclusiveGroup']);
+            }
+
             if ($mode === 'manual') {
-                if (!isset($config['attributes']) || !is_array($config['attributes']) || $config['attributes'] === []) {
+                if (isset($config['attributes']) && is_array($config['attributes']) && $config['attributes'] !== []) {
+                    $entry['attributes'] = $config['attributes'];
+                }
+                if (isset($config['classes']) && ((is_string($config['classes']) && trim($config['classes']) !== '') || (is_array($config['classes']) && $config['classes'] !== []))) {
+                    $entry['classes'] = is_string($config['classes']) ? trim($config['classes']) : $config['classes'];
+                }
+                if (isset($config['styles']) && is_array($config['styles']) && $config['styles'] !== []) {
+                    $entry['styles'] = $config['styles'];
+                }
+                if (!isset($entry['attributes']) && !isset($entry['classes']) && !isset($entry['styles'])) {
                     continue;
                 }
-                $entry['attributes'] = $config['attributes'];
             }
 
             if ($mode === 'automatic') {
