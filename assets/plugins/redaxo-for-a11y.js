@@ -26,6 +26,7 @@
   var SEVERITY_LABEL = { error: 'Fehler', warn: 'Warnung', info: 'Hinweis' };
   var SEVERITY_COLOR = { error: '#c62828', warn: '#ef6c00', info: '#1565c0' };
   var SEVERITY_BG    = { error: 'rgba(229,57,53,.12)', warn: 'rgba(251,140,0,.14)', info: 'rgba(30,136,229,.12)' };
+  var MAX_HEADING_LENGTH = 120;
 
   var FOR_A11Y_ICON = "<svg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><path fill='#1976d2' d='M12 2a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z'/></svg>";
 
@@ -234,6 +235,12 @@
           message: 'Schreibe die Überschrift in normaler Gross-/Kleinschreibung. Für Versalien-Optik: CSS text-transform im Frontend.',
           element: h, preview: shortHtml(h) });
       }
+      if (text.length > MAX_HEADING_LENGTH) {
+        findings.push({ id: 'heading-too-long', severity: 'warn',
+          title: h.tagName + ' ist sehr lang (' + text.length + ' Zeichen)',
+          message: 'Sehr lange Überschriften erschweren Orientierung und Scanbarkeit. Kürze die Überschrift auf maximal ' + MAX_HEADING_LENGTH + ' Zeichen und lagere Details in den Fließtext aus.',
+          element: h, preview: shortHtml(h) });
+      }
       prevLevel = level;
     });
 
@@ -241,10 +248,17 @@
     var paragraphs = Array.from(body.querySelectorAll('p'));
     var blankRun = [];
     function flushBlank() {
-      if (blankRun.length >= 2) {
+      if (blankRun.length >= 1) {
+        var count = blankRun.length;
+        var title = count === 1
+          ? 'Leerer Absatz'
+          : count + ' leere Absätze hintereinander';
+        var message = count === 1
+          ? 'Leere Absätze werden von Screenreadern als „leer" angekündigt. Entferne den leeren Absatz und erzeuge Abstände via CSS.'
+          : 'Leere Absätze werden von Screenreadern als „leer" angekündigt. Entferne sie und erzeuge Abstände via CSS.';
         findings.push({ id: 'blank-paragraphs', severity: 'info',
-          title: blankRun.length + ' leere Absätze hintereinander',
-          message: 'Leere Absätze werden von Screenreadern als „leer" angekündigt. Entferne sie und erzeuge Abstände via CSS.',
+          title: title,
+          message: message,
           element: blankRun[0], preview: shortHtml(blankRun[0]) });
       }
       blankRun = [];
@@ -299,6 +313,17 @@
     Array.from(body.querySelectorAll('table')).forEach(function (t) {
       var ths     = t.querySelectorAll('th');
       var caption = t.querySelector('caption');
+      var merged  = Array.from(t.querySelectorAll('td[colspan], td[rowspan], th[colspan], th[rowspan]')).filter(function (cell) {
+        var colspan = parseInt(cell.getAttribute('colspan') || '1', 10);
+        var rowspan = parseInt(cell.getAttribute('rowspan') || '1', 10);
+        return colspan > 1 || rowspan > 1;
+      });
+      if (merged.length > 0) {
+        findings.push({ id: 'table-merged-cells', severity: 'warn',
+          title: 'Tabelle mit verbundenen Zellen (' + merged.length + ')',
+          message: 'Verbundene Zellen mit rowspan/colspan sind für Screenreader schwerer verständlich und sollten möglichst vermieden werden.',
+          element: t, preview: shortHtml(t) });
+      }
       if (!ths.length) {
         findings.push({ id: 'table-no-th', severity: 'warn',
           title: 'Tabelle ohne <th>',
