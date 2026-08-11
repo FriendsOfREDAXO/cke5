@@ -30,7 +30,13 @@
       valignDefault: 'Default',
       valignTop: 'Top',
       valignMiddle: 'Middle',
-      valignBottom: 'Bottom'
+      valignBottom: 'Bottom',
+      captionButtonAdd: 'Add caption',
+      captionButtonRemove: 'Remove caption',
+      captionHint: 'After adding it, edit the caption directly above the table.',
+      captionStatusLabel: 'Caption',
+      captionStatusPresent: 'present',
+      captionStatusMissing: 'none'
     },
     de: {
       tableButton: 'Tabelle',
@@ -58,7 +64,13 @@
       valignDefault: 'Standard',
       valignTop: 'Oben',
       valignMiddle: 'Mitte',
-      valignBottom: 'Unten'
+      valignBottom: 'Unten',
+      captionButtonAdd: 'Beschriftung hinzufügen',
+      captionButtonRemove: 'Beschriftung entfernen',
+      captionHint: 'Danach die Beschriftung direkt oberhalb der Tabelle bearbeiten.',
+      captionStatusLabel: 'Beschriftung',
+      captionStatusPresent: 'vorhanden',
+      captionStatusMissing: 'keine'
     }
   };
 
@@ -252,9 +264,17 @@
     var className = table && typeof table.getAttribute === 'function' ? String(table.getAttribute('forTableClass') || '') : '';
     var styleString = table && typeof table.getAttribute === 'function' ? String(table.getAttribute('forTableStyle') || '') : '';
     var styleMap = parseStyleString(styleString);
+    var hasCaption = false;
+
+    if (table && typeof table.getChildren === 'function') {
+      hasCaption = Array.from(table.getChildren()).some(function (child) {
+        return child && child.name === 'caption';
+      });
+    }
 
     return {
       className: className,
+      hasCaption: hasCaption,
       width: styleMap.width || '',
       textAlign: styleMap['text-align'] || ''
     };
@@ -561,18 +581,22 @@
     var style = document.createElement('style');
     style.id = 'cke5-for-table-style';
     style.textContent = ''
-      + '.ck-for-table-panel{display:flex;flex-direction:column;gap:0;box-sizing:border-box;width:min(24rem,calc(100vw - 40px));min-width:17rem;max-width:calc(100vw - 40px);background:var(--ck-color-base-background,#fff);border:1px solid var(--ck-color-base-border,#d8dde4);border-radius:4px;overflow:hidden;}'
+      + '.ck-for-table-panel{display:flex;flex-direction:column;gap:0;box-sizing:border-box;width:min(28rem,calc(100vw - 40px));min-width:17rem;max-width:calc(100vw - 40px);background:var(--ck-color-base-background,#fff);border:1px solid var(--ck-color-base-border,#d8dde4);border-radius:4px;overflow:hidden;}'
       + '.ck-for-table-panel__header{padding:12px 14px!important;border-bottom:1px solid var(--ck-color-base-border,#d8dde4);background:var(--ck-color-base-foreground,#f7f8fa);}'
       + '.ck-for-table-panel__title{font-weight:600;font-size:13px;color:#2f4057;line-height:1.3;}'
-      + '.ck-for-table-panel__content{padding:14px!important;display:flex;flex-direction:column;gap:12px;}'
+      + '.ck-for-table-panel__content{padding:14px!important;display:flex;flex-direction:column;gap:12px;min-width:0;}'
       + '.ck-for-table-panel__grid{display:grid;grid-template-columns:1fr;gap:12px;align-items:end;}'
       + '.ck-for-table-panel__field{display:flex;flex-direction:column;gap:6px;min-width:0;}'
       + '.ck-for-table-panel__field label{font-size:12px;color:#4f6480;line-height:1.3;}'
       + '.ck-for-table-panel__field input,.ck-for-table-panel__field select{width:100%;max-width:100%;min-width:0;box-sizing:border-box;}'
       + '.ck-for-table-panel .ck.ck-input{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box;}'
-      + '.ck-for-table-panel__hint{font-size:11px;color:#5f728c;line-height:1.35;}'
-      + '.ck-for-table-panel__actions{display:flex;gap:8px;justify-content:flex-end;padding:12px 14px!important;border-top:1px solid #d8e0ea;background:var(--ck-color-base-foreground,#f7f8fa);}'
-      + '.ck-for-table-panel .ck.ck-button{justify-content:center;}'
+      + '.ck-for-table-panel__hint{display:block;width:100%;min-width:0;font-size:11px;color:#5f728c;line-height:1.35;white-space:normal!important;word-break:break-word;overflow-wrap:anywhere;}'
+      + '.ck-for-table-panel__status{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 10px;border:1px solid var(--ck-color-base-border,#d8dde4);border-radius:4px;background:var(--ck-color-base-foreground,#f7f8fa);font-size:12px;line-height:1.35;color:#2f4057;}'
+      + '.ck-for-table-panel__status-label{font-weight:600;}'
+      + '.ck-for-table-panel__status-value{font-weight:500;color:#4f6480;}'
+      + '.ck-for-table-panel__actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;align-items:stretch;padding:12px 14px!important;border-top:1px solid #d8e0ea;background:var(--ck-color-base-foreground,#f7f8fa);}'
+      + '.ck-for-table-panel .ck.ck-button{justify-content:center;white-space:normal;min-height:34px;}'
+      + '.ck-for-table-panel__actions .ck.ck-button{flex:0 1 auto;max-width:100%;}'
       + '.ck{--for-table-cell-glow-strong:rgba(255,153,51,.98);--for-table-cell-glow-soft:rgba(255,153,51,.36);}'
       + 'body.rex-theme-dark .ck{--for-table-cell-glow-strong:rgba(255,184,107,.98);--for-table-cell-glow-soft:rgba(255,184,107,.42);}'
       + '@media (prefers-color-scheme: dark){body.rex-has-theme:not(.rex-theme-light) .ck{--for-table-cell-glow-strong:rgba(255,184,107,.98);--for-table-cell-glow-soft:rgba(255,184,107,.42);}}'
@@ -636,6 +660,7 @@
           classes: config.tableClasses,
           hideManual: config.hideManualTableProperties,
           showClass: true,
+          showCaptionToggle: true,
           showWidth: true,
           showHeight: false,
           showAlign: true,
@@ -647,6 +672,7 @@
           classes: config.columnClasses,
           hideManual: config.hideManualColumnProperties,
           showClass: true,
+          showCaptionToggle: false,
           showWidth: true,
           showHeight: false,
           showAlign: true,
@@ -658,6 +684,7 @@
           classes: config.rowClasses,
           hideManual: config.hideManualRowProperties,
           showClass: true,
+          showCaptionToggle: false,
           showWidth: false,
           showHeight: true,
           showAlign: true,
@@ -669,6 +696,7 @@
           classes: config.cellClasses,
           hideManual: config.hideManualCellProperties,
           showClass: true,
+          showCaptionToggle: false,
           showWidth: true,
           showHeight: true,
           showAlign: true,
@@ -683,12 +711,13 @@
     }
 
     var command = editor.commands && typeof editor.commands.get === 'function' ? editor.commands.get(commandName) : null;
+    var toggleCaptionCommand = editor.commands && typeof editor.commands.get === 'function' ? editor.commands.get('toggleTableCaption') : null;
     var panel = dropdown.panelView.element;
     var values = command && command.value && typeof command.value === 'object' ? command.value : {};
     var meta = getPanelMeta(commandName, i18n, config);
 
     panel.style.minWidth = '18rem';
-    panel.style.width = 'min(22rem, calc(100vw - 24px))';
+    panel.style.width = 'min(28rem, calc(100vw - 24px))';
     panel.style.maxWidth = 'calc(100vw - 24px)';
 
     var html = '<div class="ck-for-table-panel">';
@@ -741,9 +770,20 @@
       html += '</div>';
     }
 
+    if (meta.showCaptionToggle) {
+      html += '<div class="ck-for-table-panel__status">'
+        + '<span class="ck-for-table-panel__status-label">' + escapeHtml(i18n.captionStatusLabel) + '</span>'
+        + '<span class="ck-for-table-panel__status-value">' + escapeHtml(values.hasCaption ? i18n.captionStatusPresent : i18n.captionStatusMissing) + '</span>'
+        + '</div>';
+      html += '<div class="ck-for-table-panel__hint">' + escapeHtml(i18n.captionHint) + '</div>';
+    }
+
     html += '</div>';
 
     html += '<div class="ck-for-table-panel__actions">'
+      + (meta.showCaptionToggle
+        ? '<button type="button" class="ck ck-button" data-for-table-action="toggle-caption">' + escapeHtml(values.hasCaption ? i18n.captionButtonRemove : i18n.captionButtonAdd) + '</button>'
+        : '')
       + '<button type="button" class="ck ck-button" data-for-table-action="reset">' + escapeHtml(i18n.reset) + '</button>'
       + '<button type="button" class="ck ck-button ck-on" data-for-table-action="apply">' + escapeHtml(i18n.apply) + '</button>'
       + '</div>';
@@ -753,6 +793,23 @@
 
     var apply = panel.querySelector('[data-for-table-action="apply"]');
     var reset = panel.querySelector('[data-for-table-action="reset"]');
+    var toggleCaption = panel.querySelector('[data-for-table-action="toggle-caption"]');
+
+    function bindActionButton(button, handler) {
+      if (!button) {
+        return;
+      }
+
+      button.addEventListener('mousedown', function (event) {
+        event.preventDefault();
+      });
+
+      button.addEventListener('click', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        handler();
+      });
+    }
 
     function collectOptions(resetValues) {
       if (resetValues) {
@@ -780,27 +837,50 @@
       };
     }
 
-    if (apply) {
-      apply.addEventListener('click', function () {
+    bindActionButton(apply, function () {
+      if (editor.editing && editor.editing.view) {
+        editor.editing.view.focus();
+      }
+      if (command && typeof command.refresh === 'function') {
+        command.refresh();
+      }
         if (!command || !command.isEnabled) {
           return;
         }
         editor.execute(commandName, collectOptions(false));
         editor.editing.view.focus();
         dropdown.isOpen = false;
-      });
-    }
+    });
 
-    if (reset) {
-      reset.addEventListener('click', function () {
+    bindActionButton(reset, function () {
+      if (editor.editing && editor.editing.view) {
+        editor.editing.view.focus();
+      }
+      if (command && typeof command.refresh === 'function') {
+        command.refresh();
+      }
         if (!command || !command.isEnabled) {
           return;
         }
         editor.execute(commandName, collectOptions(true));
         editor.editing.view.focus();
         dropdown.isOpen = false;
-      });
-    }
+    });
+
+    bindActionButton(toggleCaption, function () {
+      if (editor.editing && editor.editing.view) {
+        editor.editing.view.focus();
+      }
+      if (toggleCaptionCommand && typeof toggleCaptionCommand.refresh === 'function') {
+        toggleCaptionCommand.refresh();
+      }
+        if (!toggleCaptionCommand || !toggleCaptionCommand.isEnabled) {
+          return;
+        }
+        editor.execute('toggleTableCaption');
+        editor.editing.view.focus();
+        dropdown.isOpen = false;
+    });
   }
 
   function renderDialogContent(container, meta, i18n, values) {

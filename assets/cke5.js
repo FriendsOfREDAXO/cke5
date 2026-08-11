@@ -671,6 +671,7 @@
             "BlockQuote",
             "Table",
             "TableToolbar",
+            "TableCaption",
             "Image",
             "ImageToolbar",
             "ImageCaption",

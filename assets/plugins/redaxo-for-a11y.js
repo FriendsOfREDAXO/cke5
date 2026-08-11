@@ -28,7 +28,124 @@
   var SEVERITY_BG    = { error: 'rgba(229,57,53,.12)', warn: 'rgba(251,140,0,.14)', info: 'rgba(30,136,229,.12)' };
   var MAX_HEADING_LENGTH = 120;
 
+  var FOR_A11Y_I18N = {
+    de: {
+      buttonLabel: 'Barrierefreiheit prüfen',
+      panelTitle: 'Barrierefreiheit',
+      close: 'Schließen',
+      noIssuesTitle: 'Keine Probleme gefunden',
+      noIssuesMessage: 'Der Inhalt hat alle geprüften Barrierefreiheits-Regeln bestanden.',
+      previewLabel: 'Element',
+      editorTipLabel: 'Im Editor',
+      recheck: 'Neu prüfen',
+      previous: 'Vorheriges',
+      next: 'Nächstes',
+      severityLabel: { error: 'Fehler', warn: 'Warnung', info: 'Hinweis' },
+      progressUnit: { error: 'Fehler', warn: 'Warnungen', info: 'Hinweise' },
+      quickfix: {
+        'blank-paragraphs': 'Leere Absätze entfernen',
+        'text-too-many-spaces': 'Leerzeichen reduzieren',
+        'list-single-item': 'In Absatz umwandeln',
+        'list-fake': 'In echte Liste umwandeln'
+      },
+      editorTip: {
+        'img-missing-alt': 'Bild markieren und im Bild-Dialog einen kurzen Alternativtext eintragen. Für rein dekorative Bilder den Text leer lassen.',
+        'img-missing-alt-in-link': 'Wenn der Linktext daneben schon alles erklärt, den Alternativtext des Bildes leer lassen, damit nichts doppelt vorgelesen wird.',
+        'img-empty-alt': 'Prüfe im Bild-Dialog, ob das Bild nur dekorativ ist. Wenn es Inhalte transportiert, einen kurzen Alternativtext eintragen.',
+        'img-alt-too-long': 'Im Bild-Dialog den Alternativtext kürzer formulieren und Details lieber in den Fließtext oder die Bildunterschrift schreiben.',
+        'img-alt-filename': 'Im Bild-Dialog statt Dateiname kurz beschreiben, was auf dem Bild zu sehen ist.',
+        'img-alt-redundant': 'Im Bild-Dialog den Alternativtext ohne Einleitung wie „Bild von“ formulieren.',
+        'link-no-accname': 'Link markieren und einen sichtbaren Linktext oder eine klare Beschriftung vergeben.',
+        'link-generic-text': 'Link markieren und den Text im Editor so umschreiben, dass das Ziel direkt verständlich ist.',
+        'link-new-window': 'Im Linktext oder im Link-Dialog ergänzen, dass sich der Link in einem neuen Tab oder Fenster öffnet.',
+        'link-raw-url': 'Linktext direkt im Editor durch eine kurze Beschreibung des Ziels ersetzen.',
+        'link-file-format': 'Im Linktext das Dateiformat ergänzen, zum Beispiel PDF oder XLS.',
+        'link-duplicate-text': 'Gleiche Linktexte prüfen und bei Bedarf mit einem klareren Zielbezug unterscheiden.',
+        'heading-empty': 'Leere Überschrift entfernen oder im Überschriften-Feld mit echtem Inhalt füllen.',
+        'heading-skip': 'Im Absatzformat eine passendere Überschriftenstufe wählen, statt Ebenen zu überspringen.',
+        'heading-allcaps': 'Text normal schreiben und die Optik später über Styles oder das Frontend gestalten.',
+        'heading-too-long': 'Überschrift im Editor kürzen und ergänzende Infos in den folgenden Absatz verschieben.',
+        'blank-paragraphs': 'Leere Zeilen im Editor löschen. Abstände besser über das Layout oder Styles lösen.',
+        'text-too-many-spaces': 'Überflüssige Leerzeichen direkt im Text entfernen.',
+        'text-bold-as-heading': 'Statt fett formatiertem Absatz im Absatzformat eine echte Überschrift auswählen.',
+        'list-fake': 'Für solche Punkte im Editor den Listen-Button verwenden.',
+        'list-single-item': 'Bei nur einem Punkt lieber normalen Absatztext verwenden.',
+        'table-merged-cells': 'In der Tabelle möglichst auf zusammengeführte Zellen verzichten oder die Struktur vereinfachen.',
+        'table-no-th': 'In der Tabellen-Werkzeugleiste echte Kopfzellen für Überschriften verwenden.',
+        'table-no-caption': 'In den Tabelleneigenschaften eine Beschriftung hinzufügen, damit die Tabelle verständlicher eingeordnet wird.',
+        'iframe-no-title': 'Beim Embed eine kurze Bezeichnung ergänzen, damit klar ist, was im eingebetteten Inhalt steckt.'
+      }
+    },
+    en: {
+      buttonLabel: 'Check accessibility',
+      panelTitle: 'Accessibility',
+      close: 'Close',
+      noIssuesTitle: 'No issues found',
+      noIssuesMessage: 'The content passed all checked accessibility rules.',
+      previewLabel: 'Element',
+      editorTipLabel: 'In the editor',
+      recheck: 'Check again',
+      previous: 'Previous',
+      next: 'Next',
+      severityLabel: { error: 'Error', warn: 'Warning', info: 'Note' },
+      progressUnit: { error: 'errors', warn: 'warnings', info: 'notes' },
+      quickfix: {
+        'blank-paragraphs': 'Remove empty paragraphs',
+        'text-too-many-spaces': 'Reduce spaces',
+        'list-single-item': 'Convert to paragraph',
+        'list-fake': 'Convert to real list'
+      },
+      editorTip: {
+        'img-missing-alt': 'Select the image and add a short alternative text in the image dialog. Leave it empty only for decorative images.',
+        'img-missing-alt-in-link': 'If the visible link text already explains everything, keep the image alt text empty so nothing is read twice.',
+        'img-empty-alt': 'Check in the image dialog whether the image is decorative. If it carries meaning, add a short alt text.',
+        'img-alt-too-long': 'Shorten the alt text in the image dialog and move extra details into the body text or caption.',
+        'img-alt-filename': 'Replace the file name in the image dialog with a short description of the image.',
+        'img-alt-redundant': 'Write the alt text directly, without prefixes such as “image of”.',
+        'link-no-accname': 'Select the link and give it visible link text or a clear label.',
+        'link-generic-text': 'Rewrite the link text in the editor so the destination is understandable on its own.',
+        'link-new-window': 'Mention in the link text or link dialog that the link opens in a new tab or window.',
+        'link-raw-url': 'Replace the raw URL in the editor with a short description of the destination.',
+        'link-file-format': 'Add the file type, for example PDF or XLS, to the link text.',
+        'link-duplicate-text': 'Review repeated link texts and make them more specific where needed.',
+        'heading-empty': 'Remove the empty heading or fill it with real text.',
+        'heading-skip': 'Choose a more suitable heading level in the block format instead of skipping levels.',
+        'heading-allcaps': 'Write the heading normally and leave the visual styling to styles or the frontend.',
+        'heading-too-long': 'Shorten the heading in the editor and move extra details into the next paragraph.',
+        'blank-paragraphs': 'Delete empty lines in the editor. Use layout or styles for spacing instead.',
+        'text-too-many-spaces': 'Remove extra spaces directly in the text.',
+        'text-bold-as-heading': 'Use a real heading from the block format instead of a bold paragraph.',
+        'list-fake': 'Use the list button in the editor for this content.',
+        'list-single-item': 'For a single item, plain paragraph text is usually better.',
+        'table-merged-cells': 'Avoid merged cells where possible or simplify the table structure.',
+        'table-no-th': 'Use real header cells in the table toolbar for headings.',
+        'table-no-caption': 'Add a caption in the table properties so the table gets a clear label.',
+        'iframe-no-title': 'Add a short label to the embed so people know what the embedded content contains.'
+      }
+    }
+  };
+
   var FOR_A11Y_ICON = "<svg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><path fill='#1976d2' d='M12 2a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z'/></svg>";
+
+  function resolveLanguage(editor) {
+    var rexLocale = typeof window !== 'undefined' && window.rex && typeof window.rex.backendLocale === 'string'
+      ? window.rex.backendLocale
+      : typeof window !== 'undefined' && window.rex && typeof window.rex.locale === 'string'
+        ? window.rex.locale
+        : '';
+    var docLanguage = typeof document !== 'undefined' && document.documentElement && typeof document.documentElement.lang === 'string' ? document.documentElement.lang : '';
+    var uiLanguage = editor && editor.locale && typeof editor.locale.uiLanguage === 'string' ? editor.locale.uiLanguage : '';
+    var raw = (rexLocale || docLanguage || uiLanguage || 'en').toLowerCase();
+    if (raw.indexOf('de') === 0) {
+      return 'de';
+    }
+    return 'en';
+  }
+
+  function getI18n(editor) {
+    var lang = resolveLanguage(editor);
+    return FOR_A11Y_I18N[lang] || FOR_A11Y_I18N.en;
+  }
 
   /* ─────────────── Analyse-Helpers ─────────────── */
 
@@ -495,12 +612,12 @@
     return false;
   }
 
-  var QUICKFIX_IDS = {
-    'blank-paragraphs': 'Leere Absätze entfernen',
-    'text-too-many-spaces': 'Leerzeichen reduzieren',
-    'list-single-item': 'In Absatz umwandeln',
-    'list-fake': 'In echte Liste umwandeln'
-  };
+  function getEditorTip(i18n, findingId) {
+    if (!i18n || !i18n.editorTip) {
+      return '';
+    }
+    return i18n.editorTip[findingId] || '';
+  }
 
   /* ─────────────── Panel-UI ─────────────── */
 
@@ -554,6 +671,8 @@
     '.for-a11y-ck-title{margin:0 0 8px;font-size:15px;font-weight:600;}',
     '.for-a11y-ck-rule{font-size:10px;opacity:.5;font-family:Menlo,Consolas,monospace;margin-bottom:10px;display:block;}',
     '.for-a11y-ck-msg{margin:0 0 10px;font-size:13px;line-height:1.55;}',
+    '.for-a11y-ck-tip-label{font-size:11px;text-transform:uppercase;letter-spacing:.5px;opacity:.6;margin-bottom:4px;}',
+    '.for-a11y-ck-tip{margin:0 0 12px;font-size:12px;line-height:1.55;padding:10px 12px;border-radius:6px;background:rgba(25,118,210,.08);color:#1f3f66;}',
     '.for-a11y-ck-preview-label{font-size:11px;text-transform:uppercase;letter-spacing:.5px;opacity:.6;margin-bottom:4px;}',
     '.for-a11y-ck-preview{margin:0;font-family:Menlo,Consolas,monospace;font-size:11px;',
     'background:#f6f6f6;color:#222;padding:8px 10px;border-radius:4px;white-space:pre-wrap;word-break:break-all;border-left:3px solid #bbb;}',
@@ -567,11 +686,13 @@
     'body.rex-theme-dark .for-a11y-ck-panel__foot{background:#222;border-top-color:#3a3a3a;}',
     'body.rex-theme-dark .for-a11y-ck-btn{background:#3a3a3a;color:#eee;border-color:#4a4a4a;}',
     'body.rex-theme-dark .for-a11y-ck-btn:hover:not(:disabled){background:#4a4a4a;}',
+    'body.rex-theme-dark .for-a11y-ck-tip{background:rgba(100,181,246,.14);color:#d6e8ff;}',
     'body.rex-theme-dark .for-a11y-ck-preview{background:#222;color:#eee;}',
     '@media(prefers-color-scheme:dark){',
     'body.rex-has-theme:not(.rex-theme-light) .for-a11y-ck-panel{background:#2d2d2d;color:#eee;}',
     'body.rex-has-theme:not(.rex-theme-light) .for-a11y-ck-panel__foot{background:#222;border-top-color:#3a3a3a;}',
     'body.rex-has-theme:not(.rex-theme-light) .for-a11y-ck-btn{background:#3a3a3a;color:#eee;border-color:#4a4a4a;}',
+    'body.rex-has-theme:not(.rex-theme-light) .for-a11y-ck-tip{background:rgba(100,181,246,.14);color:#d6e8ff;}',
     'body.rex-has-theme:not(.rex-theme-light) .for-a11y-ck-preview{background:#222;color:#eee;}',
     '}'
   ].join('');
@@ -588,6 +709,8 @@
     removePanel();
     injectStyles();
 
+    var i18n = getI18n(editor);
+
     var idx = 0;
 
     panel = document.createElement('div');
@@ -598,8 +721,8 @@
     var drag = document.createElement('div');
     drag.className = 'for-a11y-ck-panel__drag';
     drag.innerHTML = '<span class="for-a11y-ck-panel__drag-icon" aria-hidden="true">' + FOR_A11Y_ICON.replace(/#1976d2/g, '#fff') + '</span>'
-      + '<span class="for-a11y-ck-panel__drag-title">Barrierefreiheit</span>'
-      + '<button class="for-a11y-ck-panel__close" title="Schließen">✕</button>';
+      + '<span class="for-a11y-ck-panel__drag-title">' + escHtml(i18n.panelTitle) + '</span>'
+      + '<button class="for-a11y-ck-panel__close" title="' + escHtml(i18n.close) + '">✕</button>';
     drag.querySelector('.for-a11y-ck-panel__close').addEventListener('click', removePanel);
     panel.appendChild(drag);
 
@@ -657,12 +780,12 @@
       if (!findings.length) {
         body.innerHTML = '<div class="for-a11y-ck-ok">'
           + '<div class="for-a11y-ck-ok__icon">✅</div>'
-          + '<h3>Keine Probleme gefunden</h3>'
-          + '<p>Der Inhalt hat alle geprüften Barrierefreiheits-Regeln bestanden.</p>'
+          + '<h3>' + escHtml(i18n.noIssuesTitle) + '</h3>'
+          + '<p>' + escHtml(i18n.noIssuesMessage) + '</p>'
           + '</div>';
         var closeBtn = document.createElement('button');
         closeBtn.className = 'for-a11y-ck-btn';
-        closeBtn.textContent = 'Schließen';
+        closeBtn.textContent = i18n.close;
         closeBtn.addEventListener('click', removePanel);
         foot.appendChild(closeBtn);
         return;
@@ -674,16 +797,16 @@
       var prog = document.createElement('div');
       prog.className = 'for-a11y-ck-progress';
       prog.textContent = (idx + 1) + ' / ' + findings.length + ' · '
-        + findings.filter(function (x) { return x.severity === 'error'; }).length + ' Fehler · '
-        + findings.filter(function (x) { return x.severity === 'warn'; }).length + ' Warnungen · '
-        + findings.filter(function (x) { return x.severity === 'info'; }).length + ' Hinweise';
+        + findings.filter(function (x) { return x.severity === 'error'; }).length + ' ' + i18n.progressUnit.error + ' · '
+        + findings.filter(function (x) { return x.severity === 'warn'; }).length + ' ' + i18n.progressUnit.warn + ' · '
+        + findings.filter(function (x) { return x.severity === 'info'; }).length + ' ' + i18n.progressUnit.info;
       body.appendChild(prog);
 
       // Badge
       var badge = document.createElement('div');
       badge.className = 'for-a11y-ck-badge';
       badge.style.cssText = 'background:' + SEVERITY_BG[f.severity] + ';color:' + SEVERITY_COLOR[f.severity];
-      badge.textContent = SEVERITY_LABEL[f.severity];
+      badge.textContent = i18n.severityLabel[f.severity] || SEVERITY_LABEL[f.severity];
       body.appendChild(badge);
 
       // Title
@@ -704,10 +827,23 @@
       msg.textContent = f.message;
       body.appendChild(msg);
 
+      var editorTip = getEditorTip(i18n, f.id);
+      if (editorTip) {
+        var tipLabel = document.createElement('div');
+        tipLabel.className = 'for-a11y-ck-tip-label';
+        tipLabel.textContent = i18n.editorTipLabel;
+        body.appendChild(tipLabel);
+
+        var tip = document.createElement('p');
+        tip.className = 'for-a11y-ck-tip';
+        tip.textContent = editorTip;
+        body.appendChild(tip);
+      }
+
       // Preview
       var prevLabel = document.createElement('div');
       prevLabel.className = 'for-a11y-ck-preview-label';
-      prevLabel.textContent = 'Element';
+      prevLabel.textContent = i18n.previewLabel;
       body.appendChild(prevLabel);
       var prev = document.createElement('pre');
       prev.className = 'for-a11y-ck-preview';
@@ -722,7 +858,7 @@
       var prevBtn = document.createElement('button');
       prevBtn.className = 'for-a11y-ck-btn for-a11y-ck-btn--nav';
       prevBtn.textContent = '‹';
-      prevBtn.title = 'Vorheriges';
+      prevBtn.title = i18n.previous;
       prevBtn.disabled = idx === 0;
       prevBtn.addEventListener('click', function () { if (idx > 0) { idx--; renderFinding(); } });
       foot.appendChild(prevBtn);
@@ -730,7 +866,7 @@
       var nextBtn = document.createElement('button');
       nextBtn.className = 'for-a11y-ck-btn for-a11y-ck-btn--nav';
       nextBtn.textContent = '›';
-      nextBtn.title = 'Nächstes';
+      nextBtn.title = i18n.next;
       nextBtn.disabled = idx === findings.length - 1;
       nextBtn.addEventListener('click', function () { if (idx < findings.length - 1) { idx++; renderFinding(); } });
       foot.appendChild(nextBtn);
@@ -740,10 +876,10 @@
       foot.appendChild(spacer);
 
       // Quickfix
-      if (QUICKFIX_IDS[f.id]) {
+      if (i18n.quickfix[f.id]) {
         var fixBtn = document.createElement('button');
         fixBtn.className = 'for-a11y-ck-btn for-a11y-ck-btn--fix';
-        fixBtn.textContent = '⚡ ' + QUICKFIX_IDS[f.id];
+        fixBtn.textContent = '⚡ ' + i18n.quickfix[f.id];
         fixBtn.addEventListener('click', function () {
           if (applyQuickfix(f, editor)) {
             // Neu analysieren nach Fix
@@ -762,7 +898,7 @@
       // Neu prüfen
       var recheckBtn = document.createElement('button');
       recheckBtn.className = 'for-a11y-ck-btn';
-      recheckBtn.textContent = '↻ Neu prüfen';
+      recheckBtn.textContent = '↻ ' + i18n.recheck;
       recheckBtn.addEventListener('click', function () {
         var html = editor.getData();
         var doc  = new DOMParser().parseFromString(html, 'text/html');
@@ -795,8 +931,9 @@
           if (typeof cke.ButtonView !== 'function') return null;
 
           var button = new cke.ButtonView(locale);
+          var i18n = getI18n(editor);
           button.set({
-            label: 'Barrierefreiheit prüfen',
+            label: i18n.buttonLabel,
             icon: FOR_A11Y_ICON,
             withText: false,
             tooltip: true,
