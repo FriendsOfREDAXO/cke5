@@ -1284,7 +1284,49 @@
                 normalizedToolbar.push("forTableRowProperties");
               }
             }
-            options.table.contentToolbar = cke5_normalize_toolbar_items(normalizedToolbar);
+
+            const defaultGroup = [
+              "tableColumn",
+              "tableRow",
+              "mergeTableCells",
+              "toggleTableCaption"
+            ];
+            const customGroup = [
+              "forTableProperties",
+              "forTableColumnProperties",
+              "forTableRowProperties",
+              "forTableCellProperties"
+            ];
+
+            const orderedToolbar = [];
+            defaultGroup.forEach((item) => {
+              if (normalizedToolbar.includes(item)) {
+                orderedToolbar.push(item);
+              }
+            });
+
+            const hasDefaultGroup = orderedToolbar.length > 0;
+            const customItems = [];
+            customGroup.forEach((item) => {
+              if (normalizedToolbar.includes(item)) {
+                customItems.push(item);
+              }
+            });
+
+            if (hasDefaultGroup && customItems.length > 0) {
+              orderedToolbar.push("|");
+            }
+            customItems.forEach((item) => {
+              orderedToolbar.push(item);
+            });
+
+            normalizedToolbar.forEach((item) => {
+              if (!defaultGroup.includes(item) && !customGroup.includes(item)) {
+                orderedToolbar.push(item);
+              }
+            });
+
+            options.table.contentToolbar = cke5_normalize_toolbar_items(orderedToolbar);
           }
 
           return options;

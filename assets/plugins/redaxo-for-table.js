@@ -715,6 +715,21 @@
     var panel = dropdown.panelView.element;
     var values = command && command.value && typeof command.value === 'object' ? command.value : {};
     var meta = getPanelMeta(commandName, i18n, config);
+    var savedSelection = null;
+
+    if (editor.model && typeof editor.model.createSelection === 'function' && editor.model.document && editor.model.document.selection) {
+      savedSelection = editor.model.createSelection(editor.model.document.selection);
+    }
+
+    function restoreSelection() {
+      if (!savedSelection || !editor.model || typeof editor.model.change !== 'function') {
+        return;
+      }
+
+      editor.model.change(function (writer) {
+        writer.setSelection(savedSelection);
+      });
+    }
 
     panel.style.minWidth = '18rem';
     panel.style.width = 'min(28rem, calc(100vw - 24px))';
@@ -841,10 +856,8 @@
       if (editor.editing && editor.editing.view) {
         editor.editing.view.focus();
       }
-      if (command && typeof command.refresh === 'function') {
-        command.refresh();
-      }
-        if (!command || !command.isEnabled) {
+      restoreSelection();
+      if (!command) {
           return;
         }
         editor.execute(commandName, collectOptions(false));
@@ -856,10 +869,8 @@
       if (editor.editing && editor.editing.view) {
         editor.editing.view.focus();
       }
-      if (command && typeof command.refresh === 'function') {
-        command.refresh();
-      }
-        if (!command || !command.isEnabled) {
+      restoreSelection();
+      if (!command) {
           return;
         }
         editor.execute(commandName, collectOptions(true));
@@ -871,10 +882,8 @@
       if (editor.editing && editor.editing.view) {
         editor.editing.view.focus();
       }
-      if (toggleCaptionCommand && typeof toggleCaptionCommand.refresh === 'function') {
-        toggleCaptionCommand.refresh();
-      }
-        if (!toggleCaptionCommand || !toggleCaptionCommand.isEnabled) {
+      restoreSelection();
+      if (!toggleCaptionCommand) {
           return;
         }
         editor.execute('toggleTableCaption');
@@ -1045,12 +1054,16 @@
         var table = findSelectedTable(this.editor);
         this.isEnabled = !!table;
         this.value = table ? readTableValues(table) : null;
+        this._lastTable = table || this._lastTable || null;
       }
 
       execute(options) {
         options = options || {};
         var editor = this.editor;
         var table = findSelectedTable(editor);
+        if (!table && this._lastTable) {
+          table = this._lastTable;
+        }
         if (!table) {
           return;
         }
@@ -1073,12 +1086,16 @@
         var cells = getCellsInSelectedColumns(this.editor);
         this.isEnabled = cells.length > 0;
         this.value = readModeValues(cells);
+        this._lastCells = cells.length > 0 ? cells.slice() : this._lastCells || [];
       }
 
       execute(options) {
         options = options || {};
         var editor = this.editor;
         var cells = getCellsInSelectedColumns(editor);
+        if (cells.length === 0 && Array.isArray(this._lastCells) && this._lastCells.length > 0) {
+          cells = this._lastCells;
+        }
         if (cells.length === 0) {
           return;
         }
@@ -1102,12 +1119,16 @@
         var cells = getCellsInSelectedRows(this.editor);
         this.isEnabled = cells.length > 0;
         this.value = readModeValues(cells);
+        this._lastCells = cells.length > 0 ? cells.slice() : this._lastCells || [];
       }
 
       execute(options) {
         options = options || {};
         var editor = this.editor;
         var cells = getCellsInSelectedRows(editor);
+        if (cells.length === 0 && Array.isArray(this._lastCells) && this._lastCells.length > 0) {
+          cells = this._lastCells;
+        }
         if (cells.length === 0) {
           return;
         }
@@ -1131,12 +1152,16 @@
         var cells = getSelectionTableCells(this.editor);
         this.isEnabled = cells.length > 0;
         this.value = cells.length > 0 ? readCellValues(cells[0]) : null;
+        this._lastCells = cells.length > 0 ? cells.slice() : this._lastCells || [];
       }
 
       execute(options) {
         options = options || {};
         var editor = this.editor;
         var cells = getSelectionTableCells(editor);
+        if (cells.length === 0 && Array.isArray(this._lastCells) && this._lastCells.length > 0) {
+          cells = this._lastCells;
+        }
         if (cells.length === 0) {
           return;
         }
