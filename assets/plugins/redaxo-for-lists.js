@@ -1012,6 +1012,17 @@
           }
         });
 
+        // Einzelnen <p>-Wrapper in <li> entfernen: DocumentList erzeugt immer <li><p>…</p></li>,
+        // aber für sauberes Frontend-HTML soll nur <li>…</li> gespeichert werden.
+        // Nur wenn <p> das einzige Kind ist (kein Multi-Block-Item).
+        doc.querySelectorAll('li > p:only-child').forEach(function (p) {
+          var li = p.parentElement;
+          while (p.firstChild) {
+            li.insertBefore(p.firstChild, p);
+          }
+          li.removeChild(p);
+        });
+
         return doc.body.innerHTML;
       };
     }
@@ -1061,12 +1072,39 @@
             });
 
             dispatcher.on('element:li', function (evt, data, conversionApi) {
+              // Stil am <li> selbst prüfen
               var styleValue = getListStyleFromViewElement(data.viewItem);
+
+              // Fallback: Stil am übergeordneten <ol>/<ul>-Container lesen.
+              // list-style-type wird von patchGetDataOutput auf den Container gesetzt,
+              // nicht auf das einzelne <li>.
+              if (styleValue === '' && data.viewItem && data.viewItem.parent) {
+                styleValue = getListStyleFromViewElement(data.viewItem.parent);
+              }
+
               if (styleValue === '') {
                 return;
               }
-              setModelStyleForConvertedRange(data.modelRange, conversionApi, styleValue);
-            });
+
+              // Attribut direkt setzen, ohne isListBlock-Prüfung:
+              // Bei priority:'low' hat DocumentList bereits listType gesetzt,
+              // aber wir vermeiden die Abhängigkeit davon für mehr Robustheit.
+              if (!data.modelRange || !conversionApi || !conversionApi.writer) {
+                return;
+              }
+
+              var normalized = normalizeStyleValue(styleValue);
+              if (normalized === '') {
+                return;
+              }
+
+              var writer = conversionApi.writer;
+              for (var item of data.modelRange.getItems()) {
+                if (item.is('element') && typeof item.getAttribute === 'function') {
+                  writer.setAttribute('forListStyle', normalized, item);
+                }
+              }
+            }, { priority: 'low' });
           });
 
           editor.conversion.for('dataDowncast').add(function (dispatcher) {

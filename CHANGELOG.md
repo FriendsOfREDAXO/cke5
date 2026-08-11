@@ -1,5 +1,21 @@
 # Changelog
 
+## Version 7.4.0
+
+### Neu
+
+* `<p>`-Wrapper in `<li>` wird beim Speichern automatisch entfernt: DocumentList erzeugt intern `<li><p>…</p></li>`, gespeichert wird aber das saubere `<li>…</li>`
+* Content-Styles-Override neutralisiert den `<p>`-Margin in Listenpunkten für die Editor-Ansicht
+
+### Geändert
+
+* CKEditor 5 auf Version 48.4.0 aktualisiert (Tabellen-Verbesserungen, Speicherleck-Fix, CSS-Trennung UI vs. Content-Styles)
+* Content-Styles nach CKEditor-CSS-Trennung neu generiert
+
+### Behoben
+
+* Listenstil (z. B. `lower-roman`, `lower-latin`) auf verschachtelten Ebenen wird beim Wiederöffnen im Editor korrekt wiederhergestellt: Upcast-Handler liest `list-style-type` nun vom übergeordneten `<ol>`/`<ul>`-Container und läuft mit `priority: 'low'` nach dem DocumentList-Converter
+
 ## Version 7.3.0
 
 ### Neu

@@ -1,4 +1,11 @@
 /* REDAXO cke5 custom list output overrides */
+
+/* DocumentList erzeugt intern <li><p>…</p></li>.
+   Im Editor-Modus den p-Margin neutralisieren. */
+.ck-content li > p:only-child {
+  margin-top: 0;
+  margin-bottom: 0;
+}
 .ck-content ol[style*="decimal-leading-zero"] {
   list-style-type: decimal-leading-zero !important;
 }

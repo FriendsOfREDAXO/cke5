@@ -93,7 +93,7 @@ pnpm run vendor:update
 
 Aktueller Vendor-Stand:
 
-1. CKEditor 5 `48.3.0`
+1. CKEditor 5 `48.4.0`
 2. generated runtime assets under `assets/vendor/ckeditor5-modern`
 
 Das Script aktualisiert anschließend beide Stände:
