@@ -58,7 +58,7 @@ class Cke5PreviewHelper
         $userLang = (string) Cke5Lang::getUserLang();
         $outputLang = (string) Cke5Lang::getOutputLang();
 
-        $code = '<textarea class="form-control cke5-editor" data-profile="'
+        $code = '<textarea class="form-control cke5-editor" name="REX_INPUT_VALUE[1]" data-profile="'
             . $profileName
             . '" data-lang="'
             . $userLang

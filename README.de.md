@@ -2,6 +2,46 @@
 
 CKEditor-5-Integration für REDAXO mit profilbasierter Konfiguration, REDAXO-Medien- und Link-Dialogen, Snippets, Style-Management und Import/Export-Workflows.
 
+## Quickstart
+
+### 1. Addon installieren und Profil anlegen
+
+1. Addon über den REDAXO-Installer installieren.
+2. Unter **CKEditor 5 → Profiles** ein Profil konfigurieren (z. B. `default`).
+
+### 2. Editor im Modul-Eingabeteil einbinden
+
+```html
+<textarea
+  class="form-control cke5-editor"
+  name="REX_INPUT_VALUE[1]"
+  data-profile="default"
+  data-lang="<?php echo \Cke5\Utils\Cke5Lang::getUserLang(); ?>"
+  data-content-lang="<?php echo \Cke5\Utils\Cke5Lang::getOutputLang(); ?>"
+>REX_VALUE[1]</textarea>
+```
+
+### 3. Ausgabe im Modul-Ausgabeteil
+
+```html
+<div class="ck-content">
+  REX_VALUE[id="1" output="html"]
+</div>
+```
+
+### 4. CSS im Frontend einbinden
+
+Die mitgelieferte CSS-Datei sorgt für korrekte Darstellung von Listen, Tabellen, Medien und weiteren CKEditor-Elementen. Sie sollte im `<head>` aller Seiten geladen werden:
+
+```html
+<link rel="stylesheet" href="/assets/addons/cke5/cke5_content_styles.css">
+```
+
+> **Hinweis:** Die Styles sind mit dem Selektor `.ck-content` präfixiert. Das Ausgabeelement muss diese Klasse tragen, damit die Styles greifen.
+> Basis-Typografie (Schrift, Farbe, Zeilenabstand) erbt automatisch vom Elternelement – das Projekt-CSS (UIkit, Bootstrap, etc.) wird nicht überschrieben.
+
+---
+
 ## Funktionsüberblick
 
 ### Editor und Bedienung
@@ -121,6 +161,82 @@ Ein Eintrag wird nur angezeigt, wenn sein `toolbarItem` bzw. eines der `toolbarA
 2. REDAXO-Update/Install-Routine ausführen.
 3. Unter `CKEditor 5 > Profiles` mindestens ein Profil konfigurieren.
 4. Profil im Textarea über `data-profile` verwenden.
+
+## Frontend-Styling
+
+### Wichtig: Mitgelieferte CSS nicht bearbeiten
+
+Die Datei `/assets/addons/cke5/cke5_content_styles.css` wird bei jedem `pnpm run content-styles:update` automatisch neu generiert und überschrieben. Direkte Änderungen gehen dabei verloren.
+
+**Das richtige Vorgehen:** Die mitgelieferte CSS einbinden und danach eine eigene Projektdatei laden, die nur die gewünschten Variablen überschreibt.
+
+### Eigene Projekt-CSS erstellen
+
+```html
+<!-- Im <head>: erst die generierte CKEditor-CSS, dann die eigene -->
+<link rel="stylesheet" href="/assets/addons/cke5/cke5_content_styles.css">
+<link rel="stylesheet" href="/assets/project/cke5-content.css">
+```
+
+Die eigene Datei `cke5-content.css` enthält nur Überschreibungen:
+
+```css
+/* assets/project/cke5-content.css */
+
+/* Farben an das Projekt anpassen */
+:root {
+  --ck-content-blockquote-border: #your-color;
+  --ck-content-pre-bg: #f5f5f5;
+  --ck-content-pre-color: #222;
+  --ck-content-pre-border: #ddd;
+}
+```
+
+### Verfügbare CSS-Variablen
+
+Diese Variablen können im Projekt überschrieben werden:
+
+| Variable | Betrifft |
+|---|---|
+| `--ck-content-blockquote-border` | Blockzitat Randfarbe |
+| `--ck-content-pre-color` | Code-Block Textfarbe |
+| `--ck-content-pre-bg` | Code-Block Hintergrund |
+| `--ck-content-pre-border` | Code-Block Randfarbe |
+| `--ck-content-hr-bg` | Trennlinie Farbe |
+| `--ck-content-pagebreak-label-bg` | Seitenumbruch Label Hintergrund |
+| `--ck-content-pagebreak-label-color` | Seitenumbruch Label Textfarbe |
+| `--ck-content-pagebreak-line` | Seitenumbruch Linienfarbe |
+| `--ck-content-color-image-caption-background` | Bildunterschrift Hintergrund |
+| `--ck-content-color-image-caption-text` | Bildunterschrift Textfarbe |
+| `--ck-content-color-table-caption-background` | Tabellenbeschriftung Hintergrund |
+| `--ck-content-color-table-caption-text` | Tabellenbeschriftung Textfarbe |
+
+### Dark Mode mit eigenem Toggle
+
+Für Projekte mit eigenem Dark-Mode-Toggle (z. B. `[data-theme="dark"]` auf `<html>`):
+
+```css
+/* assets/project/cke5-content.css */
+
+[data-theme="dark"] {
+  --ck-content-blockquote-border: #555;
+  --ck-content-pre-color: #d4d4d4;
+  --ck-content-pre-bg: rgba(255, 255, 255, 0.06);
+  --ck-content-pre-border: #444;
+  --ck-content-hr-bg: #444;
+  --ck-content-pagebreak-label-bg: #2a2a2a;
+  --ck-content-pagebreak-label-color: #ccc;
+  --ck-content-pagebreak-line: #555;
+  --ck-content-color-image-caption-background: #1e1e1e;
+  --ck-content-color-image-caption-text: #ccc;
+  --ck-content-color-table-caption-background: #1e1e1e;
+  --ck-content-color-table-caption-text: #ccc;
+}
+```
+
+> `prefers-color-scheme: dark` ist bereits in der mitgelieferten CSS abgedeckt. Nur wenn der Projekt-Toggle über eine eigene CSS-Klasse oder ein Attribut gesteuert wird, ist ein zusätzlicher Block nötig.
+
+---
 
 ## Basisverwendung
 

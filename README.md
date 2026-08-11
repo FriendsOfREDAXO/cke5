@@ -2,6 +2,46 @@
 
 CKEditor 5 integration for REDAXO with profile-based configuration, REDAXO media/link dialogs, snippets, style management, and import/export workflows.
 
+## Quickstart
+
+### 1. Install the addon and create a profile
+
+1. Install the addon via the REDAXO installer.
+2. Go to **CKEditor 5 → Profiles** and create a profile (e.g. `default`).
+
+### 2. Add the editor to a module input
+
+```html
+<textarea
+  class="form-control cke5-editor"
+  name="REX_INPUT_VALUE[1]"
+  data-profile="default"
+  data-lang="<?php echo \Cke5\Utils\Cke5Lang::getUserLang(); ?>"
+  data-content-lang="<?php echo \Cke5\Utils\Cke5Lang::getOutputLang(); ?>"
+>REX_VALUE[1]</textarea>
+```
+
+### 3. Output in the module output
+
+```html
+<div class="ck-content">
+  REX_VALUE[id="1" output="html"]
+</div>
+```
+
+### 4. Include the CSS in the frontend
+
+The bundled CSS file provides correct rendering of lists, tables, media, and other CKEditor elements. Include it in the `<head>` of every page:
+
+```html
+<link rel="stylesheet" href="/assets/addons/cke5/cke5_content_styles.css">
+```
+
+> **Note:** All styles are prefixed with `.ck-content`. The output element must carry this class for the styles to apply.
+> Base typography (font family, size, color, line height) inherits from the parent element — your project CSS (UIkit, Bootstrap, etc.) is not overridden.
+
+---
+
 ## Feature Overview
 
 ### Editor and UX
@@ -133,6 +173,82 @@ pnpm run vendor:update
 ```
 
 This regenerates the vendor under `assets/vendor/ckeditor5-modern` and synchronizes the shipped copy under `public/assets/addons/cke5/vendor/ckeditor5-modern`.
+
+## Frontend Styling
+
+### Important: Do not edit the bundled CSS
+
+The file `/assets/addons/cke5/cke5_content_styles.css` is automatically regenerated and overwritten on every `pnpm run content-styles:update`. Any direct changes will be lost.
+
+**The correct approach:** Include the bundled CSS, then load your own project file afterwards that only overrides the desired variables.
+
+### Creating your own project CSS
+
+```html
+<!-- In <head>: bundled CKEditor CSS first, then your own -->
+<link rel="stylesheet" href="/assets/addons/cke5/cke5_content_styles.css">
+<link rel="stylesheet" href="/assets/project/cke5-content.css">
+```
+
+Your own `cke5-content.css` only contains overrides:
+
+```css
+/* assets/project/cke5-content.css */
+
+/* Adapt colors to the project */
+:root {
+  --ck-content-blockquote-border: #your-color;
+  --ck-content-pre-bg: #f5f5f5;
+  --ck-content-pre-color: #222;
+  --ck-content-pre-border: #ddd;
+}
+```
+
+### Available CSS variables
+
+These variables can be overridden in your project:
+
+| Variable | Affects |
+|---|---|
+| `--ck-content-blockquote-border` | Blockquote border color |
+| `--ck-content-pre-color` | Code block text color |
+| `--ck-content-pre-bg` | Code block background |
+| `--ck-content-pre-border` | Code block border color |
+| `--ck-content-hr-bg` | Horizontal rule color |
+| `--ck-content-pagebreak-label-bg` | Page break label background |
+| `--ck-content-pagebreak-label-color` | Page break label text color |
+| `--ck-content-pagebreak-line` | Page break line color |
+| `--ck-content-color-image-caption-background` | Image caption background |
+| `--ck-content-color-image-caption-text` | Image caption text color |
+| `--ck-content-color-table-caption-background` | Table caption background |
+| `--ck-content-color-table-caption-text` | Table caption text color |
+
+### Dark mode with a custom toggle
+
+For projects with a custom dark mode toggle (e.g. `[data-theme="dark"]` on `<html>`):
+
+```css
+/* assets/project/cke5-content.css */
+
+[data-theme="dark"] {
+  --ck-content-blockquote-border: #555;
+  --ck-content-pre-color: #d4d4d4;
+  --ck-content-pre-bg: rgba(255, 255, 255, 0.06);
+  --ck-content-pre-border: #444;
+  --ck-content-hr-bg: #444;
+  --ck-content-pagebreak-label-bg: #2a2a2a;
+  --ck-content-pagebreak-label-color: #ccc;
+  --ck-content-pagebreak-line: #555;
+  --ck-content-color-image-caption-background: #1e1e1e;
+  --ck-content-color-image-caption-text: #ccc;
+  --ck-content-color-table-caption-background: #1e1e1e;
+  --ck-content-color-table-caption-text: #ccc;
+}
+```
+
+> `prefers-color-scheme: dark` is already covered by the bundled CSS. An additional block is only needed when the project toggle is controlled via a custom CSS class or attribute.
+
+---
 
 ## Basic Usage
 

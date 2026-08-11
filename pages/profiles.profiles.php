@@ -398,13 +398,13 @@ if ($func === '') {
             // text area
             $field = $form->addTextAreaField('expert_definition');
             $field->setAttribute('id', 'cke5-expert-definition-area');
-            $field->setAttribute('class', 'rex-code');
+            $field->setAttribute('class', 'rex-code form-control');
             $field->setAttribute('rows', '5');
             $field->setLabel(rex_i18n::msg('cke5_expert_definition_area'));
             // text area
             $field = $form->addTextAreaField('expert_suboption');
             $field->setAttribute('id', 'cke5-expert-suboption-area');
-            $field->setAttribute('class', 'rex-code');
+            $field->setAttribute('class', 'rex-code form-control');
             $field->setAttribute('rows', '5');
             $field->setLabel(rex_i18n::msg('cke5_expert_suboption_area'));
         // end collapse

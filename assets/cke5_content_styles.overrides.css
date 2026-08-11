@@ -1,9 +1,86 @@
 /* REDAXO cke5 custom list output overrides */
 
-/* DocumentList erzeugt intern <li><p>…</p></li>.
-   Im Editor-Modus den p-Margin neutralisieren. */
-.ck-content li > p:only-child {
-  margin-top: 0;
+/* Basisstile (Schrift, Farbe, Zeilenabstand) auf inherit setzen,
+   damit Projekt-CSS (UIkit, Bootstrap, etc.) nicht überschrieben wird.
+   CKEditor setzt in :root explizite Werte (z. B. font-size: medium, color: #000),
+   die hier durch inherit neutralisiert werden. Die .ck-content-Regeln greifen
+   dann weiterhin für CKEditor-spezifische Elemente (Tabellen, Bilder, Listen usw.). */
+:root {
+  --ck-content-font-family: inherit;
+  --ck-content-font-size: inherit;
+  --ck-content-font-color: inherit;
+  --ck-content-line-height: inherit;
+  --ck-content-word-break: inherit;
+  --ck-content-overflow-wrap: inherit;
+}
+
+/* CKEditor-spezifische Farben als CSS-Variablen – überschreibbar im Projekt.
+   Light-Defaults entsprechen den CKEditor-Originalwerten. */
+:root {
+  --ck-content-blockquote-border: #ccc;
+  --ck-content-pre-color: #353535;
+  --ck-content-pre-bg: #c7c7c74d;
+  --ck-content-pre-border: #c4c4c4;
+  --ck-content-hr-bg: #dedede;
+  --ck-content-pagebreak-label-bg: #fff;
+  --ck-content-pagebreak-label-color: #333;
+  --ck-content-pagebreak-line: #c4c4c4;
+}
+
+/* Dark-Mode-Overrides für CKEditor-Inhaltselemente.
+   Greift bei System-Dark-Mode. Projekte können die Variablen
+   oben unter eigenem Selektor (z. B. [data-theme="dark"] :root)
+   für eigene Dark-Mode-Implementierungen überschreiben. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ck-content-blockquote-border: #555;
+    --ck-content-pre-color: #d4d4d4;
+    --ck-content-pre-bg: rgba(255, 255, 255, 0.06);
+    --ck-content-pre-border: #444;
+    --ck-content-hr-bg: #444;
+    --ck-content-pagebreak-label-bg: #2a2a2a;
+    --ck-content-pagebreak-label-color: #ccc;
+    --ck-content-pagebreak-line: #555;
+  }
+}
+
+.ck-content blockquote {
+  border-left-color: var(--ck-content-blockquote-border);
+}
+
+.ck-content[dir="rtl"] blockquote {
+  border-right-color: var(--ck-content-blockquote-border);
+}
+
+.ck-content pre {
+  color: var(--ck-content-pre-color);
+  background: var(--ck-content-pre-bg);
+  border-color: var(--ck-content-pre-border);
+}
+
+.ck-content hr {
+  background: var(--ck-content-hr-bg);
+}
+
+.ck-content .page-break__label {
+  background: var(--ck-content-pagebreak-label-bg);
+  color: var(--ck-content-pagebreak-label-color);
+  border-color: var(--ck-content-pagebreak-line);
+}
+
+.ck-content .page-break:after {
+  border-bottom-color: var(--ck-content-pagebreak-line);
+}
+
+/* Bootstrap-Konflikt: Bootstrap 4/5 nutzt ebenfalls .table als Klasse.
+   Die td/th-Borders von Bootstrap werden durch CKEditors spezifischere
+   Selektoren bereits überschrieben. Zusätzlich: Bootstrap 5 box-shadow
+   auf Zellen zurücksetzen, damit CKEditor-Tabellenstile sauber greifen. */
+.ck-content table.table > :not(caption) > * > * {
+  box-shadow: none;
+}
+
+
   margin-bottom: 0;
 }
 .ck-content ol[style*="decimal-leading-zero"] {

@@ -6,6 +6,12 @@
 
 * `<p>`-Wrapper in `<li>` wird beim Speichern automatisch entfernt: DocumentList erzeugt intern `<li><p>…</p></li>`, gespeichert wird aber das saubere `<li>…</li>`
 * Content-Styles-Override neutralisiert den `<p>`-Margin in Listenpunkten für die Editor-Ansicht
+* Dark-Mode-Unterstützung für CKEditor-Inhaltselemente (`blockquote`, `pre`, `hr`, Seitenumbruch-Label) über CSS-Variablen und `prefers-color-scheme: dark`
+* Alle betroffenen Farben als überschreibbare CSS Custom Properties (`--ck-content-blockquote-border`, `--ck-content-pre-*`, `--ck-content-hr-bg`, `--ck-content-pagebreak-*`)
+* Bootstrap-5-Kompatibilität: `box-shadow` auf Tabellenzellen innerhalb `.ck-content` zurückgesetzt
+* Basis-Typografie (`font-family`, `font-size`, `color`, `line-height`) erbt jetzt vom Elternelement statt CKEditor-Defaults zu erzwingen – verhindert Kollisionen mit UIkit, Bootstrap und anderen CSS-Frameworks
+* Quickstart-Sektion in `README.de.md` und `README.md`: Schritt-für-Schritt-Anleitung für Profil anlegen, Editor einbinden, Frontend-Ausgabe mit `ck-content`-Klasse und CSS-Einbindung
+* Neuer Abschnitt „Frontend-Styling" in beiden READMEs: erklärt CSS-Variablen, Dark-Mode-Toggle-Implementierung und eigene Projekt-CSS
 
 ### Geändert
 
@@ -15,6 +21,8 @@
 ### Behoben
 
 * Listenstil (z. B. `lower-roman`, `lower-latin`) auf verschachtelten Ebenen wird beim Wiederöffnen im Editor korrekt wiederhergestellt: Upcast-Handler liest `list-style-type` nun vom übergeordneten `<ol>`/`<ul>`-Container und läuft mit `priority: 'low'` nach dem DocumentList-Converter
+* Expert-Definition- und Expert-Suboption-Textarea erhalten nun die Klasse `form-control` für korrekte Vollbreite-Darstellung (PR #229)
+* HTML-Beispiel im Profil-Editor enthält jetzt das erforderliche Attribut `name="REX_INPUT_VALUE[1]"` für die Modul-Einbindung
 
 ## Version 7.3.0
 
