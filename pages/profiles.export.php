@@ -11,6 +11,7 @@ $send = rex_request::request('send', 'boolean', false);
 $profileTable = rex::getTable(Cke5DatabaseHandler::CKE5_PROFILES);
 $message = '';
 $profiles = Cke5DatabaseHandler::getAllProfiles();
+$csrfToken = rex_csrf_token::factory('cke5_profiles_export');
 
 /**
  * @param array<string,string> $profile
@@ -84,16 +85,19 @@ $resolveRefNames = static function (array $profile, string $fieldName, array $id
 };
 
 // action
-if (rex_request::post('_csrf_token', 'string', '') !== '') {
+if ($func === 'cke5export') {
     try {
-        /** @var array<string,array<int,string>> $exportIds */
-        $exportIds = rex_request::post('profiles', 'array', []);
+        if (!$csrfToken->isValid()) {
+            throw new InvalidArgumentException('csrf_token');
+        }
 
-        if (!isset($exportIds['profiles'])) {
+        /** @var array<int,string|int> $exportIds */
+        $exportIds = rex_request::post('profiles', 'array', []);
+        if (!is_array($exportIds) || $exportIds === []) {
             throw new LengthException();
         }
 
-        $exportIds = array_values(array_unique(array_filter(array_map('intval', $exportIds['profiles']), static function (int $id): bool {
+        $exportIds = array_values(array_unique(array_filter(array_map('intval', $exportIds), static function (int $id): bool {
             return $id > 0;
         })));
         if ($exportIds === []) {
@@ -154,6 +158,14 @@ if (rex_request::post('_csrf_token', 'string', '') !== '') {
         header('Content-Disposition: attachment; filename="' . $fileName . '"; charset=utf-8');
         rex_response::sendContent((string) json_encode($exportData, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT), 'application/json');
         exit;
+    } catch (InvalidArgumentException $e) {
+        if ($e->getMessage() === 'csrf_token') {
+            $message = rex_view::error(rex_i18n::msg('csrf_token_invalid'));
+            $func = 'error';
+        } else {
+            $message = rex_view::error($this->i18n('profiles_export_error', $e->getMessage()));
+            $func = 'error';
+        }
     } catch (LengthException $e) {
         $message = rex_view::error($this->i18n('profiles_export_missing_input_error', $e->getMessage()));
         $func = 'error';
@@ -171,37 +183,39 @@ if ($func === 'error') {
 
 // get form without action
 if ($func === '') {
-    // initialize rex form
-    $form = rex_config_form::factory('cke5_export', 'Profiles');
-
-    // add select
-    $field = $form->addSelectField('profiles', null, ['class' => 'form-control']);
-    $field->setAttribute('multiple', 'multiple');
-    $field->setLabel($this->i18n('profiles_select'));
-    $select = $field->getSelect();
-    // set select size
-    $select->setSize((!is_null($profiles) && count($profiles) < 10) ? count($profiles) : 10);
-
-    // add profiles
+    $size = (!is_null($profiles) && count($profiles) > 0 && count($profiles) < 10) ? count($profiles) : 10;
+    $options = '';
     if (!is_null($profiles) && count($profiles) > 0) {
         foreach ($profiles as $profile) {
-            $select->addOption($profile['name'] . ' [' . $profile['description'] . ']', $profile['id']); // add profile key as option
+            $name = isset($profile['name']) ? (string) $profile['name'] : '';
+            $description = isset($profile['description']) ? (string) $profile['description'] : '';
+            $id = isset($profile['id']) ? (int) $profile['id'] : 0;
+            $options .= '<option value="' . $id . '">' . rex_escape($name . ' [' . $description . ']') . '</option>';
         }
     }
 
+    $formBody = '<fieldset>'
+        . '<input type="hidden" name="func" value="cke5export" />'
+        . '<div class="form-group">'
+        . '<label>' . rex_escape($this->i18n('profiles_select')) . '</label>'
+        . '<select class="form-control" name="profiles[]" multiple="multiple" size="' . $size . '">'
+        . $options
+        . '</select>'
+        . '</div>'
+        . '</fieldset>';
 
-    $attr = ['type' => 'submit', 'internal::useArraySyntax' => false, 'internal::fieldSeparateEnding' => true];
-    $form->addControlField(
-        null,
-        $form->addField('button', 'save', $this->i18n('export_profiles'), $attr, false)
-    );
+    $buttonFragment = new rex_fragment();
+    $buttonFragment->setVar('elements', [[
+        'field' => '<button class="btn btn-save rex-form-aligned" type="submit" value="export"><i class="rex-icon rex-icon-export"></i> ' . rex_escape($this->i18n('export_profiles')) . '</button>'
+    ]], false);
 
-    $class = '<style>.rex-form-group + .rex-form-panel-footer {display:none}</style>';
-
-    // show
     $fragment = new rex_fragment();
     $fragment->setVar('class', 'edit', false);
     $fragment->setVar('title', $this->i18n('profiles_export_title'), false);
-    $fragment->setVar('body', $class . $form->get(), false);
-    echo $fragment->parse('core/page/section.php');
+    $fragment->setVar('body', $formBody, false);
+    $fragment->setVar('buttons', $buttonFragment->parse('core/form/submit.php'), false);
+    echo '<form action="' . rex_url::currentBackendPage() . '" method="post">'
+        . $csrfToken->getHiddenField()
+        . $fragment->parse('core/page/section.php')
+        . '</form>';
 }

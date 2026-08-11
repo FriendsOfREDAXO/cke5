@@ -1,5 +1,21 @@
 # Changelog
 
+## Version 7.5.0
+
+### Neu
+
+* Neues Plugin `RedaxoForA11y` (Toolbar-Token: `for_a11y`): On-Demand-Barrierefreiheits-Check des Editor-Inhalts
+* Geprüfte Regeln: Bilder (alt-Text, Dateiname, Länge, redundante Präfixe), Links (kein accessible name, generischer Text, `_blank` ohne Hinweis, URL als Linktext, Download-Format), Überschriften (leer, Hierarchiesprung, VERSALIEN), Absätze (fetter Pseudo-Heading, Mehrfach-Leerzeichen, Fake-Listen), Listen (einzelner Eintrag), Tabellen (kein `<th>`, keine `<caption>`), `<iframe>` ohne `title`
+* Navigierbares, verschiebbares Panel mit Schweregrad-Anzeige (Fehler / Warnung / Hinweis) und Element-Highlight im Editor
+* Quickfixes für: leere Absätze entfernen, Mehrfach-Leerzeichen reduzieren, Einzellisten in Absatz umwandeln, Fake-Listen in echte Listen umwandeln
+* Panel positioniert sich beim Öffnen direkt unterhalb des Toolbar-Buttons; bleibt per Drag verschiebbar
+* Dark-Mode-Support (REDAXO-Pattern: explizit + auto)
+* Demo-Profile `demo_default` und `demo_full_expert` enthalten `for_a11y` als erstes Toolbar-Element
+
+### Behoben
+
+* `cke5profiles.js` (Source-Asset) enthält jetzt `for_a11y` in den Demo-Profilen – verhindert, dass der Button nach Reinstall fehlt (REDAXO kopiert diese Datei nach `restore_files` über die dynamisch generierte Version)
+
 ## Version 7.4.0
 
 ### Neu

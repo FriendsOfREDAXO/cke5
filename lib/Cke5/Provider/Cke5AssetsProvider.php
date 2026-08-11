@@ -104,6 +104,7 @@ class Cke5AssetsProvider
                 'plugins/redaxo-paste-plain-text-toggle.js',
                 'plugins/redaxo-markdown-paste-toggle.js',
                 'plugins/redaxo-minimap-toggle.js',
+                'plugins/redaxo-for-a11y.js',
             ] as $nativePluginFile) {
                 rex_view::addJsFile(self::getAddon()->getAssetsUrl($nativePluginFile));
             }
