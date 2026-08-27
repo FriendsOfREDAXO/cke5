@@ -20,7 +20,12 @@
             return typeof MP3 !== "undefined" && typeof MP3.open === "function";
           },
           // onSelect(filename) wie bei den klassischen Popups; options.filter
-          // waehlt optional den Start-Typ-Tab vor (z.B. "images", "videos").
+          // waehlt optional den Start-Typ-Tab vor (z.B. "images", "videos"),
+          // rein als Startwert. options.allowedExtensions (Array, z.B.
+          // ["jpg","png"]) ist dagegen eine harte Einschraenkung (MediaPlace
+          // >=1.3.6) -- blendet nicht passende Dateien aus dem Grid aus und
+          // blockiert die Auswahl, analog zum args[types]-Parameter des
+          // klassischen Popups.
           pick: function (onSelect, options) {
             MP3.open(onSelect, options || {});
           },
@@ -925,9 +930,11 @@
             cke5_apply_link_to_form_or_editor(editor, mediaPath + filename, filename);
           };
 
+          const hasMediaTypes = typeof linkConfig.rexmedia_types === "string" && linkConfig.rexmedia_types !== "";
+
           const bridge = window.rex5MediaplaceBridge;
           if (bridge && bridge.isActive()) {
-            bridge.pick(handleSelected, {});
+            bridge.pick(handleSelected, hasMediaTypes ? { allowedExtensions: linkConfig.rexmedia_types.split(",") } : {});
             return;
           }
 
@@ -938,7 +945,7 @@
           if (typeof linkConfig.rexmedia_category !== "undefined") {
             query += "&rex_file_category=" + linkConfig.rexmedia_category;
           }
-          if (typeof linkConfig.rexmedia_types === "string" && linkConfig.rexmedia_types !== "") {
+          if (hasMediaTypes) {
             query += "&args[types]=" + linkConfig.rexmedia_types;
           }
           const popup = window.openREXMedia("cke5_medialink", query);

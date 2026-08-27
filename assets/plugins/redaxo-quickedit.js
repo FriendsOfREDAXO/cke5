@@ -376,9 +376,13 @@
             }
           }
 
+          var mediaTypes = typeof imageConfig.rexmedia_types === 'string' && imageConfig.rexmedia_types !== ''
+            ? imageConfig.rexmedia_types
+            : 'jpg,jpeg,png,gif,bmp,tiff,svg,webp,heic,heif';
+
           var bridge = window.rex5MediaplaceBridge;
           if (bridge && bridge.isActive()) {
-            bridge.pick(handleSelected, { filter: 'images' });
+            bridge.pick(handleSelected, { filter: 'images', allowedExtensions: mediaTypes.split(',') });
             return;
           }
 
@@ -386,9 +390,6 @@
             return;
           }
 
-          var mediaTypes = typeof imageConfig.rexmedia_types === 'string' && imageConfig.rexmedia_types !== ''
-            ? imageConfig.rexmedia_types
-            : 'jpg,jpeg,png,gif,bmp,tiff,svg,webp,heic,heif';
           var query = '&args[types]=' + mediaTypes;
           if (typeof imageConfig.rexmedia_category !== 'undefined') {
             query += '&rex_file_category=' + imageConfig.rexmedia_category;

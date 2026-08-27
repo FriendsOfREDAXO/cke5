@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 7.6.2
+
+### Behoben
+
+* **MediaPlace-Bildauswahl erzwingt Dateityp wieder hart:** "Bild aus Medienpool" (redaxo-media-image, QuickEdit) und der Medien-Link-Dialog schränkten im klassischen Medienpool-Popup die Auswahl fest auf konfigurierte Endungen ein (`rexmedia_types`, z.B. nur jpg/png/gif/...) – bei aktivem MediaPlace ging diese Einschränkung verloren, da nur der Start-Tab gesetzt wurde. Nutzt jetzt MediaPlaces neue `allowedExtensions`-Option (MediaPlace ≥1.3.6), die die Auswahl wieder hart durchsetzt statt nur einen Tab vorzuschlagen.
+
 ## Version 7.6.1
 
 ### Behoben
