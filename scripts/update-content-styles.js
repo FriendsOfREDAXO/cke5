@@ -7,10 +7,15 @@ const projectPublicRoot = path.resolve(addonRoot, '..', '..', '..', '..');
 
 const sourceCss = path.join(addonRoot, 'node_modules', 'ckeditor5', 'dist', 'ckeditor5-content.css');
 const overridesCss = path.join(addonRoot, 'assets', 'cke5_content_styles.overrides.css');
-const targets = [
-  path.join(addonRoot, 'assets', 'cke5_content_styles.css'),
-  path.join(projectPublicRoot, 'assets', 'addons', 'cke5', 'cke5_content_styles.css')
-];
+// Die ausgelieferte Kopie nur bei klassischem Layout (public/redaxo/src/addons) direkt
+// schreiben, sonst landet sie außerhalb des Projekts; dort per `console assets:sync`.
+const publicAddonsDir = path.join(projectPublicRoot, 'assets', 'addons');
+const targets = [path.join(addonRoot, 'assets', 'cke5_content_styles.css')];
+if (fs.existsSync(publicAddonsDir)) {
+  targets.push(path.join(publicAddonsDir, 'cke5', 'cke5_content_styles.css'));
+} else {
+  console.log('[content-styles:update] Kein ' + publicAddonsDir + ', ausgelieferte Kopie per `bin/console assets:sync` aktualisieren.');
+}
 
 if (!fs.existsSync(sourceCss)) {
   console.error('[content-styles:update] Quelle nicht gefunden:', sourceCss);

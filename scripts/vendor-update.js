@@ -73,10 +73,16 @@ async function main() {
     }
   }
 
-  await syncDirectory(modernRoot, publicModernRoot);
-
   console.log('[vendor-update] Updated assets/vendor/ckeditor5-modern');
-  console.log('[vendor-update] Synced public/assets/addons/cke5/vendor/ckeditor5-modern');
+
+  // Nur bei klassischem Layout (public/redaxo/src/addons) direkt synchronisieren,
+  // sonst läge das Ziel außerhalb des Projekts; dort per `console assets:sync`.
+  if (fs.existsSync(path.dirname(path.dirname(publicModernRoot)))) {
+    await syncDirectory(modernRoot, publicModernRoot);
+    console.log('[vendor-update] Synced public/assets/addons/cke5/vendor/ckeditor5-modern');
+  } else {
+    console.log('[vendor-update] Kein public/assets/addons/cke5 gefunden, ausgelieferte Kopie per `bin/console assets:sync` aktualisieren.');
+  }
 }
 
 main().catch((err) => {
