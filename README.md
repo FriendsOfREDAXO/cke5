@@ -616,6 +616,27 @@ Export payload includes:
 
 Import performs ID-based upsert for bundled tables and then profile import.
 
+### Console
+
+The same bundles can be written and read without the backend, which is what a
+versioned profile set in a project repository or a deployment step needs:
+
+```bash
+# all profiles, indented
+redaxo/bin/console cke5:export redaxo/data/addons/project/cke5_profiles.json --pretty
+
+# a selection
+redaxo/bin/console cke5:export bundle.json content hero
+
+# import; an existing profile of the same name is kept unless it is named
+redaxo/bin/console cke5:import bundle.json --overwrite=content --overwrite=hero
+redaxo/bin/console cke5:import bundle.json --overwrite-all
+```
+
+`cke5:export` produces the same payload as the export page, and `cke5:import`
+regenerates `cke5profiles.js` afterwards — without that the editor keeps using
+the profile definitions it already has.
+
 ## Config Page
 
 `CKEditor 5 > Config` provides:

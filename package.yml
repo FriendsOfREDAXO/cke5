@@ -3,6 +3,10 @@ version: '7.7.0'
 author: Friends Of REDAXO
 supportpage: https://github.com/FriendsOfREDAXO/cke5/issues
 
+console_commands:
+    cke5:export: Cke5\Console\Cke5ExportCommand
+    cke5:import: Cke5\Console\Cke5ImportCommand
+
 page:
     title: 'translate:title'
     icon: cke5-icon-logo

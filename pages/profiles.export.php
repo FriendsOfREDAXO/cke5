@@ -2,6 +2,7 @@
 /** @var rex_addon $this */
 
 use Cke5\Handler\Cke5DatabaseHandler;
+use Cke5\Handler\Cke5DefaultDataService;
 
 $func = rex_request::request('func', 'string');
 $id = rex_request::request('id', 'int');
@@ -12,77 +13,6 @@ $profileTable = rex::getTable(Cke5DatabaseHandler::CKE5_PROFILES);
 $message = '';
 $profiles = Cke5DatabaseHandler::getAllProfiles();
 $csrfToken = rex_csrf_token::factory('cke5_profiles_export');
-
-/**
- * @param array<string,string> $profile
- * @param string $fieldName
- * @return array<int,int>
- */
-$collectIds = static function (array $profile, string $fieldName): array {
-    if (!isset($profile[$fieldName]) || $profile[$fieldName] === '') {
-        return [];
-    }
-
-    $ids = array_map('trim', explode('|', (string) $profile[$fieldName]));
-    $ids = array_filter($ids, static function ($id): bool {
-        return $id !== '';
-    });
-
-    return array_values(array_unique(array_map('intval', $ids)));
-};
-
-/**
- * @param string $tableName
- * @param array<int,int> $ids
- * @return array<int,array<string,string>>
- */
-$loadRows = static function (string $tableName, array $ids): array {
-    if ($ids === []) {
-        return [];
-    }
-
-    $sql = rex_sql::factory();
-    $table = rex::getTable($tableName);
-    $rows = $sql->getArray('SELECT * FROM ' . $table . ' WHERE id IN (' . implode(', ', $ids) . ') ORDER BY id');
-
-    return is_array($rows) ? $rows : [];
-};
-
-/**
- * @param array<int,array<string,string>> $rows
- * @return array<int,string>
- */
-$createIdNameMap = static function (array $rows): array {
-    $map = [];
-    foreach ($rows as $row) {
-        $id = isset($row['id']) ? (int) $row['id'] : 0;
-        $name = isset($row['name']) ? trim((string) $row['name']) : '';
-        if ($id <= 0 || $name === '') {
-            continue;
-        }
-
-        $map[$id] = $name;
-    }
-
-    return $map;
-};
-
-/**
- * @param array<string,string> $profile
- * @param string $fieldName
- * @param array<int,string> $idNameMap
- * @return array<int,string>
- */
-$resolveRefNames = static function (array $profile, string $fieldName, array $idNameMap) use ($collectIds): array {
-    $names = [];
-    foreach ($collectIds($profile, $fieldName) as $id) {
-        if (isset($idNameMap[$id])) {
-            $names[] = $idNameMap[$id];
-        }
-    }
-
-    return array_values(array_unique($names));
-};
 
 // action
 if ($func === 'cke5export') {
@@ -104,53 +34,14 @@ if ($func === 'cke5export') {
             throw new LengthException();
         }
 
-        $exportProfiles = [];
+        // The bundle is built by the service, so the console command
+        // (cke5:export) produces exactly the same file.
+        $exportData = Cke5DefaultDataService::exportBundle($exportIds);
+
         $exportNames = [];
-        $styleGroupIds = [];
-        $styleIds = [];
-        $snippetIds = [];
-
-        if (!is_null($profiles)) {
-            foreach ($profiles as $profile) {
-                $profileId = isset($profile['id']) ? (int) $profile['id'] : 0;
-                if (!in_array($profileId, $exportIds, true)) {
-                    continue;
-                }
-
-                $exportProfiles[] = $profile;
-                $exportNames[] = (string) ($profile['name'] ?? 'profile');
-                $styleGroupIds = array_merge($styleGroupIds, $collectIds($profile, 'group_styles'));
-                $styleIds = array_merge($styleIds, $collectIds($profile, 'styles'));
-                $snippetIds = array_merge($snippetIds, $collectIds($profile, 'snippets'));
-            }
+        foreach ($exportData['profiles'] as $exportProfile) {
+            $exportNames[] = (string) ($exportProfile['name'] ?? 'profile');
         }
-
-        $exportStyleGroups = $loadRows(Cke5DatabaseHandler::CKE5_STYLE_GROUPS, array_values(array_unique($styleGroupIds)));
-        $exportStyles = $loadRows(Cke5DatabaseHandler::CKE5_STYLES, array_values(array_unique($styleIds)));
-        $exportSnippets = $loadRows(Cke5DatabaseHandler::CKE5_SNIPPETS, array_values(array_unique($snippetIds)));
-
-        $styleGroupMap = $createIdNameMap($exportStyleGroups);
-        $styleMap = $createIdNameMap($exportStyles);
-        $snippetMap = $createIdNameMap($exportSnippets);
-
-        foreach ($exportProfiles as &$exportProfile) {
-            $exportProfile['group_styles_ref'] = $resolveRefNames($exportProfile, 'group_styles', $styleGroupMap);
-            $exportProfile['styles_ref'] = $resolveRefNames($exportProfile, 'styles', $styleMap);
-            $exportProfile['snippets_ref'] = $resolveRefNames($exportProfile, 'snippets', $snippetMap);
-        }
-        unset($exportProfile);
-
-        $exportData = [
-            '_meta' => [
-                'schema_version' => 2,
-                'reference_mode' => 'name-first',
-                'exported_at' => date(DATE_ATOM),
-            ],
-            'profiles' => $exportProfiles,
-            'style_groups' => $exportStyleGroups,
-            'styles' => $exportStyles,
-            'snippets' => $exportSnippets,
-        ];
 
         $joinedNames = implode('_', $exportNames);
         $names = (strlen($joinedNames) > 100) ? substr($joinedNames, 0, 100) . '_etc_' : $joinedNames;

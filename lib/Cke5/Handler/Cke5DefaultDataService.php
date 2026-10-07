@@ -57,6 +57,138 @@ class Cke5DefaultDataService
     }
 
     /**
+     * Builds the export bundle for the given profile ids.
+     *
+     * Same structure importBundle() reads back: styles, style groups and
+     * snippets travel with the profiles, and the profiles reference them by
+     * name (*_ref) so the ids of the target installation do not matter.
+     *
+     * @param array<int,int> $profileIds
+     * @return array<string,mixed>
+     */
+    public static function exportBundle(array $profileIds): array
+    {
+        $profileIds = array_values(array_unique(array_filter(array_map('intval', $profileIds), static function (int $id): bool {
+            return $id > 0;
+        })));
+
+        $profiles = [];
+        $styleGroupIds = [];
+        $styleIds = [];
+        $snippetIds = [];
+
+        foreach (Cke5DatabaseHandler::getAllProfiles() ?: [] as $profile) {
+            if (!is_array($profile) || !in_array((int) ($profile['id'] ?? 0), $profileIds, true)) {
+                continue;
+            }
+
+            $profiles[] = $profile;
+            $styleGroupIds = array_merge($styleGroupIds, self::collectIds($profile, 'group_styles'));
+            $styleIds = array_merge($styleIds, self::collectIds($profile, 'styles'));
+            $snippetIds = array_merge($snippetIds, self::collectIds($profile, 'snippets'));
+        }
+
+        $styleGroups = self::loadRowsById(Cke5DatabaseHandler::CKE5_STYLE_GROUPS, array_values(array_unique($styleGroupIds)));
+        $styles = self::loadRowsById(Cke5DatabaseHandler::CKE5_STYLES, array_values(array_unique($styleIds)));
+        $snippets = self::loadRowsById(Cke5DatabaseHandler::CKE5_SNIPPETS, array_values(array_unique($snippetIds)));
+
+        $styleGroupMap = self::createIdNameMap($styleGroups);
+        $styleMap = self::createIdNameMap($styles);
+        $snippetMap = self::createIdNameMap($snippets);
+
+        foreach ($profiles as &$profile) {
+            $profile['group_styles_ref'] = self::resolveNames($profile, 'group_styles', $styleGroupMap);
+            $profile['styles_ref'] = self::resolveNames($profile, 'styles', $styleMap);
+            $profile['snippets_ref'] = self::resolveNames($profile, 'snippets', $snippetMap);
+        }
+        unset($profile);
+
+        return [
+            '_meta' => [
+                'schema_version' => 2,
+                'reference_mode' => 'name-first',
+                'exported_at' => date(DATE_ATOM),
+            ],
+            'profiles' => $profiles,
+            'style_groups' => $styleGroups,
+            'styles' => $styles,
+            'snippets' => $snippets,
+        ];
+    }
+
+    /**
+     * @param array<string,mixed> $profile
+     * @return array<int,int>
+     */
+    private static function collectIds(array $profile, string $fieldName): array
+    {
+        if (!isset($profile[$fieldName]) || $profile[$fieldName] === '') {
+            return [];
+        }
+
+        $ids = array_filter(array_map('trim', explode('|', (string) $profile[$fieldName])), static function (string $id): bool {
+            return $id !== '';
+        });
+
+        return array_values(array_unique(array_map('intval', $ids)));
+    }
+
+    /**
+     * @param array<int,int> $ids
+     * @return array<int,array<string,mixed>>
+     */
+    private static function loadRowsById(string $tableName, array $ids): array
+    {
+        if ($ids === []) {
+            return [];
+        }
+
+        $rows = rex_sql::factory()->getArray(
+            'SELECT * FROM ' . rex::getTable($tableName) . ' WHERE id IN (' . implode(', ', $ids) . ') ORDER BY id',
+        );
+
+        return is_array($rows) ? $rows : [];
+    }
+
+    /**
+     * @param array<int,array<string,mixed>> $rows
+     * @return array<int,string>
+     */
+    private static function createIdNameMap(array $rows): array
+    {
+        $map = [];
+
+        foreach ($rows as $row) {
+            $id = isset($row['id']) ? (int) $row['id'] : 0;
+            $name = isset($row['name']) ? trim((string) $row['name']) : '';
+
+            if ($id > 0 && $name !== '') {
+                $map[$id] = $name;
+            }
+        }
+
+        return $map;
+    }
+
+    /**
+     * @param array<string,mixed> $profile
+     * @param array<int,string> $idNameMap
+     * @return array<int,string>
+     */
+    private static function resolveNames(array $profile, string $fieldName, array $idNameMap): array
+    {
+        $names = [];
+
+        foreach (self::collectIds($profile, $fieldName) as $id) {
+            if (isset($idNameMap[$id])) {
+                $names[] = $idNameMap[$id];
+            }
+        }
+
+        return array_values(array_unique($names));
+    }
+
+    /**
      * @param array<string,mixed> $data
      * @return array<int,array<string,mixed>>
      */
