@@ -914,6 +914,7 @@
         }
         function cke5_open_redaxo_internal_link(editor, linkConfig) {
           if (typeof window.openLinkMap !== "function" || typeof window.jQuery !== "function") {
+            console.warn("[cke5] Interner Link: openLinkMap() oder jQuery fehlt auf dieser Seite (Linkmap wird nur im REDAXO-Backend geladen).");
             return;
           }
           const category = typeof linkConfig.rexlink_category !== "undefined" ? "&category_id=" + linkConfig.rexlink_category : "";

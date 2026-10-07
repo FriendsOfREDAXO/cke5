@@ -718,6 +718,21 @@ function cke5_addIdNameFields(element) {
   }
 }
 
+function cke5_cssColorToRgb(value) {
+  if (typeof value !== 'string' || value.trim() === '') {
+    return null;
+  }
+  let probe = document.createElement('span');
+  probe.style.color = value;
+  if (probe.style.color === '') {
+    return null;
+  }
+  document.body.appendChild(probe);
+  let match = getComputedStyle(probe).color.match(/rgba?\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)/);
+  probe.remove();
+  return match ? {r: parseInt(match[1], 10), g: parseInt(match[2], 10), b: parseInt(match[3], 10)} : null;
+}
+
 function cke5_addColorFields(element) {
   if (element.length) {
     if (element.data('cke5-multiinput-initialized') === true) {
@@ -746,7 +761,17 @@ function cke5_addColorFields(element) {
           input_border = el.find('input.border');
         input_color.css('background', input_color.val());
         input_color.colpick({
+          // colpick liest den Feldwert nur als Hex, gespeichert ist rgb(...): Farbe beim Öffnen selbst setzen.
+          onBeforeShow: function () {
+            let current = cke5_cssColorToRgb($(this).val());
+            if (current) {
+              $(this).colpickSetColor(current, true);
+            }
+          },
           onChange: function (hsb, hex, rgb, el, bySetColor) {
+            if (bySetColor) {
+              return;
+            }
             $(el).val('rgb(' + rgb.r + ', ' + rgb.g + ', ' + rgb.b + ')');
             $(el).css('background', $(el).val());
             // $(el).val('#'+hex);
