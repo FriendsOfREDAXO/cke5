@@ -740,7 +740,8 @@
             return;
           }
           const selection = editor.model.document.selection;
-          if (!selection || !selection.isCollapsed) {
+          // Cursor in einem vorhandenen Link: den ganzen Link ändern, nicht einen neuen hineinsetzen.
+          if (!selection || !selection.isCollapsed || selection.hasAttribute("linkHref")) {
             editor.execute("link", url);
             return;
           }
@@ -750,8 +751,23 @@
             editor.model.insertContent(node, selection.getFirstPosition());
           });
         }
-        function cke5_get_link_form() {
-          return document.querySelector(".ck.ck-link-form") || document.querySelector(".ck.ck-link-form_layout-vertical");
+        // Das Link-Formular dieses Editors, solange es angezeigt wird. Nicht per document.querySelector:
+        // bei mehreren Editoren auf der Seite (MForm, Repeater) wäre das das Formular eines anderen Editors.
+        function cke5_get_link_form(editor) {
+          const linkUI = editor && editor.plugins && editor.plugins.has("LinkUI") ? editor.plugins.get("LinkUI") : null;
+          const form = linkUI && linkUI.formView ? linkUI.formView.element : null;
+          return form && form.isConnected ? form : null;
+        }
+        // Linkmap- und MediaPlace-Overlay liegen im selben Dokument. CKEditor schließt das Link-Formular
+        // bei jedem mousedown außerhalb seines Balloons; solange der Picker offen ist, erreicht ein
+        // mousedown im Overlay das document deshalb nicht. Handler im Overlay selbst laufen weiter.
+        function cke5_shield_picker_overlay(root) {
+          if (!root) {
+            return () => {};
+          }
+          const stop = (event) => event.stopPropagation();
+          root.addEventListener("mousedown", stop);
+          return () => root.removeEventListener("mousedown", stop);
         }
         function cke5_link_form_set_input_value(input, value) {
           if (!input) {
@@ -790,7 +806,7 @@
           return { textInput, urlInput };
         }
         function cke5_apply_link_to_form_or_editor(editor, url, label) {
-          const form = cke5_get_link_form();
+          const form = cke5_get_link_form(editor);
           if (form) {
             const formInputs = cke5_get_link_form_inputs(form);
             if (formInputs.urlInput) {
@@ -919,12 +935,17 @@
           }
           const category = typeof linkConfig.rexlink_category !== "undefined" ? "&category_id=" + linkConfig.rexlink_category : "";
           const popup = window.openLinkMap("", "&clang=" + cke5_get_clang_param() + category);
+          const releaseShield = cke5_shield_picker_overlay(document.getElementById("lm-overlay"));
+          if (popup && typeof popup.addEventListener === "function") {
+            popup.addEventListener("beforeunload", releaseShield);
+          }
           window.jQuery(popup).off("rex:selectLink.cke5").on("rex:selectLink.cke5", (event, linkUrl, linkLabel) => {
             event.preventDefault();
+            cke5_apply_link_to_form_or_editor(editor, linkUrl, linkLabel);
+            releaseShield();
             if (popup && typeof popup.close === "function") {
               popup.close();
             }
-            cke5_apply_link_to_form_or_editor(editor, linkUrl, linkLabel);
           });
         }
         function cke5_open_redaxo_media_link(editor, linkConfig) {
@@ -937,7 +958,16 @@
 
           const bridge = window.rex5MediaplaceBridge;
           if (bridge && bridge.isActive()) {
-            bridge.pick(handleSelected, hasMediaTypes ? { allowedExtensions: linkConfig.rexmedia_types.split(",") } : {});
+            let releaseShield = () => {};
+            const options = { onClose: () => releaseShield() };
+            if (hasMediaTypes) {
+              options.allowedExtensions = linkConfig.rexmedia_types.split(",");
+            }
+            bridge.pick((filename) => {
+              handleSelected(filename);
+              releaseShield();
+            }, options);
+            releaseShield = cke5_shield_picker_overlay(document.getElementById("mp-root"));
             return;
           }
 
@@ -1064,7 +1094,7 @@
           }
           editor._cke5RedaxoLinkEnhancerInit = true;
           const observer = new MutationObserver(() => {
-            const form = document.querySelector(".ck.ck-link-form") || document.querySelector(".ck.ck-link-form_layout-vertical");
+            const form = cke5_get_link_form(editor);
             if (!form || form.querySelector(".ck-redaxo-link-buttons")) {
               return;
             }

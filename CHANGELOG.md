@@ -1,5 +1,15 @@
 # Changelog
 
+## Version 7.8.1
+
+### Behoben
+
+* **Interne Links und Medien-Links mit Linkmap- bzw. MediaPlace-Overlay** ([#237](https://github.com/FriendsOfREDAXO/cke5/issues/237), danke @fietstouring für die Analyse):
+  * Ein Klick ins Overlay schloss den Link-Dialog von CKEditor (Outside-Click). Der gewählte Link wurde dann direkt eingefügt, statt im Dialog zu landen. Solange das Overlay offen ist, erreicht ein `mousedown` darin `document` nicht mehr. Der Link steht danach im URL-Feld, übernommen wird er mit „Einfügen“ bzw. „Aktualisieren“.
+  * Bei mehreren Editoren auf einer Seite (typisch für MForm und Repeater) hängten sich die REDAXO-Link-Buttons (internal, media, email, phone, ytable) an den ersten Editor. Jeder Link landete deshalb dort. Buttons und Link-Übernahme gehen jetzt an das Link-Formular des Editors, in dem der Dialog offen ist.
+  * Stand der Cursor ohne Markierung in einem vorhandenen Link, setzte die Ersatzlösung einen neuen Link mitten hinein (`<a>Beispi</a><a>Impressum</a><a>el-Link</a>`). Jetzt wird der vorhandene Link geändert.
+* **Textausrichtung im Profil ohne Wirkung:** Der Profil-Creator schrieb die gewählten Ausrichtungen als nacktes Array (`alignment: [...]`). CKEditor erwartet `alignment: { options: [...] }` und zeigte deshalb immer alle vier Varianten. Das Update erzeugt `cke5profiles.js` neu, bestehende Profile greifen danach sofort.
+
 ## Version 7.8.0
 
 ### Neu

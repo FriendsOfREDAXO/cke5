@@ -731,7 +731,7 @@ class Cke5ProfilesCreator
         }
 
         if (in_array('alignment', $toolbar, true) && isset($profile['alignment']) && $profile['alignment'] !== '') {
-            $jsonProfile['alignment'] = self::toArray($profile['alignment']);
+            $jsonProfile['alignment'] = ['options' => self::toArray($profile['alignment'])];
         } else {
             $jsonProfile['removePlugins'][] = 'Alignment';
         }
