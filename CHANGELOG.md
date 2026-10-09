@@ -1,5 +1,12 @@
 # Changelog
 
+## Version 7.8.2
+
+### Behoben
+
+* **Snippet-Auswahl im Editor bis an den Fensterrand gestreckt** ([#241](https://github.com/FriendsOfREDAXO/cke5/issues/241)): Das Panel hängt am `body` und erbte von `.ck.ck-dropdown__panel` ein `bottom: 0`. Das korrigierende `bottom: auto` von CKEditor greift nur innerhalb eines `.ck-dropdown`. Das Panel setzt jetzt selbst `bottom: auto`.
+* **Profil-IDs in SQL-Abfragen abgesichert:** Die Listen von Stilgruppen, Stilen und Snippets eines Profils (`|1|2|`) wurden ungeprüft in `WHERE id IN (...)` eingesetzt. Diese Felder können auch aus einem importierten Bundle stammen (Importseite, `cke5:import`). Jetzt werden nur positive Ganzzahlen übernommen.
+
 ## Version 7.8.1
 
 ### Behoben

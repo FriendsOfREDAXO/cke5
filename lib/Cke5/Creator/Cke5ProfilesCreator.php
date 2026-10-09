@@ -743,10 +743,10 @@ class Cke5ProfilesCreator
         }
 
         if (isset($profile['group_styles']) && $profile['group_styles'] !== '') {
-            $styleGroups = array_filter(explode('|', $profile['group_styles']));
+            $styleGroups = self::idList($profile['group_styles']);
             $stylesGroupTable = rex::getTable(Cke5DatabaseHandler::CKE5_STYLE_GROUPS);
             $sql = rex_sql::factory();
-            $sqlResult = $sql->getArray("select * from $stylesGroupTable where id in (".implode(', ', $styleGroups).")");
+            $sqlResult = $styleGroups === [] ? [] : $sql->getArray("select * from $stylesGroupTable where id in (".implode(', ', $styleGroups).")");
             if (count($sqlResult) > 0) {
                 foreach ($sqlResult as $result) {
                     if (!empty($result['json_config'])) {
@@ -772,10 +772,10 @@ class Cke5ProfilesCreator
         }
 
         if (isset($profile['styles']) && $profile['styles'] !== '') {
-            $styles = array_filter(explode('|', $profile['styles']));
+            $styles = self::idList($profile['styles']);
             $stylesTable = rex::getTable(Cke5DatabaseHandler::CKE5_STYLES);
             $sql = rex_sql::factory();
-            $sqlResult = $sql->getArray("select * from $stylesTable where id in (".implode(', ', $styles).")");
+            $sqlResult = $styles === [] ? [] : $sql->getArray("select * from $stylesTable where id in (".implode(', ', $styles).")");
             if (count($sqlResult) > 0) {
                 foreach ($sqlResult as $result) {
                     $classes = array_filter(explode(',', $result['classes']));
@@ -793,7 +793,7 @@ class Cke5ProfilesCreator
         }
 
         if (isset($profile['snippets']) && $profile['snippets'] !== '') {
-            $snippetIds = array_filter(explode('|', $profile['snippets']));
+            $snippetIds = self::idList($profile['snippets']);
             if ($snippetIds !== []) {
                 $snippetTable = rex::getTable(Cke5DatabaseHandler::CKE5_SNIPPETS);
                 $sql = rex_sql::factory();
@@ -1799,6 +1799,23 @@ class Cke5ProfilesCreator
             }
         }
         return $return;
+    }
+
+    /**
+     * IDs aus einer "|1|2|"-Liste, nur positive Ganzzahlen: die Liste landet in einer SQL-IN-Klausel
+     * und kann auch aus einem importierten Bundle stammen.
+     *
+     * @return list<int>
+     */
+    private static function idList(mixed $value): array
+    {
+        if (!is_string($value)) {
+            return [];
+        }
+
+        $ids = array_map('intval', explode('|', $value));
+
+        return array_values(array_unique(array_filter($ids, static fn (int $id): bool => $id > 0)));
     }
 
     /**
