@@ -55,8 +55,11 @@ if ($func === 'add' || $func === 'edit') {
 
     $field = $form->addTextAreaField('content');
     $field->setLabel(rex_i18n::msg('cke5_snippets_content'));
-    $field->setAttribute('class', 'form-control cke5-editor');
-    $field->setAttribute('data-profile', 'demo_default');
+    // Code-Editor statt CKE5: ein Profil filtert unbekanntes Markup beim Bearbeiten heraus,
+    // ein Snippet muss sein HTML aber unverändert behalten.
+    $field->setAttribute('class', 'form-control rex-code');
+    $field->setAttribute('data-codemirror-mode', 'text/html');
+    $field->setAttribute('rows', '12');
 
     $field = $form->addSelectField('active');
     $field->setLabel(rex_i18n::msg('cke5_snippets_active'));

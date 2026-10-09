@@ -25,7 +25,7 @@
   function createDropdownPanel(snippets, onSelect) {
     var panel = document.createElement('div');
     panel.className = 'ck ck-reset ck-dropdown__panel ck-dropdown__panel_se ck-dropdown__panel-visible ' + PANEL_CLASS;
-    panel.style.cssText = 'position:fixed;z-index:100001;min-width:180px;max-width:320px;max-height:320px;overflow-y:auto;';
+    panel.style.cssText = 'position:fixed;bottom:auto;z-index:100001;min-width:180px;max-width:320px;max-height:320px;overflow-y:auto;';
 
     var list = document.createElement('ul');
     list.className = 'ck ck-reset ck-list';

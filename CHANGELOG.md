@@ -1,5 +1,13 @@
 # Changelog
 
+## Version 7.8.2
+
+### Behoben
+
+* **Snippets ließen sich nicht mit eigenem HTML anlegen** ([#241](https://github.com/FriendsOfREDAXO/cke5/issues/241), danke @fietstouring): Der Inhalt wurde in einem CKEditor mit dem fest eingestellten Demo-Profil `demo_default` bearbeitet, das keinen Quelltext-Modus hat. Auch mit Quelltext-Modus hätte die HTML-Filterung des Profils eigenes Markup beim Bearbeiten verändert oder entfernt. Das Feld ist jetzt ein HTML-Code-Editor (`rex-code`, CodeMirror, wenn im Backend aktiv). Der Inhalt wird unverändert gespeichert.
+* **Snippet-Auswahl im Editor bis an den Fensterrand gestreckt** ([#241](https://github.com/FriendsOfREDAXO/cke5/issues/241)): Das Panel hängt am `body` und erbte von `.ck.ck-dropdown__panel` ein `bottom: 0`. Das korrigierende `bottom: auto` von CKEditor greift nur innerhalb eines `.ck-dropdown`. Das Panel setzt jetzt selbst `bottom: auto`.
+* **Profil-IDs in SQL-Abfragen abgesichert:** Die Listen von Stilgruppen, Stilen und Snippets eines Profils (`|1|2|`) wurden ungeprüft in `WHERE id IN (...)` eingesetzt. Diese Felder können auch aus einem importierten Bundle stammen (Importseite, `cke5:import`). Jetzt werden nur positive Ganzzahlen übernommen.
+
 ## Version 7.8.1
 
 ### Behoben
