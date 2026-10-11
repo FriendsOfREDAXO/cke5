@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 7.8.3
+
+### Behoben
+
+* **Bilder mit Breite sprengten im Editor ihren Rahmen:** `cke5.css` setzt für alle Bilder im Editor `.rex-slice .ck-editor img { max-width: unset }` (gegen das `max-width: 100%` aus be_style, das die Symbole der Werkzeugleiste verzerrte). Die Regel ist spezifischer als CKEditors eigenes `.ck-content .image-inline img { max-width: 100% }`. Ein Bild mit eingestellter Breite (z. B. 25 %) zeigte deshalb einen Rahmen in dieser Breite, das Bild darin aber in voller Größe. Bilder im Inhalt (`.ck-content`) sind jetzt wieder auf ihren Rahmen begrenzt; die Werkzeugleiste bleibt unverändert.
+
 ## Version 7.8.2
 
 ### Behoben

@@ -34,6 +34,13 @@
     max-width: unset;
 }
 
+/* Bilder im Inhalt wieder auf ihren Rahmen begrenzen: die Regel oben hebt max-width für alle Bilder im Editor auf
+   und ist spezifischer als CKEditors eigenes max-width: 100% – Bilder mit Breite (z. B. 25 %) sprengten sonst ihren Rahmen. */
+.rex-slice .ck-editor .ck-content img,
+.rex-slice .ck-editor .ck-content picture {
+    max-width: 100%;
+}
+
 .slider.slider-horizontal {
     width: 96%;
     margin: 0 2%;
