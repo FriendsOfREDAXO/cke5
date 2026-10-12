@@ -2,6 +2,7 @@
 /** @var rex_addon $this */
 
 // register permissions
+use Cke5\Creator\Cke5ProfilesCreator;
 use Cke5\Handler\Cke5ExtensionHandler;
 use Cke5\Handler\Cke5FileRestoreHandler;
 use Cke5\Handler\Cke5FileUploadHandler;
@@ -17,6 +18,14 @@ if (rex::isBackend() && is_object(rex::getUser())) {
     // restore config editor files
     if ($this->getConfig('restore_files', false) === true) {
         Cke5FileRestoreHandler::restoreEditorFiles($this);
+        // REDAXO kopiert beim Installieren/Aktualisieren die Paket-Assets NACH install.php/update.php – dabei wird die
+        // aus der Datenbank erzeugte assets/addons/cke5/cke5profiles.js mit der mitgelieferten Fassung (nur Demo-Profile
+        // + default) überschrieben. Alle eigenen Profile fehlten danach im Editor, bis jemand ein Profil speicherte.
+        try {
+            Cke5ProfilesCreator::profilesCreate();
+        } catch (\Throwable $e) {
+            rex_logger::logException($e);
+        }
         $this->removeConfig('restore_files');
     }
 

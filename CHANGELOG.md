@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 7.8.4
+
+### Behoben
+
+* **Eigene Profile fehlten nach einem Update:** REDAXO kopiert beim Installieren/Aktualisieren die Paket-Assets erst nach `install.php`/`update.php`. Dabei wurde die aus der Datenbank erzeugte `assets/addons/cke5/cke5profiles.js` mit der mitgelieferten Fassung überschrieben, die nur die Demo-Profile und `default` enthält. Editoren mit eigenen Profilen (z. B. im Frontend) starteten danach nicht mehr, bis jemand ein Profil speicherte. Beim ersten Backend-Aufruf nach Installation/Update (`restore_files`) wird die Datei jetzt aus der Datenbank neu erzeugt.
+
 ## Version 7.8.3
 
 ### Behoben
