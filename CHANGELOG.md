@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 7.8.5 (in Arbeit)
+
+### Behoben
+
+* **Markierter Link im Editor unlesbar:** `cke5.css` hinterlegte einen angeklickten Link (`.ck-link_selected`) schwarz und setzte die Schrift auf Weiß. Hat der Linktext eine eigene Farbe (Schriftfarbe im Editor, z. B. `<a><span style="color:hsl(0,0%,0%)">…</span></a>`), gewinnt die Farbe des inneren `span` – schwarze Schrift auf schwarzem Grund. Links werden jetzt dezent markiert (CKEditor-Hintergrund `--ck-color-link-selected-background` plus heller Rahmen, anpassbar über `--cke5-link-selected-ring`), die Schriftfarbe bleibt unverändert. Button-Links (`a.btn`, Klassen mit `button`) behalten die kräftige dunkle Markierung, weil CKEditors heller Hintergrund sonst die Button-Farbe ersetzt und weiße Button-Schrift unlesbar macht; eingefärbte Texte darin werden während der Markierung weiß dargestellt. Die Regeln gegen geteilte Fake-Selection-Overlays (`display: contents`, zusammengefügte `a.btn`-Segmente) bleiben erhalten.
+
 ## Version 7.8.4
 
 ### Behoben

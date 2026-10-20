@@ -540,17 +540,35 @@
     z-index: 2;
 }
 
-/* Avoid fake selection overlays that can split links visually. */
+/* Avoid fake selection overlays that can split links visually.
+   The fake selection span is display: contents (see below), so only the link itself is marked. */
 .ck .ck-fake-link-selection {
     outline: 0 !important;
     box-shadow: none !important;
+    background: var(--ck-color-link-selected-background) !important;
+}
+
+/* Selected link: subtle tint plus ring, the text colour stays untouched.
+   Links often carry their own colour (font colour plugin: <a><span style="color:…">),
+   a dark background with forced white text made them unreadable. */
+.ck {
+    --cke5-link-selected-ring: rgba(31, 176, 255, .45);
+}
+
+.ck .ck-link_selected {
+    background: var(--ck-color-link-selected-background) !important;
+    box-shadow: 0 0 0 2px var(--cke5-link-selected-ring);
+}
+
+/* Button links keep a solid marker: CKEditor's own selection background would replace the
+   button colour with a pale tint and leave white button text unreadable. */
+.ck .ck-content a.ck-link_selected:is(.btn, [class*="button"]) {
     background: #111 !important;
     color: #fff !important;
 }
 
-.ck .ck-link_selected {
-    background: #111 !important;
-    color: #fff !important;
+.ck .ck-content a.ck-link_selected:is(.btn, [class*="button"]) * {
+    color: inherit !important;
 }
 
 .ck .ck-fake-link-selection_collapsed {
