@@ -23,7 +23,7 @@ class Cke5ProfilesApi extends Cke5DatabaseHandler
      * @return array<string,string>
      * @author Joachim Doerr
      */
-    public static function addProfile(string $name, string $description, string $definition, string $subOptions = null): array
+    public static function addProfile(string $name, string $description, string $definition, ?string $subOptions = null): array
     {
         try {
             if (self::profileExist($name)) {
