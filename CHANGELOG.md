@@ -6,6 +6,11 @@
 
 * CKEditor 5 auf Version 48.5.3 aktualisiert (Fehlerbehebungen, keine Breaking Changes).
 
+### Behoben
+
+* **`target="_blank"` an externen Links wechselte bei jedem Speichern:** Ist im Profil „Externe Links in neuem Tab“ aktiv und gibt es zusätzlich einen Link-Decorator mit `target` (z. B. `openInNewTab`, so in den Demo-Profilen), kollidieren beide in CKEditor: Beim Einlesen greift der Decorator, beim Ausgeben fällt das Attribut weg, beim nächsten Speichern setzt die Automatik es wieder. `target="_blank"` entsteht jetzt nur noch über die Profil-Einstellung – immer mit `rel="noopener noreferrer"`. Link-Decorators, die ein `target` setzen (Profil, globale Einstellungen, Experten-Modus), werden beim Erzeugen der Profile verworfen; die Demo-Profile enthalten den Decorator nicht mehr. Die Profile werden nach dem Update automatisch neu erzeugt.
+* PHP 8.4+: Deprecation-Hinweise zu implizit nullable Parametern behoben (`Cke5ProfilesCreator`, `Cke5ProfilesApi`).
+
 ## Version 7.8.5
 
 ### Behoben

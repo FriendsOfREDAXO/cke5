@@ -407,7 +407,7 @@ class Cke5ProfilesCreator
      * @throws rex_functional_exception
      * @author Joachim Doerr
      */
-    public static function profilesCreate(array $getProfile = null): void
+    public static function profilesCreate(?array $getProfile = null): void
     {
         $profiles = Cke5DatabaseHandler::getAllProfiles();
         $content = [];
@@ -498,6 +498,11 @@ class Cke5ProfilesCreator
                     $jsonProfile['ui']['poweredBy'] = [];
                 }
                 $jsonProfile['ui']['poweredBy']['forceVisible'] = false;
+            }
+
+            // auch im Experten-Modus: target nur über link.addTargetToExternalLinks (siehe unten)
+            if (isset($jsonProfile['link']['decorators']) && is_array($jsonProfile['link']['decorators'])) {
+                $jsonProfile['link']['decorators'] = self::removeTargetLinkDecorators($jsonProfile['link']['decorators']);
             }
 
             return ['suboptions' => $jsonSubOption, 'profile' => $jsonProfile];
@@ -728,6 +733,13 @@ class Cke5ProfilesCreator
                     array_replace($jsonProfile['link']['decorators'], self::flattenLinkDecoratorDefinition($definition)),
                 );
             }
+        }
+
+        // target="_blank" nur über die Profil-Einstellung „Externe Links in neuem Tab“ (addTargetToExternalLinks,
+        // immer mit rel="noopener noreferrer"). Link-Decorators, die selbst ein target setzen, kollidieren damit:
+        // CKEditor schaltet das Attribut dann bei jedem Speichern abwechselnd an und aus.
+        if (isset($jsonProfile['link']['decorators']) && is_array($jsonProfile['link']['decorators'])) {
+            $jsonProfile['link']['decorators'] = self::removeTargetLinkDecorators($jsonProfile['link']['decorators']);
         }
 
         if (in_array('alignment', $toolbar, true) && isset($profile['alignment']) && $profile['alignment'] !== '') {
@@ -1424,6 +1436,22 @@ class Cke5ProfilesCreator
     }
 
     /**
+     * Link-Decorators entfernen, die ein target-Attribut setzen (siehe addTargetToExternalLinks).
+     *
+     * @param array<array-key,mixed> $decorators
+     * @return array<array-key,mixed>
+     */
+    private static function removeTargetLinkDecorators(array $decorators): array
+    {
+        return array_filter($decorators, static function ($decorator): bool {
+            if (!is_array($decorator) || !isset($decorator['attributes']) || !is_array($decorator['attributes'])) {
+                return true;
+            }
+            return !array_key_exists('target', array_change_key_case($decorator['attributes'], CASE_LOWER));
+        });
+    }
+
+    /**
      * Normalize custom link decorators to CKEditor-compatible structure.
      *
      * @param mixed $decorators
@@ -1823,7 +1851,7 @@ class Cke5ProfilesCreator
      * @return array<int,string>
      * @author Joachim Doerr
      */
-    private static function toArray(string $string = null): array
+    private static function toArray(?string $string = null): array
     {
         if (!is_string($string)) return [];
         return array_filter(explode(',', $string));
