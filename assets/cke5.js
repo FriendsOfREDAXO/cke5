@@ -299,6 +299,7 @@
             }
             options = cke5_remove_unsupported_toolbar_items(options);
             options = cke5_prepare_link_decorator_exclusive_groups(options);
+            options = cke5_prepare_link_target_normalizer(options);
             options = cke5_apply_external_profile_transforms(options, element);
             if (ckeditors[unique_id] === void 0) {
               const editorConstructor = cke5_get_editor_constructor(options);
@@ -870,6 +871,54 @@
 
           options.redaxoLinkDecoratorExclusiveGroups = Object.values(groups).filter((group) => Array.isArray(group) && group.length > 1);
           return options;
+        }
+        // Link-Schalter mit target (z. B. „In neuem Tab öffnen“): CKEditor erkennt einen vorhandenen Link nur,
+        // wenn alle Attribute des Schalters passen. Links mit target="_blank" ohne passendes rel (ältere Inhalte,
+        // bisherige Automatik) würden ihr target sonst beim Speichern verlieren – rel beim Laden angleichen.
+        function cke5_prepare_link_target_normalizer(options) {
+          if (!options || typeof options !== "object" || !options.link || typeof options.link !== "object") {
+            return options;
+          }
+          const decorators = options.link.decorators;
+          if (!decorators || typeof decorators !== "object") {
+            return options;
+          }
+          let targetRule = null;
+          Object.keys(decorators).forEach((name) => {
+            const decorator = decorators[name];
+            if (targetRule || !decorator || decorator.mode !== "manual" || !decorator.attributes || typeof decorator.attributes.target !== "string") {
+              return;
+            }
+            if (typeof decorator.attributes.rel === "string" && decorator.attributes.rel.trim() !== "") {
+              targetRule = { target: decorator.attributes.target, rel: decorator.attributes.rel };
+            }
+          });
+          if (!targetRule) {
+            return options;
+          }
+          const normalizer = function (editor) {
+            cke5_init_link_target_normalizer(editor, targetRule);
+          };
+          options.extraPlugins = (Array.isArray(options.extraPlugins) ? options.extraPlugins : []).concat([normalizer]);
+          return options;
+        }
+        function cke5_init_link_target_normalizer(editor, targetRule) {
+          const processor = editor && editor.data ? editor.data.processor : null;
+          const UpcastWriter = typeof window.CKEDITOR === "object" && window.CKEDITOR !== null ? window.CKEDITOR.UpcastWriter : null;
+          if (!processor || typeof processor.toView !== "function" || typeof UpcastWriter !== "function") {
+            return;
+          }
+          const toView = processor.toView.bind(processor);
+          processor.toView = function (data) {
+            const fragment = toView(data);
+            const writer = new UpcastWriter(editor.data.viewDocument);
+            for (const { item } of writer.createRangeIn(fragment)) {
+              if (item.is("element", "a") && item.getAttribute("target") === targetRule.target && item.getAttribute("rel") !== targetRule.rel) {
+                writer.setAttribute("rel", targetRule.rel, item);
+              }
+            }
+            return fragment;
+          };
         }
         function cke5_init_link_decorator_exclusive_groups(editor, options) {
           if (!editor || editor._cke5ExclusiveLinkDecoratorsInit) {

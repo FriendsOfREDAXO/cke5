@@ -500,9 +500,9 @@ class Cke5ProfilesCreator
                 $jsonProfile['ui']['poweredBy']['forceVisible'] = false;
             }
 
-            // auch im Experten-Modus: target nur über link.addTargetToExternalLinks (siehe unten)
-            if (isset($jsonProfile['link']['decorators']) && is_array($jsonProfile['link']['decorators'])) {
-                $jsonProfile['link']['decorators'] = self::removeTargetLinkDecorators($jsonProfile['link']['decorators']);
+            // auch im Experten-Modus: Link-Ziel entweder automatisch oder per Schalter (siehe unten)
+            if (isset($jsonProfile['link']) && is_array($jsonProfile['link'])) {
+                $jsonProfile['link'] = self::normalizeLinkTarget($jsonProfile['link']);
             }
 
             return ['suboptions' => $jsonSubOption, 'profile' => $jsonProfile];
@@ -735,12 +735,8 @@ class Cke5ProfilesCreator
             }
         }
 
-        // target="_blank" nur über die Profil-Einstellung „Externe Links in neuem Tab“ (addTargetToExternalLinks,
-        // immer mit rel="noopener noreferrer"). Link-Decorators, die selbst ein target setzen, kollidieren damit:
-        // CKEditor schaltet das Attribut dann bei jedem Speichern abwechselnd an und aus.
-        if (isset($jsonProfile['link']['decorators']) && is_array($jsonProfile['link']['decorators'])) {
-            $jsonProfile['link']['decorators'] = self::removeTargetLinkDecorators($jsonProfile['link']['decorators']);
-        }
+        // Link-Ziel: Profil-Einstellung „Externe Links in neuem Tab“ ODER ein Link-Schalter mit target (siehe normalizeLinkTarget)
+        $jsonProfile['link'] = self::normalizeLinkTarget($jsonProfile['link']);
 
         if (in_array('alignment', $toolbar, true) && isset($profile['alignment']) && $profile['alignment'] !== '') {
             $jsonProfile['alignment'] = ['options' => self::toArray($profile['alignment'])];
@@ -1436,19 +1432,56 @@ class Cke5ProfilesCreator
     }
 
     /**
-     * Link-Decorators entfernen, die ein target-Attribut setzen (siehe addTargetToExternalLinks).
+     * Link-Ziel (target) eindeutig regeln. Die Profil-Einstellung „Externe Links in neuem Tab“
+     * (addTargetToExternalLinks) und ein Link-Schalter mit target dürfen nicht gleichzeitig wirken:
+     * CKEditor schaltet das Attribut sonst bei jedem Speichern abwechselnd an und aus.
      *
-     * @param array<array-key,mixed> $decorators
+     * - Nur Profil-Einstellung: alle externen Links mit target="_blank" rel="noopener noreferrer".
+     * - Link-Schalter (manuell) mit target: Redakteure wählen pro Link; bei target="_blank" wird
+     *   rel um "noopener noreferrer" ergänzt. Ist zusätzlich die Profil-Einstellung aktiv, gewinnt
+     *   der Schalter und ist bei neuen Links vorausgewählt (defaultValue), sofern nicht anders definiert.
+     * - Automatische Decorators mit target und weitere Schalter mit target entfallen.
+     *
+     * @param array<array-key,mixed> $link
      * @return array<array-key,mixed>
      */
-    private static function removeTargetLinkDecorators(array $decorators): array
+    private static function normalizeLinkTarget(array $link): array
     {
-        return array_filter($decorators, static function ($decorator): bool {
+        $addTargetToExternal = !empty($link['addTargetToExternalLinks']);
+        if (!isset($link['decorators']) || !is_array($link['decorators'])) {
+            return $link;
+        }
+
+        $targetDecorator = null;
+        foreach ($link['decorators'] as $name => $decorator) {
             if (!is_array($decorator) || !isset($decorator['attributes']) || !is_array($decorator['attributes'])) {
-                return true;
+                continue;
             }
-            return !array_key_exists('target', array_change_key_case($decorator['attributes'], CASE_LOWER));
-        });
+            $attributes = array_change_key_case($decorator['attributes'], CASE_LOWER);
+            if (!array_key_exists('target', $attributes)) {
+                continue;
+            }
+            if (($decorator['mode'] ?? '') !== 'manual' || $targetDecorator !== null) {
+                unset($link['decorators'][$name]);
+                continue;
+            }
+            if (strtolower((string) $attributes['target']) === '_blank') {
+                $rel = preg_split('/\s+/', strtolower(trim((string) ($attributes['rel'] ?? ''))), -1, PREG_SPLIT_NO_EMPTY) ?: [];
+                $attributes['rel'] = implode(' ', array_values(array_unique(array_merge($rel, ['noopener', 'noreferrer']))));
+            }
+            $decorator['attributes'] = $attributes;
+            if ($addTargetToExternal && !array_key_exists('defaultValue', $decorator)) {
+                $decorator['defaultValue'] = true;
+            }
+            $link['decorators'][$name] = $decorator;
+            $targetDecorator = $name;
+        }
+
+        if ($targetDecorator !== null) {
+            $link['addTargetToExternalLinks'] = false;
+        }
+
+        return $link;
     }
 
     /**

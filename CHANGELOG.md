@@ -23,7 +23,13 @@
 
 ### Behoben
 
-* **`target="_blank"` an externen Links wechselte bei jedem Speichern:** Ist im Profil „Externe Links in neuem Tab“ aktiv und gibt es zusätzlich einen Link-Decorator mit `target` (z. B. `openInNewTab`, so in den Demo-Profilen), kollidieren beide in CKEditor: Beim Einlesen greift der Decorator, beim Ausgeben fällt das Attribut weg, beim nächsten Speichern setzt die Automatik es wieder. `target="_blank"` entsteht jetzt nur noch über die Profil-Einstellung – immer mit `rel="noopener noreferrer"`. Link-Decorators, die ein `target` setzen (Profil, globale Einstellungen, Experten-Modus), werden beim Erzeugen der Profile verworfen; die Demo-Profile enthalten den Decorator nicht mehr. Die Profile werden nach dem Update automatisch neu erzeugt.
+* **`target="_blank"` an externen Links wechselte bei jedem Speichern:** War im Profil „Externe Links in neuem Tab“ aktiv und gab es zusätzlich einen Link-Schalter mit `target` (z. B. `openInNewTab` in den Demo-Profilen), kollidierten beide in CKEditor: Beim Einlesen griff der Schalter, beim Ausgeben fiel das Attribut weg, beim nächsten Speichern setzte die Automatik es wieder. Das Link-Ziel ist jetzt eindeutig geregelt:
+  * **Nur Profil-Einstellung:** alle externen Links öffnen in einem neuen Tab (`target="_blank" rel="noopener noreferrer"`).
+  * **Link-Schalter mit `target`:** Redakteure wählen pro Link („In neuem Tab öffnen“). Bei `target="_blank"` wird `rel` immer um `noopener noreferrer` ergänzt.
+  * **Beides:** Der Schalter gewinnt, die Automatik wird abgeschaltet; der Schalter ist bei neuen Links vorausgewählt (außer `defaultValue` ist anders definiert).
+  * Weitere Schalter mit `target` und automatische Decorators mit `target` entfallen – auch im Experten-Modus.
+  * Vorhandene Links mit `target="_blank"` ohne passendes `rel` (ältere Inhalte, bisherige Automatik) werden beim Laden angeglichen und behalten ihr Ziel.
+  * Die Profile werden nach dem Update automatisch neu erzeugt.
 * PHP 8.4+: Deprecation-Hinweise zu implizit nullable Parametern behoben (`Cke5ProfilesCreator`, `Cke5ProfilesApi`).
 
 ## Version 7.8.5
