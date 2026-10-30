@@ -1,5 +1,20 @@
 # Changelog
 
+## Version 8.0.0
+
+### Aktualisiert
+
+* **CKEditor 5 auf Version 49.0.1 aktualisiert** (Hauptversion). Wichtigste Änderungen von CKEditor:
+  * **Neues Standard-Theme** auf Basis von Design-Tokens: Die Oberfläche (Werkzeugleiste, Menüs, Dialoge) sieht etwas anders aus, Knöpfe haben mehr Abstand – bei schmalen Editoren bricht die Werkzeugleiste dadurch früher um. Der Inhalt sieht unverändert aus.
+  * **Watchdog entfernt:** Nach einem unerwarteten Fehler startet der Editor nicht mehr neu, sondern läuft mit Inhalt und Rückgängig-Verlauf weiter. Das AddOn nutzte den Watchdog nicht.
+  * **Neue Standard-Farbpaletten** für Schrift- und Tabellenfarben (120 Material-Farben), sofern im Profil keine eigenen Farben festgelegt sind. Vorhandene Farben im Inhalt bleiben erhalten.
+  * Auslieferung als **ES2023** und Stylesheets mit **nativem CSS-Nesting** – unterstützt von allen aktuellen Browsern (Chrome/Edge 120+, Firefox 117+, Safari 17.2+).
+
+### Angepasst
+
+* `cke5.css` las die in CKEditor 49 entfernten Variablen `--ck-spacing-small`, `--ck-spacing-medium`, `--ck-spacing-standard` und `--ck-ui-component-min-height`. Sie fallen jetzt auf die neuen Tokens (`--ck-spacing-sm`, `--ck-spacing-md`, `--ck-spacing-base`, `--ck-size-min-height`) zurück; eigene Overrides der alten Namen wirken weiter.
+* Das Dark-Theme (`dark.css`) setzt weiterhin die bisherigen `--ck-color-*`-Variablen; CKEditor 49 unterstützt diese Overrides, der dunkle Editor bleibt unverändert.
+
 ## Version 7.8.6
 
 ### Aktualisiert
