@@ -998,8 +998,8 @@ dl + .cke5_clangtabs .nav.nav-tabs,
 
 .ck.ck-link-form_layout-vertical .ck-reset.ck-list + .ck-redaxo-link-dropdown {
     margin-left: 0 !important;
-    min-height: var(--ck-ui-component-min-height);
-    margin-top: var(--ck-spacing-medium);
+    min-height: var(--ck-ui-component-min-height, var(--ck-size-min-height, 2.3em));
+    margin-top: var(--ck-spacing-medium, var(--ck-spacing-md));
 }
 
 .ck-vertical-form > .ck-redaxo-link-dropdown > .ck-button:after {
@@ -1007,8 +1007,8 @@ dl + .cke5_clangtabs .nav.nav-tabs,
     width: 0;
     position: absolute;
     right: -1px;
-    top: var(--ck-spacing-small);
-    bottom: var(--ck-spacing-small);
+    top: var(--ck-spacing-small, var(--ck-spacing-sm));
+    bottom: var(--ck-spacing-small, var(--ck-spacing-sm));
     z-index: 1;
 }
 
@@ -1045,7 +1045,7 @@ dl + .cke5_clangtabs .nav.nav-tabs,
 .ck.ck-link-form_layout-vertical >.ck-redaxo-link-dropdown >.ck-button {
     border-radius: 0;
     margin: 0;
-    padding: var(--ck-spacing-standard);
+    padding: var(--ck-spacing-standard, var(--ck-spacing-base));
     width: 50%;
 }
 
