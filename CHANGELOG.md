@@ -1,6 +1,12 @@
 # Changelog
 
-## Version 7.8.5 (in Arbeit)
+## Version 7.8.6
+
+### Aktualisiert
+
+* CKEditor 5 auf Version 48.5.3 aktualisiert (Fehlerbehebungen, keine Breaking Changes).
+
+## Version 7.8.5
 
 ### Behoben
 
