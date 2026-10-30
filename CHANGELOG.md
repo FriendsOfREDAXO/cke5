@@ -2,6 +2,14 @@
 
 ## Version 8.0.0
 
+### ⚠️ Vor dem Update lesen (Breaking Changes)
+
+* **Frontend: `cke5_content_styles.css` nutzt natives CSS-Nesting.** Die Inhalts-Styles werden wie von CKEditor 49 ausgeliefert übernommen (verschachtelte Regeln mit `&`). Browser ohne CSS-Nesting ignorieren diese Regeln – betroffen sind u. a. Safari/iOS vor 16.5, Chrome/Edge vor 112 und Firefox vor 117. Dort fehlen z. B. Bildausrichtung, Tabellen- und Schriftgrößen-Formatierung. Wer diese Datei im Frontend einbindet und ältere Browser unterstützen muss, sollte sie im eigenen Build entschachteln (z. B. mit Lightning CSS oder PostCSS) oder eigene Styles verwenden. Auch CSS-Minifier oder Präprozessoren im Projekt müssen Nesting verarbeiten können.
+* **Eigene CKEditor-Plugins und JavaScript:** CKEditor 49 entfernt u. a. den Watchdog (`EditorWatchdog`, `ContextWatchdog`), den Konstruktor `new TooltipManager()`, `BodyCollection#detachFromDom()`, die Option `listenerOptions` von `clickOutsideHandler()` und `getCommonAncestor()`; `.ck-body-wrapper` steht direkt nach `create()` nicht mehr sicher im DOM. Eigene Plugins (z. B. über `Cke5\PluginRegistry`) bitte prüfen – siehe [Update-Guide](https://ckeditor.com/docs/ckeditor5/latest/updating/guides/update-to-49.html). Die Plugins des AddOns, mblock und der MForm-Repeater sind nicht betroffen.
+* **Eigenes CSS mit CKEditor-Variablen:** Alte Variablen wie `--ck-spacing-small`, `--ck-spacing-standard` oder `--ck-ui-component-min-height` sind nicht mehr definiert. Wer sie ohne Rückfallwert liest (`var(--ck-spacing-small)`), bekommt leere Werte. Überschreiben der bisherigen `--ck-color-*`-Variablen funktioniert weiter.
+* **Browser im Backend:** Der Editor ist als ES2023 gebaut und benötigt einen aktuellen Browser.
+* **Aussehen:** Neues Standard-Theme, die Werkzeugleiste bricht bei schmalen Editoren früher um; neue Standard-Farbpaletten für Schrift- und Tabellenfarben, wenn das Profil keine eigenen Farben festlegt.
+
 ### Aktualisiert
 
 * **CKEditor 5 auf Version 49.0.1 aktualisiert** (Hauptversion). Wichtigste Änderungen von CKEditor:
