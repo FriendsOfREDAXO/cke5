@@ -407,7 +407,7 @@ class Cke5ProfilesCreator
      * @throws rex_functional_exception
      * @author Joachim Doerr
      */
-    public static function profilesCreate(array $getProfile = null): void
+    public static function profilesCreate(?array $getProfile = null): void
     {
         $profiles = Cke5DatabaseHandler::getAllProfiles();
         $content = [];
@@ -498,6 +498,11 @@ class Cke5ProfilesCreator
                     $jsonProfile['ui']['poweredBy'] = [];
                 }
                 $jsonProfile['ui']['poweredBy']['forceVisible'] = false;
+            }
+
+            // auch im Experten-Modus: Link-Ziel entweder automatisch oder per Schalter (siehe unten)
+            if (isset($jsonProfile['link']) && is_array($jsonProfile['link'])) {
+                $jsonProfile['link'] = self::normalizeLinkTarget($jsonProfile['link']);
             }
 
             return ['suboptions' => $jsonSubOption, 'profile' => $jsonProfile];
@@ -729,6 +734,9 @@ class Cke5ProfilesCreator
                 );
             }
         }
+
+        // Link-Ziel: Profil-Einstellung „Externe Links in neuem Tab“ ODER ein Link-Schalter mit target (siehe normalizeLinkTarget)
+        $jsonProfile['link'] = self::normalizeLinkTarget($jsonProfile['link']);
 
         if (in_array('alignment', $toolbar, true) && isset($profile['alignment']) && $profile['alignment'] !== '') {
             $jsonProfile['alignment'] = ['options' => self::toArray($profile['alignment'])];
@@ -1424,6 +1432,59 @@ class Cke5ProfilesCreator
     }
 
     /**
+     * Link-Ziel (target) eindeutig regeln. Die Profil-Einstellung „Externe Links in neuem Tab“
+     * (addTargetToExternalLinks) und ein Link-Schalter mit target dürfen nicht gleichzeitig wirken:
+     * CKEditor schaltet das Attribut sonst bei jedem Speichern abwechselnd an und aus.
+     *
+     * - Nur Profil-Einstellung: alle externen Links mit target="_blank" rel="noopener noreferrer".
+     * - Link-Schalter (manuell) mit target: Redakteure wählen pro Link; bei target="_blank" wird
+     *   rel um "noopener noreferrer" ergänzt. Ist zusätzlich die Profil-Einstellung aktiv, gewinnt
+     *   der Schalter und ist bei neuen Links vorausgewählt (defaultValue), sofern nicht anders definiert.
+     * - Automatische Decorators mit target und weitere Schalter mit target entfallen.
+     *
+     * @param array<array-key,mixed> $link
+     * @return array<array-key,mixed>
+     */
+    private static function normalizeLinkTarget(array $link): array
+    {
+        $addTargetToExternal = !empty($link['addTargetToExternalLinks']);
+        if (!isset($link['decorators']) || !is_array($link['decorators'])) {
+            return $link;
+        }
+
+        $targetDecorator = null;
+        foreach ($link['decorators'] as $name => $decorator) {
+            if (!is_array($decorator) || !isset($decorator['attributes']) || !is_array($decorator['attributes'])) {
+                continue;
+            }
+            $attributes = array_change_key_case($decorator['attributes'], CASE_LOWER);
+            if (!array_key_exists('target', $attributes)) {
+                continue;
+            }
+            if (($decorator['mode'] ?? '') !== 'manual' || $targetDecorator !== null) {
+                unset($link['decorators'][$name]);
+                continue;
+            }
+            if (strtolower((string) $attributes['target']) === '_blank') {
+                $rel = preg_split('/\s+/', strtolower(trim((string) ($attributes['rel'] ?? ''))), -1, PREG_SPLIT_NO_EMPTY) ?: [];
+                $attributes['rel'] = implode(' ', array_values(array_unique(array_merge($rel, ['noopener', 'noreferrer']))));
+            }
+            $decorator['attributes'] = $attributes;
+            if ($addTargetToExternal && !array_key_exists('defaultValue', $decorator)) {
+                $decorator['defaultValue'] = true;
+            }
+            $link['decorators'][$name] = $decorator;
+            $targetDecorator = $name;
+        }
+
+        if ($targetDecorator !== null) {
+            $link['addTargetToExternalLinks'] = false;
+        }
+
+        return $link;
+    }
+
+    /**
      * Normalize custom link decorators to CKEditor-compatible structure.
      *
      * @param mixed $decorators
@@ -1823,7 +1884,7 @@ class Cke5ProfilesCreator
      * @return array<int,string>
      * @author Joachim Doerr
      */
-    private static function toArray(string $string = null): array
+    private static function toArray(?string $string = null): array
     {
         if (!is_string($string)) return [];
         return array_filter(explode(',', $string));
